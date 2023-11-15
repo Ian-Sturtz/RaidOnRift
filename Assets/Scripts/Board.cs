@@ -5,21 +5,39 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+    public float tile_size = 1.15f;
     private const int TILE_COUNT_X = 10;
     private const int TILE_COUNT_Y = 10;
     private GameObject[,] tiles;
+    private GameObject gameBoard;
 
-    private GameObject camera;
+    private Camera currentCamera;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        camera = GameObject.FindGameObjectWithTag("MainCamera");
-
-        GenerateAllTiles(1, TILE_COUNT_X, TILE_COUNT_Y);
+        GenerateAllTiles(tile_size, TILE_COUNT_X, TILE_COUNT_Y);        
     }
 
+    private void Update()
+    {
+        if (!currentCamera)
+        {
+            currentCamera = Camera.current;
+            return;
+        }
+
+        RaycastHit info;
+        Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out, info, 100, LayerMask.GetMask("Tile")))
+        {
+
+        }
+    }
+
+    //Generates the board and sets the board in the center of the camera
     private void GenerateAllTiles(float tileSize, int tileCountX, int tileCountY)
     {
         tiles = new GameObject[tileCountX, tileCountY];
@@ -31,7 +49,7 @@ public class Board : MonoBehaviour
 
 
 
-        //camera.transform.position = new Vector3 (1, 1, -10);
+        centerBoardInCamera();
     }
 
     private GameObject GenerateSingleTile(float tileSize, int x, int y)
@@ -57,5 +75,24 @@ public class Board : MonoBehaviour
         tileObject.AddComponent<BoxCollider>();
 
         return tileObject;
+    }
+
+    private void centerBoardInCamera()
+    {
+        gameBoard = GameObject.FindGameObjectWithTag("GameBoard");
+
+        float x_pos;
+        float y_pos;
+
+        x_pos = gameBoard.transform.position.x;
+        y_pos = gameBoard.transform.position.y;
+
+        x_pos -= tile_size * (TILE_COUNT_X / 2);
+        y_pos -= tile_size * (TILE_COUNT_Y / 2);
+
+        Debug.Log("xpos = " + x_pos);
+        Debug.Log("ypos = " + y_pos);
+
+        gameBoard.transform.position = new Vector3 (x_pos, y_pos, -9);
     }
 }
