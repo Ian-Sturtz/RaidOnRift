@@ -27,14 +27,6 @@ public class Board : MonoBehaviour
             currentCamera = Camera.current;
             return;
         }
-
-        RaycastHit info;
-        Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out, info, 100, LayerMask.GetMask("Tile")))
-        {
-
-        }
     }
 
     //Generates the board and sets the board in the center of the camera
