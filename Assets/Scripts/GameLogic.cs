@@ -4,17 +4,46 @@ using UnityEngine;
 
 public class GameLogic : MonoBehaviour
 {
-    public GameObject Piece;
+    [SerializeField] private int PIECES_ADDED = 2;    //Increase this number for each new piece added
+    [SerializeField] private GameBoard board;
+    
+    
+    [Header("Prefabs and Materials")]
+    [SerializeField] private GameObject[] PiecePrefabs;
 
-    // Start is called before the first frame update
-    void Start()
+    public Piece newPiece;
+
+    private void Awake()
     {
-        Instantiate(Piece, new Vector3(0, 0, -1), Quaternion.identity);
+        newPiece = SpawnPiece(PieceType.Mate, true);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        newPiece.transform.position = new Vector3(1,1,1);
     }
+
+    private Piece SpawnPiece(PieceType type, bool isNavy)
+    {
+        Piece cp;
+
+        if (!isNavy)
+        {
+            cp = Instantiate(PiecePrefabs[(int)type + PIECES_ADDED], transform).GetComponent<Piece>();
+
+            Debug.Log("Instantiated a Pirate Mate");
+        }
+        else
+        {
+            cp = Instantiate(PiecePrefabs[(int)type], transform).GetComponent<Piece>();
+
+            Debug.Log("Instantiated a Navy Mate");
+        }
+
+        cp.type = type;
+        cp.isNavy = isNavy;
+
+        return cp;
+    }
+
 }
