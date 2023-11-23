@@ -115,7 +115,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -143,5 +143,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89379eea6f913404a855a961f318dc40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameBoard: {fileID: 0}
   defaultBoardMaterial: {fileID: 2100000, guid: d0083b1e859096144a067ba53d830ea0, type: 2}
   hoveredBoardMaterial: {fileID: 2100000, guid: 9912fce311274024390740068e158a10, type: 2}
+  clickedBoardMaterial: {fileID: 2100000, guid: e7ccabd546951604b87b2e3277a96435, type: 2}
+  moveableBoardMaterial: {fileID: 2100000, guid: 2c8196b42a2633d419e15a4b183d712f, type: 2}
+  currentPiece: {fileID: 0}
+  SquareHasBeenClicked: 0

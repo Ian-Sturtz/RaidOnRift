@@ -2,29 +2,74 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardSquareBehavior : MonoBehaviour
+public class Square : MonoBehaviour
 {
-    [SerializeField] private Material defaultBoardMaterial;
-    [SerializeField] private Material hoveredBoardMaterial;
+    [SerializeField] private GameObject gameBoard;
+    private GameBoard board;
 
-    void Start()
+    [Header("Board Materials")]
+    public Material defaultBoardMaterial;
+    public Material hoveredBoardMaterial;
+    public Material clickedBoardMaterial;
+    public Material moveableBoardMaterial;
+    public Piece currentPiece;
+    public bool SquareHasBeenClicked = false;
+    private bool flashing = false;
+
+    private void Start()
     {
+        gameBoard = GameObject.FindGameObjectWithTag("GameBoard");
+        board = gameBoard.GetComponent<GameBoard>();
         SetMaterial(defaultBoardMaterial);
+    }
+
+    private void Update()
+    {
+        if (!flashing)
+        {
+            if (SquareHasBeenClicked)
+            {
+                SetMaterial(clickedBoardMaterial);
+            }
+        }
     }
 
     private void OnMouseOver()
     {
-        SetMaterial(hoveredBoardMaterial);
+        if (!board.squareSelected && !flashing)
+            SetMaterial(hoveredBoardMaterial);
     }
 
     private void OnMouseExit()
     {
-        SetMaterial(defaultBoardMaterial);
+        if (!board.squareSelected && !flashing)
+            SetMaterial(defaultBoardMaterial);
     }
 
     public void SetMaterial(Material newMaterial)
     {
         if (this.tag != "GameController")
             GetComponent<SpriteRenderer>().material = newMaterial;
+    }
+
+    public void FlashMaterial(Material flashingMaterial, int flashCount)
+    {
+        Material startingMaterial = GetComponent<SpriteRenderer>().material;
+        StartCoroutine(MaterialFlash(startingMaterial, flashingMaterial, flashCount));
+        SetMaterial(defaultBoardMaterial);
+    }
+
+    IEnumerator MaterialFlash(Material StartingMaterial, Material TargetMaterial, int flashCount)
+    {
+        flashing = true;
+        float delay = .05f;
+        for (int i = 0; i < flashCount; i++)
+        {
+            SetMaterial(TargetMaterial);
+            yield return new WaitForSeconds(delay);
+            SetMaterial(StartingMaterial);
+            yield return new WaitForSeconds(delay);
+        }
+        flashing = false;
     }
 }

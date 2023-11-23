@@ -7,6 +7,7 @@ TagManager:
   - GameBoard
   - BoardLowerLeftCorner
   - GameSquare
+  - MoveableSquare
   layers:
   - Default
   - TransparentFX
