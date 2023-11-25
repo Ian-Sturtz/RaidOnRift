@@ -5,9 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - GameBoard
-  - BoardLowerLeftCorner
   - GameSquare
   - MoveableSquare
+  - JailCell
+  - JailBoard
   layers:
   - Default
   - TransparentFX

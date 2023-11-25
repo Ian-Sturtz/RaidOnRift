@@ -54,8 +54,7 @@ public class Square : MonoBehaviour
 
     public void FlashMaterial(Material flashingMaterial, int flashCount)
     {
-        Material startingMaterial = GetComponent<SpriteRenderer>().material;
-        StartCoroutine(MaterialFlash(startingMaterial, flashingMaterial, flashCount));
+        StartCoroutine(MaterialFlash(defaultBoardMaterial, flashingMaterial, flashCount));
         SetMaterial(defaultBoardMaterial);
     }
 

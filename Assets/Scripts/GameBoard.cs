@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameBoard : MonoBehaviour
 {
     // How many pieces have been added to the game so far
-    public int PIECES_ADDED = System.Enum.GetValues(typeof(PieceType)).Length;
+    public int PIECES_ADDED;
 
     // Board Information
     public float tile_size = 1f;
@@ -16,30 +16,47 @@ public class GameBoard : MonoBehaviour
     private GameObject gameBoard;   // Reference to gameBoard object
 
     public GameObject[,] tiles; // All game squares
-    public Piece[,] pieces;     // All game pieces
-    private int[,] moveAssessment;
+    public Piece[] NavyPieces;      // All Navy game pieces
+    public Piece[] PiratePieces;    // All Pirate game pieces
 
+    public GameObject JailCells;
+    public JailBoard jail;
+    public int teamSize = 30;
+
+    private int[,] moveAssessment;  // All legal moves of a clicked-on piece
     public bool squareSelected = false;
     public GameObject tileSelected;
     public GameObject storedTileSelected;
 
 
     [Header("Prefabs and Materials")]
-    [SerializeField] private GameObject[] PiecePrefabs;
+    [SerializeField] public GameObject[] PiecePrefabs;
 
     private void Start()
     {
+        PIECES_ADDED = System.Enum.GetValues(typeof(PieceType)).Length;
 
         //Initialize the game board and all variables
         gameBoard = GameObject.FindGameObjectWithTag("GameBoard");
         game_board_size = gameBoard.transform.localScale.x;
         tile_size = gameBoard.transform.localScale.x / game_board_size;
         tiles = new GameObject[TILE_COUNT_X, TILE_COUNT_Y];
-        pieces = new Piece[TILE_COUNT_X, TILE_COUNT_Y];
+        teamSize = 30;
+
+        JailCells = GameObject.FindGameObjectWithTag("JailBoard");
+        jail = JailCells.GetComponent<JailBoard>();
+        NavyPieces = new Piece[teamSize];
+        PiratePieces = new Piece[teamSize];
         IdentifyBoardSquares();
 
-        pieces[0,0] = SpawnPiece(PieceType.Mate, false, 3, 4);
-        pieces[1, 1] = SpawnPiece(PieceType.Ore, true, 9, 9);
+        NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 3, 0);
+        NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 1, 2);
+        NavyPieces[2] = SpawnPiece(PieceType.LandMine, true, 7, 6);
+
+
+        PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
+        PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
+        PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 5, 5);
     }
 
     private void Update()
@@ -47,6 +64,11 @@ public class GameBoard : MonoBehaviour
         // Detect a square has been clicked
         if (Input.GetMouseButtonDown(0))
         {
+            //Test Piece Capture
+            jail.InsertAPiece(NavyPieces[1]);
+            NavyPieces[1] = null;
+
+
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
@@ -100,8 +122,6 @@ public class GameBoard : MonoBehaviour
 
     private void IdentifyBoardSquares()
     {
-        
-
         string piecename;
 
         for (int x = 1; x <= TILE_COUNT_X; x++)
@@ -112,14 +132,7 @@ public class GameBoard : MonoBehaviour
 
                 GameObject boardSquare = GameObject.Find(piecename);
 
-                if (x == 1 && y == 1)
-                {
-                    boardSquare.tag = "BoardLowerLeftCorner";
-                }
-                else
-                {
-                    boardSquare.tag = "GameSquare";
-                }
+                boardSquare.tag = "GameSquare";
                 
                 tiles[x - 1, y - 1] = boardSquare;
             }
@@ -243,6 +256,12 @@ public class GameBoard : MonoBehaviour
         switch (piece.type)
         {
             case PieceType.Ore:
+                squareSelected = false;
+                current_square.SquareHasBeenClicked = false;
+                current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);
+                tileSelected = null;
+                break;
+            case PieceType.LandMine:
                 squareSelected = false;
                 current_square.SquareHasBeenClicked = false;
                 current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);

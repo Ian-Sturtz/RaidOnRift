@@ -5,7 +5,8 @@ using UnityEngine;
 public enum PieceType
 {
     Ore = 0,
-    Mate = 1,
+    LandMine = 1,
+    Mate = 2,
 }
 
 public enum Team

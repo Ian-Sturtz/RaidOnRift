@@ -17,13 +17,30 @@ public class Mate : Piece
         // For all squares +/- 1 away from current position
         for (int x_change = -1; x_change < 2; x_change++)
         {
-            for (int y_change = -1; y_change < 2; y_change++)
+            if (!isNavy)
             {
-                if (y_change >= 0 || hasCaptured)
+                for (int y_change = -1; y_change < 2; y_change++)
                 {
-                    if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                    if (y_change <= 0 || hasCaptured)
                     {
-                        moveAssessment[currentX + x_change, currentY + y_change] = 1;
+                        if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                        {
+                            moveAssessment[currentX + x_change, currentY + y_change] = 1;
+                        }
+                    }
+                }
+            }
+            else
+            {
+
+                for (int y_change = -1; y_change < 2; y_change++)
+                {
+                    if (y_change >= 0 || hasCaptured)
+                    {
+                        if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                        {
+                            moveAssessment[currentX + x_change, currentY + y_change] = 1;
+                        }
                     }
                 }
             }
