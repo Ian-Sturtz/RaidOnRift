@@ -2906,6 +2906,8 @@ MonoBehaviour:
   tile_size: 1
   tile_size_margins: 1.05
   game_board_size: 10.55
+  gameWon: 0
+  navyTurn: 1
   NavyPieces: []
   PiratePieces: []
   JailCells: {fileID: 0}

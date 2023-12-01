@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2040952411381913586}
   - component: {fileID: 4833898257165064853}
-  - component: {fileID: 1852899705929686132}
+  - component: {fileID: 5425058452558433379}
   m_Layer: 0
   m_Name: PirateLandMine
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 858630950521785915}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.598, y: -4.696, z: 0}
+  m_LocalPosition: {x: 23.8541, y: 0.10359943, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
+  - {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1852899705929686132
+--- !u!114 &5425058452558433379
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,14 +95,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 858630950521785915}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1715335f84937804fa56a821e974dfa4, type: 3}
+  m_Script: {fileID: 11500000, guid: f640d6ccd96df9f439ca83539d9cf328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   piratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}
   navyPiece: {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
   NavyOre: {fileID: 2100000, guid: b1f0623e1f035104ba60e5ad7d6cc221, type: 2}
   PirateOre: {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
-  type: 0
+  type: 1
   isNavy: 0
   hasCaptured: 0
   hasOre: 0
@@ -135,7 +135,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.0017670747, y: -0.0053011025, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2040952411381913586}
@@ -180,8 +180,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: dacf1b35ee208db4a8544897237cd225, type: 3}
+  m_SortingOrder: 4
+  m_Sprite: {fileID: 21300000, guid: ade000330d8d90d4080fe1d05ab45868, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

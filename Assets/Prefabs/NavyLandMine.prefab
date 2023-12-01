@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5680363364236138667}
   - component: {fileID: 714259295948069478}
-  - component: {fileID: 8583185998997905720}
+  - component: {fileID: 4042372183233901977}
   m_Layer: 0
   m_Name: NavyLandMine
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2119935833039630825}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.147564, y: -4.677249, z: 0}
+  m_LocalPosition: {x: 20.596657, y: 4.398282, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b1f0623e1f035104ba60e5ad7d6cc221, type: 2}
+  - {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8583185998997905720
+--- !u!114 &4042372183233901977
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,14 +95,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2119935833039630825}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1715335f84937804fa56a821e974dfa4, type: 3}
+  m_Script: {fileID: 11500000, guid: f640d6ccd96df9f439ca83539d9cf328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   piratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}
   navyPiece: {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
   NavyOre: {fileID: 2100000, guid: b1f0623e1f035104ba60e5ad7d6cc221, type: 2}
   PirateOre: {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
-  type: 0
+  type: 1
   isNavy: 1
   hasCaptured: 0
   hasOre: 0
@@ -135,7 +135,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.0017670747, y: -0.0053011025, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5680363364236138667}

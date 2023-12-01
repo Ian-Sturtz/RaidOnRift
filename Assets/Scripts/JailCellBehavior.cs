@@ -10,7 +10,7 @@ public class JailCell : MonoBehaviour
     public Material clickedJailMaterial;
 
     public Piece currentPiece;
-    public bool hasPiece;
+    public bool hasPiece = false;
 
     private void Start()
     {
@@ -19,14 +19,6 @@ public class JailCell : MonoBehaviour
 
     private void Update()
     {
-        if(currentPiece == null)
-        {
-            hasPiece = false;
-        }
-        else
-        {
-            hasPiece = true;
-        }
 
         if (hasPiece)
         {

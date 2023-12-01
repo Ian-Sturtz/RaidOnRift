@@ -32,6 +32,11 @@ public class Piece : MonoBehaviour
     private Vector3 desiredPosition;
     private Vector3 desiredScale;
 
+    public void destroyPiece()
+    {
+        Destroy(GameObject.Find(this.name));
+    }
+
     protected bool IsSquareOnBoard(int x, int y)
     {
         return (x >= 0 && x < 10 && y >= 0 && y < 10) ;

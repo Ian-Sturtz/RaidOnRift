@@ -53,13 +53,16 @@ public class JailBoard : MonoBehaviour
         if (piece.isNavy)
         {
             cellToPlaceIn = FindFirstOpen(PirateJailCells);
+            Debug.Log(cellToPlaceIn);
             pieceIndex = FindNextSlot(navyJailedPieces);
             navyJailedPieces[pieceIndex] = SpawnPiece(piece.type, true, cellToPlaceIn);
+            PirateJailCells[cellToPlaceIn].GetComponent<JailCell>().hasPiece = true;
             cell = PirateJailCells[cellToPlaceIn].GetComponent<JailCell>();
         }
         else
         {
             cellToPlaceIn = FindFirstOpen(NavyJailCells);
+            Debug.Log(cellToPlaceIn);
             pieceIndex = FindNextSlot(pirateJailedPieces);
             pirateJailedPieces[pieceIndex] = SpawnPiece(piece.type, false, cellToPlaceIn);
             cell = NavyJailCells[cellToPlaceIn].GetComponent<JailCell>();

@@ -9,6 +9,7 @@ TagManager:
   - MoveableSquare
   - JailCell
   - JailBoard
+  - CaptureSquare
   layers:
   - Default
   - TransparentFX
