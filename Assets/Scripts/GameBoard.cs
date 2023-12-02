@@ -57,14 +57,21 @@ public class GameBoard : MonoBehaviour
         NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 3, 0);
         NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 1, 2);
         NavyPieces[2] = SpawnPiece(PieceType.LandMine, true, 7, 6);
+        NavyPieces[3] = SpawnPiece(PieceType.Mate, true, 4, 4);
+        NavyPieces[4] = SpawnPiece(PieceType.Royal1, true, 0, 3);
 
         PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
         PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 5, 5);
+        PiratePieces[3] = SpawnPiece(PieceType.Royal1, false, 8, 6);
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
         // Check for a game win
         for (int i = 0; i < TILE_COUNT_X; i++)
         {
@@ -123,11 +130,12 @@ public class GameBoard : MonoBehaviour
                             Square selectedTile = tileSelected.GetComponent<Square>();
                             selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
                         }
-                        else 
+                        else
                         {
                             storedTileSelected = tileSelected;
                             squareSelected = true;
                             current_square.SquareHasBeenClicked = true;
+                            Debug.Log(tileSelected + " " + current_square + " " +  current_square.currentPiece);
                             DetectLegalMoves(tileSelected, current_square.currentPiece);
                         }
                         
@@ -351,6 +359,16 @@ public class GameBoard : MonoBehaviour
             case PieceType.Mate:
                 moveAssessment = piece.GetComponent<Mate>().GetValidMoves(tiles);
                 break;
+            case PieceType.Royal1:
+                if (piece.isNavy)
+                {
+                    moveAssessment = piece.GetComponent<Admiral>().GetValidMoves(tiles);
+                }
+                else
+                {
+                    moveAssessment = piece.GetComponent<Captain>().GetValidMoves(tiles);
+                }
+                break;
             default:
                 Debug.Log("Cannot determine piece moveset");
                 break;
@@ -401,7 +419,7 @@ public class GameBoard : MonoBehaviour
                 {
                     tiles[x, y].tag = "CaptureSquare";
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
-                    activeSquare.SetMaterial(activeSquare.clickedBoardMaterial);
+                    activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
                 }
             }
         }

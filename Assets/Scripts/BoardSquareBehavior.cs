@@ -12,6 +12,7 @@ public class Square : MonoBehaviour
     public Material hoveredBoardMaterial;
     public Material clickedBoardMaterial;
     public Material moveableBoardMaterial;
+    public Material enemyBoardMaterial;
     public Piece currentPiece;
     public bool SquareHasBeenClicked = false;
     private bool flashing = false;

@@ -7,6 +7,7 @@ public enum PieceType
     Ore = 0,
     LandMine = 1,
     Mate = 2,
+    Royal1 = 3,
 }
 
 public enum Team
@@ -34,7 +35,7 @@ public class Piece : MonoBehaviour
 
     public void destroyPiece()
     {
-        Destroy(GameObject.Find(this.name));
+        Destroy(gameObject);
     }
 
     protected bool IsSquareOnBoard(int x, int y)
