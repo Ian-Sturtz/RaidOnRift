@@ -16,34 +16,150 @@ public class Admiral : Piece
 
         GameObject currentSquare = tiles[currentX, currentY];
 
-        // For all squares +/- 1 away from current position
-        for (int x_change = -1; x_change < 2; x_change++)
+        bool up = true;
+        bool down = true;
+        bool left = true;
+        bool right = true;
+        bool up_right = true;
+        bool up_left = true;
+        bool down_right = true;
+        bool down_left = true;
+
+        for (int change = 1; up || down || left || right || up_right || up_left || down_right || down_left; change++)
         {
-            if (!isNavy)
+            if (up)
             {
-                for (int y_change = -1; y_change < 2; y_change++)
+                if (IsSquareOnBoard(currentX, currentY + change))
                 {
-                    if (y_change <= 0 || hasCaptured)
+                    moveAssessment[currentX, currentY + change] = 1;
+
+                    if (tiles[currentX, currentY + change].GetComponent<Square>().currentPiece != null)
                     {
-                        if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
-                        {
-                            moveAssessment[currentX + x_change, currentY + y_change] = 1;
-                        }
+                        up = false;
                     }
                 }
-            }
-            else
-            {
-
-                for (int y_change = -1; y_change < 2; y_change++)
+                else
                 {
-                    if (y_change >= 0 || hasCaptured)
+                    up = false;
+                }
+            }
+
+            if (down)
+            {
+                if (IsSquareOnBoard(currentX, currentY - change))
+                {
+                    moveAssessment[currentX, currentY - change] = 1;
+
+                    if (tiles[currentX, currentY - change].GetComponent<Square>().currentPiece != null)
                     {
-                        if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
-                        {
-                            moveAssessment[currentX + x_change, currentY + y_change] = 1;
-                        }
+                        down = false;
                     }
+                }
+                else
+                {
+                    down = false;
+                }
+            }
+
+            if (right)
+            {
+                if (IsSquareOnBoard(currentX + change, currentY))
+                {
+                    moveAssessment[currentX + change, currentY] = 1;
+
+                    if (tiles[currentX + change, currentY].GetComponent<Square>().currentPiece != null)
+                    {
+                        right = false;
+                    }
+                }
+                else
+                {
+                    right = false;
+                }
+            }
+
+            if (left)
+            {
+                if (IsSquareOnBoard(currentX - change, currentY))
+                {
+                    moveAssessment[currentX - change, currentY] = 1;
+
+                    if (tiles[currentX - change, currentY].GetComponent<Square>().currentPiece != null)
+                    {
+                        left = false;
+                    }
+                }
+                else
+                {
+                    left = false;
+                }
+            }
+
+            if (up_right)
+            {
+                if (IsSquareOnBoard(currentX + change, currentY + change))
+                {
+                    moveAssessment[currentX + change, currentY + change] = 1;
+
+                    if (tiles[currentX + change, currentY + change].GetComponent<Square>().currentPiece != null)
+                    {
+                        up_right = false;
+                    }
+                }
+                else
+                {
+                    up_right = false;
+                }
+            }
+
+            if (up_left)
+            {
+                if (IsSquareOnBoard(currentX - change, currentY + change))
+                {
+                    moveAssessment[currentX - change, currentY + change] = 1;
+
+                    if (tiles[currentX - change, currentY + change].GetComponent<Square>().currentPiece != null)
+                    {
+                        up_left = false;
+                    }
+                }
+                else
+                {
+                    up_left = false;
+                }
+            }
+
+            if (down_right)
+            {
+                if (IsSquareOnBoard(currentX + change, currentY - change))
+                {
+                    moveAssessment[currentX + change, currentY - change] = 1;
+
+                    if (tiles[currentX + change, currentY - change].GetComponent<Square>().currentPiece != null)
+                    {
+                        down_right = false;
+                    }
+                }
+                else
+                {
+                    down_right = false;
+                }
+            }
+
+            if (down_left)
+            {
+                if (IsSquareOnBoard(currentX - change, currentY - change))
+                {
+                    moveAssessment[currentX - change, currentY - change] = 1;
+
+                    if (tiles[currentX - change, currentY - change].GetComponent<Square>().currentPiece != null)
+                    {
+                        down_left = false;
+                    }
+                }
+                else
+                {
+                    down_left = false;
                 }
             }
         }

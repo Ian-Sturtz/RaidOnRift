@@ -7,7 +7,9 @@ public enum PieceType
     Ore = 0,
     LandMine = 1,
     Mate = 2,
-    Royal1 = 3,
+    Vanguard = 3,
+    Navigator = 4,
+    Royal1 = 5,
 }
 
 public enum Team
@@ -41,5 +43,34 @@ public class Piece : MonoBehaviour
     protected bool IsSquareOnBoard(int x, int y)
     {
         return (x >= 0 && x < 10 && y >= 0 && y < 10) ;
+    }
+
+    public int[,] GetValidMovesOre(GameObject[,] tiles)
+    {
+        int[,] moveAssessment;
+
+        moveAssessment = new int[10, 10];
+
+        for (int x = 0; x < 10; x++)
+            for (int y = 0; y < 10; y++)
+                moveAssessment[x, y] = -1;
+
+        GameObject currentSquare = tiles[currentX, currentY];
+
+        // For all squares +/- 1 away from current position
+        for (int x_change = -1; x_change < 2; x_change++)
+        {
+            for (int y_change = -1; y_change < 2; y_change++)
+            {
+                if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                {
+                    moveAssessment[currentX + x_change, currentY + y_change] = 1;
+                }
+            }
+        }
+
+        moveAssessment[currentX, currentY] = 0;
+
+        return moveAssessment;
     }
 }
