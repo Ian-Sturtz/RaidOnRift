@@ -78,7 +78,7 @@ public class GameBoard : MonoBehaviour
         }
 
         // Check for a game win
-        for (int i = 0; i < TILE_COUNT_X; i++)
+        for (int i = 0; i < TILE_COUNT_X && !gameWon; i++)
         {
             for (int j = 0; j < 3; j++)
             {
@@ -362,12 +362,14 @@ public class GameBoard : MonoBehaviour
             switch (piece.type)
             {
                 case PieceType.Ore:
+                    Debug.Log("The Ore doesn't move!");
                     squareSelected = false;
                     current_square.SquareHasBeenClicked = false;
                     current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);
                     tileSelected = null;
                     break;
                 case PieceType.LandMine:
+                    Debug.Log("The Land Mine doesn't move!");
                     squareSelected = false;
                     current_square.SquareHasBeenClicked = false;
                     current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);

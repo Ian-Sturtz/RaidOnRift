@@ -12,12 +12,6 @@ public enum PieceType
     Royal1 = 5,
 }
 
-public enum Team
-{
-    Pirate = 0,
-    Navy = 1,
-}
-
 public class Piece : MonoBehaviour
 {
     public Material piratePiece;
@@ -31,9 +25,6 @@ public class Piece : MonoBehaviour
     public bool hasOre;
     public int currentX = -1;
     public int currentY = -1;
-
-    private Vector3 desiredPosition;
-    private Vector3 desiredScale;
 
     public void destroyPiece()
     {
