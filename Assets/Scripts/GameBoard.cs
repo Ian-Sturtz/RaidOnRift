@@ -22,17 +22,18 @@ public class GameBoard : MonoBehaviour
     public Piece[] NavyPieces;      // All Navy game pieces
     public Piece[] PiratePieces;    // All Pirate game pieces
 
-
+    // Jail State Information
     public GameObject JailCells;
     public JailBoard jail;
     public int teamSize = 30;
 
+    // Movement Information
     private int[,] moveAssessment;  // All legal moves of a clicked-on piece
     public bool squareSelected = false;
     public GameObject tileSelected;
     public GameObject storedTileSelected;
 
-
+    // Piece prefabs to be spawned in as needed
     [Header("Prefabs and Materials")]
     [SerializeField] public GameObject[] PiecePrefabs;
 
