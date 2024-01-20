@@ -10,7 +10,8 @@ public enum PieceType
     Vanguard = 3,
     Navigator = 4,
     Gunner = 5,
-    Royal1 = 6,
+    Cannon = 6,
+    Royal1 = 7,
 }
 
 public class Piece : MonoBehaviour
