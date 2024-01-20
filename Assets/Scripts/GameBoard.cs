@@ -62,6 +62,7 @@ public class GameBoard : MonoBehaviour
         NavyPieces[4] = SpawnPiece(PieceType.Vanguard, true, 1, 3);
         NavyPieces[5] = SpawnPiece(PieceType.Navigator, true, 2, 4);
         NavyPieces[6] = SpawnPiece(PieceType.Gunner, true, 4, 5);
+        NavyPieces[7] = SpawnPiece(PieceType.Cannon, true, 3, 3);
 
         PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
@@ -70,6 +71,7 @@ public class GameBoard : MonoBehaviour
         PiratePieces[4] = SpawnPiece(PieceType.Vanguard, false, 3, 7);
         PiratePieces[5] = SpawnPiece(PieceType.Navigator, false, 1, 8);
         PiratePieces[6] = SpawnPiece(PieceType.Gunner, false, 6, 9);
+        PiratePieces[7] = SpawnPiece(PieceType.Cannon, false, 7, 7);
     }
 
     private void Update()
@@ -199,7 +201,7 @@ public class GameBoard : MonoBehaviour
                         capturedPiece.destroyPiece();
                         currentSquare.currentPiece.hasCaptured = true;
 
-                        // Move current piece to that square (unless it's a gunner or cannon)
+                        // Move current piece to that square (unless it's a gunner)
                         if(currentSquare.currentPiece.type != PieceType.Gunner)
                             MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
 
@@ -214,8 +216,86 @@ public class GameBoard : MonoBehaviour
                         storedTileSelected = null;
                     }
 
+                    // Cannon is capturing a piece by jumping
+                    else if(tileSelected.tag == "CannonDestination")
+                    {
+                        Square currentSquare = storedTileSelected.GetComponent<Square>();
+                        Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
+
+                        // Find which piece is being captured
+                        Piece capturedPiece = null;
+                        if (moveCoordinates.x + 1 < 10) {
+                            Debug.Log("Checked Right");
+                            if (tiles[moveCoordinates.x + 1, moveCoordinates.y].GetComponent<Square>().tag == "CannonTarget")
+                            {
+                                Debug.Log("Found Right");
+                                capturedPiece = tiles[moveCoordinates.x + 1, moveCoordinates.y].GetComponent<Square>().currentPiece;
+                            }
+                        }
+                        if (moveCoordinates.x - 1 >= 0 && capturedPiece == null)
+                        {
+                            Debug.Log("Checked Left");
+                            if (tiles[moveCoordinates.x - 1, moveCoordinates.y].GetComponent<Square>().tag == "CannonTarget")
+                            {
+                                Debug.Log("Found Left");
+                                capturedPiece = tiles[moveCoordinates.x - 1, moveCoordinates.y].GetComponent<Square>().currentPiece;
+                            }
+                        }
+                        if (moveCoordinates.y + 1 < 10 && capturedPiece == null)
+                        {
+                            Debug.Log("Checked Up");
+                            if (tiles[moveCoordinates.x, moveCoordinates.y + 1].GetComponent<Square>().tag == "CannonTarget")
+                            {
+                                Debug.Log("Found Up");
+                                capturedPiece = tiles[moveCoordinates.x, moveCoordinates.y + 1].GetComponent<Square>().currentPiece;
+                            }
+                        }
+                        if (moveCoordinates.y - 1 >= 0 && capturedPiece == null)
+                        {
+                            Debug.Log("Checked Down");
+                            if (tiles[moveCoordinates.x, moveCoordinates.y - 1].GetComponent<Square>().tag == "CannonTarget")
+                            {
+                                Debug.Log("Found Down");
+                                capturedPiece = tiles[moveCoordinates.x, moveCoordinates.y - 1].GetComponent<Square>().currentPiece;
+                            }
+                        }
+
+                        // A piece is being captured
+                        if (capturedPiece != null)
+                        {
+                            // Check if capture target is the ore
+                            if (capturedPiece.type == PieceType.Ore)
+                                currentSquare.currentPiece.hasOre = true;
+
+                            // Captured the orebearer, need to place the ore back on the board
+                            if (capturedPiece.hasOre)
+                            {
+                                Debug.Log("The orebearer has been captured, the ore is still safe!");
+                            }
+
+                            // Capture that piece
+                            jail.InsertAPiece(capturedPiece);
+                            Debug.Log(capturedPiece.name + " has been captured");
+                            capturedPiece.destroyPiece();
+                            currentSquare.currentPiece.hasCaptured = true;
+                        }
+
+                        // Move current piece to that square
+                        MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
+
+                        // Clean up board now that move has completed
+                        ResetBoardMaterials();
+                        NextTurn();
+                        Square selectedTile = tileSelected.GetComponent<Square>();
+                        selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 2);
+                        squareSelected = false;
+                        currentSquare.SquareHasBeenClicked = false;
+                        tileSelected = null;
+                        storedTileSelected = null;
+                    }
+
                     // The same square was clicked twice (cancel the square selection)
-                    else if(tileSelected.GetComponent<Square>().SquareHasBeenClicked)
+                            else if(tileSelected.GetComponent<Square>().SquareHasBeenClicked)
                     {
                         ResetBoardMaterials();
                         squareSelected = false;
@@ -395,6 +475,9 @@ public class GameBoard : MonoBehaviour
                 case PieceType.Gunner:
                     moveAssessment = piece.GetComponent<Gunner>().GetValidMoves(tiles);
                     break;
+                case PieceType.Cannon:
+                    moveAssessment = piece.GetComponent<Cannon>().GetValidMoves(tiles);
+                    break;
                 case PieceType.Royal1:
                     if (piece.isNavy)
                     {
@@ -436,7 +519,7 @@ public class GameBoard : MonoBehaviour
                         else
                         {
                             // The current Piece is a Gunner or Cannon that can't capture regularly
-                            if (piece.type == PieceType.Gunner /*|| piece.type == PieceType.cannon*/)
+                            if (piece.type == PieceType.Gunner || piece.type == PieceType.Cannon)
                             {
                                 moveAssessment[x, y] = -1;
                             }
@@ -456,23 +539,43 @@ public class GameBoard : MonoBehaviour
         {
             for (int y = 0; y < TILE_COUNT_Y; y++)
             {
+                // Square can be moved to
                 if(moveAssessment[x,y] == 1)
                 {
                     tiles[x, y].tag = "MoveableSquare";
                     Square activeSquare = tiles[x,y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.moveableBoardMaterial);
                 }
+                // Square contains a capturable piece by replacement
                 else if (moveAssessment[x,y] == 2)
                 {
                     tiles[x, y].tag = "CaptureSquare";
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
                 }
+                // Square contains a capturable piece by shooting
                 else if(moveAssessment[x,y] == 3)
                 {
                     tiles[x, y].tag = "GunnerTarget";
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                }
+                // Square contains a capturable peice by jumping
+                else if(moveAssessment[x,y] == 4)
+                {
+                    // Cannon can jump a Land Mine but not capture it
+                    if (tiles[x, y].GetComponent<Square>().currentPiece.type != PieceType.LandMine)
+                    {
+                        tiles[x, y].tag = "CannonTarget";
+                        Square activeSquare = tiles[x, y].GetComponent<Square>();
+                        activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                    }
+                }
+                // Square can be moved to for jumping capture
+                else if (moveAssessment[x, y] == 5)
+                {
+                    tiles[x, y].tag = "CannonDestination";
+                    Square activeSquare = tiles[x, y].GetComponent<Square>();
                 }
             }
         }

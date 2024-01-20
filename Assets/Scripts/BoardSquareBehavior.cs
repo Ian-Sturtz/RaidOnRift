@@ -16,6 +16,7 @@ public class Square : MonoBehaviour
     public Piece currentPiece;
     public bool SquareHasBeenClicked = false;
     private bool flashing = false;
+    private bool continualFlash = false;
 
     private void Start()
     {
@@ -32,6 +33,19 @@ public class Square : MonoBehaviour
             {
                 SetMaterial(clickedBoardMaterial);
             }
+        }
+
+        if(tag == "CannonDestination")
+        {
+            if (!continualFlash)
+            {
+                continualFlash = true;
+                StartCoroutine(ContinualFlash(defaultBoardMaterial, moveableBoardMaterial));
+            }
+        }
+        else
+        {
+            continualFlash = false;
         }
     }
 
@@ -71,5 +85,18 @@ public class Square : MonoBehaviour
             yield return new WaitForSeconds(delay);
         }
         flashing = false;
+    }
+
+    IEnumerator ContinualFlash(Material StartingMaterial, Material TargetMaterial)
+    {
+        while (continualFlash)
+        {
+            float delay = .35f;
+
+            SetMaterial(TargetMaterial);
+            yield return new WaitForSeconds(delay);
+            SetMaterial(StartingMaterial);
+            yield return new WaitForSeconds(delay);
+        }
     }
 }

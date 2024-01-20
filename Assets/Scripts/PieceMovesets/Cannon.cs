@@ -7,6 +7,10 @@ public class Cannon : Piece
     public int[,] GetValidMoves(GameObject[,] tiles)
     {
         int[,] moveAssessment;
+        bool up = true;
+        bool down = true;
+        bool left = true;
+        bool right = true;
 
         moveAssessment = new int[10, 10];
 
@@ -14,36 +18,153 @@ public class Cannon : Piece
             for (int y = 0; y < 10; y++)
                 moveAssessment[x, y] = -1;
 
-        GameObject currentSquare = tiles[currentX, currentY];
+        // Movement
+        for (int x_change = -1; x_change <= 1; x_change++)
+            for (int y_change = -1; y_change <= 1; y_change++)
+                if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                    if (tiles[currentX + x_change, currentY + y_change].GetComponent<Square>().currentPiece == null)
+                        moveAssessment[currentX + x_change, currentY + y_change] = 1;
 
-        // For all squares +/- 1 away from current position
-        for (int x_change = -1; x_change < 2; x_change++)
+        // Capturing
+        for (int change = 1; up || down || left || right; change++)
         {
-            if (!isNavy)
+            // Searching for enemy pieces in the up direction
+            if (up)
             {
-                for (int y_change = -1; y_change < 2; y_change++)
+                if(IsSquareOnBoard(currentX, currentY + change))
                 {
-                    if (y_change <= 0 || hasCaptured)
+                    Square possibleSquare = tiles[currentX, currentY + change].GetComponent<Square>();
+                    
+                    // Piece has been found
+                    if(possibleSquare.currentPiece != null)
                     {
-                        if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                        up = false;
+                        
+                        // It is an enemy piece
+                        if(isNavy != possibleSquare.currentPiece.isNavy)
                         {
-                            moveAssessment[currentX + x_change, currentY + y_change] = 1;
+                            if(IsSquareOnBoard(currentX, currentY + change + 1))
+                            {
+                                Square possibleDestination = tiles[currentX, currentY + change + 1].GetComponent<Square>();
+
+                                // There is an appropriate square to jump into
+                                if (possibleDestination.currentPiece == null)
+                                {
+                                    moveAssessment[currentX, currentY + change] = 4;
+                                    moveAssessment[currentX, currentY + change + 1] = 5;
+                                }
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-
-                for (int y_change = -1; y_change < 2; y_change++)
+                else
                 {
-                    if (y_change >= 0 || hasCaptured)
+                    up = false;
+                }
+            }
+
+            // Searching for enemy pieces in the down direction
+            if (down)
+            {
+                if (IsSquareOnBoard(currentX, currentY - change))
+                {
+                    Square possibleSquare = tiles[currentX, currentY - change].GetComponent<Square>();
+
+                    // Piece has been found
+                    if (possibleSquare.currentPiece != null)
                     {
-                        if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                        down = false;
+
+                        // It is an enemy piece
+                        if (isNavy != possibleSquare.currentPiece.isNavy)
                         {
-                            moveAssessment[currentX + x_change, currentY + y_change] = 1;
+                            if (IsSquareOnBoard(currentX, currentY - change - 1))
+                            {
+                                Square possibleDestination = tiles[currentX, currentY - change - 1].GetComponent<Square>();
+
+                                // There is an appropriate square to jump into
+                                if (possibleDestination.currentPiece == null)
+                                {
+                                    moveAssessment[currentX, currentY - change] = 4;
+                                    moveAssessment[currentX, currentY - change - 1] = 5;
+                                }
+                            }
                         }
                     }
+                }
+                else
+                {
+                    down = false;
+                }
+            }
+
+            // Searching for enemy pieces in the left direction
+            if (left)
+            {
+                if (IsSquareOnBoard(currentX - change, currentY))
+                {
+                    Square possibleSquare = tiles[currentX - change, currentY].GetComponent<Square>();
+
+                    // Piece has been found
+                    if (possibleSquare.currentPiece != null)
+                    {
+                        left = false;
+
+                        // It is an enemy piece
+                        if (isNavy != possibleSquare.currentPiece.isNavy)
+                        {
+                            if (IsSquareOnBoard(currentX - change - 1, currentY))
+                            {
+                                Square possibleDestination = tiles[currentX - change - 1, currentY].GetComponent<Square>();
+
+                                // There is an appropriate square to jump into
+                                if (possibleDestination.currentPiece == null)
+                                {
+                                    moveAssessment[currentX - change, currentY] = 4;
+                                    moveAssessment[currentX - change - 1, currentY] = 5;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    left = false;
+                }
+            }
+
+            // Searching for enemy pieces in the right direction
+            if (right)
+            {
+                if (IsSquareOnBoard(currentX + change, currentY))
+                {
+                    Square possibleSquare = tiles[currentX + change, currentY].GetComponent<Square>();
+
+                    // Piece has been found
+                    if (possibleSquare.currentPiece != null)
+                    {
+                        right = false;
+
+                        // It is an enemy piece
+                        if (isNavy != possibleSquare.currentPiece.isNavy)
+                        {
+                            if (IsSquareOnBoard(currentX + change + 1, currentY))
+                            {
+                                Square possibleDestination = tiles[currentX + change + 1, currentY].GetComponent<Square>();
+
+                                // There is an appropriate square to jump into
+                                if (possibleDestination.currentPiece == null)
+                                {
+                                    moveAssessment[currentX + change, currentY] = 4;
+                                    moveAssessment[currentX + change + 1, currentY] = 5;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    right = false;
                 }
             }
         }
