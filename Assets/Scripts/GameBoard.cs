@@ -61,6 +61,7 @@ public class GameBoard : MonoBehaviour
         NavyPieces[3] = SpawnPiece(PieceType.Royal1, true, 0, 3);
         NavyPieces[4] = SpawnPiece(PieceType.Vanguard, true, 1, 3);
         NavyPieces[5] = SpawnPiece(PieceType.Navigator, true, 2, 4);
+        NavyPieces[6] = SpawnPiece(PieceType.Gunner, true, 4, 5);
 
         PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
@@ -68,6 +69,7 @@ public class GameBoard : MonoBehaviour
         PiratePieces[3] = SpawnPiece(PieceType.Royal1, false, 8, 6);
         PiratePieces[4] = SpawnPiece(PieceType.Vanguard, false, 3, 7);
         PiratePieces[5] = SpawnPiece(PieceType.Navigator, false, 1, 8);
+        PiratePieces[6] = SpawnPiece(PieceType.Gunner, false, 6, 9);
     }
 
     private void Update()
@@ -159,6 +161,10 @@ public class GameBoard : MonoBehaviour
                     {
                         Square currentSquare = storedTileSelected.GetComponent<Square>();
                         Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
+                        if(currentSquare.currentPiece.type == PieceType.Gunner)
+                        {
+                            currentSquare.currentPiece.hasCaptured = false;
+                        }
                         MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
                         ResetBoardMaterials();
                         NextTurn();
@@ -171,12 +177,12 @@ public class GameBoard : MonoBehaviour
                     }
 
                     // An enemy piece is being captured
-                    else if(tileSelected.tag == "CaptureSquare")
+                    else if(tileSelected.tag == "CaptureSquare" || tileSelected.tag == "GunnerTarget")
                     {
                         Square currentSquare = storedTileSelected.GetComponent<Square>();
                         Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
 
-                        // Capture that piece
+                        // Check if capture target is the ore
                         Piece capturedPiece = tiles[moveCoordinates.x, moveCoordinates.y].GetComponent<Square>().currentPiece;
                         if (capturedPiece.type == PieceType.Ore)
                             currentSquare.currentPiece.hasOre = true;
@@ -187,14 +193,15 @@ public class GameBoard : MonoBehaviour
                             Debug.Log("The orebearer has been captured, the ore is still safe!");
                         }
 
+                        // Capture that piece
                         jail.InsertAPiece(capturedPiece);
                         Debug.Log(capturedPiece.name + " has been captured");
                         capturedPiece.destroyPiece();
                         currentSquare.currentPiece.hasCaptured = true;
 
-                        // Move current piece to that square
-                        MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
-                        
+                        // Move current piece to that square (unless it's a gunner or cannon)
+                        if(currentSquare.currentPiece.type != PieceType.Gunner)
+                            MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
 
                         // Clean up board now that move has completed
                         ResetBoardMaterials();
@@ -385,6 +392,9 @@ public class GameBoard : MonoBehaviour
                 case PieceType.Navigator:
                     moveAssessment = piece.GetComponent<Navigator>().GetValidMoves(tiles);
                     break;
+                case PieceType.Gunner:
+                    moveAssessment = piece.GetComponent<Gunner>().GetValidMoves(tiles);
+                    break;
                 case PieceType.Royal1:
                     if (piece.isNavy)
                     {
@@ -425,7 +435,16 @@ public class GameBoard : MonoBehaviour
                         // That piece is an enemy piece that can be captured
                         else
                         {
-                            moveAssessment[x, y] = 2;
+                            // The current Piece is a Gunner or Cannon that can't capture regularly
+                            if (piece.type == PieceType.Gunner /*|| piece.type == PieceType.cannon*/)
+                            {
+                                moveAssessment[x, y] = -1;
+                            }
+                            // That piece can be captured
+                            else
+                            {
+                                moveAssessment[x, y] = 2;
+                            }
                         }
                     }
                 }
@@ -436,7 +455,7 @@ public class GameBoard : MonoBehaviour
         for (int x = 0; x < TILE_COUNT_X; x++)
         {
             for (int y = 0; y < TILE_COUNT_Y; y++)
-            {                
+            {
                 if(moveAssessment[x,y] == 1)
                 {
                     tiles[x, y].tag = "MoveableSquare";
@@ -446,6 +465,12 @@ public class GameBoard : MonoBehaviour
                 else if (moveAssessment[x,y] == 2)
                 {
                     tiles[x, y].tag = "CaptureSquare";
+                    Square activeSquare = tiles[x, y].GetComponent<Square>();
+                    activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                }
+                else if(moveAssessment[x,y] == 3)
+                {
+                    tiles[x, y].tag = "GunnerTarget";
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
                 }

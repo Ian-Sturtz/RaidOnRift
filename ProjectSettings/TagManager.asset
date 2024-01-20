@@ -10,6 +10,9 @@ TagManager:
   - JailCell
   - JailBoard
   - CaptureSquare
+  - GunnerTarget
+  - CannonTarget
+  - CannonDestination
   layers:
   - Default
   - TransparentFX
