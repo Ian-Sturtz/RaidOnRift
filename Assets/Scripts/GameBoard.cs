@@ -32,6 +32,7 @@ public class GameBoard : MonoBehaviour
     public bool squareSelected = false;
     public GameObject tileSelected;
     public GameObject storedTileSelected;
+    [SerializeField] private bool bomberSelected = false;
 
     // Piece prefabs to be spawned in as needed
     [Header("Prefabs and Materials")]
@@ -63,6 +64,7 @@ public class GameBoard : MonoBehaviour
         NavyPieces[5] = SpawnPiece(PieceType.Navigator, true, 2, 4);
         NavyPieces[6] = SpawnPiece(PieceType.Gunner, true, 4, 5);
         NavyPieces[7] = SpawnPiece(PieceType.Cannon, true, 3, 3);
+        NavyPieces[8] = SpawnPiece(PieceType.Bomber, true, 5, 4);
 
         PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
@@ -72,6 +74,7 @@ public class GameBoard : MonoBehaviour
         PiratePieces[5] = SpawnPiece(PieceType.Navigator, false, 1, 8);
         PiratePieces[6] = SpawnPiece(PieceType.Gunner, false, 6, 9);
         PiratePieces[7] = SpawnPiece(PieceType.Cannon, false, 7, 7);
+        PiratePieces[8] = SpawnPiece(PieceType.Bomber, false, 7, 5);
     }
 
     private void Update()
@@ -112,6 +115,15 @@ public class GameBoard : MonoBehaviour
                     }
                 }
             }
+        }
+
+        if(storedTileSelected != null && storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.Bomber)
+        {
+            bomberSelected = true;
+        }
+        else
+        {
+            bomberSelected = false;
         }
 
         // Detect a square has been clicked
@@ -295,7 +307,7 @@ public class GameBoard : MonoBehaviour
                     }
 
                     // The same square was clicked twice (cancel the square selection)
-                            else if(tileSelected.GetComponent<Square>().SquareHasBeenClicked)
+                    else if(tileSelected.GetComponent<Square>().SquareHasBeenClicked)
                     {
                         ResetBoardMaterials();
                         squareSelected = false;
@@ -466,6 +478,9 @@ public class GameBoard : MonoBehaviour
                 case PieceType.Mate:
                     moveAssessment = piece.GetComponent<Mate>().GetValidMoves(tiles);
                     break;
+                case PieceType.Bomber:
+                    moveAssessment = piece.GetComponent<Bomber>().GetValidMoves(tiles);
+                    break;
                 case PieceType.Vanguard:
                     moveAssessment = piece.GetComponent<Vanguard>().GetValidMoves(tiles);
                     break;
@@ -513,7 +528,14 @@ public class GameBoard : MonoBehaviour
                         // That piece is a land mine (can't move there)
                         else if(possiblePiece.type == PieceType.LandMine)
                         {
-                            moveAssessment[x, y] = -1;
+                            if(piece.type == PieceType.Bomber)
+                            {
+                                moveAssessment[x, y] = 2;
+                            }
+                            else
+                            {
+                                moveAssessment[x, y] = -1;
+                            }
                         }
                         // That piece is an enemy piece that can be captured
                         else

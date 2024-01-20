@@ -7,11 +7,12 @@ public enum PieceType
     Ore = 0,
     LandMine = 1,
     Mate = 2,
-    Vanguard = 3,
-    Navigator = 4,
-    Gunner = 5,
-    Cannon = 6,
-    Royal1 = 7,
+    Bomber = 3,
+    Vanguard = 4,
+    Navigator = 5,
+    Gunner = 6,
+    Cannon = 7,
+    Royal1 = 8,
 }
 
 public class Piece : MonoBehaviour
