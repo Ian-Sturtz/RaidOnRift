@@ -2930,6 +2930,7 @@ MonoBehaviour:
   - {fileID: 879590214565728766, guid: 8139a33a8084c7f479f06b69cac406bd, type: 3}
   - {fileID: 5436928990520726397, guid: 946daf20fd3e1a54f9efdef81f5abdff, type: 3}
   - {fileID: 9113518023586393087, guid: bf174c5af3e5ec4439c9b878fef34f88, type: 3}
+  - {fileID: 1255779526189719486, guid: e0f18f14538a23e4cb2f274cd5889bbc, type: 3}
   - {fileID: 8191554329119799554, guid: 2870aa1d3c0409e4ba9ccc14dcd8152a, type: 3}
   - {fileID: 4256565950918163535, guid: c542ce97909e7b2419984bdca6a31e4d, type: 3}
   - {fileID: 858630950521785915, guid: 6db3a579d48312443bfe6c004b5d0ba0, type: 3}
@@ -2940,6 +2941,7 @@ MonoBehaviour:
   - {fileID: 2450506514258733070, guid: 66835b91119fbe9479220c2263dc5a56, type: 3}
   - {fileID: 1125514398813937554, guid: 4a1033300f8065149982b56c4d3f5add, type: 3}
   - {fileID: 6650292672067637781, guid: cfb5343b78e83b741900e3529d295740, type: 3}
+  - {fileID: 7533564943061118156, guid: 33ca8144c4edb434e8c4cdda88c83e6e, type: 3}
   - {fileID: 6867195418064038437, guid: c619115d072cf364f90bc2ccba15ba38, type: 3}
 --- !u!4 &374190494 stripped
 Transform:

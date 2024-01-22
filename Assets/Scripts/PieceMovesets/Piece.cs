@@ -13,7 +13,8 @@ public enum PieceType
     Gunner = 6,
     Cannon = 7,
     Quartermaster = 8,
-    Royal1 = 9,
+    Royal2 = 9,
+    Royal1 = 10,
 }
 
 public class Piece : MonoBehaviour

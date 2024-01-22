@@ -42,6 +42,9 @@ public class GameBoard : MonoBehaviour
     [SerializeField] private bool resetOre = false;
     [SerializeField] private bool orebearerSecondMove = false;
 
+    // Corsair mechanics
+    [SerializeField] private int jumpCooldown = 0;
+
     // Piece prefabs to be spawned in as needed
     [Header("Prefabs and Materials")]
     [SerializeField] public GameObject[] PiecePrefabs;
@@ -75,6 +78,7 @@ public class GameBoard : MonoBehaviour
         NavyPieces[8] = SpawnPiece(PieceType.Bomber, true, 5, 4);
         NavyPieces[9] = SpawnPiece(PieceType.LandMine, true, 6, 6);
         NavyPieces[10] = SpawnPiece(PieceType.Quartermaster, true, 5, 6);
+        NavyPieces[11] = SpawnPiece(PieceType.Royal2, true, 0, 8);
 
         PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
@@ -87,6 +91,7 @@ public class GameBoard : MonoBehaviour
         PiratePieces[8] = SpawnPiece(PieceType.Bomber, false, 7, 5);
         PiratePieces[9] = SpawnPiece(PieceType.Royal1, false, 4, 0);
         PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 6, 4);
+        PiratePieces[11] = SpawnPiece(PieceType.Royal2, false, 9, 4);
     }
 
     private void Update()
@@ -242,6 +247,26 @@ public class GameBoard : MonoBehaviour
                         {
                             currentSquare.currentPiece.hasCaptured = false;
                         }
+                        MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
+                        ResetBoardMaterials();
+                        NextTurn();
+                        Square selectedTile = tileSelected.GetComponent<Square>();
+                        selectedTile.FlashMaterial(selectedTile.moveableBoardMaterial, 2);
+                        squareSelected = false;
+                        currentSquare.SquareHasBeenClicked = false;
+                        tileSelected = null;
+                        storedTileSelected = null;
+                    }
+
+                    // The Corsair has jumped to an open board space
+                    else if (tileSelected.tag == "CorsairJump")
+                    {
+                        Square currentSquare = storedTileSelected.GetComponent<Square>();
+
+                        // Corsair jumping requires 2 turns of cooldown before the next jump
+                        if (currentSquare.currentPiece.type == PieceType.Royal2 && !currentSquare.currentPiece.isNavy)
+                            jumpCooldown = 2;
+                        Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
                         MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
                         ResetBoardMaterials();
                         NextTurn();
@@ -801,6 +826,32 @@ public class GameBoard : MonoBehaviour
                 case PieceType.Quartermaster:
                     moveAssessment = piece.GetComponent<Quartermaster>().GetValidMoves(tiles);
                     break;
+                case PieceType.Royal2:
+                    if (piece.isNavy)
+                    {
+                        Debug.Log("Tactician can't move yet");
+                        squareSelected = false;
+                        current_square.SquareHasBeenClicked = false;
+                        current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);
+                        tileSelected = null;
+                        //moveAssessment = piece.GetComponent<Tactician>().GetValidMoves(tiles);
+                    }
+                    else
+                    {
+                        if(jumpCooldown > 0)
+                        {
+                            Debug.Log("Corsair can't jump yet, move someone else!");
+                            squareSelected = false;
+                            current_square.SquareHasBeenClicked = false;
+                            current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);
+                            tileSelected = null;
+                        }
+                        else
+                        {
+                            moveAssessment = piece.GetComponent<Corsair>().GetValidMoves(tiles);
+                        }
+                    }
+                    break;
                 case PieceType.Royal1:
                     if (piece.isNavy)
                     {
@@ -901,7 +952,7 @@ public class GameBoard : MonoBehaviour
                         activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
                     }
                 }
-                // Square can be moved to for jumping capture
+                // Square can be moved to for cannon jumping capture
                 else if (moveAssessment[x, y] == 5)
                 {
                     tiles[x, y].tag = "CannonDestination";
@@ -921,6 +972,14 @@ public class GameBoard : MonoBehaviour
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
                 }
+
+                // Corsair can jump here
+                else if (moveAssessment[x, y] == 8)
+                {
+                    tiles[x, y].tag = "CorsairJump";
+                    Square activeSquare = tiles[x, y].GetComponent<Square>();
+                    activeSquare.SetMaterial(activeSquare.moveableBoardMaterial);
+                }
             }
         }
     }
@@ -928,6 +987,11 @@ public class GameBoard : MonoBehaviour
     // Changes the turn from one player to the next
     private void NextTurn()
     {
+        if(jumpCooldown != 0)
+        {
+            jumpCooldown--;
+        }
+
         orebearerSecondMove = false;
         if (!resetOre)
         {
