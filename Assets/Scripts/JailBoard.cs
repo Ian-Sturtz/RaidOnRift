@@ -8,8 +8,8 @@ public class JailBoard : MonoBehaviour
     public GameBoard board;
     public GameObject[] NavyJailCells;      // Cells in the Navy Jail (where Pirates go)
     public GameObject[] PirateJailCells;    // Cells in the Pirate Jail (where Navy go)
-    public Piece[] navyJailedPieces;
-    public Piece[] pirateJailedPieces;
+    public Piece[] navyJailedPieces;        // Captured Navy Pieces
+    public Piece[] pirateJailedPieces;      // Captured Pirate Pieces
     private float jail_square_size = .6f;
 
     private void Start()
@@ -53,7 +53,6 @@ public class JailBoard : MonoBehaviour
         if (piece.isNavy)
         {
             cellToPlaceIn = FindFirstOpen(PirateJailCells);
-            Debug.Log(cellToPlaceIn);
             pieceIndex = FindNextSlot(navyJailedPieces);
             navyJailedPieces[pieceIndex] = SpawnPiece(piece.type, true, cellToPlaceIn);
             PirateJailCells[cellToPlaceIn].GetComponent<JailCell>().hasPiece = true;
@@ -62,14 +61,21 @@ public class JailBoard : MonoBehaviour
         else
         {
             cellToPlaceIn = FindFirstOpen(NavyJailCells);
-            Debug.Log(cellToPlaceIn);
             pieceIndex = FindNextSlot(pirateJailedPieces);
             pirateJailedPieces[pieceIndex] = SpawnPiece(piece.type, false, cellToPlaceIn);
             cell = NavyJailCells[cellToPlaceIn].GetComponent<JailCell>();
         }
 
-        cell.currentPiece = piece;
         cell.hasPiece = true;
+
+        if (piece.isNavy)
+        {
+            PirateJailCells[cellToPlaceIn].GetComponent<JailCell>().currentPiece = navyJailedPieces[cellToPlaceIn].GetComponent<Piece>();
+        }
+        else
+        {
+            NavyJailCells[cellToPlaceIn].GetComponent<JailCell>().currentPiece = pirateJailedPieces[cellToPlaceIn].GetComponent<Piece>();
+        }
 
         cell.FlashMaterial(cell.clickedJailMaterial, 3);
     }
@@ -129,5 +135,52 @@ public class JailBoard : MonoBehaviour
         cp.transform.position = targetPosition;
 
         return cp;
+    }
+
+    // Finds a given piece within the specified Jail
+    public int FindPiece(PieceType type, bool pieceIsNavy)
+    {
+        int index;
+
+        // Searches the Pirate Jail for a Navy piece
+        if (pieceIsNavy)
+        {
+            for (index = 0; index < 30; index++)
+            {
+                if (navyJailedPieces[index] != null)
+                {
+                    if (navyJailedPieces[index].type == type)
+                    {
+                        return index;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (index = 0; index < 30; index++)
+            {
+                if (pirateJailedPieces[index] != null)
+                {
+                    if (pirateJailedPieces[index].type == type)
+                    {
+                        return index;
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public void resetMaterials()
+    {
+        for(int i = 0; i < 30; i++)
+        {
+            NavyJailCells[i].GetComponent<JailCell>().interactable = false;
+            NavyJailCells[i].GetComponent<JailCell>().clicked = false;
+            PirateJailCells[i].GetComponent<JailCell>().interactable = false;
+            PirateJailCells[i].GetComponent<JailCell>().clicked = false;
+        }
     }
 }

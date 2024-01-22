@@ -166,4 +166,45 @@ public class Bomber : Piece
 
         return moveAssessment;
     }
+
+    // Checks for legal squares to deploy a land mine to
+    public int[,] DetectBombDeploy(GameObject[,] tiles)
+    {
+        Debug.Log("Checking for legal bomb deployments");
+        int[,] moveAssessment;
+
+        moveAssessment = new int[10, 10];
+
+        for (int x = 0; x < 10; x++)
+            for (int y = 0; y < 10; y++)
+                moveAssessment[x, y] = -1;
+
+        // Checks square to the left
+        if(tiles[currentX -1, currentY].GetComponent<Square>().currentPiece == null)
+        {
+            moveAssessment[currentX - 1, currentY] = 6;
+        }
+
+        // Checks square to the right
+        if (tiles[currentX + 1, currentY].GetComponent<Square>().currentPiece == null)
+        {
+            moveAssessment[currentX + 1, currentY] = 6;
+        }
+
+        // Checks square above
+        if (tiles[currentX, currentY + 1].GetComponent<Square>().currentPiece == null)
+        {
+            moveAssessment[currentX, currentY + 1] = 6;
+        }
+
+        // Checks square below
+        if (tiles[currentX, currentY - 1].GetComponent<Square>().currentPiece == null)
+        {
+            moveAssessment[currentX, currentY - 1] = 6;
+        }
+
+        moveAssessment[currentX, currentY] = 0;
+
+        return moveAssessment;
+    }
 }

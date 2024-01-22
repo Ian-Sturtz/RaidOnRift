@@ -13,6 +13,9 @@ TagManager:
   - GunnerTarget
   - CannonTarget
   - CannonDestination
+  - InteractablePiece
+  - MineDeploy
+  - OreDeploy
   layers:
   - Default
   - TransparentFX

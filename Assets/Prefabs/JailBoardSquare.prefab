@@ -143,9 +143,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81a81b3720454a64f95a7f6935fb490b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameBoard: {fileID: 0}
   inactiveJailMaterial: {fileID: 2100000, guid: 1a687eeb90a0d714eac1c38a471602a9, type: 2}
   activeJailMaterial: {fileID: 2100000, guid: 70dd8934f47d686468dc8363948f5453, type: 2}
+  interactableJailMaterial: {fileID: 2100000, guid: ad9ac2889dbcafc448bab697e6ea4bef, type: 2}
   clickedJailMaterial: {fileID: 2100000, guid: e7ccabd546951604b87b2e3277a96435, type: 2}
   currentPiece: {fileID: 0}
   hasPiece: 0
+  interactable: 0

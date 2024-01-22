@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f640d6ccd96df9f439ca83539d9cf328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  piratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}
-  navyPiece: {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
+  PiratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}
+  NavyPiece: {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
   NavyOre: {fileID: 2100000, guid: b1f0623e1f035104ba60e5ad7d6cc221, type: 2}
   PirateOre: {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
   type: 1

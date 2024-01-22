@@ -2916,6 +2916,10 @@ MonoBehaviour:
   squareSelected: 0
   tileSelected: {fileID: 0}
   storedTileSelected: {fileID: 0}
+  bomberSelected: 0
+  landMineSelected: 0
+  resetOre: 0
+  orebearerSecondMove: 0
   PiecePrefabs:
   - {fileID: 6887330558775533615, guid: f001947424947804da43bca6d72c7ef0, type: 3}
   - {fileID: 2119935833039630825, guid: 178bfac06b4641441b24f40d8dc05b36, type: 3}
