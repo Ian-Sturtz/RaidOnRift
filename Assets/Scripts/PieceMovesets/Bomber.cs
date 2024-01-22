@@ -31,9 +31,14 @@ public class Bomber : Piece
                 {
                     moveAssessment[currentX, currentY + change] = 1;
 
-                    if (tiles[currentX, currentY + change].GetComponent<Square>().currentPiece != null)
+                    Square possibleSquare = tiles[currentX, currentY + change].GetComponent<Square>();
+                    if (possibleSquare.currentPiece != null)
                     {
                         up = false;
+                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        {
+                            moveAssessment[currentX, currentY + change] = -1;
+                        }
                     }
                 }
                 else
@@ -48,9 +53,14 @@ public class Bomber : Piece
                 {
                     moveAssessment[currentX, currentY - change] = 1;
 
-                    if (tiles[currentX, currentY - change].GetComponent<Square>().currentPiece != null)
+                    Square possibleSquare = tiles[currentX, currentY - change].GetComponent<Square>();
+                    if (possibleSquare.currentPiece != null)
                     {
                         down = false;
+                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        {
+                            moveAssessment[currentX, currentY - change] = -1;
+                        }
                     }
                 }
                 else
@@ -65,9 +75,14 @@ public class Bomber : Piece
                 {
                     moveAssessment[currentX + change, currentY] = 1;
 
-                    if (tiles[currentX + change, currentY].GetComponent<Square>().currentPiece != null)
+                    Square possibleSquare = tiles[currentX + change, currentY].GetComponent<Square>();
+                    if (possibleSquare.currentPiece != null)
                     {
                         right = false;
+                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        {
+                            moveAssessment[currentX + change, currentY] = -1;
+                        }
                     }
                 }
                 else
@@ -82,9 +97,14 @@ public class Bomber : Piece
                 {
                     moveAssessment[currentX - change, currentY] = 1;
 
-                    if (tiles[currentX - change, currentY].GetComponent<Square>().currentPiece != null)
+                    Square possibleSquare = tiles[currentX - change, currentY].GetComponent<Square>();
+                    if (possibleSquare.currentPiece != null)
                     {
                         left = false;
+                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        {
+                            moveAssessment[currentX - change, currentY] = -1;
+                        }
                     }
                 }
                 else
@@ -99,9 +119,14 @@ public class Bomber : Piece
                 {
                     moveAssessment[currentX + change, currentY + change] = 1;
 
-                    if (tiles[currentX + change, currentY + change].GetComponent<Square>().currentPiece != null)
+                    Square possibleSquare = tiles[currentX + change, currentY + change].GetComponent<Square>();
+                    if (possibleSquare.currentPiece != null)
                     {
                         up_right = false;
+                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        {
+                            moveAssessment[currentX + change, currentY + change] = -1;
+                        }
                     }
                 }
                 else
@@ -116,9 +141,14 @@ public class Bomber : Piece
                 {
                     moveAssessment[currentX - change, currentY + change] = 1;
 
-                    if (tiles[currentX - change, currentY + change].GetComponent<Square>().currentPiece != null)
+                    Square possibleSquare = tiles[currentX - change, currentY + change].GetComponent<Square>();
+                    if (possibleSquare.currentPiece != null)
                     {
                         up_left = false;
+                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        {
+                            moveAssessment[currentX - change, currentY + change] = -1;
+                        }
                     }
                 }
                 else
@@ -133,9 +163,14 @@ public class Bomber : Piece
                 {
                     moveAssessment[currentX + change, currentY - change] = 1;
 
-                    if (tiles[currentX + change, currentY - change].GetComponent<Square>().currentPiece != null)
+                    Square possibleSquare = tiles[currentX + change, currentY - change].GetComponent<Square>();
+                    if (possibleSquare.currentPiece != null)
                     {
                         down_right = false;
+                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        {
+                            moveAssessment[currentX + change, currentY - change] = -1;
+                        }
                     }
                 }
                 else
@@ -150,9 +185,14 @@ public class Bomber : Piece
                 {
                     moveAssessment[currentX - change, currentY - change] = 1;
 
-                    if (tiles[currentX - change, currentY - change].GetComponent<Square>().currentPiece != null)
+                    Square possibleSquare = tiles[currentX - change, currentY - change].GetComponent<Square>();
+                    if (possibleSquare.currentPiece != null)
                     {
                         down_left = false;
+                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        {
+                            moveAssessment[currentX - change, currentY - change] = -1;
+                        }
                     }
                 }
                 else

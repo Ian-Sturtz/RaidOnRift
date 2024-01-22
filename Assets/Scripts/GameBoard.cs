@@ -74,6 +74,7 @@ public class GameBoard : MonoBehaviour
         NavyPieces[7] = SpawnPiece(PieceType.Cannon, true, 3, 3);
         NavyPieces[8] = SpawnPiece(PieceType.Bomber, true, 5, 4);
         NavyPieces[9] = SpawnPiece(PieceType.LandMine, true, 6, 6);
+        NavyPieces[10] = SpawnPiece(PieceType.Quartermaster, true, 5, 6);
 
         PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
@@ -85,6 +86,7 @@ public class GameBoard : MonoBehaviour
         PiratePieces[7] = SpawnPiece(PieceType.Cannon, false, 7, 7);
         PiratePieces[8] = SpawnPiece(PieceType.Bomber, false, 7, 5);
         PiratePieces[9] = SpawnPiece(PieceType.Royal1, false, 4, 0);
+        PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 6, 4);
     }
 
     private void Update()
@@ -503,7 +505,6 @@ public class GameBoard : MonoBehaviour
                         storedTileSelected = null;
                         bomberSelected = false;
                         landMineSelected = false;
-                        cellToHighlight = -2;
                         NextTurn();
                     }
 
@@ -514,6 +515,8 @@ public class GameBoard : MonoBehaviour
                         Square pieceSquare = storedTileSelected.GetComponent<Square>();
                         Vector2Int deployCoordinates = IdentifyThisBoardSquare(tileSelected);
                         int spawnIndex = FindFirstOpenTeamSlot(pieceSquare.currentPiece.isNavy);
+
+                        cellToHighlight = jail.FindPiece(PieceType.Ore, pieceSquare.currentPiece.isNavy);
 
                         if (pieceSquare.currentPiece.isNavy)
                         {
@@ -535,7 +538,6 @@ public class GameBoard : MonoBehaviour
                         tileSelected = null;
                         bomberSelected = false;
                         landMineSelected = false;
-                        cellToHighlight = -2;
 
                         // Turn is now over
                         if (!orebearerSecondMove)
@@ -548,7 +550,6 @@ public class GameBoard : MonoBehaviour
                         // Return control to the orebearer for a second turn
                         else
                         {
-                            cellToHighlight = -2;
                             pieceSquare.SquareHasBeenClicked = true;
                             DetectLegalMoves(storedTileSelected, pieceSquare.currentPiece);
                         }
@@ -572,7 +573,6 @@ public class GameBoard : MonoBehaviour
                         storedTileSelected = null;
                         bomberSelected = false;
                         landMineSelected = false;
-                        cellToHighlight = -2;
                     }
                 }
             }
@@ -797,6 +797,9 @@ public class GameBoard : MonoBehaviour
                     break;
                 case PieceType.Cannon:
                     moveAssessment = piece.GetComponent<Cannon>().GetValidMoves(tiles);
+                    break;
+                case PieceType.Quartermaster:
+                    moveAssessment = piece.GetComponent<Quartermaster>().GetValidMoves(tiles);
                     break;
                 case PieceType.Royal1:
                     if (piece.isNavy)
