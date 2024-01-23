@@ -16,6 +16,7 @@ TagManager:
   - InteractablePiece
   - MineDeploy
   - OreDeploy
+  - CorsairJump
   layers:
   - Default
   - TransparentFX

@@ -28,6 +28,7 @@ public class Piece : MonoBehaviour
     public bool isNavy;
     public bool hasCaptured;
     public bool hasOre;
+    public bool gameWon = false;
     public int currentX = -1;
     public int currentY = -1;
 
@@ -37,32 +38,49 @@ public class Piece : MonoBehaviour
 
     private void Update()
     {
-        if (isNavy)
+        if (!gameWon)
         {
-            if(flashDelay != (1f - .1f * (9 - currentY)))
+            if (isNavy)
             {
-                flashDelay = 1f - .1f * (9 - currentY);
+                if (flashDelay != (1f - .1f * (9 - currentY)))
+                {
+                    flashDelay = 1f - .1f * (9 - currentY);
+                }
+            }
+            else
+            {
+                if (flashDelay != 1f - .1f * (currentY))
+                {
+                    flashDelay = 1f - .1f * (currentY);
+                }
+            }
+
+            if (hasOre && !continualFlash)
+            {
+                if (isNavy)
+                {
+                    continualFlash = true;
+                    StartCoroutine(ContinualFlash(NavyPiece, NavyOre));
+                }
+                else
+                {
+                    continualFlash = true;
+                    StartCoroutine(ContinualFlash(PiratePiece, PirateOre));
+                }
             }
         }
         else
         {
-            if(flashDelay != 1f - .1f * (currentY))
-            {
-                flashDelay = 1f - .1f * (currentY);
-            }
-        }
+            continualFlash = false;
+            StopAllCoroutines();
 
-        if (hasOre && !continualFlash)
-        {
             if (isNavy)
             {
-                continualFlash = true;
-                StartCoroutine(ContinualFlash(NavyPiece, NavyOre));
+                SetMaterial(NavyOre);
             }
             else
             {
-                continualFlash = true;
-                StartCoroutine(ContinualFlash(PiratePiece, PirateOre));
+                SetMaterial(PirateOre);
             }
         }
     }
