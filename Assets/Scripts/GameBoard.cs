@@ -963,7 +963,6 @@ public class GameBoard : MonoBehaviour
                 else if (moveAssessment[x, y] == 5)
                 {
                     tiles[x, y].tag = "CannonDestination";
-                    Square activeSquare = tiles[x, y].GetComponent<Square>();
                 }
                 // A Land Mine can be deployed here
                 else if (moveAssessment[x,y] == 6)
@@ -984,8 +983,6 @@ public class GameBoard : MonoBehaviour
                 else if (moveAssessment[x, y] == 8)
                 {
                     tiles[x, y].tag = "CorsairJump";
-                    Square activeSquare = tiles[x, y].GetComponent<Square>();
-                    activeSquare.SetMaterial(activeSquare.moveableBoardMaterial);
                 }
             }
         }

@@ -43,6 +43,14 @@ public class Square : MonoBehaviour
                 StartCoroutine(ContinualFlash(defaultBoardMaterial, moveableBoardMaterial));
             }
         }
+        else if(tag == "CorsairJump")
+        {
+            if (!continualFlash)
+            {
+                continualFlash = true;
+                StartCoroutine(ContinualFlash(defaultBoardMaterial, hoveredBoardMaterial, .6f));
+            }
+        }
         else
         {
             continualFlash = false;
@@ -87,16 +95,21 @@ public class Square : MonoBehaviour
         flashing = false;
     }
 
-    IEnumerator ContinualFlash(Material StartingMaterial, Material TargetMaterial)
+    IEnumerator ContinualFlash(Material StartingMaterial, Material TargetMaterial, float delay = .35f)
     {
         while (continualFlash)
         {
-            float delay = .35f;
-
             SetMaterial(TargetMaterial);
             yield return new WaitForSeconds(delay);
             SetMaterial(StartingMaterial);
-            yield return new WaitForSeconds(delay);
+            if (delay != .35f)
+            {
+                yield return new WaitForSeconds(.1f);
+            }
+            else
+            {
+                yield return new WaitForSeconds(delay);
+            }
         }
     }
 }
