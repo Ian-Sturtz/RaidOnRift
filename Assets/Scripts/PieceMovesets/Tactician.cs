@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class Tactician : Piece
 {
+    public bool[] mimicPieces = new bool[9];    // Boolean for whether he can mimic those pieces
+
     public int[,] GetValidMoves(GameObject[,] tiles)
     {
         int[,] moveAssessment;
+
+        GameObject GameBoard = GameObject.FindGameObjectWithTag("GameBoard");
+        GameBoard board = GameBoard.GetComponent<GameBoard>();
+
+        GameObject JailCells = GameObject.FindGameObjectWithTag("JailBoard");
+        JailBoard jail = JailCells.GetComponent<JailBoard>();
 
         int interactableZone = 0;
 
@@ -15,16 +23,10 @@ public class Tactician : Piece
         bool left = true;
         bool right = true;
 
-
-        bool mate = false;
-        bool bomber = false;
-        bool vanguard = false;
-        bool navigator = false;
-        bool gunner = false;
-        bool cannon = false;
-        bool quartermaster = false;
-        bool corsair = false;
-        bool captain = false;
+        for (int i = 0; i < 9; i++)
+        {
+            mimicPieces[i] = false;
+        }
 
         moveAssessment = new int[10, 10];
 
@@ -181,7 +183,7 @@ public class Tactician : Piece
             upperBound = 9;
         }
 
-        for (int j; y <= upperBound; y++)
+        while(y <= upperBound)
         {
             for (int x = 0; x < 10; x++)
             {
@@ -190,56 +192,92 @@ public class Tactician : Piece
                 {
                     if (!squareInRange.currentPiece.isNavy)
                     {
-                        switch (squareInRange.currentPiece.type)
+                        if(squareInRange.currentPiece.type == PieceType.Mate && !mimicPieces[0])
                         {
-                            case PieceType.Mate:
-                                Debug.Log("Inheriting move from Mate on {" + x + ", " + y + "}");
-                                mate = true;
-                                break;
-                            case PieceType.Bomber:
-                                Debug.Log("Inheriting move from Bomber on {" + x + ", " + y + "}");
-                                bomber = true;
-                                break;
-                            case PieceType.Vanguard:
-                                Debug.Log("Inheriting move from Vanguard on {" + x + ", " + y + "}");
-                                vanguard = true;
-                                break;
-                            case PieceType.Navigator:
-                                Debug.Log("Inheriting move from Navigator on {" + x + ", " + y + "}");
-                                navigator = true;
-                                break;
-                            case PieceType.Gunner:
-                                Debug.Log("Inheriting move from Gunner on {" + x + ", " + y + "}");
-                                gunner = true;
-                                break;
-                            case PieceType.Cannon:
-                                Debug.Log("Inheriting move from Cannon on {" + x + ", " + y + "}");
-                                cannon = true;
-                                break;
-                            case PieceType.Quartermaster:
-                                Debug.Log("Inheriting move from Quartermaster on {" + x + ", " + y + "}");
-                                quartermaster = true;
-                                break;
-                            case PieceType.Royal2:
+                            Debug.Log("Inheriting move from Mate on {" + x + ", " + y + "}");
+                            mimicPieces[0] = true;
+                        }
+                        else if (squareInRange.currentPiece.type == PieceType.Bomber && !mimicPieces[1])
+                        {
+                            Debug.Log("Inheriting move from Bomber on {" + x + ", " + y + "}");
+                            mimicPieces[1] = true;
+                        }
+                        else if (squareInRange.currentPiece.type == PieceType.Vanguard && !mimicPieces[2])
+                        {
+                            Debug.Log("Inheriting move from Vanguard on {" + x + ", " + y + "}");
+                            mimicPieces[2] = true;
+                        }
+                        else if (squareInRange.currentPiece.type == PieceType.Navigator && !mimicPieces[3])
+                        {
+                            Debug.Log("Inheriting move from Navigator on {" + x + ", " + y + "}");
+                            mimicPieces[3] = true;
+                        }
+                        else if (squareInRange.currentPiece.type == PieceType.Gunner && !mimicPieces[4])
+                        {
+                            Debug.Log("Inheriting move from Gunner on {" + x + ", " + y + "}");
+                            mimicPieces[4] = true;
+                        }
+                        else if (squareInRange.currentPiece.type == PieceType.Cannon && !mimicPieces[5])
+                        {
+                            Debug.Log("Inheriting move from Cannon on {" + x + ", " + y + "}");
+                            mimicPieces[5] = true;
+                        }
+                        else if (squareInRange.currentPiece.type == PieceType.Quartermaster && !mimicPieces[6])
+                        {
+                            Debug.Log("Inheriting move from Quartermaster on {" + x + ", " + y + "}");
+                            mimicPieces[6] = true;
+                        }
+                        else if (squareInRange.currentPiece.type == PieceType.Royal2 && !mimicPieces[7])
+                        {
+                            if(board.tacticianCorsairJump > 0)
+                            {
+                                Debug.Log("Corsair Still on cooldown, can't be mimicked");
+                            }
+                            else
+                            {
                                 Debug.Log("Inheriting move from Corsair on {" + x + ", " + y + "}");
-                                corsair = true;
-                                break;
-                            case PieceType.Royal1:
-                                Debug.Log("Inheriting move from Captain on {" + x + ", " + y + "}");
-                                captain = true;
-                                break;
-                            default:
-                                Debug.Log("Piece on {" + x + ", " + y + "} is a land mine or ore or unidentified");
-                                break;
+                                mimicPieces[7] = true;
+                            }
+                        }
+                        else if (squareInRange.currentPiece.type == PieceType.Royal1 && !mimicPieces[8])
+                        {
+                            Debug.Log("Inheriting move from Captain on {" + x + ", " + y + "}");
+                            mimicPieces[8] = true;
+                        }
+                        else
+                        {
+                            Debug.Log("Piece on {" + x + ", " + y + "} is a land mine or ore or unidentified");
                         }
                     }
                 }
             }
+
+            y++;
         }
 
-        if(!mate && !bomber && !vanguard && !navigator && !gunner && !cannon && !quartermaster && !corsair && !captain)
+        for (int i = 0; i < 9; i++)
         {
-            Debug.Log("No moves to inherit");
+            if (mimicPieces[i])
+            {
+                
+                Piece inheritPiece = Instantiate(board.PiecePrefabs[i + 13].GetComponent<Piece>());
+
+                jail.InsertAPiece(inheritPiece, true);
+                inheritPiece.destroyPiece();
+                Debug.Log("Inserting a new piece, mimicPieces " + i);
+                mimicPieces[i] = false;
+            }
+        }
+
+        for (int i = 0; i < 9; i++)
+        {
+            if(jail.TacticianMimicCells[i].GetComponent<JailCell>().currentPiece != null)
+            {
+                Piece currentPiece = jail.TacticianMimicCells[i].GetComponent<JailCell>().currentPiece;
+
+                currentPiece.currentX = currentX;
+                currentPiece.currentY = currentY;
+            }
         }
 
         moveAssessment[currentX, currentY] = 0;

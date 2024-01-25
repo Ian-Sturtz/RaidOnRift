@@ -53,7 +53,12 @@ public class Square : MonoBehaviour
         }
         else
         {
-            continualFlash = false;
+            if (continualFlash)
+            {
+                continualFlash = false;
+                flashing = false;
+                StopAllCoroutines();
+            }
         }
     }
 

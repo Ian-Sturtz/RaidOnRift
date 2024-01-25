@@ -190,6 +190,8 @@ MonoBehaviour:
   isNavy: 1
   hasCaptured: 0
   hasOre: 0
+  gameWon: 0
   currentX: -1
   currentY: -1
   flashDelay: 1
+  mimicPieces: 000000000000000000

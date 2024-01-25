@@ -18,9 +18,9 @@ public class GameBoard : MonoBehaviour
     // Game State Information
     public bool gameWon = false;
     public bool navyTurn = true;
-    public GameObject[,] tiles; // All game squares
+    public GameObject[,] tiles;     // All game squares
     public Piece[] NavyPieces;      // All Navy game pieces
-    public Piece[] PiratePieces;    // All Pirate game pieces
+    public Piece[] PiratePieces;    // All Pirate game
 
     // Jail State Information
     public GameObject JailCells;
@@ -37,6 +37,12 @@ public class GameBoard : MonoBehaviour
     [SerializeField] private bool bomberSelected = false;
     [SerializeField] private bool landMineSelected = false;
     private int cellToHighlight = -2;
+
+    // For use with tactician interactions
+    public bool tacticianSelected = false;
+    public bool tacticianInheritSelected = false;
+    public bool tacticianGunnerCapture = false;
+    public int tacticianCorsairJump = 0;
 
     // Ore and Orebearer mechanics
     [SerializeField] private bool resetOre = false;
@@ -78,7 +84,7 @@ public class GameBoard : MonoBehaviour
         NavyPieces[8] = SpawnPiece(PieceType.Bomber, true, 5, 4);
         NavyPieces[9] = SpawnPiece(PieceType.LandMine, true, 6, 6);
         NavyPieces[10] = SpawnPiece(PieceType.Quartermaster, true, 5, 6);
-        NavyPieces[11] = SpawnPiece(PieceType.Royal2, true, 8, 0);
+        NavyPieces[11] = SpawnPiece(PieceType.Royal2, true, 8, 9);
 
         PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
@@ -136,23 +142,59 @@ public class GameBoard : MonoBehaviour
             }
         }
 
-        // The active player has selected a bomber to use this turn
+        // The active player has selected a bomber or tactician to use this turn
         if (storedTileSelected != null)
         {
+            // The active player has selected a bomber to use this turn
             if (storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.Bomber) {
                 bomberSelected = true;
             }
+
+            // The active player has selected a tactician to use this turn
+            else if (storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.Royal2)
+            {
+                if (storedTileSelected.GetComponent<Square>().currentPiece.isNavy)
+                {
+                    tacticianSelected = true;
+                }
+            }
         }
+        // The active player hasn't selected a tactician or bomber to use this turn
         else
         {
             bomberSelected = false;
+            
+            // Despawns all pieces out of Tactician inherit cells (if applicable)
+            if (tacticianSelected)
+            {
+                tacticianSelected = false;
+                tacticianInheritSelected = false;
+
+                for (int i = 0; i < 9; i++)
+                {
+
+                    if(jail.tacticianMimicPieces[i] != null)
+                        jail.tacticianMimicPieces[i].GetComponent<Piece>().destroyPiece();
+                    jail.TacticianMimicCells[i].GetComponent<JailCell>().resetCell();
+                    ResetBoardMaterials(true);
+                }
+            }
         }
 
         // Highlights a captured enemy land mines so the bomber can deploy them
         if (bomberSelected && cellToHighlight == -2)
         {
+            // Tactician is mimicking a bomber
+            if (tacticianInheritSelected)
+            {
+                cellToHighlight = jail.FindPiece(PieceType.LandMine, false);
+                if(cellToHighlight >= 0)
+                {
+                    jail.NavyJailCells[cellToHighlight].GetComponent<JailCell>().interactable = true;
+                }
+            }
             // The selected bomber is Navy and can deploy Pirate Bombs
-            if (tileSelected.GetComponent<Square>().currentPiece.isNavy)
+            else if (tileSelected.GetComponent<Square>().currentPiece.isNavy)
             {
                 cellToHighlight = jail.FindPiece(PieceType.LandMine, false);
                 if (cellToHighlight >= 0)
@@ -167,6 +209,31 @@ public class GameBoard : MonoBehaviour
                 if (cellToHighlight >= 0)
                 {
                     jail.PirateJailCells[cellToHighlight].GetComponent<JailCell>().interactable = true;
+                }
+            }
+        }
+
+        // Highlights all possible pieces that tactician can inherit
+        if(tacticianSelected)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if(jail.TacticianMimicCells[i].GetComponent<JailCell>().hasPiece == true) {
+                    // Tactician has inherited a piece
+                    if (tacticianInheritSelected)
+                    {
+                        // Jail cell in question was not selected (stop flashing)
+                        if (!jail.TacticianMimicCells[i].GetComponent<JailCell>().clicked)
+                        {
+                            jail.TacticianMimicCells[i].GetComponent<JailCell>().interactable = false;
+                        }
+                    }
+                    // Tactician has not yet inherited a piece (start flashing)
+                    else if (jail.TacticianMimicCells[i].GetComponent<JailCell>().interactable == false)
+                    {
+                        JailCell tacticianCell = jail.TacticianMimicCells[i].GetComponent<JailCell>();
+                        tacticianCell.interactable = true;
+                    }
                 }
             }
         }
@@ -244,20 +311,29 @@ public class GameBoard : MonoBehaviour
                     if (tileSelected.tag == "MoveableSquare")
                     {
                         Square currentSquare = storedTileSelected.GetComponent<Square>();
+
+                        // Checks if the piece is a Tactician that has moved since mimicking a Gunner
+                        Piece currentPiece = currentSquare.currentPiece;
+                        if (currentPiece.type == PieceType.Royal2 && currentPiece.isNavy)
+                        {
+                            tacticianGunnerCapture = false;
+                        }
+
                         Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
                         if (currentSquare.currentPiece.type == PieceType.Gunner)
                         {
                             currentSquare.currentPiece.hasCaptured = false;
                         }
                         MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
+
                         ResetBoardMaterials();
-                        NextTurn();
                         Square selectedTile = tileSelected.GetComponent<Square>();
                         selectedTile.FlashMaterial(selectedTile.moveableBoardMaterial, 2);
                         squareSelected = false;
                         currentSquare.SquareHasBeenClicked = false;
                         tileSelected = null;
                         storedTileSelected = null;
+                        NextTurn();
                     }
 
                     // The Corsair has jumped to an open board space
@@ -268,6 +344,11 @@ public class GameBoard : MonoBehaviour
                         // Corsair jumping requires 2 turns of cooldown before the next jump
                         if (currentSquare.currentPiece.type == PieceType.Royal2 && !currentSquare.currentPiece.isNavy)
                             jumpCooldown = 3;
+                        // Tactician inherits a corsair and now has a cooldown
+                        else
+                        {
+                            tacticianCorsairJump = 3;
+                        }
                         Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
                         MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
                         ResetBoardMaterials();
@@ -305,8 +386,17 @@ public class GameBoard : MonoBehaviour
                         capturedPiece.destroyPiece();
                         currentPiece.hasCaptured = true;
 
+                        // Prevents the Tactician from mimicking a Gunner and capturing twice
+                        if (tileSelected.tag == "GunnerTarget")
+                        {
+                            if (currentPiece.type == PieceType.Royal2 && currentPiece.isNavy)
+                            {
+                                tacticianGunnerCapture = true;
+                            }
+                        }
+
                         // Move current piece to the new square (unless it's a gunner)
-                        if (currentPiece.type != PieceType.Gunner)
+                        if (tileSelected.tag != "GunnerTarget")
                         {
                             MovePiece(currentPiece, moveCoordinates.x, moveCoordinates.y);
                         }
@@ -362,8 +452,6 @@ public class GameBoard : MonoBehaviour
                             ResetBoardMaterials();
                             NextTurn();
                         }
-
-
                     }
 
                     // Cannon is capturing a piece by jumping
@@ -489,24 +577,72 @@ public class GameBoard : MonoBehaviour
                         }
                     }
 
-                    // A landmine has been selected from jail
+                    // A landmine has been selected from jail or a tactician is mimicking a piece
                     else if (tileSelected.tag == "InteractablePiece")
                     {
-                        // The user clicked on the landmine again (cancel selection and return to normal moveset)
-                        if (landMineSelected)
+                        // A landmine is being interacted with
+                        if (bomberSelected)
                         {
-                            landMineSelected = false;
-                            cellToHighlight = -2;
-                            ResetBoardMaterials();
-                            tileSelected = storedTileSelected;
-                            DetectLegalMoves(tileSelected, tileSelected.GetComponent<Square>().currentPiece);
+                            // The user clicked on the landmine again (cancel selection and return to normal moveset)
+                            if (landMineSelected)
+                            {
+                                landMineSelected = false;
+                                cellToHighlight = -2;
+                                ResetBoardMaterials();
+                                tileSelected = storedTileSelected;
+                                DetectLegalMoves(tileSelected, tileSelected.GetComponent<Square>().currentPiece);
+                            }
+                            else
+                            {
+                                landMineSelected = true;
+                                tileSelected.GetComponent<JailCell>().clicked = true;
+                                ResetBoardMaterials(false);
+                                DetectLegalMoves(storedTileSelected, storedTileSelected.GetComponent<Square>().currentPiece);
+                            }
                         }
-                        else
+                        
+                        // The tactician is trying to mimic a piece
+                        if (tacticianSelected)
                         {
-                            landMineSelected = true;
-                            tileSelected.GetComponent<JailCell>().clicked = true;
-                            ResetBoardMaterials(false);
-                            DetectLegalMoves(storedTileSelected, storedTileSelected.GetComponent<Square>().currentPiece);
+                            // The user clicked on the inherited piece again (cancel selection and return to normal moveset)
+                            if (tacticianInheritSelected)
+                            {
+                                for (int i = 0; i < 9; i++)
+                                {
+                                    if(jail.TacticianMimicCells[i].GetComponent<JailCell>().hasPiece)
+                                        jail.TacticianMimicCells[i].GetComponent<JailCell>().interactable = true;
+                                }
+
+                                tacticianInheritSelected = false;
+                                cellToHighlight = -2;
+                                tileSelected = storedTileSelected;
+                                ResetBoardMaterials(true);
+                                ResetBoardMaterials(true);
+                                DetectLegalMoves(tileSelected, storedTileSelected.GetComponent<Square>().currentPiece);
+                            }
+                            // The user clicked on a piece to inherit
+                            else
+                            {
+                                tacticianInheritSelected = true;
+
+                                for (int i = 0; i < 9; i++)
+                                {
+                                    jail.TacticianMimicCells[i].GetComponent<JailCell>().interactable = false;
+                                }
+
+                                tileSelected.GetComponent<JailCell>().clicked = true;
+                                ResetBoardMaterials(false);
+
+                                Square currentSquare = storedTileSelected.GetComponent<Square>();
+                                Piece inheritingPiece = tileSelected.GetComponent<JailCell>().currentPiece;
+
+                                Vector2Int currentPosition = IdentifyThisBoardSquare(storedTileSelected);
+                                Debug.Log(currentPosition.x + ", " + currentPosition.y);
+
+                                DetectLegalMoves(storedTileSelected, inheritingPiece);
+
+                                tileSelected = storedTileSelected;
+                            }
                         }
                     }
 
@@ -595,10 +731,10 @@ public class GameBoard : MonoBehaviour
                     // The same square was clicked twice (cancel the square selection)
                     else if (tileSelected.GetComponent<Square>().SquareHasBeenClicked)
                     {
-                        ResetBoardMaterials();
+                        ResetBoardMaterials(true);
                         
                         // Ends turn if orebearer decides not to move a second time
-                        if (tileSelected.GetComponent<Square>().currentPiece.hasOre && orebearerSecondMove) 
+                        if (tileSelected.GetComponent<Square>().currentPiece.hasOre && orebearerSecondMove)
                         {
                             orebearerSecondMove = false;
                             NextTurn();
@@ -703,6 +839,8 @@ public class GameBoard : MonoBehaviour
     private void SetCurrentPiece(Piece piece, int x, int y)
     {
         tiles[x, y].GetComponent<Square>().currentPiece = piece;
+
+        Debug.Log(tiles[x, y].GetComponent<Square>().currentPiece.name);
     }
 
     private void NullCurrentPiece(int x, int y)
@@ -839,13 +977,13 @@ public class GameBoard : MonoBehaviour
                     moveAssessment = piece.GetComponent<Quartermaster>().GetValidMoves(tiles);
                     break;
                 case PieceType.Royal2:
-                    if (piece.isNavy)
+                    if (piece.isNavy && !tacticianInheritSelected)
                     {
                         moveAssessment = piece.GetComponent<Tactician>().GetValidMoves(tiles);
                     }
                     else
                     {
-                        if(jumpCooldown > 0)
+                        if(jumpCooldown > 0 && !tacticianSelected)
                         {
                             Debug.Log("Corsair can't jump yet, move someone else!");
                             squareSelected = false;
@@ -860,7 +998,7 @@ public class GameBoard : MonoBehaviour
                     }
                     break;
                 case PieceType.Royal1:
-                    if (piece.isNavy)
+                    if (piece.isNavy && !tacticianInheritSelected)
                     {
                         moveAssessment = piece.GetComponent<Admiral>().GetValidMoves(tiles);
                     }
@@ -944,9 +1082,12 @@ public class GameBoard : MonoBehaviour
                 // Square contains a capturable piece by shooting
                 else if(moveAssessment[x,y] == 3)
                 {
-                    tiles[x, y].tag = "GunnerTarget";
-                    Square activeSquare = tiles[x, y].GetComponent<Square>();
-                    activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                    if((tacticianSelected && !tacticianGunnerCapture) || !tacticianSelected)
+                    {
+                        tiles[x, y].tag = "GunnerTarget";
+                        Square activeSquare = tiles[x, y].GetComponent<Square>();
+                        activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                    }
                 }
                 // Square contains a capturable peice by jumping
                 else if(moveAssessment[x,y] == 4)
@@ -991,6 +1132,13 @@ public class GameBoard : MonoBehaviour
     // Changes the turn from one player to the next
     private void NextTurn()
     {
+        ResetBoardMaterials(true);
+
+        if(tacticianCorsairJump != 0)
+        {
+            tacticianCorsairJump--;
+        }
+
         if(jumpCooldown != 0)
         {
             jumpCooldown--;

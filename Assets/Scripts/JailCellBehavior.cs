@@ -27,8 +27,11 @@ public class JailCell : MonoBehaviour
         }
         else if (interactable && !continualFlash)
         {
-            if(currentPiece.GetComponent<Piece>().type != PieceType.Ore)
-                tag = "InteractablePiece";
+            if (currentPiece != null)
+            {
+                if (currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                    tag = "InteractablePiece";
+            }
             
             continualFlash = true;
             StartCoroutine(ContinualFlash(activeJailMaterial, interactableJailMaterial));
@@ -83,6 +86,12 @@ public class JailCell : MonoBehaviour
             SetMaterial(StartingMaterial);
             yield return new WaitForSeconds(delay);
         }
+    }
+
+    public void stopFlashing()
+    {
+        continualFlash = false;
+        StopAllCoroutines();
     }
 
     IEnumerator ContinualFlash(Material StartingMaterial, Material TargetMaterial)

@@ -33,7 +33,6 @@ public class Piece : MonoBehaviour
     public int currentY = -1;
 
     [SerializeField] private float flashDelay = 1f;
-
     private bool continualFlash = false;
 
     private void Update()
@@ -99,6 +98,12 @@ public class Piece : MonoBehaviour
     protected bool IsSquareOnBoard(int x, int y)
     {
         return (x >= 0 && x < 10 && y >= 0 && y < 10) ;
+    }
+
+    public void SetCoordinates(int x, int y)
+    {
+        currentX = x;
+        currentY = y;
     }
 
     public int[,] GetValidMovesOre(GameObject[,] tiles)

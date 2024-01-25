@@ -7,6 +7,11 @@ public class Corsair : Piece
     public int[,] GetValidMoves(GameObject[,] tiles)
     {
         int[,] moveAssessment;
+        
+        bool up_right = true;
+        bool up_left = true;
+        bool down_right = true;
+        bool down_left = true;
 
         moveAssessment = new int[10, 10];
 
@@ -25,29 +30,68 @@ public class Corsair : Piece
                 }
             }
         }
-
-        // Upper Right
-        if (IsSquareOnBoard(currentX + 1, currentY + 1))
+        for (int i = 1; i <= 2; i++)
         {
-            moveAssessment[currentX + 1, currentY + 1] = 1;
-        }
 
-        // Upper Left
-        if (IsSquareOnBoard(currentX - 1, currentY + 1))
-        {
-            moveAssessment[currentX - 1, currentY + 1] = 1;
-        }
+            // Upper Right
+            if (IsSquareOnBoard(currentX + i, currentY + i) && up_right)
+            {
+                Square possibleSquare = tiles[currentX + i, currentY + i].GetComponent<Square>();
+                moveAssessment[currentX + i, currentY + i] = 1;
+                if (possibleSquare.currentPiece != null)
+                {
+                    up_right = false;
+                }
+            }
+            else
+            {
+                up_right = false;
+            }
 
-        // Lower Right
-        if (IsSquareOnBoard(currentX + 1, currentY - 1))
-        {
-            moveAssessment[currentX + 1, currentY - 1] = 1;
-        }
+            // Upper Left
+            if (IsSquareOnBoard(currentX - i, currentY + i) && up_left)
+            {
+                Square possibleSquare = tiles[currentX - i, currentY + i].GetComponent<Square>();
+                moveAssessment[currentX - i, currentY + i] = 1;
+                if (possibleSquare.currentPiece != null)
+                {
+                    up_left = false;
+                }
+            }
+            else
+            {
+                up_left = false;
+            }
 
-        // Lower Left
-        if (IsSquareOnBoard(currentX - 1, currentY - 1))
-        {
-            moveAssessment[currentX - 1, currentY - 1] = 1;
+            // Lower Right
+            if (IsSquareOnBoard(currentX + i, currentY - i) && down_right)
+            {
+                Square possibleSquare = tiles[currentX + i, currentY - i].GetComponent<Square>();
+                moveAssessment[currentX + i, currentY - i] = 1;
+                if (possibleSquare.currentPiece != null)
+                {
+                    down_right = false;
+                }
+            }
+            else
+            {
+                down_right = false;
+            }
+
+            // Lower Left
+            if (IsSquareOnBoard(currentX - i, currentY - i) && down_left)
+            {
+                Square possibleSquare = tiles[currentX - i, currentY - i].GetComponent<Square>();
+                moveAssessment[currentX - i, currentY - i] = 1;
+                if (possibleSquare.currentPiece != null)
+                {
+                    down_left = false;
+                }
+            }
+            else
+            {
+                down_left = false;
+            }
         }
 
         moveAssessment[currentX, currentY] = 0;
