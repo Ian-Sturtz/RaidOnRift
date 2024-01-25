@@ -17,6 +17,7 @@ public class GameBoard : MonoBehaviour
 
     // Game State Information
     public bool gameWon = false;
+    public bool stalemate = false;
     public bool navyTurn = true;
     public GameObject[,] tiles;     // All game squares
     public Piece[] NavyPieces;      // All Navy game pieces
@@ -264,7 +265,7 @@ public class GameBoard : MonoBehaviour
         }
 
         // Detect a square has been clicked
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !gameWon && !stalemate)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
@@ -839,8 +840,6 @@ public class GameBoard : MonoBehaviour
     private void SetCurrentPiece(Piece piece, int x, int y)
     {
         tiles[x, y].GetComponent<Square>().currentPiece = piece;
-
-        Debug.Log(tiles[x, y].GetComponent<Square>().currentPiece.name);
     }
 
     private void NullCurrentPiece(int x, int y)
@@ -1013,6 +1012,7 @@ public class GameBoard : MonoBehaviour
             }
         }
         
+        // Ensures that an enemy is not moving to a landmine or allied occupied square
         for (int x = 0; x < TILE_COUNT_X && !piece.hasOre; x++)
         {
             for (int y = 0; y < TILE_COUNT_Y; y++)
@@ -1124,6 +1124,65 @@ public class GameBoard : MonoBehaviour
                 else if (moveAssessment[x, y] == 8)
                 {
                     tiles[x, y].tag = "CorsairJump";
+                }
+            }
+        }
+    }
+
+    // Checks if a team has no valid moves left to trigger a stalemate
+    private void CheckForStalemate(bool checkingNavy)
+    {
+        bool noLegalMoves = false;
+
+        moveAssessment = new int[TILE_COUNT_X, TILE_COUNT_Y];
+
+        // Checks all pieces left on the Navy's board to ensure there are legal moves open
+        if (checkingNavy)
+        {
+            for (int i = 0; i < teamSize; i++)
+            {
+                if(NavyPieces[i] != null)
+                {
+                    Piece possiblePiece = NavyPieces[i];
+
+                    switch (possiblePiece.type)
+                    {
+                        case PieceType.Mate:
+                            moveAssessment = possiblePiece.GetComponent<Mate>().GetValidMoves(tiles);
+                            break;
+                        case PieceType.Bomber:
+                            moveAssessment = possiblePiece.GetComponent<Bomber>().GetValidMoves(tiles);
+                            break;
+                        case PieceType.Vanguard:
+                            moveAssessment = possiblePiece.GetComponent<Vanguard>().GetValidMoves(tiles);
+                            break;
+                        case PieceType.Navigator:
+                            moveAssessment = possiblePiece.GetComponent<Navigator>().GetValidMoves(tiles);
+                            break;
+                        case PieceType.Gunner:
+                            moveAssessment = possiblePiece.GetComponent<Gunner>().GetValidMoves(tiles);
+                            break;
+                        case PieceType.Cannon:
+                            moveAssessment = possiblePiece.GetComponent<Cannon>().GetValidMoves(tiles);
+                            break;
+                        case PieceType.Quartermaster:
+                            moveAssessment = possiblePiece.GetComponent<Quartermaster>().GetValidMoves(tiles);
+                            break;
+                        case PieceType.Royal2:
+                            moveAssessment = possiblePiece.GetComponent<Tactician>().GetValidMoves(tiles);
+                            break;
+                        case PieceType.Royal1:
+                            moveAssessment = possiblePiece.GetComponent<Admiral>().GetValidMoves(tiles);
+                            break;
+                    }
+
+                    for (int x = 0; x < TILE_COUNT_X; x++)
+                    {
+                        for (int y = 0; y < TILE_COUNT_Y; y++)
+                        {
+
+                        }
+                    }
                 }
             }
         }
