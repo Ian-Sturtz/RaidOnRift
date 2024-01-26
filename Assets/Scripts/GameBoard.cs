@@ -73,32 +73,80 @@ public class GameBoard : MonoBehaviour
         PiratePieces = new Piece[teamSize];
         IdentifyBoardSquares();
 
-        // Test spawns one piece of each type in a random spot on the board
-        NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 3, 0);
-        NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 1, 2);
-        NavyPieces[2] = SpawnPiece(PieceType.LandMine, true, 7, 6);
-        NavyPieces[3] = SpawnPiece(PieceType.Royal1, true, 0, 3);
-        NavyPieces[4] = SpawnPiece(PieceType.Vanguard, true, 1, 3);
-        NavyPieces[5] = SpawnPiece(PieceType.Navigator, true, 2, 4);
-        NavyPieces[6] = SpawnPiece(PieceType.Gunner, true, 4, 6);
-        NavyPieces[7] = SpawnPiece(PieceType.Cannon, true, 3, 3);
-        NavyPieces[8] = SpawnPiece(PieceType.Bomber, true, 5, 4);
-        NavyPieces[9] = SpawnPiece(PieceType.LandMine, true, 6, 6);
-        NavyPieces[10] = SpawnPiece(PieceType.Quartermaster, true, 5, 6);
-        NavyPieces[11] = SpawnPiece(PieceType.Royal2, true, 8, 9);
+        // Decent board starting positions for a sample game
+        NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 1, 0);
+        NavyPieces[1] = SpawnPiece(PieceType.Royal1, true, 3, 0);
+        NavyPieces[2] = SpawnPiece(PieceType.Mate, true, 9, 0);
+        NavyPieces[3] = SpawnPiece(PieceType.Cannon, true, 0, 1);
+        NavyPieces[4] = SpawnPiece(PieceType.Mate, true, 1, 1);
+        NavyPieces[5] = SpawnPiece(PieceType.Vanguard, true, 3, 1);
+        NavyPieces[6] = SpawnPiece(PieceType.Cannon, true, 4, 1);
+        NavyPieces[7] = SpawnPiece(PieceType.Mate, true, 6, 1);
+        NavyPieces[8] = SpawnPiece(PieceType.Vanguard, true, 7, 1);
+        NavyPieces[9] = SpawnPiece(PieceType.Navigator, true, 0, 2);
+        NavyPieces[10] = SpawnPiece(PieceType.Bomber, true, 1, 2);
+        NavyPieces[11] = SpawnPiece(PieceType.Quartermaster, true, 2, 2);
+        NavyPieces[12] = SpawnPiece(PieceType.Gunner, true, 3, 2);
+        NavyPieces[13] = SpawnPiece(PieceType.Mate, true, 5, 2);
+        NavyPieces[14] = SpawnPiece(PieceType.Gunner, true, 6, 2);
+        NavyPieces[15] = SpawnPiece(PieceType.Navigator, true, 7, 2);
+        NavyPieces[16] = SpawnPiece(PieceType.Bomber, true, 8, 2);
+        NavyPieces[17] = SpawnPiece(PieceType.Royal2, true, 9, 2);
+        
+        NavyPieces[18] = SpawnPiece(PieceType.LandMine, true, 3, 6);
+        NavyPieces[19] = SpawnPiece(PieceType.LandMine, true, 5, 5);
+        NavyPieces[20] = SpawnPiece(PieceType.LandMine, true, 8, 5);
+        NavyPieces[21] = SpawnPiece(PieceType.LandMine, true, 9, 6);
+        PiratePieces[0] = SpawnPiece(PieceType.LandMine, false, 3, 3);
+        PiratePieces[1] = SpawnPiece(PieceType.LandMine, false, 3, 9);
+        PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 4, 6);
+        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 5);
 
-        PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
-        PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
-        PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 5, 5);
-        PiratePieces[3] = SpawnPiece(PieceType.Royal1, false, 8, 6);
-        PiratePieces[4] = SpawnPiece(PieceType.Vanguard, false, 3, 7);
-        PiratePieces[5] = SpawnPiece(PieceType.Navigator, false, 1, 8);
-        PiratePieces[6] = SpawnPiece(PieceType.Gunner, false, 6, 9);
-        PiratePieces[7] = SpawnPiece(PieceType.Cannon, false, 7, 7);
-        PiratePieces[8] = SpawnPiece(PieceType.Bomber, false, 7, 5);
-        PiratePieces[9] = SpawnPiece(PieceType.Royal1, false, 4, 0);
-        PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 6, 4);
-        PiratePieces[11] = SpawnPiece(PieceType.Royal2, false, 9, 4);
+        PiratePieces[4] = SpawnPiece(PieceType.Ore, false, 6, 9);
+        PiratePieces[5] = SpawnPiece(PieceType.Bomber, false, 0, 7);
+        PiratePieces[6] = SpawnPiece(PieceType.Navigator, false, 1, 7);
+        PiratePieces[7] = SpawnPiece(PieceType.Mate, false, 2, 7);
+        PiratePieces[8] = SpawnPiece(PieceType.Gunner, false, 3, 7);
+        PiratePieces[9] = SpawnPiece(PieceType.Mate, false, 4, 7);
+        PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 5, 7);
+        PiratePieces[11] = SpawnPiece(PieceType.Bomber, false, 6, 7);
+        PiratePieces[12] = SpawnPiece(PieceType.Mate, false, 7, 7);
+        PiratePieces[13] = SpawnPiece(PieceType.Navigator, false, 8, 7);
+        PiratePieces[14] = SpawnPiece(PieceType.Gunner, false, 9, 7);
+        PiratePieces[15] = SpawnPiece(PieceType.Cannon, false, 0, 8);
+        PiratePieces[16] = SpawnPiece(PieceType.Mate, false, 4, 8);
+        PiratePieces[17] = SpawnPiece(PieceType.Cannon, false, 6, 8);
+        PiratePieces[18] = SpawnPiece(PieceType.Vanguard, false, 8, 8);
+        PiratePieces[19] = SpawnPiece(PieceType.Royal2, false, 9, 8);
+        PiratePieces[20] = SpawnPiece(PieceType.Royal1, false, 2, 9);
+        PiratePieces[21] = SpawnPiece(PieceType.Vanguard, false, 9, 9);
+
+        // Test spawns one piece of each type in a random spot on the board
+        //NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 3, 0);
+        //NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 1, 2);
+        //NavyPieces[2] = SpawnPiece(PieceType.LandMine, true, 7, 6);
+        //NavyPieces[3] = SpawnPiece(PieceType.Royal1, true, 0, 3);
+        //NavyPieces[4] = SpawnPiece(PieceType.Vanguard, true, 1, 3);
+        //NavyPieces[5] = SpawnPiece(PieceType.Navigator, true, 2, 4);
+        //NavyPieces[6] = SpawnPiece(PieceType.Gunner, true, 4, 6);
+        //NavyPieces[7] = SpawnPiece(PieceType.Cannon, true, 3, 3);
+        //NavyPieces[8] = SpawnPiece(PieceType.Bomber, true, 5, 4);
+        //NavyPieces[9] = SpawnPiece(PieceType.LandMine, true, 6, 6);
+        //NavyPieces[10] = SpawnPiece(PieceType.Quartermaster, true, 5, 6);
+        //NavyPieces[11] = SpawnPiece(PieceType.Royal2, true, 8, 9);
+
+        //PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
+        //PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
+        //PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 5, 5);
+        //PiratePieces[3] = SpawnPiece(PieceType.Royal1, false, 8, 6);
+        //PiratePieces[4] = SpawnPiece(PieceType.Vanguard, false, 3, 7);
+        //PiratePieces[5] = SpawnPiece(PieceType.Navigator, false, 1, 8);
+        //PiratePieces[6] = SpawnPiece(PieceType.Gunner, false, 6, 9);
+        //PiratePieces[7] = SpawnPiece(PieceType.Cannon, false, 7, 7);
+        //PiratePieces[8] = SpawnPiece(PieceType.Bomber, false, 7, 5);
+        //PiratePieces[9] = SpawnPiece(PieceType.Royal1, false, 4, 0);
+        //PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 6, 4);
+        //PiratePieces[11] = SpawnPiece(PieceType.Royal2, false, 9, 4);
     }
 
     private void Update()
@@ -192,6 +240,7 @@ public class GameBoard : MonoBehaviour
                 if(cellToHighlight >= 0)
                 {
                     jail.NavyJailCells[cellToHighlight].GetComponent<JailCell>().interactable = true;
+                    // A bomb is being highlighted right now in a jail cell, it can potentially be replaced on the board
                 }
             }
             // The selected bomber is Navy and can deploy Pirate Bombs
@@ -1060,6 +1109,21 @@ public class GameBoard : MonoBehaviour
             }
         }
 
+        // This is where UI Text can be reviewed, all possible move data is stored in moveAssessment[x,y]
+        // moveAssessment[x,y] == -1: no move is possible
+        // moveAssessment[x,y] == 0: active piece is there
+        // moveAssessment[x,y] == 1: Piece can move there
+        // moveAssessment[x,y] == 2: piece can capture by moving there
+        // moveAssessment[x,y] == 3: piece can capture by shooting there
+        // moveAssessment[x,y] == 4: piece can capture this square by jumping
+        // moveAssessment[x,y] == 5: piece can capture the "cannonTarget" square by jumping here
+        // moveAssessment[x,y] == 6: A mine can be placed in any of these squares
+        // moveAssessment[x,y] == 7: the ore can be redeployed to any of these squares
+        // moveAssessment[x,y] == 8: The corsair can jump to any of these squares (but will need to cooldown afterwards)
+        // Also add text to the code in line 195
+        // 
+
+
         // Establishes squares that can be moved to or captured in
         for (int x = 0; x < TILE_COUNT_X; x++)
         {
@@ -1071,6 +1135,7 @@ public class GameBoard : MonoBehaviour
                     tiles[x, y].tag = "MoveableSquare";
                     Square activeSquare = tiles[x,y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.moveableBoardMaterial);
+                    // In text box, write "Click on a green square to move it"
                 }
                 // Square contains a capturable piece by replacement
                 else if (moveAssessment[x,y] == 2)
@@ -1078,6 +1143,7 @@ public class GameBoard : MonoBehaviour
                     tiles[x, y].tag = "CaptureSquare";
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                    // In text box, write "Click on a red square to capture that piece!"
                 }
                 // Square contains a capturable piece by shooting
                 else if(moveAssessment[x,y] == 3)
@@ -1098,6 +1164,7 @@ public class GameBoard : MonoBehaviour
                         tiles[x, y].tag = "CannonTarget";
                         Square activeSquare = tiles[x, y].GetComponent<Square>();
                         activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                        // "Click on a flashing green square to jump capture the enemy piece!"
                     }
                 }
                 // Square can be moved to for cannon jumping capture

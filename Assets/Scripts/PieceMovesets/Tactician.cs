@@ -255,7 +255,7 @@ public class Tactician : Piece
             y++;
         }
 
-        for (int i = 0; i < 9 && board.tacticianSelected; i++)
+        for (int i = 0; i < 9; i++)
         {
             if (mimicPieces[i])
             {
