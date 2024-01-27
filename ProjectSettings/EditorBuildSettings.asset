@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu.unity
     guid: 78c52290c1d0eff4b999489bfa5c46f6
   - enabled: 1
+    path: Assets/Scenes/Piece Selection.unity
+    guid: d1cf37af2a880df40baf78f5860550d3
+  - enabled: 1
     path: Assets/Scenes/Board.unity
     guid: bd6263746ddb0f54295da104ecebfa73
   - enabled: 1
