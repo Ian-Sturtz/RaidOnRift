@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PieceSelection : MonoBehaviour
 {
     private bool p1Navy;
     private bool navySelecting;
-    private int[] navyLoadout = new int[9];
-    private int[] pirateLoadout = new int[9];
 
     private int royal1 = 0;
     private int royal2 = 0;
@@ -25,6 +24,9 @@ public class PieceSelection : MonoBehaviour
     private int totalPoints = 5;
     private int totalRoyals = 0;
     private int totalArmy = 0;
+
+    private int navyTotal;
+    private int pirateTotal;
 
     [SerializeField] private TMP_Text navyPoints;
     [SerializeField] private TMP_Text navyRoyals;
@@ -247,27 +249,29 @@ public class PieceSelection : MonoBehaviour
     {
         if(navySelecting)
         {
-            navyLoadout[0] = royal1;
-            navyLoadout[1] = royal2;
-            navyLoadout[2] = quartermaster;
-            navyLoadout[3] = cannon;
-            navyLoadout[4] = bomber;
-            navyLoadout[5] = vanguard;
-            navyLoadout[6] = navigator;
-            navyLoadout[7] = gunner;
-            navyLoadout[8] = mate;
+            PieceManager.instance.navyRoyal1 = royal1;
+            PieceManager.instance.navyRoyal2 = royal2;
+            PieceManager.instance.navyQuartermaster = quartermaster;
+            PieceManager.instance.navyCannon = cannon;
+            PieceManager.instance.navyBomber = bomber;
+            PieceManager.instance.navyVanguard = vanguard;
+            PieceManager.instance.navyNavigator = navigator;
+            PieceManager.instance.navyGunner = gunner;
+            PieceManager.instance.navyMate = mate;
+            navyTotal = totalPoints;
         }
         else
         {
-            pirateLoadout[0] = royal1;
-            pirateLoadout[1] = royal2;
-            pirateLoadout[2] = quartermaster;
-            pirateLoadout[3] = cannon;
-            pirateLoadout[4] = bomber;
-            pirateLoadout[5] = vanguard;
-            pirateLoadout[6] = navigator;
-            pirateLoadout[7] = gunner;
-            pirateLoadout[8] = mate;
+            PieceManager.instance.pirateRoyal1 = royal1;
+            PieceManager.instance.pirateRoyal2 = royal2;
+            PieceManager.instance.pirateQuartermaster = quartermaster;
+            PieceManager.instance.pirateCannon = cannon;
+            PieceManager.instance.pirateBomber = bomber;
+            PieceManager.instance.pirateVanguard = vanguard;
+            PieceManager.instance.pirateNavigator = navigator;
+            PieceManager.instance.pirateGunner = gunner;
+            PieceManager.instance.pirateMate = mate;
+            pirateTotal = totalPoints;
         }
 
         if(navySelecting == p1Navy)
@@ -307,7 +311,13 @@ public class PieceSelection : MonoBehaviour
         }
         else
         {
-            Debug.Log("Begin placement here");
+            if (navyTotal < pirateTotal)
+                PieceManager.instance.navyFirst = true;
+            else if (navyTotal > pirateTotal)
+                PieceManager.instance.navyFirst = false;
+            else
+                PieceManager.instance.navyFirst = p1Navy;
+            SceneManager.LoadScene("Piece Placement");
         }
     }
 }

@@ -822,6 +822,69 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 234297237}
   m_CullTransparentMesh: 1
+--- !u!1 &284624746
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 284624748}
+  - component: {fileID: 284624747}
+  m_Layer: 0
+  m_Name: Piece Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &284624747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284624746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4b04717f7e135b46a34ebdc649dcff8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navyRoyal1: 0
+  navyRoyal2: 0
+  navyMate: 0
+  navyQuartermaster: 0
+  navyCannon: 0
+  navyBomber: 0
+  navyVanguard: 0
+  navyNavigator: 0
+  navyGunner: 0
+  pirateRoyal1: 0
+  pirateRoyal2: 0
+  pirateMate: 0
+  pirateQuartermaster: 0
+  pirateCannon: 0
+  pirateBomber: 0
+  pirateVanguard: 0
+  pirateNavigator: 0
+  pirateGunner: 0
+  navyFirst: 0
+--- !u!4 &284624748
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284624746}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1117.2336, y: 509.76196, z: 2.067058}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &309121026 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5083643174142770695, guid: 681faaa2c6873464eb15e4e652d7c520, type: 3}
@@ -7863,3 +7926,4 @@ SceneRoots:
   - {fileID: 1835849988}
   - {fileID: 1044066239}
   - {fileID: 972566594}
+  - {fileID: 284624748}
