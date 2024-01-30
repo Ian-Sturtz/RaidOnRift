@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class CreditsScript : MonoBehaviour
 {
-    private float creditDuration = 10f;
+    private float creditDuration = 4f;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +22,6 @@ public class CreditsScript : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        SceneManager.LoadScene("Board");
+        SceneManager.LoadScene("Main Menu");
     }
 }

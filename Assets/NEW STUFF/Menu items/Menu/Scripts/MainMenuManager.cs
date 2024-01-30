@@ -231,8 +231,9 @@ public class MainMenuManager : MonoBehaviour
 
 
     #region Levels
-    public void LoadLevel()
+    public void LoadLevel(string sceneName)
     {
+        sceneToLoad = sceneName;
         // Fade Animation
         fadeAnimator.SetTrigger("FadeOut");
 

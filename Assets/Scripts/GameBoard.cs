@@ -4,16 +4,9 @@ using UnityEngine;
 
 public class GameBoard : MonoBehaviour
 {
+    #region GameInfo
     // How many pieces have been added to the game so far
     public int PIECES_ADDED;
-
-    // Board Information
-    public float tile_size = 1f;
-    public float tile_size_margins = 1.05f;
-    public float game_board_size = 10.55f;
-    private const int TILE_COUNT_X = 10;
-    private const int TILE_COUNT_Y = 10;
-    private GameObject gameBoard;   // Reference to gameBoard object
 
     // Game State Information
     public bool gameWon = false;
@@ -23,17 +16,40 @@ public class GameBoard : MonoBehaviour
     public Piece[] NavyPieces;      // All Navy game pieces
     public Piece[] PiratePieces;    // All Pirate game
 
+    #endregion
+
+    #region BoardInfo
+    // Board Information
+    public float tile_size = 1f;
+    public float tile_size_margins = 1.05f;
+    public float game_board_size = 10.55f;
+    private const int TILE_COUNT_X = 10;
+    private const int TILE_COUNT_Y = 10;
+    private GameObject gameBoard;   // Reference to gameBoard object
+
+    BoardUI boardUI;
+
+    #endregion
+
+    #region JailInfo
+
     // Jail State Information
     public GameObject JailCells;
     public JailBoard jail;
     public int teamSize = 30;
 
+    #endregion
+
+    #region MovementInfo
     // Movement Information
     private int[,] moveAssessment;  // All legal moves of a clicked-on piece
     public bool squareSelected = false;
     public GameObject tileSelected;
     public GameObject storedTileSelected;
 
+    #endregion
+
+    #region PieceInteractions
     // For use with bomber interactions
     [SerializeField] private bool bomberSelected = false;
     [SerializeField] private bool landMineSelected = false;
@@ -52,6 +68,8 @@ public class GameBoard : MonoBehaviour
     // Corsair mechanics
     [SerializeField] private int jumpCooldown = 0;
 
+    #endregion
+
     // Piece prefabs to be spawned in as needed
     [Header("Prefabs and Materials")]
     [SerializeField] public GameObject[] PiecePrefabs;
@@ -66,6 +84,9 @@ public class GameBoard : MonoBehaviour
         tile_size = gameBoard.transform.localScale.x / game_board_size;
         tiles = new GameObject[TILE_COUNT_X, TILE_COUNT_Y];
         teamSize = 30;
+
+        boardUI = FindObjectOfType<BoardUI>();
+        boardUI.GoalText("Click on a piece to move it!");
 
         JailCells = GameObject.FindGameObjectWithTag("JailBoard");
         jail = JailCells.GetComponent<JailBoard>();
@@ -151,48 +172,34 @@ public class GameBoard : MonoBehaviour
 
     private void Update()
     {
-        // Quits the game if user hits ESC (temporary prototype feature)
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
-
         // Check for a game win
         for (int i = 0; i < TILE_COUNT_X && !gameWon; i++)
         {
-            for (int j = 0; j < 3; j++)
+            Piece checkPiece = tiles[i, 0].GetComponent<Square>().currentPiece;
+
+            if (checkPiece != null)
             {
-                Piece checkPiece = tiles[i, j].GetComponent<Square>().currentPiece;
-
-                if(checkPiece != null)
+                if (checkPiece.hasOre && checkPiece.isNavy)
                 {
-                    if (checkPiece.hasOre && checkPiece.isNavy)
-                    {
-                        Debug.Log("The Navy Won!");
-                        gameWon = true;
-                        checkPiece.gameWon = true;
+                    gameWon = true;
+                    checkPiece.gameWon = true;
 
-                        // Update UI
-                        FindObjectOfType<BoardUI>().GameWon(true);
-                    }
+                    // Update UI
+                    boardUI.GameWon(true);
                 }
             }
 
-            for (int j = 9; j > 6; j--)
+            checkPiece = tiles[i, 9].GetComponent<Square>().currentPiece;
+
+            if (checkPiece != null)
             {
-                Piece checkPiece = tiles[i, j].GetComponent<Square>().currentPiece;
-
-                if (checkPiece != null)
+                if (checkPiece.hasOre && !checkPiece.isNavy)
                 {
-                    if (checkPiece.hasOre && !checkPiece.isNavy)
-                    {
-                        Debug.Log("The Pirates Won!");
-                        gameWon = true;
-                        checkPiece.gameWon = true;
+                    gameWon = true;
+                    checkPiece.gameWon = true;
 
-                        // Update UI
-                        FindObjectOfType<BoardUI>().GameWon(false);
-                    }
+                    // Update UI
+                    boardUI.GameWon(false);
                 }
             }
         }
@@ -345,6 +352,7 @@ public class GameBoard : MonoBehaviour
                         // The wrong team is trying to move
                         if(current_square.currentPiece.isNavy != navyTurn)
                         {
+                            boardUI.DisplayTempText("It's not your turn yet!", 1.5f);
                             Debug.Log("It's not your turn!");
                             Square selectedTile = tileSelected.GetComponent<Square>();
                             selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
@@ -352,6 +360,14 @@ public class GameBoard : MonoBehaviour
                         // The right team is trying to move
                         else
                         {
+                            if(current_square.currentPiece.type == PieceType.Royal2 && current_square.currentPiece.isNavy)
+                            {
+                                tacticianSelected = true;
+                            }
+                            if(current_square.currentPiece.type == PieceType.Bomber)
+                            {
+                                bomberSelected = true;
+                            }
                             storedTileSelected = tileSelected;
                             squareSelected = true;
                             current_square.SquareHasBeenClicked = true;
@@ -431,7 +447,7 @@ public class GameBoard : MonoBehaviour
                             currentPiece.hasOre = true;
 
                             // Update UI
-                            FindObjectOfType<BoardUI>().UpdateGoal(navyTurn, true);
+                            boardUI.UpdateGoal(navyTurn, true);
                         }
 
                         // If the orebearer is being captured, the ore needs to be reset
@@ -480,7 +496,7 @@ public class GameBoard : MonoBehaviour
                             DetectLegalMoves(storedTileSelected, currentPiece);
 
                             // Update UI
-                            FindObjectOfType<BoardUI>().UpdateGoal(!navyTurn, false);
+                            boardUI.UpdateGoal(!navyTurn, false);
                         }
                         // The orebearer just captured and gets to take a second turn
                         if (currentPiece.hasOre && !orebearerSecondMove)
@@ -586,7 +602,7 @@ public class GameBoard : MonoBehaviour
                                 currentPiece.hasOre = true;
 
                                 // Update UI
-                                FindObjectOfType<BoardUI>().UpdateGoal(navyTurn, true);
+                                boardUI.UpdateGoal(navyTurn, true);
                             }
 
                             // If the orebearer is being captured, the ore needs to be reset
@@ -797,7 +813,8 @@ public class GameBoard : MonoBehaviour
                     else if (tileSelected.GetComponent<Square>().SquareHasBeenClicked)
                     {
                         ResetBoardMaterials(true);
-                        
+                        boardUI.GoalText("Click on a piece to move it!");
+
                         // Ends turn if orebearer decides not to move a second time
                         if (tileSelected.GetComponent<Square>().currentPiece.hasOre && orebearerSecondMove)
                         {
@@ -981,6 +998,16 @@ public class GameBoard : MonoBehaviour
         int current_x = IdentifyThisBoardSquare(current).x;
         int current_y = IdentifyThisBoardSquare(current).y;
 
+        bool invalidPiece = false;
+        bool moveAble = false;
+        bool captureAble = false;
+        bool gunnerAble = false;
+        bool cannonTarget = false;
+        bool cannonJump = false;
+        bool mineDeploy = false;
+        bool oreDeploy = false;
+        bool corsairJump = false;
+
         moveAssessment = new int[TILE_COUNT_X, TILE_COUNT_Y];
 
         current_square = tiles[current_x, current_y].GetComponent<Square>();
@@ -998,14 +1025,18 @@ public class GameBoard : MonoBehaviour
             switch (piece.type)
             {
                 case PieceType.Ore:
+                    boardUI.DisplayTempText("The Ore can't move, click on a different piece!", 1.5f);
                     Debug.Log("The Ore doesn't move!");
+                    invalidPiece = true;
                     squareSelected = false;
                     current_square.SquareHasBeenClicked = false;
                     current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);
                     tileSelected = null;
                     break;
                 case PieceType.LandMine:
+                    boardUI.DisplayTempText("Land Mines can't move, click on a different piece!", 1.5f);
                     Debug.Log("The Land Mine doesn't move!");
+                    invalidPiece = true;
                     squareSelected = false;
                     current_square.SquareHasBeenClicked = false;
                     current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);
@@ -1048,6 +1079,7 @@ public class GameBoard : MonoBehaviour
                     {
                         if(jumpCooldown > 0 && !tacticianSelected)
                         {
+                            boardUI.DisplayTempText("The Corsair needs to recharge before jumping again. Click on a different piece to move it!");
                             Debug.Log("Corsair can't jump yet, move someone else!");
                             squareSelected = false;
                             current_square.SquareHasBeenClicked = false;
@@ -1124,21 +1156,6 @@ public class GameBoard : MonoBehaviour
             }
         }
 
-        // This is where UI Text can be reviewed, all possible move data is stored in moveAssessment[x,y]
-        // moveAssessment[x,y] == -1: no move is possible
-        // moveAssessment[x,y] == 0: active piece is there
-        // moveAssessment[x,y] == 1: Piece can move there
-        // moveAssessment[x,y] == 2: piece can capture by moving there
-        // moveAssessment[x,y] == 3: piece can capture by shooting there
-        // moveAssessment[x,y] == 4: piece can capture this square by jumping
-        // moveAssessment[x,y] == 5: piece can capture the "cannonTarget" square by jumping here
-        // moveAssessment[x,y] == 6: A mine can be placed in any of these squares
-        // moveAssessment[x,y] == 7: the ore can be redeployed to any of these squares
-        // moveAssessment[x,y] == 8: The corsair can jump to any of these squares (but will need to cooldown afterwards)
-        // Also add text to the code in line 195
-        // 
-
-
         // Establishes squares that can be moved to or captured in
         for (int x = 0; x < TILE_COUNT_X; x++)
         {
@@ -1150,7 +1167,7 @@ public class GameBoard : MonoBehaviour
                     tiles[x, y].tag = "MoveableSquare";
                     Square activeSquare = tiles[x,y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.moveableBoardMaterial);
-                    // In text box, write "Click on a green square to move it"
+                    moveAble = true;
                 }
                 // Square contains a capturable piece by replacement
                 else if (moveAssessment[x,y] == 2)
@@ -1158,7 +1175,7 @@ public class GameBoard : MonoBehaviour
                     tiles[x, y].tag = "CaptureSquare";
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
-                    // In text box, write "Click on a red square to capture that piece!"
+                    captureAble = true;
                 }
                 // Square contains a capturable piece by shooting
                 else if(moveAssessment[x,y] == 3)
@@ -1168,6 +1185,7 @@ public class GameBoard : MonoBehaviour
                         tiles[x, y].tag = "GunnerTarget";
                         Square activeSquare = tiles[x, y].GetComponent<Square>();
                         activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                        gunnerAble = true;
                     }
                 }
                 // Square contains a capturable peice by jumping
@@ -1179,13 +1197,14 @@ public class GameBoard : MonoBehaviour
                         tiles[x, y].tag = "CannonTarget";
                         Square activeSquare = tiles[x, y].GetComponent<Square>();
                         activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
-                        // "Click on a flashing green square to jump capture the enemy piece!"
+                        cannonTarget = true;
                     }
                 }
                 // Square can be moved to for cannon jumping capture
                 else if (moveAssessment[x, y] == 5)
                 {
                     tiles[x, y].tag = "CannonDestination";
+                    cannonJump = true;
                 }
                 // A Land Mine can be deployed here
                 else if (moveAssessment[x,y] == 6)
@@ -1193,6 +1212,7 @@ public class GameBoard : MonoBehaviour
                     tiles[x, y].tag = "MineDeploy";
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                    mineDeploy = true;
                 }
                 // The ore can be deployed here
                 else if (moveAssessment[x,y] == 7)
@@ -1200,14 +1220,101 @@ public class GameBoard : MonoBehaviour
                     tiles[x, y].tag = "OreDeploy";
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                    oreDeploy = true;
                 }
 
                 // Corsair can jump here
                 else if (moveAssessment[x, y] == 8)
                 {
                     tiles[x, y].tag = "CorsairJump";
+                    corsairJump = true;
                 }
             }
+        }
+
+        //bool moveAble = false;
+        //bool captureAble = false;
+        //bool gunnerAble = false;
+        //bool cannonTarget = false;
+        //bool cannonJump = false;
+        //bool mineDeploy = false;
+        //bool oreDeploy = false;
+        //bool corsairJump = false;
+
+        // Displays current possible game actions in goal text
+        if (!invalidPiece && !moveAble && !captureAble && !gunnerAble && !cannonJump && !mineDeploy && !oreDeploy && !corsairJump)
+        {
+            // No move is available with this piece
+            boardUI.GoalText("This piece has no valid moves. Click on it again to cancel.");
+        }
+        else if (!invalidPiece)
+        {
+            boardUI.GoalText("");
+            // The orebearer can move again
+            if (orebearerSecondMove)
+            {
+                boardUI.GoalText("The orebearer has just captured, and can make a second move.", true);
+            }
+
+            // A move is available with this piece
+            if (moveAble)
+            {
+                boardUI.GoalText("- Click on a green square to move there", true);
+            }
+            // A capture is available with this piece
+            if (captureAble)
+            {
+                boardUI.GoalText("- Click on a red square to capture that piece", true);
+            }
+            // The tactician can inherit a piece
+            if (tacticianSelected && !tacticianInheritSelected)
+            {
+                if(jail.tacticianMimicPieces[0] != null)
+                    boardUI.GoalText("- Click on a flashing piece to mimic that piece's moves for a turn", true);
+            }
+            // A mine can be redeployed
+            if(bomberSelected && !landMineSelected)
+            {
+                boardUI.GoalText("- Click on a flashing Land Mine to redeploy it to the board", true);
+            }
+            // A gunner can capture by shooting
+            if (gunnerAble)
+            {
+                boardUI.GoalText("- Click on a red square to shoot that piece from a distance", true);
+            }
+            // The cannon can capture a piece
+            if (cannonTarget)
+            {
+                boardUI.GoalText("- Click on a flashing green square to capture the red highlighted piece", true);
+            }
+            // The cannon can jump to a square
+            else if (cannonJump)
+            {
+                boardUI.GoalText("- Click on a flashing green square to jump there", true);
+            }
+            // A mine is being redeployed
+            if (mineDeploy)
+            {
+                boardUI.GoalText("- Click on a red square to redeploy the bomb there", true);
+                boardUI.GoalText("- Click on that Land Mine again to cancel the redeploy", true);
+            }
+            // The ore is being redeployed
+            if (oreDeploy)
+            {
+                boardUI.GoalText("- Click on a red square to redeploy the ore there", true);
+            }
+            // The corsair can jump to a square
+            if (corsairJump)
+            {
+                boardUI.GoalText("- Click on a flashing green square to jump there", true);
+            }
+            // The tactician is inheriting a piece
+            if(tacticianSelected && tacticianInheritSelected)
+            {
+                boardUI.GoalText("- Click on the mimicked piece again to return to a normal move", true);
+            }
+            // Default message
+            boardUI.GoalText("- Click on that piece again to cancel the move", true);
         }
     }
 
@@ -1299,6 +1406,7 @@ public class GameBoard : MonoBehaviour
         }
 
         // Update UI
-        FindObjectOfType<BoardUI>().UpdateTurn(navyTurn);
+        boardUI.UpdateTurn(navyTurn);
+        boardUI.GoalText("Click on a piece to move it!");
     }
 }
