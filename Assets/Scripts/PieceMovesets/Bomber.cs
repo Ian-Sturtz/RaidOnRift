@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bomber : Piece
 {
-    public int[,] GetValidMoves(GameObject[,] tiles)
+    public int[,] GetValidMoves(GameObject[,] tiles, bool bombInJail = false)
     {
         int[,] moveAssessment;
 
@@ -35,7 +35,11 @@ public class Bomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         up = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        if (!bombInJail && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        {
+                            moveAssessment[currentX, currentY + change] = -1;
+                        }
+                        else if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
                         {
                             moveAssessment[currentX, currentY + change] = -1;
                         }
@@ -57,7 +61,11 @@ public class Bomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         down = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        if (!bombInJail && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        {
+                            moveAssessment[currentX, currentY - change] = -1;
+                        }
+                        else if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
                         {
                             moveAssessment[currentX, currentY - change] = -1;
                         }
@@ -79,7 +87,11 @@ public class Bomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         right = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        if (!bombInJail && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        {
+                            moveAssessment[currentX + change, currentY] = -1;
+                        }
+                        else if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
                         {
                             moveAssessment[currentX + change, currentY] = -1;
                         }
@@ -101,7 +113,11 @@ public class Bomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         left = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        if (!bombInJail && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        {
+                            moveAssessment[currentX - change, currentY] = -1;
+                        }
+                        else if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
                         {
                             moveAssessment[currentX - change, currentY] = -1;
                         }
@@ -123,7 +139,11 @@ public class Bomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         up_right = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        if (!bombInJail && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        {
+                            moveAssessment[currentX + change, currentY + change] = -1;
+                        }
+                        else if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
                         {
                             moveAssessment[currentX + change, currentY + change] = -1;
                         }
@@ -145,7 +165,11 @@ public class Bomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         up_left = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        if (!bombInJail && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        {
+                            moveAssessment[currentX - change, currentY + change] = -1;
+                        }
+                        else if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
                         {
                             moveAssessment[currentX - change, currentY + change] = -1;
                         }
@@ -167,7 +191,11 @@ public class Bomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         down_right = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        if (!bombInJail && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        {
+                            moveAssessment[currentX + change, currentY - change] = -1;
+                        }
+                        else if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
                         {
                             moveAssessment[currentX + change, currentY - change] = -1;
                         }
@@ -189,7 +217,11 @@ public class Bomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         down_left = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
+                        if (!bombInJail && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        {
+                            moveAssessment[currentX - change, currentY - change] = -1;
+                        }
+                        else if (possibleSquare.currentPiece.type != PieceType.LandMine && !possibleSquare.currentPiece.hasOre && !hasCaptured)
                         {
                             moveAssessment[currentX - change, currentY - change] = -1;
                         }

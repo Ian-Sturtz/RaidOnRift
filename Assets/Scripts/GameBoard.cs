@@ -53,6 +53,7 @@ public class GameBoard : MonoBehaviour
     // For use with bomber interactions
     [SerializeField] private bool bomberSelected = false;
     [SerializeField] private bool landMineSelected = false;
+    [SerializeField] private bool landMineInJail = false;
     private int cellToHighlight = -2;
 
     // For use with tactician interactions
@@ -121,7 +122,7 @@ public class GameBoard : MonoBehaviour
         PiratePieces[0] = SpawnPiece(PieceType.LandMine, false, 3, 3);
         PiratePieces[1] = SpawnPiece(PieceType.LandMine, false, 3, 9);
         PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 4, 6);
-        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 5);
+        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 4);
 
         PiratePieces[4] = SpawnPiece(PieceType.Ore, false, 6, 9);
         PiratePieces[5] = SpawnPiece(PieceType.Bomber, false, 0, 7);
@@ -368,6 +369,27 @@ public class GameBoard : MonoBehaviour
                             {
                                 bomberSelected = true;
                             }
+
+                            // Finds enemy bombs in jail cells
+                            if (bomberSelected)
+                            {
+                                // Tactician is mimicking a bomber
+                                if (tacticianInheritSelected)
+                                {
+                                    landMineInJail = jail.FindPiece(PieceType.LandMine, false) >= 0;
+                                }
+                                // The selected bomber is Navy and can deploy Pirate Bombs
+                                else if (tileSelected.GetComponent<Square>().currentPiece.isNavy)
+                                {
+                                    landMineInJail = jail.FindPiece(PieceType.LandMine, false) >= 0;
+                                }
+                                // The selected bomber is Pirate and can deploy Navy Bombs
+                                else
+                                {
+                                    landMineInJail = jail.FindPiece(PieceType.LandMine, true) >= 0;
+                                }
+                            }
+
                             storedTileSelected = tileSelected;
                             squareSelected = true;
                             current_square.SquareHasBeenClicked = true;
@@ -822,6 +844,7 @@ public class GameBoard : MonoBehaviour
                             NextTurn();
                         }
 
+                        landMineInJail = false;
                         squareSelected = false;
                         tileSelected.GetComponent<Square>().SquareHasBeenClicked = false;
                         tileSelected = null;
@@ -1052,7 +1075,8 @@ public class GameBoard : MonoBehaviour
                     }
                     else
                     {
-                        moveAssessment = piece.GetComponent<Bomber>().GetValidMoves(tiles);
+                        Debug.Log(landMineInJail);
+                        moveAssessment = piece.GetComponent<Bomber>().GetValidMoves(tiles, landMineInJail);
                     }
                     break;
                 case PieceType.Vanguard:
