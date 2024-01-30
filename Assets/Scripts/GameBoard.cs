@@ -171,6 +171,9 @@ public class GameBoard : MonoBehaviour
                         Debug.Log("The Navy Won!");
                         gameWon = true;
                         checkPiece.gameWon = true;
+
+                        // Update UI
+                        FindObjectOfType<BoardUI>().GameWon(true);
                     }
                 }
             }
@@ -186,6 +189,9 @@ public class GameBoard : MonoBehaviour
                         Debug.Log("The Pirates Won!");
                         gameWon = true;
                         checkPiece.gameWon = true;
+
+                        // Update UI
+                        FindObjectOfType<BoardUI>().GameWon(false);
                     }
                 }
             }
@@ -423,6 +429,9 @@ public class GameBoard : MonoBehaviour
                         if (capturedPiece.type == PieceType.Ore)
                         {
                             currentPiece.hasOre = true;
+
+                            // Update UI
+                            FindObjectOfType<BoardUI>().UpdateGoal(navyTurn, true);
                         }
 
                         // If the orebearer is being captured, the ore needs to be reset
@@ -469,6 +478,9 @@ public class GameBoard : MonoBehaviour
                             }
                             targetSquare.tag = "CaptureSquare";
                             DetectLegalMoves(storedTileSelected, currentPiece);
+
+                            // Update UI
+                            FindObjectOfType<BoardUI>().UpdateGoal(!navyTurn, false);
                         }
                         // The orebearer just captured and gets to take a second turn
                         if (currentPiece.hasOre && !orebearerSecondMove)
@@ -572,6 +584,9 @@ public class GameBoard : MonoBehaviour
                             if (capturedPiece.type == PieceType.Ore)
                             {
                                 currentPiece.hasOre = true;
+
+                                // Update UI
+                                FindObjectOfType<BoardUI>().UpdateGoal(navyTurn, true);
                             }
 
                             // If the orebearer is being captured, the ore needs to be reset
@@ -1282,5 +1297,8 @@ public class GameBoard : MonoBehaviour
                 navyTurn = true;
             }
         }
+
+        // Update UI
+        FindObjectOfType<BoardUI>().UpdateTurn(navyTurn);
     }
 }
