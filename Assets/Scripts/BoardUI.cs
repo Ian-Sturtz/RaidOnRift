@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using TMPro;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ public class BoardUI : MonoBehaviour
         {
             turnDisplay.SetText("Navy's Turn");
 
-            if(navyHasOre)
+            if (navyHasOre)
             {
                 goalDisplay.SetText("Bring your orebearer back to your side of the board");
             }

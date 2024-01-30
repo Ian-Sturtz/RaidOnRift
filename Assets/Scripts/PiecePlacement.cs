@@ -10,11 +10,12 @@ public class PiecePlacement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Piece piece;
         if (PieceManager.instance != null)
         {
             Debug.Log(PieceManager.instance.navyFirst);
 
-            Piece piece;
+            
             for (int i = PieceManager.instance.navyRoyal1; i > 0; i--)
             {
                 piece = board.SpawnPiece(PieceType.Royal1, true, 0, 0);
@@ -130,7 +131,7 @@ public class PiecePlacement : MonoBehaviour
             Debug.Log("Piece manager not loaded, using default loadout");
 
             // Default selection, used for testing
-            Piece piece = board.SpawnPiece(PieceType.Royal1, true, 0, 0);
+            piece = board.SpawnPiece(PieceType.Royal1, true, 0, 0);
             jail.InsertAPiece(piece);
             piece.destroyPiece();
             piece = board.SpawnPiece(PieceType.Royal2, true, 0, 0);
@@ -234,6 +235,38 @@ public class PiecePlacement : MonoBehaviour
             jail.InsertAPiece(piece);
             piece.destroyPiece();
         }
+
+        piece = board.SpawnPiece(PieceType.Ore, true, 0, 0);
+        jail.InsertAPiece(piece);
+        piece.destroyPiece();
+        piece = board.SpawnPiece(PieceType.LandMine, true, 0, 0);
+        jail.InsertAPiece(piece);
+        piece.destroyPiece();
+        piece = board.SpawnPiece(PieceType.LandMine, true, 0, 0);
+        jail.InsertAPiece(piece);
+        piece.destroyPiece();
+        piece = board.SpawnPiece(PieceType.LandMine, true, 0, 0);
+        jail.InsertAPiece(piece);
+        piece.destroyPiece();
+        piece = board.SpawnPiece(PieceType.LandMine, true, 0, 0);
+        jail.InsertAPiece(piece);
+        piece.destroyPiece();
+
+        piece = board.SpawnPiece(PieceType.Ore, false, 0, 0);
+        jail.InsertAPiece(piece);
+        piece.destroyPiece();
+        piece = board.SpawnPiece(PieceType.LandMine, false, 0, 0);
+        jail.InsertAPiece(piece);
+        piece.destroyPiece();
+        piece = board.SpawnPiece(PieceType.LandMine, false, 0, 0);
+        jail.InsertAPiece(piece);
+        piece.destroyPiece();
+        piece = board.SpawnPiece(PieceType.LandMine, false, 0, 0);
+        jail.InsertAPiece(piece);
+        piece.destroyPiece();
+        piece = board.SpawnPiece(PieceType.LandMine, false, 0, 0);
+        jail.InsertAPiece(piece);
+        piece.destroyPiece();
     }
 
     // Update is called once per frame
