@@ -6116,7 +6116,7 @@ MonoBehaviour:
   showSocial3: 1
   showVersion: 1
   showFade: 1
-  sceneToLoad: Board
+  sceneToLoad: Piece Selection
   logo: {fileID: 21300000, guid: 5fc4671d84a54ab44b9f1a22e729ab05, type: 3}
   background: {fileID: 21300000, guid: 6710abdf50a3310458f05c316a720d29, type: 3}
   buttons: {fileID: 7158414126002435253, guid: 076197847ba151147b3f5ca6d92ef0fd, type: 3}
