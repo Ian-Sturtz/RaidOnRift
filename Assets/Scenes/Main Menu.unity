@@ -5767,13 +5767,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showBackground: 1
-  showVersion: 1
   showSocial1: 0
   showSocial2: 1
   showSocial3: 1
+  showVersion: 1
   showFade: 1
   sceneToLoad: Board
-  sceneToLoad2: 
   logo: {fileID: 21300000, guid: 5fc4671d84a54ab44b9f1a22e729ab05, type: 3}
   background: {fileID: 21300000, guid: 6710abdf50a3310458f05c316a720d29, type: 3}
   buttons: {fileID: 7158414126002435253, guid: 076197847ba151147b3f5ca6d92ef0fd, type: 3}
@@ -5785,13 +5784,12 @@ MonoBehaviour:
     rgba: 4286021288
   version: I^2EGO
   play: S T A R T
-  play2: Play2
   settings: S E T T I N G S
   quit: Q U I T
   social1Icon: {fileID: -2873110322805508246, guid: 076197847ba151147b3f5ca6d92ef0fd, type: 3}
   social1Link: https://www.google.com/
   social2Icon: {fileID: 21300000, guid: 87081793db934604ead27093c7d39710, type: 3}
-  social2Link: https://www.google.com/
+  social2Link: https://docs.google.com/document/d/1SXoK-zwMl2j08ecq1z6ckiNfNu--SirCVIYbBRxa6aM/edit?usp=sharing
   social3Icon: {fileID: 3058055706062087063, guid: 076197847ba151147b3f5ca6d92ef0fd, type: 3}
   social3Link: https://discord.gg/ACMdywPb
   defaultVolume: 0.8
@@ -5849,13 +5847,12 @@ MonoBehaviour:
   - {fileID: 2693931152478341869}
   - {fileID: 2693931152985079685}
   playText: {fileID: 2693931153391058489}
-  playText2: {fileID: 0}
   settingsText: {fileID: 2693931153280574683}
   quitText: {fileID: 2693931153031596406}
   versionText: {fileID: 2693931153717524339}
   volumeSlider: {fileID: 2693931152112561014}
   resolutionDropdown: {fileID: 2693931152753773863}
-  audioSource: {fileID: 4866888305661084032}
+  audioSource: {fileID: 2987782303585092839}
 --- !u!224 &2693931153334895671
 RectTransform:
   m_ObjectHideFlags: 0

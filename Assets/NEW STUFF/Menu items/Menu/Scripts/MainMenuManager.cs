@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-//resoltuion script found online
-//menu accessbility used from other project
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -14,15 +12,14 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("On/Off")]
     [Space(5)] [SerializeField] bool showBackground;
-    [SerializeField] bool showVersion;
     [SerializeField] bool showSocial1;
     [SerializeField] bool showSocial2;
     [SerializeField] bool showSocial3;
+    [SerializeField] bool showVersion;
     [SerializeField] bool showFade;
 
     [Header("Scene")]
     [Space(10)] [SerializeField] string sceneToLoad;
-    [Space(10)] [SerializeField] string sceneToLoad2;
 
     [Header("Sprites")]
     [Space(10)] [SerializeField] Sprite logo;
@@ -38,10 +35,8 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("Texts")]
     [Space(10)] [SerializeField] string play = "Play";
-    [Space(10)] [SerializeField] string play2 = "Play2";
     [SerializeField] string settings = "Settings";
     [SerializeField] string quit = "Quit";
-    
 
     [Header("Social")]
     [Space(10)] [SerializeField] Sprite social1Icon;
@@ -55,7 +50,7 @@ public class MainMenuManager : MonoBehaviour
     List<string> links = new List<string>();
 
     [Header("Audio")]
-    [Space(10)] [SerializeField] float defaultVolume = 0.6f;
+    [Space(10)] [SerializeField] float defaultVolume = 0.8f;
     [SerializeField] AudioClip uiClick;
     [SerializeField] AudioClip uiHover;
     [SerializeField] AudioClip uiSpecial;
@@ -84,7 +79,6 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("Texts")]
     [Space(10)] [SerializeField] TextMeshProUGUI playText;
-    [Space(10)] [SerializeField] TextMeshProUGUI playText2;
     [SerializeField] TextMeshProUGUI settingsText;
     [SerializeField] TextMeshProUGUI quitText;
     [SerializeField] TextMeshProUGUI versionText;   
@@ -178,9 +172,6 @@ public class MainMenuManager : MonoBehaviour
         if (playText != null)
             playText.text = play;
 
-        if(playText2 != null)
-            playText2.text = play;
-
         if (settingsText != null)
             settingsText.text = settings;
 
@@ -256,35 +247,11 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene(sceneToLoad);
     }
 
-
     public void Quit()
     {
         Application.Quit();
     }
-
-    public void LoadLevel2()
-    {
-        // Fade Animation
-        fadeAnimator.SetTrigger("FadeOut");
-
-        StartCoroutine(WaitToLoadLevel2());
-    }
-
-    IEnumerator WaitToLoadLevel2()
-    {
-        yield return new WaitForSeconds(1f);
-
-        // Scene Load
-        SceneManager.LoadScene(sceneToLoad2);
-    }
-
-
-    public void Quit2()
-    {
-        Application.Quit();
-    }
     #endregion
-
 
 
     #region Audio
