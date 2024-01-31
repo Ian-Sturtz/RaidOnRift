@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class PiecePlacement : MonoBehaviour
 {
-    public JailBoard jail;
-    public GameBoard board;
-
-    private bool prototypeDemo = true;
+    public PPJailBoard jail;
+    public PPGameBoard board;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (!prototypeDemo)
-        {
             Piece piece;
             if (PieceManager.instance != null)
             {
@@ -271,6 +267,6 @@ public class PiecePlacement : MonoBehaviour
             piece = board.SpawnPiece(PieceType.LandMine, false, 0, 0);
             jail.InsertAPiece(piece);
             piece.destroyPiece();
-        }
+        
     }
 }

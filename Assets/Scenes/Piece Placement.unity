@@ -8916,8 +8916,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f964e8c4ada4ca7499b561fcb9135fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jail: {fileID: 0}
-  board: {fileID: 0}
+  jail: {fileID: 715274902}
+  board: {fileID: 364305081}
 --- !u!224 &1124015627
 RectTransform:
   m_ObjectHideFlags: 0
