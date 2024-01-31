@@ -41,6 +41,7 @@ public class PPGameBoard : MonoBehaviour
     public GameObject JailCells;
     public PPJailBoard jail;
     public int teamSize = 30;
+    [SerializeField] private int selectedCellIndex = -1;
 
     #endregion
 
@@ -56,6 +57,8 @@ public class PPGameBoard : MonoBehaviour
     // Piece prefabs to be spawned in as needed
     [Header("Prefabs and Materials")]
     [SerializeField] public GameObject[] PiecePrefabs;
+
+    bool piecesadded = false;
 
     private void Start()
     {
@@ -80,14 +83,20 @@ public class PPGameBoard : MonoBehaviour
 
     private void Update()
     {
-        navyDone = true;
-        pirateDone = true;
+        if (navyTurn)
+        {
+            navyDone = true;
+        }
+        else
+        {
+            pirateDone = true;
+        }
 
         if (navyTurn)
         {
             for (int i = 0; i < 30; i++)
             {
-                if (jail.pirateJailedPieces[i] != null)
+                if (jail.navyJailedPieces[i] != null)
                 {
                     navyDone = false;
                     if (!squareSelected)
@@ -101,7 +110,7 @@ public class PPGameBoard : MonoBehaviour
         {
             for (int i = 0; i < 30; i++)
             {
-                if (jail.navyJailedPieces[i] != null)
+                if (jail.pirateJailedPieces[i] != null)
                 {
                     pirateDone = false;
                     if (!squareSelected)
@@ -114,21 +123,46 @@ public class PPGameBoard : MonoBehaviour
         }
 
         // Both teams are done being placed
-        if(!navyDone && !pirateDone)
+        if(navyDone && pirateDone && !piecesadded)
         {
+            int totalPieces = 0;
             piecesDone = true;
-            SceneManager.LoadScene("Board");
+            Debug.Log("Pieces placed");
+
+            for (int y = 0; y < 10; y++)
+            {
+                for (int x = 0; x < 10; x++)
+                {
+                    PPSquare activeSquare = tiles[x, y].GetComponent<PPSquare>();
+
+                    if (activeSquare.currentPiece != null)
+                    {
+                        Piece activePiece = activeSquare.currentPiece;
+                        PieceManager.instance.pieces[totalPieces] = activePiece;
+
+                        Debug.Log(PieceManager.instance.pieces[totalPieces].type + " " + PieceManager.instance.pieces[totalPieces].isNavy + " {" + PieceManager.instance.pieces[totalPieces].currentX + "," + PieceManager.instance.pieces[totalPieces].currentY + "}");
+                        totalPieces++;
+                    }
+                }
+            }
+
+            piecesadded = true;
+            // SceneManager.LoadScene("Board");
+        }
+
         // Navy finished placing their pieces (skip their placement turn)
-        }else if(navyTurn && navyDone)
+        else if (navyTurn && navyDone)
         {
             NextTurn();
         }
+
         // Pirates finished placing their pieces (skip their placement turn)
         else if(!navyTurn && pirateDone)
         {
             NextTurn();
         }
 
+        // Mouse click
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -143,26 +177,86 @@ public class PPGameBoard : MonoBehaviour
                 {
                     // Do nothing
                 }
-                // Valid cell has been clicked
+                // No valid cell had been clicked yet
                 else if (!squareSelected)
                 {
-                    PPJailCell currentSquare = tileSelected.GetComponent<PPJailCell>();
-
-                    if (currentSquare.tag == "InteractablePiece")
+                    // An interactable jail cell was clicked
+                    if (tileSelected.tag == "InteractablePiece")
                     {
+                        PPJailCell currentSquare = tileSelected.GetComponent<PPJailCell>();
                         ResetBoardMaterials();
                         currentSquare.clicked = true;
                         currentSquare.tag = "InteractablePiece";
                         squareSelected = true;
                         storedTileSelected = tileSelected;
+
                         DetectValidSquares(currentSquare);
                     }
-                }else if(tileSelected.GetComponent<PPJailCell>().tag == "InteractablePiece")
+
+                    // The same piece was clicked twice (cancel piece selection)
+                } else if (tileSelected.tag == "InteractablePiece")
                 {
+                    boardUI.GoalText(defaultText);
                     ResetBoardMaterials();
                     storedTileSelected = null;
                     squareSelected = false;
                     tileSelected = null;
+                    selectedCellIndex = -1;
+
+                    // A legal placement square has been selected (spawn the selected piece there)
+                } else if (tileSelected.tag == "MoveableSquare")
+                {
+                    Vector2Int spawnCoordinates = IdentifyThisBoardSquare(tileSelected);
+                    tileSelected.GetComponent<PPSquare>().FlashMaterial(tileSelected.GetComponent<PPSquare>().moveableBoardMaterial, 2);
+                    // Finds which cell the target piece is in
+                    for (int i = 0; i < teamSize; i++)
+                    {
+                        if (navyTurn)
+                        {
+                            PPJailCell activeCell;
+                            activeCell = jail.PirateJailCells[i].GetComponent<PPJailCell>();
+                            if (activeCell.tag == "InteractablePiece")
+                            {
+                                selectedCellIndex = i;
+                            }
+                        }
+                        else
+                        {
+                            PPJailCell activeCell;
+                            activeCell = jail.NavyJailCells[i].GetComponent<PPJailCell>();
+                            if (activeCell.tag == "InteractablePiece")
+                            {
+                                selectedCellIndex = i;
+                            }
+                        }
+                    }
+
+                    PPSquare currentSquare = tileSelected.GetComponent<PPSquare>();
+                    PPJailCell currentCell = storedTileSelected.GetComponent<PPJailCell>();
+                    Piece currentPiece = currentCell.currentPiece;
+
+                    
+                    SpawnPiece(currentPiece.type, currentPiece.isNavy, spawnCoordinates.x, spawnCoordinates.y);
+
+                    ResetBoardMaterials();
+                    currentPiece.destroyPiece();
+                    currentCell.resetCell();
+                    
+                    if (navyTurn)
+                    {
+                        jail.navyJailedPieces[selectedCellIndex] = null;
+                    }
+                    else
+                    {
+                        jail.pirateJailedPieces[selectedCellIndex] = null;
+                    }
+
+                    currentSquare.SquareHasBeenClicked = false;
+                    storedTileSelected = null;
+                    tileSelected = null;
+                    squareSelected = false;
+                    selectedCellIndex = -1;
+                    NextTurn();
                 }
             }
         }
@@ -204,34 +298,6 @@ public class PPGameBoard : MonoBehaviour
                 square.SetMaterial(square.defaultBoardMaterial);
             }
         }
-    }
-
-    private int FindFirstOpenTeamSlot(bool teamNavy)
-    {
-        int index;
-
-        if (teamNavy)
-        {
-            for (index = 0; index < teamSize; index++)
-            {
-                if(NavyPieces[index] == null)
-                {
-                    return index;
-                }
-            }
-        }
-        else
-        {
-            for (index = 0; index < teamSize; index++)
-            {
-                if (PiratePieces[index] == null)
-                {
-                    return index;
-                }
-            }
-        }
-
-        return -1;
     }
 
     private Vector2Int IdentifyThisBoardSquare(GameObject square)
@@ -314,8 +380,11 @@ public class PPGameBoard : MonoBehaviour
         int spacesNeeded = 2;
         Piece possiblePiece;
 
+        boardUI.GoalText("");
+
         if (currentPiece.type == PieceType.LandMine)
         {
+            boardUI.GoalText("This is a Land Mine. It must go in the Neutral Zone (rows 4-7).", true);
             startingRow = 3;
             endRow = 7;
         }else if (currentPiece.isNavy)
@@ -323,10 +392,19 @@ public class PPGameBoard : MonoBehaviour
             startingRow = 0;
             if (currentPiece.type == PieceType.Royal1 || currentPiece.type == PieceType.Ore)
             {
+                if(currentPiece.type == PieceType.Royal1)
+                {
+                    boardUI.GoalText("Team leaders need to go in your Commander Zone (row 1).", true);
+                }
+                else
+                {
+                    boardUI.GoalText("The Ore must go in your Commander Zone (row 1).", true);
+                }
                 endRow = 1;
             }
             else
             {
+                boardUI.GoalText("Pieces on your team can go in your Start Zone (rows 1-3).", true);
                 for (int i = 0; i < 10; i++)
                 {
                     possiblePiece = tiles[i, 0].GetComponent<PPSquare>().currentPiece;
@@ -342,6 +420,7 @@ public class PPGameBoard : MonoBehaviour
 
                 if(rowSpacesRemaining <= spacesNeeded)
                 {
+                    boardUI.GoalText("Remember to save some space for your Team Leader and Ore!", true);
                     startingRow = 1;
                 }
 
@@ -353,10 +432,19 @@ public class PPGameBoard : MonoBehaviour
             endRow = 10;
             if (currentPiece.type == PieceType.Royal1 || currentPiece.type == PieceType.Ore)
             {
+                if (currentPiece.type == PieceType.Royal1)
+                {
+                    boardUI.GoalText("Team leaders need to go in your Commander Zone (row 9).", true);
+                }
+                else
+                {
+                    boardUI.GoalText("The ore must go in your Commander Zone (row 9).", true);
+                }
                 startingRow = 9;
             }
             else
             {
+                boardUI.GoalText("Pieces on your team can go in your Start Zone (rows 8-10).", true);
                 for (int i = 0; i < 10; i++)
                 {
                     possiblePiece = tiles[i, 9].GetComponent<PPSquare>().currentPiece;
@@ -372,6 +460,7 @@ public class PPGameBoard : MonoBehaviour
 
                 if (rowSpacesRemaining <= spacesNeeded)
                 {
+                    boardUI.GoalText("Remember to save some space in your Commander Zone for your Team Leader and Ore!", true);
                     endRow = 9;
                 }
 
@@ -393,6 +482,9 @@ public class PPGameBoard : MonoBehaviour
                 }
             }
         }
+
+        boardUI.GoalText("Click on a green square to place that piece there,", true);
+        boardUI.GoalText("or click the piece again to cancel.", true);
     }
 
     // Changes the turn from one player to the next

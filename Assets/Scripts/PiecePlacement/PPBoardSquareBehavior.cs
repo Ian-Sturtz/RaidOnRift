@@ -47,7 +47,7 @@ public class PPSquare : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (!board.squareSelected)
+        if (!board.squareSelected && !flashing)
             SetMaterial(hoveredBoardMaterial);
     }
 
@@ -71,7 +71,7 @@ public class PPSquare : MonoBehaviour
     IEnumerator MaterialFlash(Material StartingMaterial, Material TargetMaterial, int flashCount)
     {
         flashing = true;
-        float delay = .05f;
+        float delay = .07f;
         for (int i = 0; i < flashCount; i++)
         {
             SetMaterial(TargetMaterial);

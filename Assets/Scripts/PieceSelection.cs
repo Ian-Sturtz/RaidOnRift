@@ -269,7 +269,7 @@ public class PieceSelection : MonoBehaviour
                 PieceManager.instance.navyFirst = false;
             else
                 PieceManager.instance.navyFirst = p1Navy;
-            SceneManager.LoadScene("Board");
+            SceneManager.LoadScene("Piece Placement");
         }
     }
 }

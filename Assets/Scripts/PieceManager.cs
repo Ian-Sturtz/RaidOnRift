@@ -28,6 +28,8 @@ public class PieceManager : MonoBehaviour
 
     public bool navyFirst;
 
+    public Piece[] pieces = new Piece[60];
+
     private void Awake()
     {
         if (instance != null)

@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Piece Selection.unity
     guid: fcef3a6071807f04d946a26d45b4449c
   - enabled: 1
+    path: Assets/Scenes/Piece Placement.unity
+    guid: 042cf5d904f920d4ab183e4c0649ed38
+  - enabled: 1
     path: Assets/Scenes/Board.unity
     guid: bd6263746ddb0f54295da104ecebfa73
   - enabled: 1

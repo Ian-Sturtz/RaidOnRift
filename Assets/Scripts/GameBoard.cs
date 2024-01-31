@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameBoard : MonoBehaviour
 {
     #region GameInfo
+
     // How many pieces have been added to the game so far
     public int PIECES_ADDED;
 
@@ -95,80 +96,8 @@ public class GameBoard : MonoBehaviour
         PiratePieces = new Piece[teamSize];
         IdentifyBoardSquares();
 
-        // Decent board starting positions for a sample game
-        NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 1, 0);
-        NavyPieces[1] = SpawnPiece(PieceType.Royal1, true, 3, 0);
-        NavyPieces[2] = SpawnPiece(PieceType.Mate, true, 9, 0);
-        NavyPieces[3] = SpawnPiece(PieceType.Cannon, true, 0, 1);
-        NavyPieces[4] = SpawnPiece(PieceType.Mate, true, 1, 1);
-        NavyPieces[5] = SpawnPiece(PieceType.Vanguard, true, 3, 1);
-        NavyPieces[6] = SpawnPiece(PieceType.Cannon, true, 4, 1);
-        NavyPieces[7] = SpawnPiece(PieceType.Mate, true, 6, 1);
-        NavyPieces[8] = SpawnPiece(PieceType.Vanguard, true, 7, 1);
-        NavyPieces[9] = SpawnPiece(PieceType.Navigator, true, 0, 2);
-        NavyPieces[10] = SpawnPiece(PieceType.Bomber, true, 1, 2);
-        NavyPieces[11] = SpawnPiece(PieceType.Quartermaster, true, 2, 2);
-        NavyPieces[12] = SpawnPiece(PieceType.Gunner, true, 3, 2);
-        NavyPieces[13] = SpawnPiece(PieceType.Mate, true, 5, 2);
-        NavyPieces[14] = SpawnPiece(PieceType.Gunner, true, 6, 2);
-        NavyPieces[15] = SpawnPiece(PieceType.Navigator, true, 7, 2);
-        NavyPieces[16] = SpawnPiece(PieceType.Bomber, true, 8, 2);
-        NavyPieces[17] = SpawnPiece(PieceType.Royal2, true, 9, 2);
+        SpawnAllPieces();
         
-        NavyPieces[18] = SpawnPiece(PieceType.LandMine, true, 3, 6);
-        NavyPieces[19] = SpawnPiece(PieceType.LandMine, true, 5, 5);
-        NavyPieces[20] = SpawnPiece(PieceType.LandMine, true, 8, 5);
-        NavyPieces[21] = SpawnPiece(PieceType.LandMine, true, 9, 6);
-        PiratePieces[0] = SpawnPiece(PieceType.LandMine, false, 3, 3);
-        PiratePieces[1] = SpawnPiece(PieceType.LandMine, false, 3, 9);
-        PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 4, 6);
-        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 4);
-
-        PiratePieces[4] = SpawnPiece(PieceType.Ore, false, 6, 9);
-        PiratePieces[5] = SpawnPiece(PieceType.Bomber, false, 0, 7);
-        PiratePieces[6] = SpawnPiece(PieceType.Navigator, false, 1, 7);
-        PiratePieces[7] = SpawnPiece(PieceType.Mate, false, 2, 7);
-        PiratePieces[8] = SpawnPiece(PieceType.Gunner, false, 3, 7);
-        PiratePieces[9] = SpawnPiece(PieceType.Mate, false, 4, 7);
-        PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 5, 7);
-        PiratePieces[11] = SpawnPiece(PieceType.Bomber, false, 6, 7);
-        PiratePieces[12] = SpawnPiece(PieceType.Mate, false, 7, 7);
-        PiratePieces[13] = SpawnPiece(PieceType.Navigator, false, 8, 7);
-        PiratePieces[14] = SpawnPiece(PieceType.Gunner, false, 9, 7);
-        PiratePieces[15] = SpawnPiece(PieceType.Cannon, false, 0, 8);
-        PiratePieces[16] = SpawnPiece(PieceType.Mate, false, 4, 8);
-        PiratePieces[17] = SpawnPiece(PieceType.Cannon, false, 6, 8);
-        PiratePieces[18] = SpawnPiece(PieceType.Vanguard, false, 8, 8);
-        PiratePieces[19] = SpawnPiece(PieceType.Royal2, false, 9, 8);
-        PiratePieces[20] = SpawnPiece(PieceType.Royal1, false, 2, 9);
-        PiratePieces[21] = SpawnPiece(PieceType.Vanguard, false, 9, 9);
-
-        // Test spawns one piece of each type in a random spot on the board
-        //NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 3, 0);
-        //NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 1, 2);
-        //NavyPieces[2] = SpawnPiece(PieceType.LandMine, true, 7, 6);
-        //NavyPieces[3] = SpawnPiece(PieceType.Royal1, true, 0, 3);
-        //NavyPieces[4] = SpawnPiece(PieceType.Vanguard, true, 1, 3);
-        //NavyPieces[5] = SpawnPiece(PieceType.Navigator, true, 2, 4);
-        //NavyPieces[6] = SpawnPiece(PieceType.Gunner, true, 4, 6);
-        //NavyPieces[7] = SpawnPiece(PieceType.Cannon, true, 3, 3);
-        //NavyPieces[8] = SpawnPiece(PieceType.Bomber, true, 5, 4);
-        //NavyPieces[9] = SpawnPiece(PieceType.LandMine, true, 6, 6);
-        //NavyPieces[10] = SpawnPiece(PieceType.Quartermaster, true, 5, 6);
-        //NavyPieces[11] = SpawnPiece(PieceType.Royal2, true, 8, 9);
-
-        //PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
-        //PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
-        //PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 5, 5);
-        //PiratePieces[3] = SpawnPiece(PieceType.Royal1, false, 8, 6);
-        //PiratePieces[4] = SpawnPiece(PieceType.Vanguard, false, 3, 7);
-        //PiratePieces[5] = SpawnPiece(PieceType.Navigator, false, 1, 8);
-        //PiratePieces[6] = SpawnPiece(PieceType.Gunner, false, 6, 9);
-        //PiratePieces[7] = SpawnPiece(PieceType.Cannon, false, 7, 7);
-        //PiratePieces[8] = SpawnPiece(PieceType.Bomber, false, 7, 5);
-        //PiratePieces[9] = SpawnPiece(PieceType.Royal1, false, 4, 0);
-        //PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 6, 4);
-        //PiratePieces[11] = SpawnPiece(PieceType.Royal2, false, 9, 4);
     }
 
     private void Update()
@@ -1400,6 +1329,94 @@ public class GameBoard : MonoBehaviour
             }
         }
     }
+
+    private void SpawnAllPieces()
+    {
+        bool allPiecesSpawned = false;
+
+        int navyPiecesAdded = 0;
+        int piratePiecesAdded = 0;
+
+        if(PieceManager.instance.pieces[0] == null)
+        {
+            Debug.Log("No pieces available, using default spawn");
+
+            // Decent board starting positions for a sample game
+            NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 1, 0);
+            NavyPieces[1] = SpawnPiece(PieceType.Royal1, true, 3, 0);
+            NavyPieces[2] = SpawnPiece(PieceType.Mate, true, 9, 0);
+            NavyPieces[3] = SpawnPiece(PieceType.Cannon, true, 0, 1);
+            NavyPieces[4] = SpawnPiece(PieceType.Mate, true, 1, 1);
+            NavyPieces[5] = SpawnPiece(PieceType.Vanguard, true, 3, 1);
+            NavyPieces[6] = SpawnPiece(PieceType.Cannon, true, 4, 1);
+            NavyPieces[7] = SpawnPiece(PieceType.Mate, true, 6, 1);
+            NavyPieces[8] = SpawnPiece(PieceType.Vanguard, true, 7, 1);
+            NavyPieces[9] = SpawnPiece(PieceType.Navigator, true, 0, 2);
+            NavyPieces[10] = SpawnPiece(PieceType.Bomber, true, 1, 2);
+            NavyPieces[11] = SpawnPiece(PieceType.Quartermaster, true, 2, 2);
+            NavyPieces[12] = SpawnPiece(PieceType.Gunner, true, 3, 2);
+            NavyPieces[13] = SpawnPiece(PieceType.Mate, true, 5, 2);
+            NavyPieces[14] = SpawnPiece(PieceType.Gunner, true, 6, 2);
+            NavyPieces[15] = SpawnPiece(PieceType.Navigator, true, 7, 2);
+            NavyPieces[16] = SpawnPiece(PieceType.Bomber, true, 8, 2);
+            NavyPieces[17] = SpawnPiece(PieceType.Royal2, true, 9, 2);
+
+            NavyPieces[18] = SpawnPiece(PieceType.LandMine, true, 3, 6);
+            NavyPieces[19] = SpawnPiece(PieceType.LandMine, true, 5, 5);
+            NavyPieces[20] = SpawnPiece(PieceType.LandMine, true, 8, 5);
+            NavyPieces[21] = SpawnPiece(PieceType.LandMine, true, 9, 6);
+            PiratePieces[0] = SpawnPiece(PieceType.LandMine, false, 3, 3);
+            PiratePieces[1] = SpawnPiece(PieceType.LandMine, false, 3, 9);
+            PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 4, 6);
+            PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 4);
+
+            PiratePieces[4] = SpawnPiece(PieceType.Ore, false, 6, 9);
+            PiratePieces[5] = SpawnPiece(PieceType.Bomber, false, 0, 7);
+            PiratePieces[6] = SpawnPiece(PieceType.Navigator, false, 1, 7);
+            PiratePieces[7] = SpawnPiece(PieceType.Mate, false, 2, 7);
+            PiratePieces[8] = SpawnPiece(PieceType.Gunner, false, 3, 7);
+            PiratePieces[9] = SpawnPiece(PieceType.Mate, false, 4, 7);
+            PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 5, 7);
+            PiratePieces[11] = SpawnPiece(PieceType.Bomber, false, 6, 7);
+            PiratePieces[12] = SpawnPiece(PieceType.Mate, false, 7, 7);
+            PiratePieces[13] = SpawnPiece(PieceType.Navigator, false, 8, 7);
+            PiratePieces[14] = SpawnPiece(PieceType.Gunner, false, 9, 7);
+            PiratePieces[15] = SpawnPiece(PieceType.Cannon, false, 0, 8);
+            PiratePieces[16] = SpawnPiece(PieceType.Mate, false, 4, 8);
+            PiratePieces[17] = SpawnPiece(PieceType.Cannon, false, 6, 8);
+            PiratePieces[18] = SpawnPiece(PieceType.Vanguard, false, 8, 8);
+            PiratePieces[19] = SpawnPiece(PieceType.Royal2, false, 9, 8);
+            PiratePieces[20] = SpawnPiece(PieceType.Royal1, false, 2, 9);
+            PiratePieces[21] = SpawnPiece(PieceType.Vanguard, false, 9, 9);
+        }
+
+        else
+        {
+            for (int i = 0; i < 60 && !allPiecesSpawned; i++)
+            {
+                if (PieceManager.instance.pieces[i] == null)
+                {
+                    allPiecesSpawned = true;
+                }
+                else
+                {
+                    Piece newPiece = PieceManager.instance.pieces[i];
+
+                    if (newPiece.isNavy)
+                    {
+                        NavyPieces[navyPiecesAdded] = SpawnPiece(newPiece.type, newPiece.isNavy, newPiece.currentX, newPiece.currentY);
+                        navyPiecesAdded++;
+                    }
+                    else
+                    {
+                        PiratePieces[piratePiecesAdded] = SpawnPiece(newPiece.type, newPiece.isNavy, newPiece.currentX, newPiece.currentY);
+                        piratePiecesAdded++;
+                    }
+                }
+            }
+        }
+    }
+
 
     // Changes the turn from one player to the next
     private void NextTurn()
