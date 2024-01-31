@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class PPGameBoard : MonoBehaviour
@@ -27,6 +28,10 @@ public class PPGameBoard : MonoBehaviour
 
     private BoardUI boardUI;
     private string defaultText = "Click on a piece to spawn it!";
+
+    [SerializeField] private bool navyDone = true;
+    [SerializeField] private bool pirateDone = true;
+    [SerializeField] private bool piecesDone = false;
 
     #endregion
 
@@ -75,7 +80,92 @@ public class PPGameBoard : MonoBehaviour
 
     private void Update()
     {
-        
+        navyDone = true;
+        pirateDone = true;
+
+        if (navyTurn)
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                if (jail.pirateJailedPieces[i] != null)
+                {
+                    navyDone = false;
+                    if (!squareSelected)
+                    {
+                        jail.PirateJailCells[i].GetComponent<PPJailCell>().interactable = true;
+                    }
+                }
+            }
+        }
+        else if (!navyTurn)
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                if (jail.navyJailedPieces[i] != null)
+                {
+                    pirateDone = false;
+                    if (!squareSelected)
+                    {
+                        jail.NavyJailCells[i].GetComponent<PPJailCell>().interactable = true;
+                    }
+                }
+
+            }
+        }
+
+        // Both teams are done being placed
+        if(!navyDone && !pirateDone)
+        {
+            piecesDone = true;
+            SceneManager.LoadScene("Board");
+        // Navy finished placing their pieces (skip their placement turn)
+        }else if(navyTurn && navyDone)
+        {
+            NextTurn();
+        }
+        // Pirates finished placing their pieces (skip their placement turn)
+        else if(!navyTurn && pirateDone)
+        {
+            NextTurn();
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+            // A square has been clicked
+            if (hit.collider != null)
+            {
+                tileSelected = GameObject.Find(hit.collider.name);
+
+                if (tileSelected.tag == "JailCell")
+                {
+                    // Do nothing
+                }
+                // Valid cell has been clicked
+                else if (!squareSelected)
+                {
+                    PPJailCell currentSquare = tileSelected.GetComponent<PPJailCell>();
+
+                    if (currentSquare.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        currentSquare.clicked = true;
+                        currentSquare.tag = "InteractablePiece";
+                        squareSelected = true;
+                        storedTileSelected = tileSelected;
+                        DetectValidSquares(currentSquare);
+                    }
+                }else if(tileSelected.GetComponent<PPJailCell>().tag == "InteractablePiece")
+                {
+                    ResetBoardMaterials();
+                    storedTileSelected = null;
+                    squareSelected = false;
+                    tileSelected = null;
+                }
+            }
+        }
     }
 
     private void IdentifyBoardSquares()
@@ -110,7 +200,7 @@ public class PPGameBoard : MonoBehaviour
             for (int y = 0; y < TILE_COUNT_Y; y++)
             {
                 tiles[x, y].tag = "GameSquare";
-                Square square = tiles[x, y].GetComponent<Square>();
+                PPSquare square = tiles[x, y].GetComponent<PPSquare>();
                 square.SetMaterial(square.defaultBoardMaterial);
             }
         }
@@ -163,12 +253,12 @@ public class PPGameBoard : MonoBehaviour
 
     private void SetCurrentPiece(Piece piece, int x, int y)
     {
-        tiles[x, y].GetComponent<Square>().currentPiece = piece;
+        tiles[x, y].GetComponent<PPSquare>().currentPiece = piece;
     }
 
     private void NullCurrentPiece(int x, int y)
     {
-        tiles[x, y].GetComponent<Square>().currentPiece = null;
+        tiles[x, y].GetComponent<PPSquare>().currentPiece = null;
     }
 
     public Piece SpawnPiece(PieceType type, bool isNavy, int startingX = -1, int startingY = -1)
@@ -206,13 +296,103 @@ public class PPGameBoard : MonoBehaviour
         {
             NullCurrentPiece(piece.currentX, piece.currentY);
         }
-        tiles[x, y].GetComponent<Square>().currentPiece = piece;
+        tiles[x, y].GetComponent<PPSquare>().currentPiece = piece;
         piece.currentX = x;
         piece.currentY = y;
         SetCurrentPiece(piece, x, y);
 
 
         piece.transform.position = targetPosition;
+    }
+
+    public void DetectValidSquares(PPJailCell currentSquare)
+    {
+        Piece currentPiece = currentSquare.currentPiece;
+        int startingRow;
+        int endRow;
+        int rowSpacesRemaining = 0;
+        int spacesNeeded = 2;
+        Piece possiblePiece;
+
+        if (currentPiece.type == PieceType.LandMine)
+        {
+            startingRow = 3;
+            endRow = 7;
+        }else if (currentPiece.isNavy)
+        {
+            startingRow = 0;
+            if (currentPiece.type == PieceType.Royal1 || currentPiece.type == PieceType.Ore)
+            {
+                endRow = 1;
+            }
+            else
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    possiblePiece = tiles[i, 0].GetComponent<PPSquare>().currentPiece;
+                    if(possiblePiece == null)
+                    {
+                        rowSpacesRemaining++;
+                    }
+                    else if (possiblePiece.type == PieceType.Royal1 || possiblePiece.type == PieceType.Ore) 
+                    {
+                        spacesNeeded--;
+                    }
+                }
+
+                if(rowSpacesRemaining <= spacesNeeded)
+                {
+                    startingRow = 1;
+                }
+
+                endRow = 3;
+            }
+        }
+        else
+        {
+            endRow = 10;
+            if (currentPiece.type == PieceType.Royal1 || currentPiece.type == PieceType.Ore)
+            {
+                startingRow = 9;
+            }
+            else
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    possiblePiece = tiles[i, 9].GetComponent<PPSquare>().currentPiece;
+                    if (possiblePiece == null)
+                    {
+                        rowSpacesRemaining++;
+                    }
+                    else if (possiblePiece.type == PieceType.Royal1 || possiblePiece.type == PieceType.Ore)
+                    {
+                        spacesNeeded--;
+                    }
+                }
+
+                if (rowSpacesRemaining <= spacesNeeded)
+                {
+                    endRow = 9;
+                }
+
+                startingRow = 7;
+            }
+        }
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = startingRow; y < endRow; y++)
+            {
+                possiblePiece = tiles[x, y].GetComponent<PPSquare>().currentPiece;
+
+                if(possiblePiece == null)
+                {
+                    PPSquare activeSquare = tiles[x, y].GetComponent<PPSquare>();
+                    activeSquare.tag = "MoveableSquare";
+                    activeSquare.SetMaterial(activeSquare.moveableBoardMaterial);
+                }
+            }
+        }
     }
 
     // Changes the turn from one player to the next

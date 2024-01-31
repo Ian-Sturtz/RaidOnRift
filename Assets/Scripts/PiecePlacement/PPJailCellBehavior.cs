@@ -29,8 +29,7 @@ public class PPJailCell : MonoBehaviour
         {
             if (currentPiece != null)
             {
-                if (currentPiece.GetComponent<Piece>().type != PieceType.Ore)
-                    tag = "InteractablePiece";
+                tag = "InteractablePiece";
             }
             
             continualFlash = true;
