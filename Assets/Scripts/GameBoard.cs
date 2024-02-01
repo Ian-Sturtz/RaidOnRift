@@ -1332,12 +1332,10 @@ public class GameBoard : MonoBehaviour
 
     private void SpawnAllPieces()
     {
-        bool allPiecesSpawned = false;
-
         int navyPiecesAdded = 0;
         int piratePiecesAdded = 0;
 
-        if(PieceManager.instance.pieces[0] == null)
+        if(PieceManager.instance == null)
         {
             Debug.Log("No pieces available, using default spawn");
 
@@ -1392,26 +1390,17 @@ public class GameBoard : MonoBehaviour
 
         else
         {
-            for (int i = 0; i < 60 && !allPiecesSpawned; i++)
+            for (int i = 0; i < PieceManager.instance.totalPieces; i++)
             {
-                if (PieceManager.instance.pieces[i] == null)
+                if (PieceManager.instance.factions[i])
                 {
-                    allPiecesSpawned = true;
+                    NavyPieces[navyPiecesAdded] = SpawnPiece(PieceManager.instance.pieceTypes[i], true, PieceManager.instance.pieceCoords[i,0], PieceManager.instance.pieceCoords[i,1]);
+                    navyPiecesAdded++;
                 }
                 else
                 {
-                    Piece newPiece = PieceManager.instance.pieces[i];
-
-                    if (newPiece.isNavy)
-                    {
-                        NavyPieces[navyPiecesAdded] = SpawnPiece(newPiece.type, newPiece.isNavy, newPiece.currentX, newPiece.currentY);
-                        navyPiecesAdded++;
-                    }
-                    else
-                    {
-                        PiratePieces[piratePiecesAdded] = SpawnPiece(newPiece.type, newPiece.isNavy, newPiece.currentX, newPiece.currentY);
-                        piratePiecesAdded++;
-                    }
+                    PiratePieces[piratePiecesAdded] = SpawnPiece(PieceManager.instance.pieceTypes[i], false, PieceManager.instance.pieceCoords[i, 0], PieceManager.instance.pieceCoords[i, 1]);
+                    piratePiecesAdded++;
                 }
             }
         }

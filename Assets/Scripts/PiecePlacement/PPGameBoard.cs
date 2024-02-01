@@ -62,6 +62,7 @@ public class PPGameBoard : MonoBehaviour
 
     private void Start()
     {
+        navyTurn = PieceManager.instance.navyFirst;
         PIECES_ADDED = System.Enum.GetValues(typeof(PieceType)).Length;
 
         //Initialize the game board and all variables
@@ -138,16 +139,21 @@ public class PPGameBoard : MonoBehaviour
                     if (activeSquare.currentPiece != null)
                     {
                         Piece activePiece = activeSquare.currentPiece;
-                        PieceManager.instance.pieces[totalPieces] = activePiece;
 
-                        Debug.Log(PieceManager.instance.pieces[totalPieces].type + " " + PieceManager.instance.pieces[totalPieces].isNavy + " {" + PieceManager.instance.pieces[totalPieces].currentX + "," + PieceManager.instance.pieces[totalPieces].currentY + "}");
+                        PieceManager.instance.pieceTypes[totalPieces] = activePiece.type;
+                        PieceManager.instance.factions[totalPieces] = activePiece.isNavy;
+                        PieceManager.instance.pieceCoords[totalPieces, 0] = activePiece.currentX;
+                        PieceManager.instance.pieceCoords[totalPieces, 1] = activePiece.currentY;
+
+                        Debug.Log(PieceManager.instance.pieceTypes[totalPieces] + " " + PieceManager.instance.factions[totalPieces] + " {" + PieceManager.instance.pieceCoords[totalPieces, 0] + "," + PieceManager.instance.pieceCoords[totalPieces, 1] + "}");
                         totalPieces++;
                     }
                 }
             }
 
+            PieceManager.instance.totalPieces = totalPieces;
             piecesadded = true;
-            // SceneManager.LoadScene("Board");
+            SceneManager.LoadScene("Board");
         }
 
         // Navy finished placing their pieces (skip their placement turn)

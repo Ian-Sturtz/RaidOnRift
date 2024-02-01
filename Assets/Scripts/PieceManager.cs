@@ -28,7 +28,10 @@ public class PieceManager : MonoBehaviour
 
     public bool navyFirst;
 
-    public Piece[] pieces = new Piece[60];
+    public PieceType[] pieceTypes = new PieceType[60];
+    public bool[] factions = new bool[60];
+    public int[,] pieceCoords = new int[60,2];
+    public int totalPieces;
 
     private void Awake()
     {
