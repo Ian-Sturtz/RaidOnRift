@@ -1390,6 +1390,7 @@ public class GameBoard : MonoBehaviour
 
         else
         {
+            navyTurn = PieceManager.instance.navyFirst;
             for (int i = 0; i < PieceManager.instance.totalPieces; i++)
             {
                 if (PieceManager.instance.factions[i])

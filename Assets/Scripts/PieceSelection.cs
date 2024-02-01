@@ -26,6 +26,9 @@ public class PieceSelection : MonoBehaviour
     private int navyTotal;
     private int pirateTotal;
 
+    [SerializeField] private GameObject navyUI;
+    [SerializeField] private GameObject pirateUI;
+
     [SerializeField] private TMP_Text navyPoints;
     [SerializeField] private TMP_Text piratePoints;
 
@@ -33,6 +36,9 @@ public class PieceSelection : MonoBehaviour
 
     [SerializeField] private TMP_Text navyPlayer;
     [SerializeField] private TMP_Text piratePlayer;
+
+    [SerializeField] private TMP_Text navyInfoText;
+    [SerializeField] private TMP_Text pirateInfoText;
 
     [SerializeField] private int royal1Points = 22;
     [SerializeField] private int royal2Points = 16;
@@ -49,6 +55,8 @@ public class PieceSelection : MonoBehaviour
     [SerializeField] private int maxArmy = 2;
     [SerializeField] private int maxPeasants = 10;
     [SerializeField] private int minPeasants = 5;
+
+    [SerializeField] public GameBoard board;
 
     public void chosenFaction(bool choseNavy)
     {
@@ -93,45 +101,47 @@ public class PieceSelection : MonoBehaviour
         if (name == "Select Quartermaster" && quartermaster < maxArmy && totalPoints + quartermasterPoints <= maxPoints)
         {
             quartermaster++;
-            amount.SetText(quartermaster + "/2");
+            amount.SetText(quartermaster + "/" + maxArmy);
             totalPoints += quartermasterPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Cannon" && cannon < maxArmy && totalPoints + cannonPoints <= maxPoints)
         {
             cannon++;
-            amount.SetText(cannon + "/2");
+            amount.SetText(cannon + "/" + maxArmy);
             totalPoints += cannonPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Bomber" && bomber < maxArmy && totalPoints + bomberPoints <= maxPoints)
         {
             bomber++;
-            amount.SetText(bomber + "/2");
+            amount.SetText(bomber + "/" + maxArmy);
             totalPoints += bomberPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Vanguard" && vanguard < maxArmy && totalPoints + vanguardPoints <= maxPoints)
         {
             vanguard++;
-            amount.SetText(vanguard + "/2");
+            amount.SetText(vanguard + "/" + maxArmy);
             totalPoints += vanguardPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Navigator" && navigator < maxArmy && totalPoints + navigatorPoints <= maxPoints)
         {
             navigator++;
-            amount.SetText(navigator + "/2");
+            amount.SetText(navigator + "/" + maxArmy);
             totalPoints += navigatorPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Gunner" && gunner < maxArmy && totalPoints + gunnerPoints <= maxPoints)
         {
             gunner++;
-            amount.SetText(gunner + "/2");
+            amount.SetText(gunner + "/" + maxArmy);
             totalPoints += gunnerPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
+
+        displayInfo(parent);
     }
     public void DecreaseCount(GameObject parent)
     {
@@ -162,45 +172,47 @@ public class PieceSelection : MonoBehaviour
         if (name == "Select Quartermaster" && quartermaster > 0)
         {
             quartermaster--;
-            amount.SetText(quartermaster + "/2");
+            amount.SetText(quartermaster + "/" + maxArmy);
             totalPoints -= quartermasterPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Cannon" && cannon > 0)
         {
             cannon--;
-            amount.SetText(cannon + "/2");
+            amount.SetText(cannon + "/" + maxArmy);
             totalPoints -= cannonPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Bomber" && bomber > 0)
         {
             bomber--;
-            amount.SetText(bomber + "/2");
+            amount.SetText(bomber + "/" + maxArmy);
             totalPoints -= bomberPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Vanguard" && vanguard > 0)
         {
             vanguard--;
-            amount.SetText(vanguard + "/2");
+            amount.SetText(vanguard + "/" + maxArmy);
             totalPoints -= vanguardPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Navigator" && navigator > 0)
         {
             navigator--;
-            amount.SetText(navigator + "/2");
+            amount.SetText(navigator + "/" + maxArmy);
             totalPoints -= navigatorPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Gunner" && gunner > 0)
         {
             gunner--;
-            amount.SetText(gunner + "/2");
+            amount.SetText(gunner + "/" + maxArmy);
             totalPoints -= gunnerPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
+
+        displayInfo(parent);
     }
 
     public void confirmSelection()
@@ -260,6 +272,9 @@ public class PieceSelection : MonoBehaviour
 
                 piratePlayer.SetText("Player 2: Select Crew");
             }
+
+            navyUI.SetActive(navySelecting);
+            pirateUI.SetActive(!navySelecting);
         }
         else
         {
@@ -270,6 +285,85 @@ public class PieceSelection : MonoBehaviour
             else
                 PieceManager.instance.navyFirst = p1Navy;
             SceneManager.LoadScene("Piece Placement");
+        }
+    }
+
+    public void displayInfo(GameObject parent)
+    {
+        string name = parent.name;
+        TMP_Text topText;
+        TMP_Text infoText;
+        if(navySelecting)
+        {
+            topText = navyPlayer;
+            infoText = navyInfoText;
+        }
+        else
+        {
+            topText = piratePlayer;
+            infoText = pirateInfoText;
+        }
+
+        if (name == "Select Royal1")
+        {
+            if(navySelecting)
+            {
+                topText.SetText("Admiral [" + royal1Points + " points]");
+                infoText.SetText("A navy exclusive crewmate. Moves any unblocked distance in any direction, captures by replacement.");
+            }
+            else
+            {
+                topText.SetText("Captain [" + royal1Points + " points]");
+                infoText.SetText("A pirate exclusive crewmate. Moves exactly five squares in any orthogonal direction, and can change direction mid-move. Cannot visit the same square twice in a move. Jumps over blockers, and captures any enemy piece in the fifth square by replacement.");
+            }
+        }
+        if (name == "Select Royal2")
+        {
+            if(navySelecting)
+            {
+                topText.SetText("Tactician [" + royal2Points + " points]");
+                infoText.SetText("A navy exclusive crewmate. Moves up to two unblocked squares orthogonally, captures by replacement. Can also use the moveset of any enemy piece within whatever zone the Tactician is in (Allied Start Zone, Neutral Zone, or Enemy Start Zone).");
+            }
+            else
+            {
+                topText.SetText("Corsair [" + royal2Points + " points]");
+                infoText.SetText("A pirate exclusive crewmate. Moves one space diagonally, captures by replacement, or can jump to any open square on the board. If the corsair jumps this way, the corsair cannot move on player 2’s following turn.");
+            }
+        }
+        if (name == "Select Mate")
+        {
+            topText.SetText("Mate [" + matePoints + " point]");
+            infoText.SetText("Moves one square in any direction, but cannot move backwards unless the Mate has captured an enemy piece. Captures by replacement. Can perform Jailbreaks after reaching the opponent’s Royal Zone.");
+        }
+        if (name == "Select Quartermaster")
+        {
+            topText.SetText("Quartermaster [" + quartermasterPoints + " points]");
+            infoText.SetText("Moves two spaces orthogonally and one space perpendicularly. Jumps over blockers and captures by replacement.");
+        }
+        if (name == "Select Cannon")
+        {
+            topText.SetText("Cannon [" + cannonPoints + " points]");
+            infoText.SetText("Can move one unblocked space in any direction, captures by jumping any unblocked distance orthogonally and must land on the opposite adjacent square to the captured piece. A Land Mine can be jumped over in this way, but the Land Mine won’t be captured.");
+        }
+        if (name == "Select Bomber")
+        {
+            topText.SetText("Bomber [" + bomberPoints + " points]");
+            infoText.SetText("Moves up to two unblocked squares in any direction. The only piece that can capture Land Mines by replacement, but cannot capture any other piece besides the flag. If the Miner has not captured a piece this turn and if there are Land Mines in the allied Jail Zone, can return one Land Mine from the Jail Zone to the game board in any open square adjacent to the Miner. Cannot move if a Jail Zone has been returned to the game board this turn.");
+        }
+        if (name == "Select Vanguard")
+        {
+            topText.SetText("Vanguard [" + vanguardPoints + " points]");
+            infoText.SetText("Moves one square forward or backward, both orthogonally and diagonally, but can move any unblocked distance sideways. Captures by replacement.");
+        }
+        if (name == "Select Navigator")
+        {
+            topText.SetText("Navigator [" + navigatorPoints + " points]");
+            infoText.SetText("Moves one square sideways, both orthogonally and diagonally, but can move any unblocked distance forwards and backwards.");
+        }
+        if (name == "Select Gunner")
+        {
+            topText.SetText("Gunner [" + gunnerPoints + " points]");
+            infoText.SetText("Moves one unblocked space in any direction, captures by shooting a piece up to 4 unblocked spaces away in any direction. Cannot capture by replacement and must move after capturing a piece before the Archer can capture another piece.");
         }
     }
 }
