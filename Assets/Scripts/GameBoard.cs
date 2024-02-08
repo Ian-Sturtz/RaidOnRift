@@ -4,16 +4,10 @@ using UnityEngine;
 
 public class GameBoard : MonoBehaviour
 {
+    #region GameInfo
+
     // How many pieces have been added to the game so far
     public int PIECES_ADDED;
-
-    // Board Information
-    public float tile_size = 1f;
-    public float tile_size_margins = 1.05f;
-    public float game_board_size = 10.55f;
-    private const int TILE_COUNT_X = 10;
-    private const int TILE_COUNT_Y = 10;
-    private GameObject gameBoard;   // Reference to gameBoard object
 
     // Game State Information
     public bool gameWon = false;
@@ -23,20 +17,44 @@ public class GameBoard : MonoBehaviour
     public Piece[] NavyPieces;      // All Navy game pieces
     public Piece[] PiratePieces;    // All Pirate game
 
+    #endregion
+
+    #region BoardInfo
+    // Board Information
+    public float tile_size = 1f;
+    public float tile_size_margins = 1.05f;
+    public float game_board_size = 10.55f;
+    private const int TILE_COUNT_X = 10;
+    private const int TILE_COUNT_Y = 10;
+    private GameObject gameBoard;   // Reference to gameBoard object
+
+    BoardUI boardUI;
+
+    #endregion
+
+    #region JailInfo
+
     // Jail State Information
     public GameObject JailCells;
     public JailBoard jail;
     public int teamSize = 30;
 
+    #endregion
+
+    #region MovementInfo
     // Movement Information
     private int[,] moveAssessment;  // All legal moves of a clicked-on piece
     public bool squareSelected = false;
     public GameObject tileSelected;
     public GameObject storedTileSelected;
 
+    #endregion
+
+    #region PieceInteractions
     // For use with bomber interactions
     [SerializeField] private bool bomberSelected = false;
     [SerializeField] private bool landMineSelected = false;
+    [SerializeField] private bool landMineInJail = false;
     private int cellToHighlight = -2;
 
     // For use with tactician interactions
@@ -51,6 +69,8 @@ public class GameBoard : MonoBehaviour
 
     // Corsair mechanics
     [SerializeField] private int jumpCooldown = 0;
+
+    #endregion
 
     // Piece prefabs to be spawned in as needed
     [Header("Prefabs and Materials")]
@@ -67,126 +87,49 @@ public class GameBoard : MonoBehaviour
         tiles = new GameObject[TILE_COUNT_X, TILE_COUNT_Y];
         teamSize = 30;
 
+        boardUI = FindObjectOfType<BoardUI>();
+        boardUI.GoalText("Click on a piece to move it!");
+
         JailCells = GameObject.FindGameObjectWithTag("JailBoard");
         jail = JailCells.GetComponent<JailBoard>();
         NavyPieces = new Piece[teamSize];
         PiratePieces = new Piece[teamSize];
         IdentifyBoardSquares();
 
-        // Decent board starting positions for a sample game
-        NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 1, 0);
-        NavyPieces[1] = SpawnPiece(PieceType.Royal1, true, 3, 0);
-        NavyPieces[2] = SpawnPiece(PieceType.Mate, true, 9, 0);
-        NavyPieces[3] = SpawnPiece(PieceType.Cannon, true, 0, 1);
-        NavyPieces[4] = SpawnPiece(PieceType.Mate, true, 1, 1);
-        NavyPieces[5] = SpawnPiece(PieceType.Vanguard, true, 3, 1);
-        NavyPieces[6] = SpawnPiece(PieceType.Cannon, true, 4, 1);
-        NavyPieces[7] = SpawnPiece(PieceType.Mate, true, 6, 1);
-        NavyPieces[8] = SpawnPiece(PieceType.Vanguard, true, 7, 1);
-        NavyPieces[9] = SpawnPiece(PieceType.Navigator, true, 0, 2);
-        NavyPieces[10] = SpawnPiece(PieceType.Bomber, true, 1, 2);
-        NavyPieces[11] = SpawnPiece(PieceType.Quartermaster, true, 2, 2);
-        NavyPieces[12] = SpawnPiece(PieceType.Gunner, true, 3, 2);
-        NavyPieces[13] = SpawnPiece(PieceType.Mate, true, 5, 2);
-        NavyPieces[14] = SpawnPiece(PieceType.Gunner, true, 6, 2);
-        NavyPieces[15] = SpawnPiece(PieceType.Navigator, true, 7, 2);
-        NavyPieces[16] = SpawnPiece(PieceType.Bomber, true, 8, 2);
-        NavyPieces[17] = SpawnPiece(PieceType.Royal2, true, 9, 2);
+        SpawnAllPieces();
         
-        NavyPieces[18] = SpawnPiece(PieceType.LandMine, true, 3, 6);
-        NavyPieces[19] = SpawnPiece(PieceType.LandMine, true, 5, 5);
-        NavyPieces[20] = SpawnPiece(PieceType.LandMine, true, 8, 5);
-        NavyPieces[21] = SpawnPiece(PieceType.LandMine, true, 9, 6);
-        PiratePieces[0] = SpawnPiece(PieceType.LandMine, false, 3, 3);
-        PiratePieces[1] = SpawnPiece(PieceType.LandMine, false, 3, 9);
-        PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 4, 6);
-        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 5);
-
-        PiratePieces[4] = SpawnPiece(PieceType.Ore, false, 6, 9);
-        PiratePieces[5] = SpawnPiece(PieceType.Bomber, false, 0, 7);
-        PiratePieces[6] = SpawnPiece(PieceType.Navigator, false, 1, 7);
-        PiratePieces[7] = SpawnPiece(PieceType.Mate, false, 2, 7);
-        PiratePieces[8] = SpawnPiece(PieceType.Gunner, false, 3, 7);
-        PiratePieces[9] = SpawnPiece(PieceType.Mate, false, 4, 7);
-        PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 5, 7);
-        PiratePieces[11] = SpawnPiece(PieceType.Bomber, false, 6, 7);
-        PiratePieces[12] = SpawnPiece(PieceType.Mate, false, 7, 7);
-        PiratePieces[13] = SpawnPiece(PieceType.Navigator, false, 8, 7);
-        PiratePieces[14] = SpawnPiece(PieceType.Gunner, false, 9, 7);
-        PiratePieces[15] = SpawnPiece(PieceType.Cannon, false, 0, 8);
-        PiratePieces[16] = SpawnPiece(PieceType.Mate, false, 4, 8);
-        PiratePieces[17] = SpawnPiece(PieceType.Cannon, false, 6, 8);
-        PiratePieces[18] = SpawnPiece(PieceType.Vanguard, false, 8, 8);
-        PiratePieces[19] = SpawnPiece(PieceType.Royal2, false, 9, 8);
-        PiratePieces[20] = SpawnPiece(PieceType.Royal1, false, 2, 9);
-        PiratePieces[21] = SpawnPiece(PieceType.Vanguard, false, 9, 9);
-
-        // Test spawns one piece of each type in a random spot on the board
-        //NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 3, 0);
-        //NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 1, 2);
-        //NavyPieces[2] = SpawnPiece(PieceType.LandMine, true, 7, 6);
-        //NavyPieces[3] = SpawnPiece(PieceType.Royal1, true, 0, 3);
-        //NavyPieces[4] = SpawnPiece(PieceType.Vanguard, true, 1, 3);
-        //NavyPieces[5] = SpawnPiece(PieceType.Navigator, true, 2, 4);
-        //NavyPieces[6] = SpawnPiece(PieceType.Gunner, true, 4, 6);
-        //NavyPieces[7] = SpawnPiece(PieceType.Cannon, true, 3, 3);
-        //NavyPieces[8] = SpawnPiece(PieceType.Bomber, true, 5, 4);
-        //NavyPieces[9] = SpawnPiece(PieceType.LandMine, true, 6, 6);
-        //NavyPieces[10] = SpawnPiece(PieceType.Quartermaster, true, 5, 6);
-        //NavyPieces[11] = SpawnPiece(PieceType.Royal2, true, 8, 9);
-
-        //PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 7, 9);
-        //PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 9, 9);
-        //PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 5, 5);
-        //PiratePieces[3] = SpawnPiece(PieceType.Royal1, false, 8, 6);
-        //PiratePieces[4] = SpawnPiece(PieceType.Vanguard, false, 3, 7);
-        //PiratePieces[5] = SpawnPiece(PieceType.Navigator, false, 1, 8);
-        //PiratePieces[6] = SpawnPiece(PieceType.Gunner, false, 6, 9);
-        //PiratePieces[7] = SpawnPiece(PieceType.Cannon, false, 7, 7);
-        //PiratePieces[8] = SpawnPiece(PieceType.Bomber, false, 7, 5);
-        //PiratePieces[9] = SpawnPiece(PieceType.Royal1, false, 4, 0);
-        //PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 6, 4);
-        //PiratePieces[11] = SpawnPiece(PieceType.Royal2, false, 9, 4);
     }
 
     private void Update()
     {
-        // Quits the game if user hits ESC (temporary prototype feature)
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
-
         // Check for a game win
         for (int i = 0; i < TILE_COUNT_X && !gameWon; i++)
         {
-            for (int j = 0; j < 3; j++)
-            {
-                Piece checkPiece = tiles[i, j].GetComponent<Square>().currentPiece;
+            Piece checkPiece = tiles[i, 0].GetComponent<Square>().currentPiece;
 
-                if(checkPiece != null)
+            if (checkPiece != null)
+            {
+                if (checkPiece.hasOre && checkPiece.isNavy)
                 {
-                    if (checkPiece.hasOre && checkPiece.isNavy)
-                    {
-                        Debug.Log("The Navy Won!");
-                        gameWon = true;
-                        checkPiece.gameWon = true;
-                    }
+                    gameWon = true;
+                    checkPiece.gameWon = true;
+
+                    // Update UI
+                    boardUI.GameWon(true);
                 }
             }
 
-            for (int j = 9; j > 6; j--)
-            {
-                Piece checkPiece = tiles[i, j].GetComponent<Square>().currentPiece;
+            checkPiece = tiles[i, 9].GetComponent<Square>().currentPiece;
 
-                if (checkPiece != null)
+            if (checkPiece != null)
+            {
+                if (checkPiece.hasOre && !checkPiece.isNavy)
                 {
-                    if (checkPiece.hasOre && !checkPiece.isNavy)
-                    {
-                        Debug.Log("The Pirates Won!");
-                        gameWon = true;
-                        checkPiece.gameWon = true;
-                    }
+                    gameWon = true;
+                    checkPiece.gameWon = true;
+
+                    // Update UI
+                    boardUI.GameWon(false);
                 }
             }
         }
@@ -339,6 +282,7 @@ public class GameBoard : MonoBehaviour
                         // The wrong team is trying to move
                         if(current_square.currentPiece.isNavy != navyTurn)
                         {
+                            boardUI.DisplayTempText("It's not your turn yet!", 1.5f);
                             Debug.Log("It's not your turn!");
                             Square selectedTile = tileSelected.GetComponent<Square>();
                             selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
@@ -346,6 +290,35 @@ public class GameBoard : MonoBehaviour
                         // The right team is trying to move
                         else
                         {
+                            if(current_square.currentPiece.type == PieceType.Royal2 && current_square.currentPiece.isNavy)
+                            {
+                                tacticianSelected = true;
+                            }
+                            if(current_square.currentPiece.type == PieceType.Bomber)
+                            {
+                                bomberSelected = true;
+                            }
+
+                            // Finds enemy bombs in jail cells
+                            if (bomberSelected)
+                            {
+                                // Tactician is mimicking a bomber
+                                if (tacticianInheritSelected)
+                                {
+                                    landMineInJail = jail.FindPiece(PieceType.LandMine, false) >= 0;
+                                }
+                                // The selected bomber is Navy and can deploy Pirate Bombs
+                                else if (tileSelected.GetComponent<Square>().currentPiece.isNavy)
+                                {
+                                    landMineInJail = jail.FindPiece(PieceType.LandMine, false) >= 0;
+                                }
+                                // The selected bomber is Pirate and can deploy Navy Bombs
+                                else
+                                {
+                                    landMineInJail = jail.FindPiece(PieceType.LandMine, true) >= 0;
+                                }
+                            }
+
                             storedTileSelected = tileSelected;
                             squareSelected = true;
                             current_square.SquareHasBeenClicked = true;
@@ -423,6 +396,9 @@ public class GameBoard : MonoBehaviour
                         if (capturedPiece.type == PieceType.Ore)
                         {
                             currentPiece.hasOre = true;
+
+                            // Update UI
+                            boardUI.UpdateGoal(navyTurn, true);
                         }
 
                         // If the orebearer is being captured, the ore needs to be reset
@@ -469,6 +445,9 @@ public class GameBoard : MonoBehaviour
                             }
                             targetSquare.tag = "CaptureSquare";
                             DetectLegalMoves(storedTileSelected, currentPiece);
+
+                            // Update UI
+                            boardUI.UpdateGoal(!navyTurn, false);
                         }
                         // The orebearer just captured and gets to take a second turn
                         if (currentPiece.hasOre && !orebearerSecondMove)
@@ -572,6 +551,9 @@ public class GameBoard : MonoBehaviour
                             if (capturedPiece.type == PieceType.Ore)
                             {
                                 currentPiece.hasOre = true;
+
+                                // Update UI
+                                boardUI.UpdateGoal(navyTurn, true);
                             }
 
                             // If the orebearer is being captured, the ore needs to be reset
@@ -782,7 +764,8 @@ public class GameBoard : MonoBehaviour
                     else if (tileSelected.GetComponent<Square>().SquareHasBeenClicked)
                     {
                         ResetBoardMaterials(true);
-                        
+                        boardUI.GoalText("Click on a piece to move it!");
+
                         // Ends turn if orebearer decides not to move a second time
                         if (tileSelected.GetComponent<Square>().currentPiece.hasOre && orebearerSecondMove)
                         {
@@ -790,6 +773,7 @@ public class GameBoard : MonoBehaviour
                             NextTurn();
                         }
 
+                        landMineInJail = false;
                         squareSelected = false;
                         tileSelected.GetComponent<Square>().SquareHasBeenClicked = false;
                         tileSelected = null;
@@ -966,6 +950,16 @@ public class GameBoard : MonoBehaviour
         int current_x = IdentifyThisBoardSquare(current).x;
         int current_y = IdentifyThisBoardSquare(current).y;
 
+        bool invalidPiece = false;
+        bool moveAble = false;
+        bool captureAble = false;
+        bool gunnerAble = false;
+        bool cannonTarget = false;
+        bool cannonJump = false;
+        bool mineDeploy = false;
+        bool oreDeploy = false;
+        bool corsairJump = false;
+
         moveAssessment = new int[TILE_COUNT_X, TILE_COUNT_Y];
 
         current_square = tiles[current_x, current_y].GetComponent<Square>();
@@ -983,14 +977,18 @@ public class GameBoard : MonoBehaviour
             switch (piece.type)
             {
                 case PieceType.Ore:
+                    boardUI.DisplayTempText("The Ore can't move, click on a different piece!", 1.5f);
                     Debug.Log("The Ore doesn't move!");
+                    invalidPiece = true;
                     squareSelected = false;
                     current_square.SquareHasBeenClicked = false;
                     current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);
                     tileSelected = null;
                     break;
                 case PieceType.LandMine:
+                    boardUI.DisplayTempText("Land Mines can't move, click on a different piece!", 1.5f);
                     Debug.Log("The Land Mine doesn't move!");
+                    invalidPiece = true;
                     squareSelected = false;
                     current_square.SquareHasBeenClicked = false;
                     current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);
@@ -1006,7 +1004,8 @@ public class GameBoard : MonoBehaviour
                     }
                     else
                     {
-                        moveAssessment = piece.GetComponent<Bomber>().GetValidMoves(tiles);
+                        Debug.Log(landMineInJail);
+                        moveAssessment = piece.GetComponent<Bomber>().GetValidMoves(tiles, landMineInJail);
                     }
                     break;
                 case PieceType.Vanguard:
@@ -1033,6 +1032,7 @@ public class GameBoard : MonoBehaviour
                     {
                         if(jumpCooldown > 0 && !tacticianSelected)
                         {
+                            boardUI.DisplayTempText("The Corsair needs to recharge before jumping again. Click on a different piece to move it!");
                             Debug.Log("Corsair can't jump yet, move someone else!");
                             squareSelected = false;
                             current_square.SquareHasBeenClicked = false;
@@ -1109,21 +1109,6 @@ public class GameBoard : MonoBehaviour
             }
         }
 
-        // This is where UI Text can be reviewed, all possible move data is stored in moveAssessment[x,y]
-        // moveAssessment[x,y] == -1: no move is possible
-        // moveAssessment[x,y] == 0: active piece is there
-        // moveAssessment[x,y] == 1: Piece can move there
-        // moveAssessment[x,y] == 2: piece can capture by moving there
-        // moveAssessment[x,y] == 3: piece can capture by shooting there
-        // moveAssessment[x,y] == 4: piece can capture this square by jumping
-        // moveAssessment[x,y] == 5: piece can capture the "cannonTarget" square by jumping here
-        // moveAssessment[x,y] == 6: A mine can be placed in any of these squares
-        // moveAssessment[x,y] == 7: the ore can be redeployed to any of these squares
-        // moveAssessment[x,y] == 8: The corsair can jump to any of these squares (but will need to cooldown afterwards)
-        // Also add text to the code in line 195
-        // 
-
-
         // Establishes squares that can be moved to or captured in
         for (int x = 0; x < TILE_COUNT_X; x++)
         {
@@ -1135,7 +1120,7 @@ public class GameBoard : MonoBehaviour
                     tiles[x, y].tag = "MoveableSquare";
                     Square activeSquare = tiles[x,y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.moveableBoardMaterial);
-                    // In text box, write "Click on a green square to move it"
+                    moveAble = true;
                 }
                 // Square contains a capturable piece by replacement
                 else if (moveAssessment[x,y] == 2)
@@ -1143,7 +1128,7 @@ public class GameBoard : MonoBehaviour
                     tiles[x, y].tag = "CaptureSquare";
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
-                    // In text box, write "Click on a red square to capture that piece!"
+                    captureAble = true;
                 }
                 // Square contains a capturable piece by shooting
                 else if(moveAssessment[x,y] == 3)
@@ -1153,6 +1138,7 @@ public class GameBoard : MonoBehaviour
                         tiles[x, y].tag = "GunnerTarget";
                         Square activeSquare = tiles[x, y].GetComponent<Square>();
                         activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                        gunnerAble = true;
                     }
                 }
                 // Square contains a capturable peice by jumping
@@ -1164,13 +1150,14 @@ public class GameBoard : MonoBehaviour
                         tiles[x, y].tag = "CannonTarget";
                         Square activeSquare = tiles[x, y].GetComponent<Square>();
                         activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
-                        // "Click on a flashing green square to jump capture the enemy piece!"
+                        cannonTarget = true;
                     }
                 }
                 // Square can be moved to for cannon jumping capture
                 else if (moveAssessment[x, y] == 5)
                 {
                     tiles[x, y].tag = "CannonDestination";
+                    cannonJump = true;
                 }
                 // A Land Mine can be deployed here
                 else if (moveAssessment[x,y] == 6)
@@ -1178,6 +1165,7 @@ public class GameBoard : MonoBehaviour
                     tiles[x, y].tag = "MineDeploy";
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                    mineDeploy = true;
                 }
                 // The ore can be deployed here
                 else if (moveAssessment[x,y] == 7)
@@ -1185,14 +1173,101 @@ public class GameBoard : MonoBehaviour
                     tiles[x, y].tag = "OreDeploy";
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
                     activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
+                    oreDeploy = true;
                 }
 
                 // Corsair can jump here
                 else if (moveAssessment[x, y] == 8)
                 {
                     tiles[x, y].tag = "CorsairJump";
+                    corsairJump = true;
                 }
             }
+        }
+
+        //bool moveAble = false;
+        //bool captureAble = false;
+        //bool gunnerAble = false;
+        //bool cannonTarget = false;
+        //bool cannonJump = false;
+        //bool mineDeploy = false;
+        //bool oreDeploy = false;
+        //bool corsairJump = false;
+
+        // Displays current possible game actions in goal text
+        if (!invalidPiece && !moveAble && !captureAble && !gunnerAble && !cannonJump && !mineDeploy && !oreDeploy && !corsairJump)
+        {
+            // No move is available with this piece
+            boardUI.GoalText("This piece has no valid moves. Click on it again to cancel.");
+        }
+        else if (!invalidPiece)
+        {
+            boardUI.GoalText("");
+            // The orebearer can move again
+            if (orebearerSecondMove)
+            {
+                boardUI.GoalText("The orebearer has just captured, and can make a second move.", true);
+            }
+
+            // A move is available with this piece
+            if (moveAble)
+            {
+                boardUI.GoalText("- Click on a green square to move there", true);
+            }
+            // A capture is available with this piece
+            if (captureAble)
+            {
+                boardUI.GoalText("- Click on a red square to capture that piece", true);
+            }
+            // The tactician can inherit a piece
+            if (tacticianSelected && !tacticianInheritSelected)
+            {
+                if(jail.tacticianMimicPieces[0] != null)
+                    boardUI.GoalText("- Click on a flashing piece to mimic that piece's moves for a turn", true);
+            }
+            // A mine can be redeployed
+            if(bomberSelected && !landMineSelected)
+            {
+                boardUI.GoalText("- Click on a flashing Land Mine to redeploy it to the board", true);
+            }
+            // A gunner can capture by shooting
+            if (gunnerAble)
+            {
+                boardUI.GoalText("- Click on a red square to shoot that piece from a distance", true);
+            }
+            // The cannon can capture a piece
+            if (cannonTarget)
+            {
+                boardUI.GoalText("- Click on a flashing green square to capture the red highlighted piece", true);
+            }
+            // The cannon can jump to a square
+            else if (cannonJump)
+            {
+                boardUI.GoalText("- Click on a flashing green square to jump there", true);
+            }
+            // A mine is being redeployed
+            if (mineDeploy)
+            {
+                boardUI.GoalText("- Click on a red square to redeploy the bomb there", true);
+                boardUI.GoalText("- Click on that Land Mine again to cancel the redeploy", true);
+            }
+            // The ore is being redeployed
+            if (oreDeploy)
+            {
+                boardUI.GoalText("- Click on a red square to redeploy the ore there", true);
+            }
+            // The corsair can jump to a square
+            if (corsairJump)
+            {
+                boardUI.GoalText("- Click on a flashing green square to jump there", true);
+            }
+            // The tactician is inheriting a piece
+            if(tacticianSelected && tacticianInheritSelected)
+            {
+                boardUI.GoalText("- Click on the mimicked piece again to return to a normal move", true);
+            }
+            // Default message
+            boardUI.GoalText("- Click on that piece again to cancel the move", true);
         }
     }
 
@@ -1255,6 +1330,84 @@ public class GameBoard : MonoBehaviour
         }
     }
 
+    private void SpawnAllPieces()
+    {
+        int navyPiecesAdded = 0;
+        int piratePiecesAdded = 0;
+
+        if(PieceManager.instance == null)
+        {
+            Debug.Log("No pieces available, using default spawn");
+
+            // Decent board starting positions for a sample game
+            NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 1, 0);
+            NavyPieces[1] = SpawnPiece(PieceType.Royal1, true, 3, 0);
+            NavyPieces[2] = SpawnPiece(PieceType.Mate, true, 9, 0);
+            NavyPieces[3] = SpawnPiece(PieceType.Cannon, true, 0, 1);
+            NavyPieces[4] = SpawnPiece(PieceType.Mate, true, 1, 1);
+            NavyPieces[5] = SpawnPiece(PieceType.Vanguard, true, 3, 1);
+            NavyPieces[6] = SpawnPiece(PieceType.Cannon, true, 4, 1);
+            NavyPieces[7] = SpawnPiece(PieceType.Mate, true, 6, 1);
+            NavyPieces[8] = SpawnPiece(PieceType.Vanguard, true, 7, 1);
+            NavyPieces[9] = SpawnPiece(PieceType.Navigator, true, 0, 2);
+            NavyPieces[10] = SpawnPiece(PieceType.Bomber, true, 1, 2);
+            NavyPieces[11] = SpawnPiece(PieceType.Quartermaster, true, 2, 2);
+            NavyPieces[12] = SpawnPiece(PieceType.Gunner, true, 3, 2);
+            NavyPieces[13] = SpawnPiece(PieceType.Mate, true, 5, 2);
+            NavyPieces[14] = SpawnPiece(PieceType.Gunner, true, 6, 2);
+            NavyPieces[15] = SpawnPiece(PieceType.Navigator, true, 7, 2);
+            NavyPieces[16] = SpawnPiece(PieceType.Bomber, true, 8, 2);
+            NavyPieces[17] = SpawnPiece(PieceType.Royal2, true, 9, 2);
+
+            NavyPieces[18] = SpawnPiece(PieceType.LandMine, true, 3, 6);
+            NavyPieces[19] = SpawnPiece(PieceType.LandMine, true, 5, 5);
+            NavyPieces[20] = SpawnPiece(PieceType.LandMine, true, 8, 5);
+            NavyPieces[21] = SpawnPiece(PieceType.LandMine, true, 9, 6);
+            PiratePieces[0] = SpawnPiece(PieceType.LandMine, false, 3, 3);
+            PiratePieces[1] = SpawnPiece(PieceType.LandMine, false, 3, 9);
+            PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 4, 6);
+            PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 4);
+
+            PiratePieces[4] = SpawnPiece(PieceType.Ore, false, 6, 9);
+            PiratePieces[5] = SpawnPiece(PieceType.Bomber, false, 0, 7);
+            PiratePieces[6] = SpawnPiece(PieceType.Navigator, false, 1, 7);
+            PiratePieces[7] = SpawnPiece(PieceType.Mate, false, 2, 7);
+            PiratePieces[8] = SpawnPiece(PieceType.Gunner, false, 3, 7);
+            PiratePieces[9] = SpawnPiece(PieceType.Mate, false, 4, 7);
+            PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 5, 7);
+            PiratePieces[11] = SpawnPiece(PieceType.Bomber, false, 6, 7);
+            PiratePieces[12] = SpawnPiece(PieceType.Mate, false, 7, 7);
+            PiratePieces[13] = SpawnPiece(PieceType.Navigator, false, 8, 7);
+            PiratePieces[14] = SpawnPiece(PieceType.Gunner, false, 9, 7);
+            PiratePieces[15] = SpawnPiece(PieceType.Cannon, false, 0, 8);
+            PiratePieces[16] = SpawnPiece(PieceType.Mate, false, 4, 8);
+            PiratePieces[17] = SpawnPiece(PieceType.Cannon, false, 6, 8);
+            PiratePieces[18] = SpawnPiece(PieceType.Vanguard, false, 8, 8);
+            PiratePieces[19] = SpawnPiece(PieceType.Royal2, false, 9, 8);
+            PiratePieces[20] = SpawnPiece(PieceType.Royal1, false, 2, 9);
+            PiratePieces[21] = SpawnPiece(PieceType.Vanguard, false, 9, 9);
+        }
+
+        else
+        {
+            navyTurn = PieceManager.instance.navyFirst;
+            for (int i = 0; i < PieceManager.instance.totalPieces; i++)
+            {
+                if (PieceManager.instance.factions[i])
+                {
+                    NavyPieces[navyPiecesAdded] = SpawnPiece(PieceManager.instance.pieceTypes[i], true, PieceManager.instance.pieceCoords[i,0], PieceManager.instance.pieceCoords[i,1]);
+                    navyPiecesAdded++;
+                }
+                else
+                {
+                    PiratePieces[piratePiecesAdded] = SpawnPiece(PieceManager.instance.pieceTypes[i], false, PieceManager.instance.pieceCoords[i, 0], PieceManager.instance.pieceCoords[i, 1]);
+                    piratePiecesAdded++;
+                }
+            }
+        }
+    }
+
+
     // Changes the turn from one player to the next
     private void NextTurn()
     {
@@ -1282,5 +1435,9 @@ public class GameBoard : MonoBehaviour
                 navyTurn = true;
             }
         }
+
+        // Update UI
+        boardUI.UpdateTurn(navyTurn);
+        boardUI.GoalText("Click on a piece to move it!");
     }
 }

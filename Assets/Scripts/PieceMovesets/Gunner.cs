@@ -35,7 +35,7 @@ public class Gunner : Piece
             Square possibleSquare;
 
             // Iterates through all squares within attack range
-            for(int x_change = 0; x_change <= 4; x_change++)
+            for(int x_change = 0; x_change <= 3; x_change++)
             {
                 int y_change = x_change;
                 if (x_change != 0) {
@@ -55,7 +55,7 @@ public class Gunner : Piece
                                 if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine)
+                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
                                     {
                                         moveAssessment[currentX, currentY + y_change] = 3;
                                     }
@@ -80,7 +80,7 @@ public class Gunner : Piece
                                 if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine)
+                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
                                     {
                                         moveAssessment[currentX - x_change, currentY + y_change] = 3;
                                     }
@@ -104,7 +104,7 @@ public class Gunner : Piece
                                 if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine)
+                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
                                     {
                                         moveAssessment[currentX + x_change, currentY + y_change] = 3;
                                     }
@@ -129,7 +129,7 @@ public class Gunner : Piece
                                 if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine)
+                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
                                     {
                                         moveAssessment[currentX, currentY - y_change] = 3;
                                     }
@@ -154,7 +154,7 @@ public class Gunner : Piece
                                 if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine)
+                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
                                     {
                                         moveAssessment[currentX - x_change, currentY - y_change] = 3;
                                     }
@@ -179,7 +179,7 @@ public class Gunner : Piece
                                 if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine)
+                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
                                     {
                                         moveAssessment[currentX + x_change, currentY - y_change] = 3;
                                     }
@@ -204,7 +204,7 @@ public class Gunner : Piece
                                 if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine)
+                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
                                     {
                                         moveAssessment[currentX + x_change, currentY] = 3;
                                     }
@@ -229,7 +229,7 @@ public class Gunner : Piece
                                 if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine)
+                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
                                     {
                                         moveAssessment[currentX - x_change, currentY] = 3;
                                     }
