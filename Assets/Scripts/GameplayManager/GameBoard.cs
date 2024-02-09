@@ -1405,6 +1405,8 @@ public class GameBoard : MonoBehaviour
                 }
             }
         }
+
+        boardUI.UpdateTurn(navyTurn);
     }
 
 

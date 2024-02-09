@@ -21,10 +21,12 @@ public class BoardUI : MonoBehaviour
         if(navyTurn)
         {
             turnDisplay.SetText("Navy's Turn");
+            turnDisplay.color = new UnityEngine.Color (0, 0.03921569f, 0.6666667f, 1);
         }
         else
         {
             turnDisplay.SetText("Pirate's Turn");
+            turnDisplay.color = new UnityEngine.Color (0.4588234f, 0f, 0f, 1f);
         }
     }
 
