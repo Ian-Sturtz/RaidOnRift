@@ -89,7 +89,7 @@ public class Square : MonoBehaviour
     IEnumerator MaterialFlash(Material StartingMaterial, Material TargetMaterial, int flashCount)
     {
         flashing = true;
-        float delay = .05f;
+        float delay = .07f;
         for (int i = 0; i < flashCount; i++)
         {
             SetMaterial(TargetMaterial);

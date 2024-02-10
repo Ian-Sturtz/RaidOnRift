@@ -68,7 +68,7 @@ public class GameBoard : MonoBehaviour
     [SerializeField] private bool orebearerSecondMove = false;
 
     // Corsair mechanics
-    [SerializeField] private int jumpCooldown = 0;
+    public int jumpCooldown = 0;
 
     #endregion
 
@@ -351,7 +351,7 @@ public class GameBoard : MonoBehaviour
 
                         ResetBoardMaterials();
                         Square selectedTile = tileSelected.GetComponent<Square>();
-                        selectedTile.FlashMaterial(selectedTile.moveableBoardMaterial, 2);
+                        selectedTile.FlashMaterial(selectedTile.moveableBoardMaterial, 3);
                         squareSelected = false;
                         currentSquare.SquareHasBeenClicked = false;
                         tileSelected = null;
@@ -1004,7 +1004,6 @@ public class GameBoard : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log(landMineInJail);
                         moveAssessment = piece.GetComponent<Bomber>().GetValidMoves(tiles, landMineInJail);
                     }
                     break;
@@ -1032,12 +1031,11 @@ public class GameBoard : MonoBehaviour
                     {
                         if(jumpCooldown > 0 && !tacticianSelected)
                         {
-                            boardUI.DisplayTempText("The Corsair needs to recharge before jumping again. Click on a different piece to move it!");
-                            Debug.Log("Corsair can't jump yet, move someone else!");
-                            squareSelected = false;
-                            current_square.SquareHasBeenClicked = false;
-                            current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);
-                            tileSelected = null;
+                            moveAssessment = piece.GetComponent<Corsair>().GetValidMoves(tiles, false);
+                        }
+                        else if(tacticianCorsairJump > 0 && tacticianSelected)
+                        {
+                            moveAssessment = piece.GetComponent<Corsair>().GetValidMoves(tiles, false);
                         }
                         else
                         {
@@ -1197,8 +1195,17 @@ public class GameBoard : MonoBehaviour
         // Displays current possible game actions in goal text
         if (!invalidPiece && !moveAble && !captureAble && !gunnerAble && !cannonJump && !mineDeploy && !oreDeploy && !corsairJump)
         {
-            // No move is available with this piece
-            boardUI.GoalText("This piece has no valid moves. Click on it again to cancel.");
+            // A land mine has been selected but it can't go anywhere
+            if (landMineSelected)
+            {
+                boardUI.GoalText("There are no valid spots for the Land Mine to go.");
+                boardUI.GoalText("Click on it again to cancel.", true);
+            }
+            else
+            {
+                // No move is available with this piece
+                boardUI.GoalText("This piece has no valid moves. Click on it again to cancel.");
+            }
         }
         else if (!invalidPiece)
         {
@@ -1226,7 +1233,7 @@ public class GameBoard : MonoBehaviour
                     boardUI.GoalText("- Click on a flashing piece to mimic that piece's moves for a turn", true);
             }
             // A mine can be redeployed
-            if(bomberSelected && !landMineSelected)
+            if(bomberSelected && !landMineSelected && landMineInJail)
             {
                 boardUI.GoalText("- Click on a flashing Land Mine to redeploy it to the board", true);
             }
@@ -1266,67 +1273,156 @@ public class GameBoard : MonoBehaviour
             {
                 boardUI.GoalText("- Click on the mimicked piece again to return to a normal move", true);
             }
+            // The corsair needs to cool down after a jump
+            if(jumpCooldown > 0 && piece.type == PieceType.Royal2 && !piece.isNavy)
+            {
+                boardUI.GoalText("- Make sure to move between jumps", true);
+            }
+
             // Default message
             boardUI.GoalText("- Click on that piece again to cancel the move", true);
         }
     }
 
     // Checks if a team has no valid moves left to trigger a stalemate
-    private void CheckForStalemate(bool checkingNavy)
+    private bool CheckForStalemate(bool checkingNavy)
     {
-        bool noLegalMoves = false;
+        bool noLegalMoves = true;
+        Piece possiblePiece = null;
 
         moveAssessment = new int[TILE_COUNT_X, TILE_COUNT_Y];
 
         // Checks all pieces left on the Navy's board to ensure there are legal moves open
-        if (checkingNavy)
+        for (int i = 0; i < teamSize; i++)
         {
-            for (int i = 0; i < teamSize; i++)
+            if (checkingNavy)
             {
-                if(NavyPieces[i] != null)
+                if (NavyPieces[i] != null)
                 {
-                    Piece possiblePiece = NavyPieces[i];
+                    possiblePiece = NavyPieces[i];
+                }
+            }
+            else
+            {
+                if (PiratePieces[i] != null)
+                {
+                    possiblePiece = PiratePieces[i];
+                }
+            }
 
-                    switch (possiblePiece.type)
-                    {
-                        case PieceType.Mate:
-                            moveAssessment = possiblePiece.GetComponent<Mate>().GetValidMoves(tiles);
-                            break;
-                        case PieceType.Bomber:
-                            moveAssessment = possiblePiece.GetComponent<Bomber>().GetValidMoves(tiles);
-                            break;
-                        case PieceType.Vanguard:
-                            moveAssessment = possiblePiece.GetComponent<Vanguard>().GetValidMoves(tiles);
-                            break;
-                        case PieceType.Navigator:
-                            moveAssessment = possiblePiece.GetComponent<Navigator>().GetValidMoves(tiles);
-                            break;
-                        case PieceType.Gunner:
-                            moveAssessment = possiblePiece.GetComponent<Gunner>().GetValidMoves(tiles);
-                            break;
-                        case PieceType.Cannon:
-                            moveAssessment = possiblePiece.GetComponent<Cannon>().GetValidMoves(tiles);
-                            break;
-                        case PieceType.Quartermaster:
-                            moveAssessment = possiblePiece.GetComponent<Quartermaster>().GetValidMoves(tiles);
-                            break;
-                        case PieceType.Royal2:
+            if (possiblePiece != null)
+            {
+                switch (possiblePiece.type)
+                {
+                    case PieceType.Mate:
+                        moveAssessment = possiblePiece.GetComponent<Mate>().GetValidMoves(tiles);
+                        break;
+                    case PieceType.Bomber:
+                        moveAssessment = possiblePiece.GetComponent<Bomber>().GetValidMoves(tiles);
+                        break;
+                    case PieceType.Vanguard:
+                        moveAssessment = possiblePiece.GetComponent<Vanguard>().GetValidMoves(tiles);
+                        break;
+                    case PieceType.Navigator:
+                        moveAssessment = possiblePiece.GetComponent<Navigator>().GetValidMoves(tiles);
+                        break;
+                    case PieceType.Gunner:
+                        moveAssessment = possiblePiece.GetComponent<Gunner>().GetValidMoves(tiles);
+                        break;
+                    case PieceType.Cannon:
+                        moveAssessment = possiblePiece.GetComponent<Cannon>().GetValidMoves(tiles);
+                        break;
+                    case PieceType.Quartermaster:
+                        moveAssessment = possiblePiece.GetComponent<Quartermaster>().GetValidMoves(tiles);
+                        break;
+                    case PieceType.Royal2:
+                        if(checkingNavy)
                             moveAssessment = possiblePiece.GetComponent<Tactician>().GetValidMoves(tiles);
-                            break;
-                        case PieceType.Royal1:
+                        else
+                            moveAssessment = possiblePiece.GetComponent<Corsair>().GetValidMoves(tiles);
+                        break;
+                    case PieceType.Royal1:
+                        if (checkingNavy)
                             moveAssessment = possiblePiece.GetComponent<Admiral>().GetValidMoves(tiles);
-                            break;
-                    }
+                        else
+                            moveAssessment = possiblePiece.GetComponent<Captain>().GetValidMoves(tiles);
+                        break;
+                }
+            }
 
-                    for (int x = 0; x < TILE_COUNT_X; x++)
+            // Ensures that an enemy is not moving to a landmine or allied occupied square
+            for (int x = 0; x < TILE_COUNT_X && !possiblePiece.hasOre; x++)
+            {
+                for (int y = 0; y < TILE_COUNT_Y; y++)
+                {
+                    if (moveAssessment[x, y] == 1)
                     {
-                        for (int y = 0; y < TILE_COUNT_Y; y++)
-                        {
+                        Piece targetPiece = tiles[x, y].GetComponent<Square>().currentPiece;
 
+                        // There is a piece in that possible move square
+                        if (targetPiece != null)
+                        {
+                            // That piece is on the same team (can't move there)
+                            if (possiblePiece.isNavy == targetPiece.isNavy)
+                            {
+                                moveAssessment[x, y] = -1;
+                            }
+                            // That piece is a land mine (can't move there)
+                            else if (targetPiece.type == PieceType.LandMine)
+                            {
+                                if (possiblePiece.type == PieceType.Bomber)
+                                {
+                                    moveAssessment[x, y] = 2;
+                                }
+                                else
+                                {
+                                    moveAssessment[x, y] = -1;
+                                }
+                            }
+                            // That piece is an enemy piece that can be captured
+                            else
+                            {
+                                // The current Piece is a Gunner or Cannon that can't capture regularly
+                                if (possiblePiece.type == PieceType.Gunner || possiblePiece.type == PieceType.Cannon)
+                                {
+                                    moveAssessment[x, y] = -1;
+                                }
+                                // That piece can be captured
+                                else
+                                {
+                                    moveAssessment[x, y] = 2;
+                                }
+                            }
                         }
                     }
                 }
             }
+
+            for (int x = 0; x < TILE_COUNT_X; x++)
+            {
+                for (int y = 0; y < TILE_COUNT_Y; y++)
+                {
+                    if (moveAssessment[x, y] > 0)   // A legal move exists in a given square
+                    {
+                        noLegalMoves = false;
+                    }
+                }
+            }
+        }
+
+        ResetBoardMaterials(true);
+        ResetBoardMaterials(true);
+
+        if (noLegalMoves)
+        {
+            gameWon = true;
+            boardUI.GameWon(!checkingNavy, true);
+            Debug.Log("Stalemate!");
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -1339,7 +1435,8 @@ public class GameBoard : MonoBehaviour
         {
             Debug.Log("No pieces available, using default spawn");
 
-            // Decent board starting positions for a sample game
+            //Decent board starting positions for a sample game
+
             NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 1, 0);
             NavyPieces[1] = SpawnPiece(PieceType.Royal1, true, 3, 0);
             NavyPieces[2] = SpawnPiece(PieceType.Mate, true, 9, 0);
@@ -1414,13 +1511,14 @@ public class GameBoard : MonoBehaviour
     private void NextTurn()
     {
         ResetBoardMaterials(true);
+        ResetBoardMaterials(true);  // Just in case
 
-        if(tacticianCorsairJump != 0)
+        if (tacticianCorsairJump != 0)
         {
             tacticianCorsairJump--;
         }
 
-        if(jumpCooldown != 0)
+        if (jumpCooldown != 0)
         {
             jumpCooldown--;
         }
@@ -1438,8 +1536,13 @@ public class GameBoard : MonoBehaviour
             }
         }
 
-        // Update UI
-        boardUI.UpdateTurn(navyTurn);
-        boardUI.GoalText("Click on a piece to move it!");
+        stalemate = CheckForStalemate(navyTurn);
+
+        // Update UI if no stalemate
+        if (!stalemate) 
+        {
+            boardUI.UpdateTurn(navyTurn);
+            boardUI.GoalText("Click on a piece to move it!");
+        }
     }
 }

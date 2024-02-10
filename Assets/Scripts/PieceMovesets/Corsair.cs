@@ -4,7 +4,48 @@ using UnityEngine;
 
 public class Corsair : Piece
 {
-    public int[,] GetValidMoves(GameObject[,] tiles)
+    
+    [SerializeField] private GameObject PieceImage;
+    [SerializeField] private Sprite jumpReady;
+    [SerializeField] private Sprite cooldown;
+
+    private GameObject GameBoard;
+    private GameBoard board;
+    public bool canJump;
+    private bool needsChange = true;
+
+    private void Start()
+    {
+        GameBoard = GameObject.FindGameObjectWithTag("GameBoard");
+        board = GameBoard.GetComponent<GameBoard>();
+    }
+
+    private void Update()
+    {
+        if(!board.tacticianSelected)
+            canJump = (board.jumpCooldown == 0);
+
+        // Sprites were being stupid so this is what I added, plz replace this with the new version once actual Corsair sprites are finished
+        if (needsChange != canJump)
+        {
+            PieceImage.transform.Rotate(0, 0, 180);
+            needsChange = canJump;
+        }
+
+        // new version in question:
+
+        //if (canJump)
+        //{
+        //    PieceImage.GetComponent<SpriteRenderer>().sprite = cooldown;
+        //}
+        //else
+        //{
+        //    PieceImage.GetComponent<SpriteRenderer>().sprite = jumpReady;
+        //}
+    }
+
+
+    public int[,] GetValidMoves(GameObject[,] tiles, bool canJump = true)
     {
         int[,] moveAssessment;
         
@@ -19,7 +60,7 @@ public class Corsair : Piece
             for (int y = 0; y < 10; y++)
                 moveAssessment[x, y] = -1;
 
-        for (int x = 0; x < 10; x++)
+        for (int x = 0; x < 10 && canJump; x++)
         {
             for (int y = 0; y < 10; y++)
             {

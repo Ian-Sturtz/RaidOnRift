@@ -4,6 +4,22 @@ using UnityEngine;
 
 public class Gunner : Piece
 {
+    [SerializeField] private GameObject PieceImage;
+    [SerializeField] private Sprite unloaded;
+    [SerializeField] private Sprite loaded;
+
+    private void Update()
+    {
+        if (hasCaptured)
+        {
+            PieceImage.GetComponent<SpriteRenderer>().sprite = unloaded;
+        }
+        else
+        {
+            PieceImage.GetComponent<SpriteRenderer>().sprite = loaded;
+        }
+    }
+
     public int[,] GetValidMoves(GameObject[,] tiles)
     {
         int[,] moveAssessment;

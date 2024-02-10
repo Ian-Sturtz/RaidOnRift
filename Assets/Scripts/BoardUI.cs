@@ -30,16 +30,27 @@ public class BoardUI : MonoBehaviour
         }
     }
 
-    public void GameWon(bool navyWon)
+    public void GameWon(bool navyWon, bool stalemate = false)
     {
         GoalText("The game is over");
-        if (navyWon)
+        if(navyWon && stalemate)
         {
-            turnDisplay.SetText("Navy has Won!");
+            turnDisplay.SetText("Stalemate! Navy Wins!");
+            turnDisplay.color = new UnityEngine.Color(0, 0.03921569f, 0.6666667f, 1);
+        }else if (stalemate)
+        {
+            turnDisplay.SetText("Stalemate! Pirates Win!");
+            turnDisplay.color = new UnityEngine.Color(0.4588234f, 0f, 0f, 1f);
+        }
+        else if (navyWon)
+        {
+            turnDisplay.SetText("Navy Wins!");
+            turnDisplay.color = new UnityEngine.Color(0, 0.03921569f, 0.6666667f, 1);
         }
         else
         {
-            turnDisplay.SetText("Pirates have Won!");
+            turnDisplay.SetText("Pirates Win!");
+            turnDisplay.color = new UnityEngine.Color(0.4588234f, 0f, 0f, 1f);
         }
     }
 
@@ -97,10 +108,5 @@ public class BoardUI : MonoBehaviour
         yield return new WaitForSeconds(duration);
         goalDisplay.SetText(currentText);
         temporaryTextActive = false;
-    }
-
-    public void LoadMenu()
-    {
-
     }
 }

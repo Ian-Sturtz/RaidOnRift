@@ -110,6 +110,9 @@ MonoBehaviour:
   currentX: -1
   currentY: -1
   flashDelay: 1
+  PieceImage: {fileID: 8931055917002377977}
+  unloaded: {fileID: 21300000, guid: 84d07b6fdec258d41ab8fd2ee6f7f424, type: 3}
+  loaded: {fileID: 21300000, guid: 661c4b3840aee5c48b6e21904dd96064, type: 3}
 --- !u!1 &8931055917002377977
 GameObject:
   m_ObjectHideFlags: 0

@@ -194,59 +194,43 @@ public class Tactician : Piece
                     {
                         if(squareInRange.currentPiece.type == PieceType.Mate && !mimicPieces[0])
                         {
-                            Debug.Log("Inheriting move from Mate on {" + x + ", " + y + "}");
                             mimicPieces[0] = true;
                         }
                         else if (squareInRange.currentPiece.type == PieceType.Bomber && !mimicPieces[1])
                         {
-                            Debug.Log("Inheriting move from Bomber on {" + x + ", " + y + "}");
                             mimicPieces[1] = true;
                         }
                         else if (squareInRange.currentPiece.type == PieceType.Vanguard && !mimicPieces[2])
                         {
-                            Debug.Log("Inheriting move from Vanguard on {" + x + ", " + y + "}");
                             mimicPieces[2] = true;
                         }
                         else if (squareInRange.currentPiece.type == PieceType.Navigator && !mimicPieces[3])
                         {
-                            Debug.Log("Inheriting move from Navigator on {" + x + ", " + y + "}");
                             mimicPieces[3] = true;
                         }
                         else if (squareInRange.currentPiece.type == PieceType.Gunner && !mimicPieces[4])
                         {
-                            Debug.Log("Inheriting move from Gunner on {" + x + ", " + y + "}");
                             mimicPieces[4] = true;
                         }
                         else if (squareInRange.currentPiece.type == PieceType.Cannon && !mimicPieces[5])
                         {
-                            Debug.Log("Inheriting move from Cannon on {" + x + ", " + y + "}");
                             mimicPieces[5] = true;
                         }
                         else if (squareInRange.currentPiece.type == PieceType.Quartermaster && !mimicPieces[6])
                         {
-                            Debug.Log("Inheriting move from Quartermaster on {" + x + ", " + y + "}");
                             mimicPieces[6] = true;
                         }
                         else if (squareInRange.currentPiece.type == PieceType.Royal2 && !mimicPieces[7])
                         {
-                            if(board.tacticianCorsairJump > 0)
-                            {
-                                Debug.Log("Corsair Still on cooldown, can't be mimicked");
-                            }
-                            else
-                            {
-                                Debug.Log("Inheriting move from Corsair on {" + x + ", " + y + "}");
-                                mimicPieces[7] = true;
-                            }
+                            mimicPieces[7] = true;
                         }
                         else if (squareInRange.currentPiece.type == PieceType.Royal1 && !mimicPieces[8])
                         {
-                            Debug.Log("Inheriting move from Captain on {" + x + ", " + y + "}");
                             mimicPieces[8] = true;
                         }
                         else
                         {
-                            Debug.Log("Piece on {" + x + ", " + y + "} is a land mine or ore or unidentified");
+                            //Default case here
                         }
                     }
                 }
@@ -264,7 +248,6 @@ public class Tactician : Piece
 
                 jail.InsertAPiece(inheritPiece, true);
                 inheritPiece.destroyPiece();
-                Debug.Log("Inserting a new piece, mimicPieces " + i);
                 mimicPieces[i] = false;
             }
         }
@@ -277,6 +260,15 @@ public class Tactician : Piece
 
                 currentPiece.currentX = currentX;
                 currentPiece.currentY = currentY;
+
+                // Spawns an unloaded Gunner if the tactician has already gunner captured
+                if(currentPiece.type == PieceType.Gunner)
+                {
+                    currentPiece.hasCaptured = board.tacticianGunnerCapture;
+                }else if(currentPiece.type == PieceType.Royal2)
+                {
+                    currentPiece.GetComponent<Corsair>().canJump = (board.tacticianCorsairJump == 0);
+                }
             }
         }
 

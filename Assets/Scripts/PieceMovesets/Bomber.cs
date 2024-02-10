@@ -252,27 +252,39 @@ public class Bomber : Piece
                 moveAssessment[x, y] = -1;
 
         // Checks square to the left
-        if(tiles[currentX -1, currentY].GetComponent<Square>().currentPiece == null)
+        if (IsSquareOnBoard(currentX - 1, currentY))
         {
-            moveAssessment[currentX - 1, currentY] = 6;
+            if (tiles[currentX - 1, currentY].GetComponent<Square>().currentPiece == null)
+            {
+                moveAssessment[currentX - 1, currentY] = 6;
+            }
         }
 
         // Checks square to the right
-        if (tiles[currentX + 1, currentY].GetComponent<Square>().currentPiece == null)
+        if (IsSquareOnBoard(currentX + 1, currentY))
         {
-            moveAssessment[currentX + 1, currentY] = 6;
+            if (tiles[currentX + 1, currentY].GetComponent<Square>().currentPiece == null)
+            {
+                moveAssessment[currentX + 1, currentY] = 6;
+            }
         }
 
         // Checks square above
-        if (tiles[currentX, currentY + 1].GetComponent<Square>().currentPiece == null)
+        if (IsSquareOnBoard(currentX, currentY + 1))
         {
-            moveAssessment[currentX, currentY + 1] = 6;
+            if (tiles[currentX, currentY + 1].GetComponent<Square>().currentPiece == null)
+            {
+                moveAssessment[currentX, currentY + 1] = 6;
+            }
         }
 
         // Checks square below
-        if (tiles[currentX, currentY - 1].GetComponent<Square>().currentPiece == null)
+        if (IsSquareOnBoard(currentX, currentY - 1))
         {
-            moveAssessment[currentX, currentY - 1] = 6;
+            if (tiles[currentX, currentY - 1].GetComponent<Square>().currentPiece == null)
+            {
+                moveAssessment[currentX, currentY - 1] = 6;
+            }
         }
 
         moveAssessment[currentX, currentY] = 0;

@@ -190,6 +190,11 @@ MonoBehaviour:
   isNavy: 0
   hasCaptured: 0
   hasOre: 0
+  gameWon: 0
   currentX: -1
   currentY: -1
   flashDelay: 1
+  PieceImage: {fileID: 3121823922205218531}
+  jumpReady: {fileID: 21300000, guid: f8ea8453f4e9aa64dbc5678bdf7b3689, type: 3}
+  cooldown: {fileID: 21300000, guid: f9b50b27cbb0aff41935cd41d8ae84fc, type: 3}
+  canJump: 0
