@@ -25,23 +25,14 @@ public class Corsair : Piece
         if(!board.tacticianSelected)
             canJump = (board.jumpCooldown == 0);
 
-        // Sprites were being stupid so this is what I added, plz replace this with the new version once actual Corsair sprites are finished
-        if (needsChange != canJump)
+        if (canJump)
         {
-            PieceImage.transform.Rotate(0, 0, 180);
-            needsChange = canJump;
+            PieceImage.GetComponent<SpriteRenderer>().sprite = jumpReady;
         }
-
-        // new version in question:
-
-        //if (canJump)
-        //{
-        //    PieceImage.GetComponent<SpriteRenderer>().sprite = cooldown;
-        //}
-        //else
-        //{
-        //    PieceImage.GetComponent<SpriteRenderer>().sprite = jumpReady;
-        //}
+        else
+        {
+            PieceImage.GetComponent<SpriteRenderer>().sprite = cooldown;
+        }
     }
 
 
