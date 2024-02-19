@@ -134,6 +134,8 @@ public class GameBoard : MonoBehaviour
             }
         }
 
+        boardUI.UpdateTurn(navyTurn);
+
         // The active player has selected a bomber or tactician to use this turn
         if (storedTileSelected != null)
         {
@@ -176,29 +178,56 @@ public class GameBoard : MonoBehaviour
         // Highlights a captured enemy land mines so the bomber can deploy them
         if (bomberSelected && cellToHighlight == -2)
         {
-            // Tactician is mimicking a bomber
-            if (tacticianInheritSelected)
-            {
-                cellToHighlight = jail.FindPiece(PieceType.LandMine, false);
-                if(cellToHighlight >= 0)
-                {
-                    jail.NavyJailCells[cellToHighlight].GetComponent<JailCell>().interactable = true;
-                    // A bomb is being highlighted right now in a jail cell, it can potentially be replaced on the board
-                }
-            }
             // The selected bomber is Navy and can deploy Pirate Bombs
-            else if (tileSelected.GetComponent<Square>().currentPiece.isNavy)
+            if (tileSelected.GetComponent<Square>().currentPiece.isNavy)
             {
-                cellToHighlight = jail.FindPiece(PieceType.LandMine, false);
+                // The bomber hasn't captured a bomb yet
+                if (tileSelected.GetComponent<Square>().currentPiece.GetComponent<Bomber>().capturedBomb == null)
+                {
+                    Debug.Log("No bombs captured, searching for one");
+                    cellToHighlight = jail.FindPiece(PieceType.LandMine, false);
+                }
+                else
+                {
+                    Debug.Log("Bomb captured, locating its position");
+                    // Searches jail for the corresponding captured bomb
+                    for (int i = 0; i < teamSize; i++)
+                    {
+                        if(jail.NavyJailCells[i].GetComponent<JailCell>().currentPiece == tileSelected.GetComponent<Square>().currentPiece.GetComponent<Bomber>().capturedBomb)
+                        {
+                            cellToHighlight = i;
+                        }
+                    }
+                }
+
                 if (cellToHighlight >= 0)
                 {
                     jail.NavyJailCells[cellToHighlight].GetComponent<JailCell>().interactable = true;
                 }
+
             }
             // The selected bomber is Pirate and can deploy Navy Bombs
             else
             {
-                cellToHighlight = jail.FindPiece(PieceType.LandMine, true);
+                // The bomber hasn't captured a bomb yet
+                if (tileSelected.GetComponent<Square>().currentPiece.GetComponent<Bomber>().capturedBomb == null)
+                {
+                    Debug.Log("No bombs captured, searching for one");
+                    cellToHighlight = jail.FindPiece(PieceType.LandMine, true);
+                }
+                else
+                {
+                    Debug.Log("Bomb captured, locating its position");
+                    // Searches jail for the corresponding captured bomb
+                    for (int i = 0; i < teamSize; i++)
+                    {
+                        if (jail.PirateJailCells[i].GetComponent<JailCell>().currentPiece == tileSelected.GetComponent<Square>().currentPiece.GetComponent<Bomber>().capturedBomb)
+                        {
+                            cellToHighlight = i;
+                        }
+                    }
+                }
+
                 if (cellToHighlight >= 0)
                 {
                     jail.PirateJailCells[cellToHighlight].GetComponent<JailCell>().interactable = true;
@@ -257,7 +286,7 @@ public class GameBoard : MonoBehaviour
         }
 
         // Detect a square has been clicked
-        if (Input.GetMouseButtonDown(0) && !gameWon && !stalemate)
+        if (Input.GetMouseButtonDown(0) && !gameWon)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
@@ -411,6 +440,20 @@ public class GameBoard : MonoBehaviour
                         jail.InsertAPiece(capturedPiece);
                         capturedPiece.destroyPiece();
                         currentPiece.hasCaptured = true;
+
+                        if (capturedPiece.type == PieceType.LandMine && currentPiece.type == PieceType.Bomber)
+                        {
+                            int bombJailIndex = jail.FindLastSlot(!currentPiece.isNavy);
+                            Debug.Log(bombJailIndex);
+                            if (currentPiece.isNavy)
+                            {
+                                currentPiece.GetComponent<Bomber>().capturedBomb = jail.pirateJailedPieces[bombJailIndex];
+                            }
+                            else
+                            {
+                                currentPiece.GetComponent<Bomber>().capturedBomb = jail.navyJailedPieces[bombJailIndex];
+                            }
+                        }
 
                         // Prevents the Tactician from mimicking a Gunner and capturing twice
                         if (tileSelected.tag == "GunnerTarget")
@@ -669,7 +712,6 @@ public class GameBoard : MonoBehaviour
                                 Piece inheritingPiece = tileSelected.GetComponent<JailCell>().currentPiece;
 
                                 Vector2Int currentPosition = IdentifyThisBoardSquare(storedTileSelected);
-                                Debug.Log(currentPosition.x + ", " + currentPosition.y);
 
                                 DetectLegalMoves(storedTileSelected, inheritingPiece);
 
@@ -1502,8 +1544,6 @@ public class GameBoard : MonoBehaviour
                 }
             }
         }
-
-        boardUI.UpdateTurn(navyTurn);
     }
 
 
@@ -1541,7 +1581,6 @@ public class GameBoard : MonoBehaviour
         // Update UI if no stalemate
         if (!stalemate) 
         {
-            boardUI.UpdateTurn(navyTurn);
             boardUI.GoalText("Click on a piece to move it!");
         }
     }

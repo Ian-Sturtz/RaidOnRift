@@ -14,24 +14,27 @@ public class BoardUI : MonoBehaviour
     private bool navyHasOre = false;
     private bool pirateHasOre = false;
 
+    private bool navyTurn = true;
+    private bool gameOver = false;
 
-
-    public void UpdateTurn(bool navyTurn)
+    private void Update()
     {
-        if(navyTurn)
+        if (navyTurn && !gameOver)
         {
             turnDisplay.SetText("Navy's Turn");
-            turnDisplay.color = new UnityEngine.Color (0, 0.03921569f, 0.6666667f, 1);
+            turnDisplay.color = new UnityEngine.Color(0, 0.03921569f, 0.6666667f, 1);
         }
-        else
+        else if(!gameOver)
         {
             turnDisplay.SetText("Pirate's Turn");
-            turnDisplay.color = new UnityEngine.Color (0.4588234f, 0f, 0f, 1f);
+            turnDisplay.color = new UnityEngine.Color(0.4588234f, 0f, 0f, 1f);
         }
     }
 
     public void GameWon(bool navyWon, bool stalemate = false)
     {
+        gameOver = true;
+
         GoalText("The game is over");
         if(navyWon && stalemate)
         {
@@ -64,6 +67,11 @@ public class BoardUI : MonoBehaviour
         {
             pirateHasOre = hasOre;
         }
+    }
+
+    public void UpdateTurn(bool currentTurn)
+    {
+        navyTurn = currentTurn;
     }
 
     public void DisplayTempText(string text, float delay = 1f)

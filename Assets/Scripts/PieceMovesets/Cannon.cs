@@ -41,7 +41,7 @@ public class Cannon : Piece
                         up = false;
                         
                         // It is an enemy piece
-                        if(isNavy != possibleSquare.currentPiece.isNavy)
+                        if(isNavy != possibleSquare.currentPiece.isNavy || possibleSquare.currentPiece.type == PieceType.LandMine)
                         {
                             if(IsSquareOnBoard(currentX, currentY + change + 1))
                             {
@@ -76,7 +76,7 @@ public class Cannon : Piece
                         down = false;
 
                         // It is an enemy piece
-                        if (isNavy != possibleSquare.currentPiece.isNavy)
+                        if (isNavy != possibleSquare.currentPiece.isNavy || possibleSquare.currentPiece.type == PieceType.LandMine)
                         {
                             if (IsSquareOnBoard(currentX, currentY - change - 1))
                             {
@@ -111,7 +111,7 @@ public class Cannon : Piece
                         left = false;
 
                         // It is an enemy piece
-                        if (isNavy != possibleSquare.currentPiece.isNavy)
+                        if (isNavy != possibleSquare.currentPiece.isNavy || possibleSquare.currentPiece.type == PieceType.LandMine)
                         {
                             if (IsSquareOnBoard(currentX - change - 1, currentY))
                             {
@@ -145,8 +145,8 @@ public class Cannon : Piece
                     {
                         right = false;
 
-                        // It is an enemy piece
-                        if (isNavy != possibleSquare.currentPiece.isNavy)
+                        // It is an enemy piece or a Land Mine
+                        if (isNavy != possibleSquare.currentPiece.isNavy || possibleSquare.currentPiece.type == PieceType.LandMine)
                         {
                             if (IsSquareOnBoard(currentX + change + 1, currentY))
                             {

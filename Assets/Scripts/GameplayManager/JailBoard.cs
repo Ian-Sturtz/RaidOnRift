@@ -13,7 +13,7 @@ public class JailBoard : MonoBehaviour
     public Piece[] navyJailedPieces;        // Captured Navy Pieces
     public Piece[] pirateJailedPieces;      // Captured Pirate Pieces
     public Piece[] tacticianMimicPieces;    // Pieces tactician can inherit
-    private float jail_square_size = .6f;
+    private float jail_square_size = .5f;
 
     private void Start()
     {
@@ -162,6 +162,32 @@ public class JailBoard : MonoBehaviour
         }
 
         Debug.Log("Too many Jailed Pieces!");
+        return -1;
+    }
+
+    public int FindLastSlot(bool findNavyPiece)
+    {
+        if (findNavyPiece)
+        {
+            for (int i = board.teamSize - 1; i >= 0; i--)
+            {
+                if(navyJailedPieces[i] != null)
+                {
+                    return i;
+                }
+            }
+        }
+        else
+        {
+            for (int i = board.teamSize - 1; i >= 0; i--)
+            {
+                if (pirateJailedPieces[i] != null)
+                {
+                    return i;
+                }
+            }
+        }
+
         return -1;
     }
 
