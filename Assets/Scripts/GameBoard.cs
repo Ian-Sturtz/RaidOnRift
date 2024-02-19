@@ -1339,6 +1339,12 @@ public class GameBoard : MonoBehaviour
         {
             Debug.Log("No pieces available, using default spawn");
 
+            NavyPieces[0] = SpawnPiece(PieceType.Royal2, true, 4, 4);
+            PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 4, 7);
+            PiratePieces[1] = SpawnPiece(PieceType.Quartermaster, false, 6, 6);
+
+            return;
+
             // Decent board starting positions for a sample game
             NavyPieces[0] = SpawnPiece(PieceType.Ore, true, 1, 0);
             NavyPieces[1] = SpawnPiece(PieceType.Royal1, true, 3, 0);

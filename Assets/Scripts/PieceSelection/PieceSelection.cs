@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 
 public class PieceSelection : MonoBehaviour
 {
@@ -40,6 +41,10 @@ public class PieceSelection : MonoBehaviour
     [SerializeField] private TMP_Text navyInfoText;
     [SerializeField] private TMP_Text pirateInfoText;
 
+    [SerializeField] private VideoPlayer vid;
+    [SerializeField] private VideoClip clip1;
+    [SerializeField] private VideoClip clip2;
+
     [SerializeField] private int royal1Points = 22;
     [SerializeField] private int royal2Points = 16;
     [SerializeField] private int matePoints = 1;
@@ -55,8 +60,6 @@ public class PieceSelection : MonoBehaviour
     [SerializeField] private int maxArmy = 2;
     [SerializeField] private int maxPeasants = 10;
     [SerializeField] private int minPeasants = 5;
-
-    [SerializeField] public GameBoard board;
 
     public void chosenFaction(bool choseNavy)
     {
@@ -310,6 +313,8 @@ public class PieceSelection : MonoBehaviour
             {
                 topText.SetText("Admiral [" + royal1Points + " points]");
                 infoText.SetText("A navy exclusive crewmate. Moves any unblocked distance in any direction, captures by replacement.");
+
+                vid.clip = clip1;
             }
             else
             {
@@ -323,6 +328,8 @@ public class PieceSelection : MonoBehaviour
             {
                 topText.SetText("Tactician [" + royal2Points + " points]");
                 infoText.SetText("A navy exclusive crewmate. Moves up to two unblocked squares orthogonally, captures by replacement. Can also use the moveset of any enemy piece within whatever zone the Tactician is in (Allied Start Zone, Neutral Zone, or Enemy Start Zone).");
+
+                vid.clip = clip2;
             }
             else
             {
