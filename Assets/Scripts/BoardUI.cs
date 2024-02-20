@@ -19,14 +19,14 @@ public class BoardUI : MonoBehaviour
 
     private void Update()
     {
-        if (navyTurn && !gameOver)
-        {
-            turnDisplay.SetText("Navy's Turn");
+        if (navyTurn && !gameOver) { 
+        
+            turnDisplay.SetText("NAVY'S TURN");
             turnDisplay.color = new UnityEngine.Color(0, 0.03921569f, 0.6666667f, 1);
         }
         else if(!gameOver)
         {
-            turnDisplay.SetText("Pirate's Turn");
+            turnDisplay.SetText("PIRATE'S TURN");
             turnDisplay.color = new UnityEngine.Color(0.4588234f, 0f, 0f, 1f);
         }
     }
@@ -35,24 +35,24 @@ public class BoardUI : MonoBehaviour
     {
         gameOver = true;
 
-        GoalText("The game is over");
+        GoalText("THE GAME IS OVER");
         if(navyWon && stalemate)
         {
-            turnDisplay.SetText("Stalemate! Navy Wins!");
+            turnDisplay.SetText("STALEMATE! NAVY WINS!");
             turnDisplay.color = new UnityEngine.Color(0, 0.03921569f, 0.6666667f, 1);
         }else if (stalemate)
         {
-            turnDisplay.SetText("Stalemate! Pirates Win!");
+            turnDisplay.SetText("STALEMATE! PIRATES WIN!");
             turnDisplay.color = new UnityEngine.Color(0.4588234f, 0f, 0f, 1f);
         }
         else if (navyWon)
         {
-            turnDisplay.SetText("Navy Wins!");
+            turnDisplay.SetText("NAVY WINS!");
             turnDisplay.color = new UnityEngine.Color(0, 0.03921569f, 0.6666667f, 1);
         }
         else
         {
-            turnDisplay.SetText("Pirates Win!");
+            turnDisplay.SetText("PIRATES WIN!");
             turnDisplay.color = new UnityEngine.Color(0.4588234f, 0f, 0f, 1f);
         }
     }
