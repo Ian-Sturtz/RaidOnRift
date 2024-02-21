@@ -60,9 +60,13 @@ public class PPGameBoard : MonoBehaviour
 
     bool piecesadded = false;
 
-    private void Start()
+    private void Start  ()
     {
-        navyTurn = PieceManager.instance.navyFirst;
+        if (PieceManager.instance != null)
+            navyTurn = PieceManager.instance.navyFirst;
+        else
+            navyTurn = true;
+
         PIECES_ADDED = System.Enum.GetValues(typeof(PieceType)).Length;
 
         //Initialize the game board and all variables
