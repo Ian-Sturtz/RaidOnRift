@@ -72,6 +72,11 @@ public class GameBoard : MonoBehaviour
 
     #endregion
 
+    [Header("Game Audio clips")]
+    [SerializeField] AudioSource movementAudio;
+    [SerializeField] AudioSource gunnerAudio;
+    [SerializeField] AudioSource gunnerRecharge;
+
     // Piece prefabs to be spawned in as needed
     [Header("Prefabs and Materials")]
     [SerializeField] public GameObject[] PiecePrefabs;
@@ -362,6 +367,7 @@ public class GameBoard : MonoBehaviour
                     // A moveable square has been clicked
                     if (tileSelected.tag == "MoveableSquare")
                     {
+                        movementAudio.Play();
                         Square currentSquare = storedTileSelected.GetComponent<Square>();
 
                         // Checks if the piece is a Tactician that has moved since mimicking a Gunner
@@ -372,8 +378,9 @@ public class GameBoard : MonoBehaviour
                         }
 
                         Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
-                        if (currentSquare.currentPiece.type == PieceType.Gunner)
+                        if (currentSquare.currentPiece.type == PieceType.Gunner && currentSquare.currentPiece.hasCaptured)
                         {
+                            gunnerRecharge.Play();
                             currentSquare.currentPiece.hasCaptured = false;
                         }
                         MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
@@ -458,10 +465,16 @@ public class GameBoard : MonoBehaviour
                         // Prevents the Tactician from mimicking a Gunner and capturing twice
                         if (tileSelected.tag == "GunnerTarget")
                         {
+                            gunnerAudio.Play();
+
                             if (currentPiece.type == PieceType.Royal2 && currentPiece.isNavy)
                             {
                                 tacticianGunnerCapture = true;
                             }
+                        }
+                        else
+                        {
+                            // Play regular capture audio
                         }
 
                         // Move current piece to the new square (unless it's a gunner)
