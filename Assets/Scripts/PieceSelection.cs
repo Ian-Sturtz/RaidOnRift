@@ -348,7 +348,7 @@ public class PieceSelection : MonoBehaviour
         if (name == "Select Bomber")
         {
             topText.SetText("Bomber [" + bomberPoints + " points]");
-            infoText.SetText("Moves up to two unblocked squares in any direction. The only piece that can capture Land Mines by replacement, but cannot capture any other piece besides the flag. If the Miner has not captured a piece this turn and if there are Land Mines in the allied Jail Zone, can return one Land Mine from the Jail Zone to the game board in any open square adjacent to the Miner. Cannot move if a Jail Zone has been returned to the game board this turn.");
+            infoText.SetText("Moves up to two unblocked squares in any direction. The only piece that can capture Land Mines by replacement, but cannot capture any other piece besides the flag. Can return one Land Mine from the Jail Zone to the game board in any open square adjacent to the Miner. Cannot move if a Jail Zone has been returned to the game board this turn.");
         }
         if (name == "Select Vanguard")
         {
