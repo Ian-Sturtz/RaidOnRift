@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class StoryUI : MonoBehaviour
 {
-    public float topHeight = 500;
+    private float topHeight = Screen.height;
     public float duration = 0.5f;
     public float transparency = 0.75f;
 
@@ -39,13 +39,29 @@ public class StoryUI : MonoBehaviour
         {
             switch(piece)
             {
+                case "Admiral":
+                    pieceName.SetText("THE ADMIRAL");
+                    pieceDesc.SetText("Admiral lore here.");
+                    break;
                 case "Tactician":
                     pieceName.SetText("THE TACTICIAN");
                     pieceDesc.SetText("In the distant future, the iron reach of the Imperial Navy spans far across the cosmos. Powered by the energy we harvest from Galactic Rifts, refined into pure crystals we call “the ore”, our weapons are charged and our cloning devices are fueled, letting us clone our ranks with ease. But great power attracts great threats. The fearsome and terrible Space Pirates now raid our refineries, seeking to steal our Ore for their own, putting a stop to our reign and letting their villany take hold in our ever peaceful empire.");
                     break;
+                case "Navy Mate":
+                    pieceName.SetText("THE CREWMATE");
+                    pieceDesc.SetText("Navy Mate lore here.");
+                    break;
+                case "Captain":
+                    pieceName.SetText("THE CAPTAIN");
+                    pieceDesc.SetText("Captain lore here.");
+                    break;
                 case "Corsair":
                     pieceName.SetText("THE CORSAIR");
                     pieceDesc.SetText("TACTICIAN JUMSCARE (there is no corsiar bust in the github)");
+                    break;
+                case "Pirate Mate":
+                    pieceName.SetText("THE CREWMATE");
+                    pieceDesc.SetText("Pirate Mate lore here.");
                     break;
             }
             Vector2 topPos = bottomPos + Vector2.up * topHeight;
