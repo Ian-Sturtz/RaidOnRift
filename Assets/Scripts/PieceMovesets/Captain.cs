@@ -14,8 +14,6 @@ public class Captain : Piece
             for (int j = 0; j < 10; j++)
                 moveAssessment[i, j] = -1;
 
-        GameObject currentSquare = tiles[currentX, currentY];
-
         int x = currentX;
         int y = currentY;
 
@@ -48,6 +46,8 @@ public class Captain : Piece
         }
 
         moveAssessment[currentX, currentY] = 0;
+
+        Debug.Log(moveAssessment);
 
         return moveAssessment;
     }
