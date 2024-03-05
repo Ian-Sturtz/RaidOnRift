@@ -17,6 +17,8 @@ TagManager:
   - MineDeploy
   - OreDeploy
   - CorsairJump
+  - VolumeSlider
+  - LINK
   layers:
   - Default
   - TransparentFX
