@@ -51,17 +51,66 @@ public class StoryUI : MonoBehaviour
                     pieceName.SetText("THE CREWMATE");
                     pieceDesc.SetText("Navy Mate lore here.");
                     break;
+                case "Navy Quartermaster":
+                    pieceName.SetText("THE QUARTERMASTER");
+                    pieceDesc.SetText("Navy quartermaster lore here.");
+                    break;
+                case "Navy Cannon":
+                    pieceName.SetText("THE CANNONEER");
+                    pieceDesc.SetText("Navy cannon lore here.");
+                    break;
+                case "Navy Bomber":
+                    pieceName.SetText("THE ENGINEER");
+                    pieceDesc.SetText("Navy engineer lore here.");
+                    break;
+                case "Navy Vanguard":
+                    pieceName.SetText("THE VANGUARD");
+                    pieceDesc.SetText("Navy vanguard lore here.");
+                    break;
+                case "Navy Navigator":
+                    pieceName.SetText("THE NAVIGATOR");
+                    pieceDesc.SetText("Navy navigator lore here.");
+                    break;
+                case "Navy Gunner":
+                    pieceName.SetText("THE GUNNER");
+                    pieceDesc.SetText("Navy gunner lore here.");
+                    break;
+
                 case "Captain":
                     pieceName.SetText("THE CAPTAIN");
                     pieceDesc.SetText("Captain lore here.");
                     break;
                 case "Corsair":
                     pieceName.SetText("THE CORSAIR");
-                    pieceDesc.SetText("TACTICIAN JUMSCARE (there is no corsiar bust in the github)");
+                    pieceDesc.SetText("Corsair lore here.");
                     break;
                 case "Pirate Mate":
                     pieceName.SetText("THE CREWMATE");
                     pieceDesc.SetText("Pirate Mate lore here.");
+                    break;
+                case "Pirate Quartermaster":
+                    pieceName.SetText("THE QUARTERMASTER");
+                    pieceDesc.SetText("Pirate quartermaster lore here.");
+                    break;
+                case "Pirate Cannon":
+                    pieceName.SetText("THE CANNONEER");
+                    pieceDesc.SetText("Pirate cannon lore here.");
+                    break;
+                case "Pirate Bomber":
+                    pieceName.SetText("THE ENGINEER");
+                    pieceDesc.SetText("Pirate engineer lore here.");
+                    break;
+                case "Pirate Vanguard":
+                    pieceName.SetText("THE VANGUARD");
+                    pieceDesc.SetText("Pirate vanguard lore here.");
+                    break;
+                case "Pirate Navigator":
+                    pieceName.SetText("THE NAVIGATOR");
+                    pieceDesc.SetText("Pirate navigator lore here.");
+                    break;
+                case "Pirate Gunner":
+                    pieceName.SetText("THE GUNNER");
+                    pieceDesc.SetText("Pirate gunner lore here.");
                     break;
             }
             Vector2 topPos = bottomPos + Vector2.up * topHeight;
