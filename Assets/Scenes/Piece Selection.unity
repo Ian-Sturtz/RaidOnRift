@@ -2720,8 +2720,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6838,8 +6838,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -8109,9 +8109,9 @@ RectTransform:
   m_Father: {fileID: 1044066239}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 4096, y: 4096}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2088430112
 MonoBehaviour:
@@ -8133,7 +8133,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 792a430faa5f3954a8f21430a59dd48b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b209f9c2b8447324ea291c48005027e5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8634,10 +8634,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1044066239}
     m_Modifications:
+    - target: {fileID: 710568601641256904, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 710568601641256904, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 710568601641256904, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1941331436991788652, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 677035666}
+    - target: {fileID: 4201905419654155203, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4201905419654155203, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4201905419654155203, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4890928154062331915, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
       propertyPath: m_Name
       value: Pause Menu
@@ -8724,6 +8748,54 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5475421667799878095, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5477347273634724500, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5477347273634724500, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5477347273634724500, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6520687209545035697, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6520687209545035697, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6520687209545035697, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7409286492478545663, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7409286492478545663, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7409286492478545663, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7972198447216311673, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7972198447216311673, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7972198447216311673, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
+      propertyPath: m_fontColor.r
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
