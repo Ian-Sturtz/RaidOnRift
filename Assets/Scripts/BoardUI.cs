@@ -143,6 +143,7 @@ public class BoardUI : MonoBehaviour
 
     IEnumerator AnimBackground()
     {
+        animBackground.SetActive(true);
         float timeElapsed = 0;
         float startHeight = animBackground.GetComponent<RectTransform>().rect.height;
 
@@ -164,18 +165,22 @@ public class BoardUI : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
+        animBackground.SetActive(false);
     }
 
     IEnumerator AnimText()
     {
+        animTextObj.SetActive(true);
         float timeElapsed = 0;
         float red = animText.color.r;
         float green = animText.color.g;
         float blue = animText.color.b;
+        //float alpha = animText.color.a;
+        float alpha = 0;
 
         while (timeElapsed < 0.25f)
         {
-            float val = Mathf.Lerp(0, 1, timeElapsed / 0.25f);
+            float val = Mathf.Lerp(alpha, 1, timeElapsed / 0.25f);
             animText.color = new UnityEngine.Color(red, green, blue, val);
             timeElapsed += Time.deltaTime;
             yield return null;
@@ -191,5 +196,6 @@ public class BoardUI : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
+        animTextObj.SetActive(false);
     }
 }

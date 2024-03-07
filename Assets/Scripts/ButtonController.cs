@@ -12,6 +12,7 @@ public class ButtonController : MonoBehaviour
 
     public void QuitGame()
     {
+        Debug.Log("Quitting Game");
         Application.Quit();
     }
 }
