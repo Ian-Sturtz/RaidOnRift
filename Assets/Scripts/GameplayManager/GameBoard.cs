@@ -1557,6 +1557,8 @@ public class GameBoard : MonoBehaviour
                 }
             }
         }
+
+        boardUI.PlayTurnAnim(navyTurn);
     }
 
 
@@ -1587,6 +1589,7 @@ public class GameBoard : MonoBehaviour
             {
                 navyTurn = true;
             }
+            boardUI.PlayTurnAnim(navyTurn);
         }
 
         stalemate = CheckForStalemate(navyTurn);
