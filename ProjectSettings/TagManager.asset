@@ -17,6 +17,7 @@ TagManager:
   - MineDeploy
   - OreDeploy
   - CorsairJump
+  - Tutorial
   layers:
   - Default
   - TransparentFX

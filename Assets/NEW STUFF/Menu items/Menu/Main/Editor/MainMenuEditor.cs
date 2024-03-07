@@ -31,6 +31,7 @@ public class MainMenuEditor : Editor
     private SerializedProperty uiClick;
     private SerializedProperty uiHover;
     private SerializedProperty uiSpecial;
+    private SerializedProperty tutorialToLoad;
 
     private SerializedProperty homePanel;
     private SerializedProperty settingsPanel;

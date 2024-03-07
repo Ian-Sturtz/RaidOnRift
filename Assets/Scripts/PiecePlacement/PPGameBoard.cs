@@ -63,9 +63,17 @@ public class PPGameBoard : MonoBehaviour
     private void Start  ()
     {
         if (PieceManager.instance != null)
+        {
             navyTurn = PieceManager.instance.navyFirst;
+        }
+        else if (MainMenuManager.tutorialToLoad == 3 | MainMenuManager.tutorialToLoad == 4)
+        {
+            navyTurn = false;
+        }
         else
+        {
             navyTurn = true;
+        }
 
         PIECES_ADDED = System.Enum.GetValues(typeof(PieceType)).Length;
 

@@ -1486,7 +1486,56 @@ public class GameBoard : MonoBehaviour
         int navyPiecesAdded = 0;
         int piratePiecesAdded = 0;
 
-        if(PieceManager.instance == null)
+        if(PieceManager.instance == null && MainMenuManager.tutorialToLoad > 0)
+        {
+            if (MainMenuManager.tutorialToLoad == 1)
+            {
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 5, 7);
+                NavyPieces[0] = SpawnPiece(PieceType.Royal1, true, 6, 5);
+                Debug.Log("let's go");
+
+            }
+            else if(MainMenuManager.tutorialToLoad == 2)
+            {
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 5, 7);
+                PiratePieces[1] = SpawnPiece(PieceType.Quartermaster, false, 3, 5);
+                NavyPieces[0] = SpawnPiece(PieceType.Royal2, true, 6, 5);
+                
+
+            }
+            else if(MainMenuManager.tutorialToLoad == 3)
+            {
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 5, 7);
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 6, 7);
+                PiratePieces[1] = SpawnPiece(PieceType.LandMine, false, 5, 5);
+                NavyPieces[0] = SpawnPiece(PieceType.Gunner, true, 5, 3);
+
+            }
+            else if(MainMenuManager.tutorialToLoad == 4)
+            {
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 5, 7);
+                NavyPieces[0] = SpawnPiece(PieceType.Vanguard, true, 6, 5);
+
+
+            }
+            else if(MainMenuManager.tutorialToLoad == 5)
+            {
+                PiratePieces[0] = SpawnPiece(PieceType.LandMine, false, 5, 5);                
+                NavyPieces[0] = SpawnPiece(PieceType.Bomber, true, 5, 3);
+                NavyPieces[1] = SpawnPiece(PieceType.LandMine, true, 4, 5);
+
+            }
+            else if(MainMenuManager.tutorialToLoad == 6)
+            {
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 5, 7);
+                PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 7, 3);
+                PiratePieces[2] = SpawnPiece(PieceType.Mate, false, 7, 7);
+                NavyPieces[0] = SpawnPiece(PieceType.Cannon, true, 5, 2);                
+
+            }
+
+        }
+        else if(PieceManager.instance == null)
         {
             Debug.Log("No pieces available, using default spawn");
 
@@ -1563,38 +1612,44 @@ public class GameBoard : MonoBehaviour
     // Changes the turn from one player to the next
     private void NextTurn()
     {
-        ResetBoardMaterials(true);
-        ResetBoardMaterials(true);  // Just in case
+        // if(MainMenuManager.tutorialToLoad == 3 | MainMenuManager.tutorialToLoad == 4){
+        //     navyTurn = false;
+        // }  
+        // else 
+        if (MainMenuManager.tutorialToLoad == 0){
+            ResetBoardMaterials(true);
+            ResetBoardMaterials(true);  // Just in case
 
-        if (tacticianCorsairJump != 0)
-        {
-            tacticianCorsairJump--;
-        }
-
-        if (jumpCooldown != 0)
-        {
-            jumpCooldown--;
-        }
-
-        orebearerSecondMove = false;
-        if (!resetOre)
-        {
-            if (navyTurn)
+            if (tacticianCorsairJump != 0)
             {
-                navyTurn = false;
+                tacticianCorsairJump--;
             }
-            else
+
+            if (jumpCooldown != 0)
             {
-                navyTurn = true;
+                jumpCooldown--;
             }
-        }
 
-        stalemate = CheckForStalemate(navyTurn);
+            orebearerSecondMove = false;
+            if (!resetOre)
+            {
+                if (navyTurn)
+                {
+                    navyTurn = false;
+                }
+                else
+                {
+                    navyTurn = true;
+                }
+            }
 
-        // Update UI if no stalemate
-        if (!stalemate) 
-        {
-            boardUI.GoalText("Click on a piece to move it!");
-        }
+            stalemate = CheckForStalemate(navyTurn);
+
+            // Update UI if no stalemate
+            if (!stalemate) 
+            {
+                boardUI.GoalText("Click on a piece to move it!");
+            }
+        } 
     }
 }

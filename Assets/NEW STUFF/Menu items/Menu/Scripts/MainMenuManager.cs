@@ -20,6 +20,7 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("Scene")]
     [Space(10)] [SerializeField] string sceneToLoad;
+    [SerializeField] public static int tutorialToLoad = 0;
 
     [Header("Sprites")]
     [Space(10)] [SerializeField] Sprite logo;
@@ -238,6 +239,11 @@ public class MainMenuManager : MonoBehaviour
         fadeAnimator.SetTrigger("FadeOut");
 
         StartCoroutine(WaitToLoadLevel());
+    }
+
+    public void LoadTutorial(int tutorialIdentifier)
+    {
+        tutorialToLoad = tutorialIdentifier;
     }
 
     IEnumerator WaitToLoadLevel()
