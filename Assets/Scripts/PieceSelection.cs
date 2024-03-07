@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 
 public class PieceSelection : MonoBehaviour
 {
@@ -33,6 +35,8 @@ public class PieceSelection : MonoBehaviour
     [SerializeField] private TMP_Text piratePoints;
 
     private TMP_Text pointsText;
+    private VideoPlayer videoPlayer;
+    private VideoManager videoManager;
 
     [SerializeField] private TMP_Text navyPlayer;
     [SerializeField] private TMP_Text piratePlayer;
@@ -56,7 +60,14 @@ public class PieceSelection : MonoBehaviour
     [SerializeField] private int maxPeasants = 10;
     [SerializeField] private int minPeasants = 5;
 
-    [SerializeField] public GameBoard board;
+    [SerializeField] private VideoPlayer navyVideo;
+    [SerializeField] private VideoPlayer pirateVideo;
+    [SerializeField] private VideoClip navyRoyal1Clip;
+
+    private void Start()
+    {
+        videoManager = this.GetComponent<VideoManager>();
+    }
 
     public void chosenFaction(bool choseNavy)
     {
@@ -65,11 +76,14 @@ public class PieceSelection : MonoBehaviour
         if(navySelecting)
         {
             pointsText = navyPoints;
+            videoPlayer = navyVideo;
         }
         else
         {
             pointsText = piratePoints;
+            videoPlayer = pirateVideo;
         }
+        videoManager.Setup(navySelecting);
     }
 
     public void IncreaseCount(GameObject parent)
@@ -263,15 +277,18 @@ public class PieceSelection : MonoBehaviour
             if (navySelecting)
             {
                 pointsText = navyPoints;
+                videoPlayer = pirateVideo;
 
                 navyPlayer.SetText("Player 2: Select Crew");
             }
             else
             {
                 pointsText = piratePoints;
+                videoPlayer = pirateVideo;
 
                 piratePlayer.SetText("Player 2: Select Crew");
             }
+            videoManager.Setup(navySelecting);
 
             navyUI.SetActive(navySelecting);
             pirateUI.SetActive(!navySelecting);
@@ -310,12 +327,14 @@ public class PieceSelection : MonoBehaviour
             {
                 topText.SetText("Admiral [" + royal1Points + " points]");
                 infoText.SetText("A navy exclusive crewmate. Moves any unblocked distance in any direction, captures by replacement.");
+                
             }
             else
             {
                 topText.SetText("Captain [" + royal1Points + " points]");
                 infoText.SetText("A pirate exclusive crewmate. Moves exactly five squares in any orthogonal direction, and can change direction mid-move. Cannot visit the same square twice in a move. Jumps over blockers, and captures any enemy piece in the fifth square by replacement.");
             }
+            videoPlayer.clip = videoManager.royal1;
         }
         if (name == "Select Royal2")
         {
@@ -329,6 +348,7 @@ public class PieceSelection : MonoBehaviour
                 topText.SetText("Corsair [" + royal2Points + " points]");
                 infoText.SetText("A pirate exclusive crewmate. Moves one space diagonally, captures by replacement, or can jump to any open square on the board. If the corsair jumps this way, the corsair cannot move on player 2’s following turn.");
             }
+            videoPlayer.clip = videoManager.royal2;
         }
         if (name == "Select Mate")
         {
