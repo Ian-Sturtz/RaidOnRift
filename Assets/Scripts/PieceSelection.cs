@@ -126,7 +126,7 @@ public class PieceSelection : MonoBehaviour
             totalPoints += cannonPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
-        if (name == "Select Bomber" && bomber < maxArmy && totalPoints + bomberPoints <= maxPoints)
+        if (name == "Select Engineer" && bomber < maxArmy && totalPoints + bomberPoints <= maxPoints)
         {
             bomber++;
             amount.SetText(bomber + "/" + maxArmy);
@@ -197,7 +197,7 @@ public class PieceSelection : MonoBehaviour
             totalPoints -= cannonPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
-        if (name == "Select Bomber" && bomber > 0)
+        if (name == "Select Engineer" && bomber > 0)
         {
             bomber--;
             amount.SetText(bomber + "/" + maxArmy);
