@@ -1587,6 +1587,7 @@ public class GameBoard : MonoBehaviour
             {
                 navyTurn = true;
             }
+            boardUI.PlayTurnAnim(navyTurn);
         }
 
         stalemate = CheckForStalemate(navyTurn);

@@ -17,6 +17,10 @@ public class BoardUI : MonoBehaviour
     private bool navyTurn = true;
     private bool gameOver = false;
 
+    [SerializeField] private GameObject animTextObj;   
+    [SerializeField] private TMP_Text animText;
+    [SerializeField] private GameObject animBackground;
+
     private void Update()
     {
         if (navyTurn && !gameOver) { 
@@ -76,7 +80,7 @@ public class BoardUI : MonoBehaviour
 
     public void DisplayTempText(string text, float delay = 1f)
     {
-        StopAllCoroutines();
+        //StopAllCoroutines();
         temporaryTextActive = true;
         StartCoroutine(TemporaryText(text, delay));
     }
@@ -85,7 +89,7 @@ public class BoardUI : MonoBehaviour
     public void GoalText(string text, bool append = false)
     {
         temporaryTextActive = false;
-        StopAllCoroutines();
+        //StopAllCoroutines();
 
         if (!append)
         {
@@ -116,5 +120,76 @@ public class BoardUI : MonoBehaviour
         yield return new WaitForSeconds(duration);
         goalDisplay.SetText(currentText);
         temporaryTextActive = false;
+    }
+
+    public void PlayTurnAnim(bool turn)
+    {
+        StopAllCoroutines();
+
+        if (turn)
+        {
+
+            animText.SetText("NAVY'S TURN");
+            animText.color = new UnityEngine.Color(0, 0.03921569f, 0.6666667f, 1);
+        }
+        else
+        {
+            animText.SetText("PIRATE'S TURN");
+            animText.color = new UnityEngine.Color(0.4588234f, 0f, 0f, 1f);
+        }
+        StartCoroutine(AnimBackground());
+        StartCoroutine(AnimText());
+    }
+
+    IEnumerator AnimBackground()
+    {
+        float timeElapsed = 0;
+        float startHeight = animBackground.GetComponent<RectTransform>().rect.height;
+
+        while (timeElapsed < 0.25f)
+        {
+            float val = Mathf.SmoothStep(startHeight, 250, timeElapsed / 0.25f);
+            animBackground.GetComponent<RectTransform>().sizeDelta = new Vector2(2000, val);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        animBackground.GetComponent<RectTransform>().sizeDelta = new Vector2(2000, 250);
+        yield return new WaitForSeconds(0.5f);
+
+        timeElapsed = 0;
+        while(timeElapsed < 0.25f)
+        {
+            float val = Mathf.SmoothStep(250, 0, timeElapsed / 0.25f);
+            animBackground.GetComponent<RectTransform>().sizeDelta = new Vector2(2000, val);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    IEnumerator AnimText()
+    {
+        float timeElapsed = 0;
+        float red = animText.color.r;
+        float green = animText.color.g;
+        float blue = animText.color.b;
+
+        while (timeElapsed < 0.25f)
+        {
+            float val = Mathf.Lerp(0, 1, timeElapsed / 0.25f);
+            animText.color = new UnityEngine.Color(red, green, blue, val);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        animText.color = new UnityEngine.Color(red, green, blue, 1);
+        yield return new WaitForSeconds(0.5f);
+
+        timeElapsed = 0;
+        while (timeElapsed < 0.25f)
+        {
+            float val = Mathf.Lerp(1, 0, timeElapsed / 0.25f);
+            animText.color = new UnityEngine.Color(red, green, blue, val);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
     }
 }
