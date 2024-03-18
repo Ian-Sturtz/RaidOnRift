@@ -18,6 +18,15 @@ public class StoryUI : MonoBehaviour
     public GameObject background;
     public TMP_Text pieceName;
     public TMP_Text pieceDesc;
+    public Image character;
+
+    public Sprite admiral;
+    public Sprite tactician;
+    public Sprite navyCrew;
+    public Sprite navyGunner;
+
+    public Sprite pirateCrew;
+    public Sprite pirateGunner;
 
     // Start is called before the first frame update
     void Start()
@@ -42,14 +51,17 @@ public class StoryUI : MonoBehaviour
                 case "Admiral":
                     pieceName.SetText("THE ADMIRAL");
                     pieceDesc.SetText("Admiral lore here.");
+                    character.sprite = admiral;
                     break;
                 case "Tactician":
                     pieceName.SetText("THE TACTICIAN");
-                    pieceDesc.SetText("In the distant future, the iron reach of the Imperial Navy spans far across the cosmos. Powered by the energy we harvest from Galactic Rifts, refined into pure crystals we call “the ore”, our weapons are charged and our cloning devices are fueled, letting us clone our ranks with ease. But great power attracts great threats. The fearsome and terrible Space Pirates now raid our refineries, seeking to steal our Ore for their own, putting a stop to our reign and letting their villany take hold in our ever peaceful empire.");
+                    pieceDesc.SetText("In the distant future, the iron reach of the Imperial Navy spans far across the cosmos. Powered by the energy we harvest from Galactic Rifts, refined into pure crystals we call the ore, our weapons are charged and our cloning devices are fueled, letting us clone our ranks with ease. But great power attracts great threats. The fearsome and terrible Space Pirates now raid our refineries, seeking to steal our Ore for their own, putting a stop to our reign and letting their villany take hold in our ever peaceful empire.");
+                    character.sprite = tactician;
                     break;
                 case "Navy Mate":
                     pieceName.SetText("THE CREWMATE");
                     pieceDesc.SetText("Navy Mate lore here.");
+                    character.sprite = navyCrew;
                     break;
                 case "Navy Quartermaster":
                     pieceName.SetText("THE QUARTERMASTER");
@@ -74,6 +86,7 @@ public class StoryUI : MonoBehaviour
                 case "Navy Gunner":
                     pieceName.SetText("THE GUNNER");
                     pieceDesc.SetText("Navy gunner lore here.");
+                    character.sprite = navyGunner;
                     break;
 
                 case "Captain":
@@ -87,6 +100,7 @@ public class StoryUI : MonoBehaviour
                 case "Pirate Mate":
                     pieceName.SetText("THE CREWMATE");
                     pieceDesc.SetText("Pirate Mate lore here.");
+                    character.sprite = pirateCrew;
                     break;
                 case "Pirate Quartermaster":
                     pieceName.SetText("THE QUARTERMASTER");
@@ -111,6 +125,7 @@ public class StoryUI : MonoBehaviour
                 case "Pirate Gunner":
                     pieceName.SetText("THE GUNNER");
                     pieceDesc.SetText("Pirate gunner lore here.");
+                    character.sprite = pirateGunner;
                     break;
             }
             Vector2 topPos = bottomPos + Vector2.up * topHeight;

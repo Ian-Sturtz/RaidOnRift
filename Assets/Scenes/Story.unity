@@ -1115,8 +1115,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 0.28235295, g: 0.8, b: 0.25490198, a: 1}
+    m_PressedColor: {r: 0.28235295, g: 0.54901963, b: 0.25490198, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -1752,8 +1752,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 18
+  m_fontSizeBase: 18
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3667,7 +3667,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -379, y: -9}
-  m_SizeDelta: {x: 534.3326, y: 888.7669}
+  m_SizeDelta: {x: 686.3789, y: 888}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1764218814
 MonoBehaviour:
@@ -3689,7 +3689,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6d6ee5c34f6d66f4c89d58a3046fd307, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d890ea08419e2a149821e5c77ce382e4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4668,6 +4668,13 @@ MonoBehaviour:
   background: {fileID: 1893111418}
   pieceName: {fileID: 1814891185}
   pieceDesc: {fileID: 17668371}
+  character: {fileID: 1764218814}
+  admiral: {fileID: 21300000, guid: 59d9abdf25b4fc349a7e294156ff9e8c, type: 3}
+  tactician: {fileID: 21300000, guid: d890ea08419e2a149821e5c77ce382e4, type: 3}
+  navyCrew: {fileID: 21300000, guid: f0a7043b24d2216448aa07f1e37a27e8, type: 3}
+  navyGunner: {fileID: 21300000, guid: ea29794674e6847438f1185e66084ef2, type: 3}
+  pirateCrew: {fileID: 21300000, guid: f9434bc5dd8e9b84bbef9a9d2b0aba03, type: 3}
+  pirateGunner: {fileID: 21300000, guid: 3b52ff33b7e959f4eace9684b2b35f78, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
