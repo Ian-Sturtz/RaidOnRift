@@ -50,12 +50,12 @@ public class StoryUI : MonoBehaviour
             {
                 case "Admiral":
                     pieceName.SetText("THE ADMIRAL");
-                    pieceDesc.SetText("Admiral lore here.");
+                    pieceDesc.SetText("In the distant future, the iron reach of the Imperial Navy spans far across the cosmos. Powered by the energy we harvest from Galactic Rifts, refined into pure crystals we call the ore, our weapons are charged and our cloning devices are fueled, letting us clone our ranks with ease. But great power attracts great threats. The fearsome and terrible Space Pirates now raid our refineries, seeking to steal our Ore for their own, putting a stop to our reign and letting their villany take hold in our ever peaceful empire.");
                     character.sprite = admiral;
                     break;
                 case "Tactician":
                     pieceName.SetText("THE TACTICIAN");
-                    pieceDesc.SetText("In the distant future, the iron reach of the Imperial Navy spans far across the cosmos. Powered by the energy we harvest from Galactic Rifts, refined into pure crystals we call the ore, our weapons are charged and our cloning devices are fueled, letting us clone our ranks with ease. But great power attracts great threats. The fearsome and terrible Space Pirates now raid our refineries, seeking to steal our Ore for their own, putting a stop to our reign and letting their villany take hold in our ever peaceful empire.");
+                    pieceDesc.SetText("The Tactician has the most advanced intellect of any life form in the galaxy, and is capable of using his cunning wit to steal strategies and tactics from the enemy, adapting them into his own ruthless plans for eliminating the opposition.");
                     character.sprite = tactician;
                     break;
                 case "Navy Mate":
@@ -85,7 +85,7 @@ public class StoryUI : MonoBehaviour
                     break;
                 case "Navy Gunner":
                     pieceName.SetText("THE GUNNER");
-                    pieceDesc.SetText("Navy gunner lore here.");
+                    pieceDesc.SetText("The Gunners have cyber-implanted cannons that they can use to keep targets at a distance and blast their way through enemy forces.");
                     character.sprite = navyGunner;
                     break;
 
@@ -95,7 +95,7 @@ public class StoryUI : MonoBehaviour
                     break;
                 case "Corsair":
                     pieceName.SetText("THE CORSAIR");
-                    pieceDesc.SetText("Corsair lore here.");
+                    pieceDesc.SetText("The Corsair is a cunning and agile blademaster, using her wings to glide her around the map with ease, letting her get in close to use her blades like scalpels and surgically remove the enemy.");
                     break;
                 case "Pirate Mate":
                     pieceName.SetText("THE CREWMATE");
