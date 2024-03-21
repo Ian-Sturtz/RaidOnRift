@@ -9,21 +9,29 @@ public class Corsair : Piece
     [SerializeField] private Sprite jumpReady;
     [SerializeField] private Sprite cooldown;
 
-    private GameObject GameBoard;
-    private GameBoard board;
+    [SerializeField] private GameObject GameBoard;
+    [SerializeField] private GameBoard board;
     public bool canJump;
     private bool needsChange = true;
+    private bool pieceSelectionScene = false;
 
     private void Start()
     {
         GameBoard = GameObject.FindGameObjectWithTag("GameBoard");
+
         board = GameBoard.GetComponent<GameBoard>();
+
+        if (board == null)
+        {
+            pieceSelectionScene = true;
+        }
     }
 
     private void Update()
     {
-        if(!board.tacticianSelected)
-            canJump = (board.jumpCooldown == 0);
+        if(!pieceSelectionScene)
+            if(!board.tacticianSelected)
+                canJump = (board.jumpCooldown == 0);
 
         if (canJump)
         {

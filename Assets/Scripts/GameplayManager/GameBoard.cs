@@ -1606,6 +1606,8 @@ public class GameBoard : MonoBehaviour
                 }
             }
         }
+
+        boardUI.PlayTurnAnim(navyTurn);
     }
 
 
@@ -1629,6 +1631,8 @@ public class GameBoard : MonoBehaviour
             {
                 jumpCooldown--;
             }
+            boardUI.PlayTurnAnim(navyTurn);
+        }
 
             orebearerSecondMove = false;
             if (!resetOre)
@@ -1652,4 +1656,4 @@ public class GameBoard : MonoBehaviour
             }
         } 
     }
-}
+
