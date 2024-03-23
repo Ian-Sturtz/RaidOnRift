@@ -61,7 +61,6 @@ public class PieceSelection : MonoBehaviour
 
     [SerializeField] private VideoPlayer navyVideo;
     [SerializeField] private VideoPlayer pirateVideo;
-    [SerializeField] private VideoClip navyRoyal1Clip;
 
     private void Start()
     {
@@ -383,6 +382,7 @@ public class PieceSelection : MonoBehaviour
         {
             topText.SetText("Gunner [" + gunnerPoints + " points]");
             infoText.SetText("Moves one unblocked space in any direction, captures by shooting a piece up to 4 unblocked spaces away in any direction. Cannot capture by replacement and must move after capturing a piece before the Archer can capture another piece.");
+            videoPlayer.clip = videoManager.gunner;
         }
     }
 }

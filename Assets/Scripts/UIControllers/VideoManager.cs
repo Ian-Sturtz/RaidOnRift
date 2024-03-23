@@ -10,6 +10,8 @@ public class VideoManager : MonoBehaviour
     [SerializeField] private VideoClip pirateRoyal1;
     [SerializeField] private VideoClip pirateRoyal2;
 
+    [SerializeField] public VideoClip gunner;
+
     [HideInInspector] public VideoClip royal1;
     [HideInInspector] public VideoClip royal2;
 

@@ -3125,7 +3125,6 @@ MonoBehaviour:
   minPeasants: 5
   navyVideo: {fileID: 1852501863}
   pirateVideo: {fileID: 1364201065}
-  navyRoyal1Clip: {fileID: 32900000, guid: f87d2d366904e37449f38e876a1c47ac, type: 3}
 --- !u!114 &677035669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3138,10 +3137,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252c8e30d275bbf42a760c2a6fe61cec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navyRoyal1: {fileID: 32900000, guid: f87d2d366904e37449f38e876a1c47ac, type: 3}
+  navyRoyal1: {fileID: 32900000, guid: bbfd988d825bdde4bb0d1cc3a21ef441, type: 3}
   navyRoyal2: {fileID: 32900000, guid: 04404465afaa5764e9cebe23d9fa5188, type: 3}
-  pirateRoyal1: {fileID: 0}
-  pirateRoyal2: {fileID: 0}
+  pirateRoyal1: {fileID: 32900000, guid: 9e10f8db7ae932842810545d4e258b96, type: 3}
+  pirateRoyal2: {fileID: 32900000, guid: 2f4239277670f174dbf2843c9f61eab1, type: 3}
+  gunner: {fileID: 32900000, guid: f7e6f3e58b276804b8f344dcfa6166e0, type: 3}
   royal1: {fileID: 0}
   royal2: {fileID: 0}
 --- !u!1 &680376055
@@ -6455,7 +6455,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364201064}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 04404465afaa5764e9cebe23d9fa5188, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 2f4239277670f174dbf2843c9f61eab1, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
