@@ -50,22 +50,22 @@ public class StoryUI : MonoBehaviour
             {
                 case "Admiral":
                     pieceName.SetText("THE ADMIRAL");
-                    pieceDesc.SetText("In the distant future, the iron reach of the Imperial Navy spans far across the cosmos. Powered by the energy we harvest from Galactic Rifts, refined into pure crystals we call the ore, our weapons are charged and our cloning devices are fueled, letting us clone our ranks with ease. But great power attracts great threats. The fearsome and terrible Space Pirates now raid our refineries, seeking to steal our Ore for their own, putting a stop to our reign and letting their villany take hold in our ever peaceful empire.");
+                    pieceDesc.SetText("“They call me fierce. They call me cunning. Above all, they call me relentless.\r\n\nFollowing my monumental victory on the planet Gyzax, I was promoted to admiral and assigned lordship over the Ore refinery on the Rift. Now, as Lord of the Rift, I have supreme access to the entire facility, and can use the knowledge, agility, and skill in battle to maintain dominance over my domain.\r\n\nI am revered by my army but feared by my enemies. I promise defeat to all who challenge my rule.”");
                     character.sprite = admiral;
                     break;
                 case "Tactician":
                     pieceName.SetText("THE TACTICIAN");
-                    pieceDesc.SetText("The Tactician has the most advanced intellect of any life form in the galaxy, and is capable of using his cunning wit to steal strategies and tactics from the enemy, adapting them into his own ruthless plans for eliminating the opposition.");
+                    pieceDesc.SetText("“My intellect is unrivaled, and my stratagems are unyielding.\r\n\nI have served the Imperial Navy for centuries now as chief military strategist. I have flourished under the Admiral since the war on planet Gyzax. I have witnessed a thousand enemies and assimilated tactics from each of them, fusing their styles into my own to form an unconquerable plan to defeat those who oppose me.\r\n\nI am the echo of countless talents, and the strength of many forged into one.”");
                     character.sprite = tactician;
                     break;
                 case "Navy Mate":
                     pieceName.SetText("THE CREWMATE");
-                    pieceDesc.SetText("Navy Mate lore here.");
+                    pieceDesc.SetText("");
                     character.sprite = navyCrew;
                     break;
                 case "Navy Quartermaster":
                     pieceName.SetText("THE QUARTERMASTER");
-                    pieceDesc.SetText("Navy quartermaster lore here.");
+                    pieceDesc.SetText("“The crew is my duty, and I’m never one to shrink away from duty.\n\r\n Since emerging from the cloning device on the Rift, I have been in charge of keeping the ranks in line. I train with the clones, I eat with the clones, and I live with the clones. In the event that the refinery is ever put in harm’s way, it is my honor to lead the charge and advance the cause of the fight. My nimble agility and fierce willpower will inspire the troops to siege on.\n\r\nSquare up those shoulders, raise those heads, and prepare for our victory.”");
                     break;
                 case "Navy Cannon":
                     pieceName.SetText("THE CANNONEER");
