@@ -12,25 +12,39 @@ public class Bar : MonoBehaviour
 
     private Vector3 initialScale; 
 
-   
+
     void Start()
     {
+        a = GameObject.FindGameObjectWithTag("GameBoard").GetComponent<GameBoard>();
         initialScale = bar.transform.localScale; 
         AnimateBar();
     }
+
     public void AnimateBar()
     {
-        LeanTween.scaleX(bar, 1, time).setOnComplete(GameUpdate);
+        LeanTween.scaleX(bar, 0, time).setOnComplete(TimeOut);
     }
-    void GameUpdate()
+
+    public void ResetBar()
     {
-        a = GameObject.FindGameObjectWithTag("GameBoard").GetComponent<GameBoard>();
-        a.NextTurn();
-
-   
+        LeanTween.reset();
         bar.transform.localScale = initialScale;
-
-  
         AnimateBar();
+    }
+
+    private void TimeOut()
+    {
+        a.GameOver(!a.navyTurn);
+    }
+
+    public void pauseTimer()
+    {
+        //if(multiplayer)
+        LeanTween.pause(bar);
+    }
+
+    public void resumeTimer()
+    {
+        LeanTween.resumeAll();
     }
 }

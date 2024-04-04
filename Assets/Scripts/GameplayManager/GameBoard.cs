@@ -30,6 +30,9 @@ public class GameBoard : MonoBehaviour
 
     BoardUI boardUI;
 
+    [SerializeField] private GameObject turnTimerController;
+    [SerializeField] private GameObject turnTimer;
+
     #endregion
 
     #region JailInfo
@@ -116,11 +119,8 @@ public class GameBoard : MonoBehaviour
             {
                 if (checkPiece.hasOre && checkPiece.isNavy)
                 {
-                    gameWon = true;
                     checkPiece.gameWon = true;
-
-                    // Update UI
-                    boardUI.GameWon(true);
+                    GameOver(true);
                 }
             }
 
@@ -130,11 +130,8 @@ public class GameBoard : MonoBehaviour
             {
                 if (checkPiece.hasOre && !checkPiece.isNavy)
                 {
-                    gameWon = true;
                     checkPiece.gameWon = true;
-
-                    // Update UI
-                    boardUI.GameWon(false);
+                    GameOver(false);
                 }
             }
         }
@@ -1470,8 +1467,7 @@ public class GameBoard : MonoBehaviour
 
         if (noLegalMoves)
         {
-            gameWon = true;
-            boardUI.GameWon(!checkingNavy, true);
+            GameOver(!checkingNavy, true);
             Debug.Log("Stalemate!");
             return true;
         }
@@ -1561,6 +1557,11 @@ public class GameBoard : MonoBehaviour
         boardUI.PlayTurnAnim(navyTurn);
     }
 
+    public void GameOver(bool teamWon, bool stalemate = false)
+    {
+        gameWon = true;
+        boardUI.GameWon(teamWon, stalemate);
+    }
 
     // Changes the turn from one player to the next
     public void NextTurn()
@@ -1591,6 +1592,8 @@ public class GameBoard : MonoBehaviour
             }
             boardUI.PlayTurnAnim(navyTurn);
         }
+
+        turnTimerController.GetComponent<Bar>().ResetBar();
 
         stalemate = CheckForStalemate(navyTurn);
 

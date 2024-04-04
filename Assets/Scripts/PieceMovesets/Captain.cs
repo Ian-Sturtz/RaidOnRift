@@ -47,8 +47,6 @@ public class Captain : Piece
 
         moveAssessment[currentX, currentY] = 0;
 
-        Debug.Log(moveAssessment);
-
         return moveAssessment;
     }
 }
