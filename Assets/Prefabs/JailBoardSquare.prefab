@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 90
+  m_SortingOrder: 3
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -149,4 +149,5 @@ MonoBehaviour:
   clickedJailMaterial: {fileID: 2100000, guid: e7ccabd546951604b87b2e3277a96435, type: 2}
   currentPiece: {fileID: 0}
   hasPiece: 0
+  clicked: 0
   interactable: 0

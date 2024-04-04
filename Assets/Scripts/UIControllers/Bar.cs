@@ -6,7 +6,6 @@ using DentedPixel;
 public class Bar : MonoBehaviour
 {
     public GameBoard a;
-
     public GameObject bar;
     public int time;
 
@@ -39,7 +38,7 @@ public class Bar : MonoBehaviour
 
     public void pauseTimer()
     {
-        //if(multiplayer)
+        //if(!multiplayer)
         LeanTween.pause(bar);
     }
 
