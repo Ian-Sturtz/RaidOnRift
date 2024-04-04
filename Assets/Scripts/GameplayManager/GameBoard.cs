@@ -1563,7 +1563,7 @@ public class GameBoard : MonoBehaviour
 
 
     // Changes the turn from one player to the next
-    private void NextTurn()
+    public void NextTurn()
     {
         ResetBoardMaterials(true);
         ResetBoardMaterials(true);  // Just in case
