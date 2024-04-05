@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Networking.Transport;
 using System;
@@ -27,10 +25,14 @@ public class Client : MonoBehaviour
     {
         driver = NetworkDriver.Create();
         NetworkEndpoint endpoint = NetworkEndpoint.Parse(ip, port);
-
+        Debug.Log("Attempting to connect to server at " + endpoint.Address);
         connection = driver.Connect(endpoint);
 
-        Debug.Log("Attempting to connect to server at " + endpoint.Address);
+        if(connection == default(NetworkConnection))
+        {
+            Debug.Log("Connection failed");
+        }
+
         isActive = true;
 
         RegisterToEvent();
@@ -83,9 +85,10 @@ public class Client : MonoBehaviour
     {
         DataStreamReader stream;
         NetworkEvent.Type cmd;
+
         while ((cmd = connection.PopEvent(driver, out stream)) != NetworkEvent.Type.Empty)
         {
-            if (cmd == NetworkEvent.Type.Data)
+            if (cmd == NetworkEvent.Type.Connect)
             {
                 //SendToServer(new NetWelcome());
                 Debug.Log("Connected to server!");
@@ -126,6 +129,7 @@ public class Client : MonoBehaviour
     private void OnKeepAlive(NetMessage nm)
     {
         //Send message back to keep alive
+        Debug.Log("Received keepalive from server");
         SendToServer(nm);
     }
 }

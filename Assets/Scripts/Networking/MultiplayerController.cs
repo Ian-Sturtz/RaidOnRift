@@ -49,4 +49,9 @@ public class MultiplayerController: MonoBehaviour
     {
         client.Shutdown();
     }
+
+    public void DeleteMultiplayerInstance()
+    {
+        Destroy(gameObject);
+    }
 }

@@ -15,7 +15,7 @@ public class Server : MonoBehaviour
     #endregion
 
     public NetworkDriver driver;
-    NativeList<NetworkConnection> connections;
+    [SerializeField] private NativeList<NetworkConnection> connections;
 
     public bool isActive = false;
     private const float keepAliveTickRate = 20f;
@@ -150,7 +150,7 @@ public class Server : MonoBehaviour
         {
             if (connections[i].IsCreated)
             {
-                Debug.Log($"Sending {msg.Code} to client");
+                Debug.Log($"Sending {msg.Code} to : {i}");
                 SendToClient(connections[i], msg);
             }
         }
