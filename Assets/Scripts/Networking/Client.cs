@@ -40,10 +40,15 @@ public class Client : MonoBehaviour
     {
         if (isActive)
         {
+            Debug.Log("Shutting down client now");
             UnregisterToEvent();
             driver.Dispose();
             isActive = false;
             connection = default(NetworkConnection);
+        }
+        else
+        {
+            Debug.Log("Server is already shut down");
         }
     }
 

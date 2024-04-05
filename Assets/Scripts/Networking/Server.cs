@@ -49,9 +49,14 @@ public class Server : MonoBehaviour
     {
         if (isActive)
         {
+            Debug.Log("Shutting down server now");
             driver.Dispose();
             connections.Dispose();
             isActive = false;
+        }
+        else
+        {
+            Debug.Log("Server is already shut down");
         }
     }
 

@@ -29,7 +29,7 @@ public class MultiplayerController: MonoBehaviour
 
     public void OnOnlineHostButton()
     {
-        server.Init(8007);
+        server.Init(8035);
         client.Init("127.0.0.1", 8035);
     }
 
