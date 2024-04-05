@@ -3,12 +3,14 @@ using UnityEngine;
 using Unity.Networking.Transport;
 using System;
 
-namespace Unity.Networking.Transport.Samples
+namespace Unity.Networking.Transport
 {
+
     public class Server : MonoBehaviour
     {
         #region Singleton Implementation
         public static Server Instance { set; get; }
+
         private void Awake()
         {
             Instance = this;
@@ -31,7 +33,7 @@ namespace Unity.Networking.Transport.Samples
             NetworkEndpoint endpoint = NetworkEndpoint.AnyIpv4;
             endpoint.Port = port;
 
-            if(driver.Bind(endpoint) != 0)
+            if (driver.Bind(endpoint) != 0)
             {
                 Debug.Log("Unable to bind to port " + endpoint.Port);
                 return;
@@ -71,15 +73,15 @@ namespace Unity.Networking.Transport.Samples
             //KeepAlive();
 
             driver.ScheduleUpdate().Complete();
-            
+
             Cleanupconnections();
             AcceptNewconnections();
-            UpdateMessgePump();
+            UpdateMessagePump();
         }
 
         private void Cleanupconnections()
         {
-            for (int i = 0; i < connections.length; i++)
+            for (int i = 0; i < connections.Length; i++)
             {
                 if (!connections[i].IsCreated)
                 {
@@ -106,14 +108,43 @@ namespace Unity.Networking.Transport.Samples
             for (int i = 0; i < connections.Length; i++)
             {
                 NetworkEvent.Type cmd;
-                while((cmd = driver.PopEventForConnection(connections[i], out stream)) != NetworkEvent.Type.Empty)
+                while ((cmd = driver.PopEventForConnection(connections[i], out stream)) != NetworkEvent.Type.Empty)
                 {
-                    if(cmd == NetworkEvent.Type.Data)
+                    if (cmd == NetworkEvent.Type.Data)
                     {
-                        // NetUtility.OnData
+                        NetUtility.OnData(stream, connections[i], this);
+                    }
+                    else if (cmd == NetworkEvent.Type.Disconnect)
+                    {
+                        Debug.Log("Client disconnected from server");
+                        connections[i] = default(NetworkConnection);
+                        connectionDropped?.Invoke();
+                        Shutdown();
                     }
                 }
             }
         }
+
+        public void SendToClient(NetworkConnection connection, NetMessage msg)
+        {
+            DataStreamWriter writer;
+            driver.BeginSend(connection, out writer);
+            //msg.Serialize(ref writer);
+            driver.EndSend(writer);
+        }
+
+        public void Broadcast(NetMessage msg)
+        {
+            for (int i = 0; i < connections.Length; i++)
+            {
+                if (connections[i].IsCreated)
+                {
+                    //Debug.Log($"Sending {msg.Code} to client");
+                    SendToClient(connections[i], msg);
+                }
+            }
+        }
+
+
     }
 }
