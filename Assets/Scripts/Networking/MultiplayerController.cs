@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Networking.Transport;
 using TMPro;
 
 public class MultiplayerController: MonoBehaviour
@@ -9,6 +10,9 @@ public class MultiplayerController: MonoBehaviour
     public static MultiplayerController MP_instance;
     public Server server;
     public Client client;
+
+    // What team is the active player
+    public int currentTeam = -1;
 
     private void Awake()
     {
@@ -22,6 +26,8 @@ public class MultiplayerController: MonoBehaviour
         DontDestroyOnLoad(gameObject);
         server = gameObject.GetComponent<Server>();
         client = gameObject.GetComponent<Client>();
+
+        RegisterEvents();
     }
     #endregion
 
@@ -54,4 +60,28 @@ public class MultiplayerController: MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    #region Events
+    private void RegisterEvents()
+    {
+        NetUtility.S_WELCOME += OnWelcomeServer;
+    }
+    private void UnRegisterEvents()
+    {
+
+    }
+
+    // Server
+    private void OnWelcomeServer(NetMessage msg, NetworkConnection cnn)
+    {
+        NetWelcome nw = msg as NetWelcome;
+
+        // Assign them a team randomly
+        // 0 = Navy, 1 = Pirates
+        nw.AssignedTeam = Random.Range(0, 2);
+
+        Server.Instance.SendToClient(cnn, nw);
+    }
+    // Client
+    #endregion
 }
