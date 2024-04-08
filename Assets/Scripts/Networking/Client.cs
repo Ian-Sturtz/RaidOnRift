@@ -90,7 +90,7 @@ public class Client : MonoBehaviour
         {
             if (cmd == NetworkEvent.Type.Connect)
             {
-                //SendToServer(new NetWelcome());
+                SendToServer(new NetWelcome());
                 Debug.Log("Connected to server!");
             }
             else if(cmd == NetworkEvent.Type.Data)
