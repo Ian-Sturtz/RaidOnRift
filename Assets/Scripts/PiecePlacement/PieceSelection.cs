@@ -27,6 +27,10 @@ public class PieceSelection : MonoBehaviour
     private int navyTotal;
     private int pirateTotal;
 
+    [SerializeField] private GameObject FactionSelectMenu;
+    [SerializeField] private GameObject NavySelectMenu;
+    [SerializeField] private GameObject PirateSelectMenu;
+
     [SerializeField] private GameObject navyUI;
     [SerializeField] private GameObject pirateUI;
 
@@ -65,6 +69,22 @@ public class PieceSelection : MonoBehaviour
     private void Start()
     {
         videoManager = this.GetComponent<VideoManager>();
+
+        
+    }
+
+    public void OnNavyChosen()
+    {
+        FactionSelectMenu.SetActive(false);
+        NavySelectMenu.SetActive(true);
+        chosenFaction(true);
+    }
+
+    public void OnPiratesChosen()
+    {
+        FactionSelectMenu.SetActive(false);
+        PirateSelectMenu.SetActive(true);
+        chosenFaction(false);
     }
 
     public void chosenFaction(bool choseNavy)
