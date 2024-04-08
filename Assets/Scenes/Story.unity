@@ -2814,7 +2814,7 @@ GameObject:
   - component: {fileID: 1338783224}
   - component: {fileID: 1338783223}
   m_Layer: 0
-  m_Name: Bomber
+  m_Name: Engineer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2892,7 +2892,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Navy Bomber
+          m_StringArgument: Navy Engineer
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1338783224
@@ -4028,7 +4028,7 @@ GameObject:
   - component: {fileID: 1737425944}
   - component: {fileID: 1737425943}
   m_Layer: 0
-  m_Name: Bomber
+  m_Name: Engineer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4106,7 +4106,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Pirate Bomber
+          m_StringArgument: Pirate Engineer
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1737425944
@@ -5188,8 +5188,20 @@ MonoBehaviour:
   tactician: {fileID: 21300000, guid: d890ea08419e2a149821e5c77ce382e4, type: 3}
   navyCrew: {fileID: 21300000, guid: f0a7043b24d2216448aa07f1e37a27e8, type: 3}
   navyGunner: {fileID: 21300000, guid: ea29794674e6847438f1185e66084ef2, type: 3}
+  navyQuatermaster: {fileID: 21300000, guid: a37a7ab967060a5458bbba5b7749f0c2, type: 3}
+  navyCannon: {fileID: 21300000, guid: 3afeec104259b544da514b4a529563f3, type: 3}
+  navyEngineer: {fileID: 21300000, guid: 4fccb999580a04a41908299c5edb30d9, type: 3}
+  navyNavigator: {fileID: 21300000, guid: 742874ec06024934186de765f7906863, type: 3}
+  navyVanguard: {fileID: 21300000, guid: 696b0c9b842522a4a99a907c0317dfbd, type: 3}
   pirateCrew: {fileID: 21300000, guid: f9434bc5dd8e9b84bbef9a9d2b0aba03, type: 3}
   pirateGunner: {fileID: 21300000, guid: 3b52ff33b7e959f4eace9684b2b35f78, type: 3}
+  Captain: {fileID: 21300000, guid: 4ab3d1da9aa67e3429cbaef9b2831fea, type: 3}
+  Corsair: {fileID: 21300000, guid: 14db3963442f3c74ebd75ffda793f7e7, type: 3}
+  pirateCannon: {fileID: 21300000, guid: a991ecdf74415ac4696a7d96fe395e46, type: 3}
+  pirateEngineer: {fileID: 21300000, guid: 43313441aa1d4eb4f97542eed3b7c2ba, type: 3}
+  pirateNavigator: {fileID: 21300000, guid: a687f1b0855917c47b616e81c6e3237e, type: 3}
+  pirateQuatermaster: {fileID: 21300000, guid: 8d6dba6f08466e24eba6417b419e20df, type: 3}
+  pirateVanguard: {fileID: 21300000, guid: cd13359535fa551469e52817f045bed2, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

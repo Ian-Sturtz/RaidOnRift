@@ -24,9 +24,23 @@ public class StoryUI : MonoBehaviour
     public Sprite tactician;
     public Sprite navyCrew;
     public Sprite navyGunner;
+    public Sprite navyQuatermaster;
+    public Sprite navyCannon;
+    public Sprite navyEngineer;
+    public Sprite navyNavigator;
+    public Sprite navyVanguard;
+    
 
     public Sprite pirateCrew;
     public Sprite pirateGunner;
+    public Sprite Captain;
+    public Sprite Corsair;
+    public Sprite pirateCannon;
+    public Sprite pirateEngineer;
+    public Sprite pirateNavigator;
+    public Sprite pirateQuatermaster;
+    public Sprite pirateVanguard;
+
 
     // Start is called before the first frame update
     void Start()
@@ -66,22 +80,27 @@ public class StoryUI : MonoBehaviour
                 case "Navy Quartermaster":
                     pieceName.SetText("THE QUARTERMASTER");
                     pieceDesc.SetText("“The crew is my duty, and I’m never one to shrink away from duty.\n\r\n Since emerging from the cloning device on the Rift, I have been in charge of keeping the ranks in line. I train with the clones, I eat with the clones, and I live with the clones. In the event that the refinery is ever put in harm’s way, it is my honor to lead the charge and advance the cause of the fight. My nimble agility and fierce willpower will inspire the troops to siege on.\n\r\nSquare up those shoulders, raise those heads, and prepare for our victory.”");
+                    character.sprite = navyQuatermaster;
                     break;
                 case "Navy Cannon":
                     pieceName.SetText("THE CANNONEER");
                     pieceDesc.SetText("Navy cannon lore here.");
+                    character.sprite = navyCannon;
                     break;
-                case "Navy Bomber":
+                case "Navy Engineer":
                     pieceName.SetText("THE ENGINEER");
                     pieceDesc.SetText("Navy engineer lore here.");
+                    character.sprite = navyEngineer;
                     break;
                 case "Navy Vanguard":
                     pieceName.SetText("THE VANGUARD");
                     pieceDesc.SetText("Navy vanguard lore here.");
+                    character.sprite = navyVanguard;
                     break;
                 case "Navy Navigator":
                     pieceName.SetText("THE NAVIGATOR");
                     pieceDesc.SetText("Navy navigator lore here.");
+                    character.sprite = navyNavigator;
                     break;
                 case "Navy Gunner":
                     pieceName.SetText("THE GUNNER");
@@ -92,10 +111,12 @@ public class StoryUI : MonoBehaviour
                 case "Captain":
                     pieceName.SetText("THE CAPTAIN");
                     pieceDesc.SetText("Captain lore here.");
+                    character.sprite = Captain;
                     break;
                 case "Corsair":
                     pieceName.SetText("THE CORSAIR");
                     pieceDesc.SetText("The Corsair is a cunning and agile blademaster, using her wings to glide her around the map with ease, letting her get in close to use her blades like scalpels and surgically remove the enemy.");
+                    character.sprite = Corsair;
                     break;
                 case "Pirate Mate":
                     pieceName.SetText("THE CREWMATE");
@@ -105,22 +126,27 @@ public class StoryUI : MonoBehaviour
                 case "Pirate Quartermaster":
                     pieceName.SetText("THE QUARTERMASTER");
                     pieceDesc.SetText("Pirate quartermaster lore here.");
+                    character.sprite = pirateQuatermaster;
                     break;
                 case "Pirate Cannon":
                     pieceName.SetText("THE CANNONEER");
                     pieceDesc.SetText("Pirate cannon lore here.");
+                    character.sprite = pirateCannon;
                     break;
-                case "Pirate Bomber":
+                case "Pirate Engineer":
                     pieceName.SetText("THE ENGINEER");
                     pieceDesc.SetText("Pirate engineer lore here.");
+                    character.sprite = pirateEngineer;
                     break;
                 case "Pirate Vanguard":
                     pieceName.SetText("THE VANGUARD");
                     pieceDesc.SetText("Pirate vanguard lore here.");
+                    character.sprite = pirateVanguard;
                     break;
                 case "Pirate Navigator":
                     pieceName.SetText("THE NAVIGATOR");
                     pieceDesc.SetText("Pirate navigator lore here.");
+                    character.sprite = pirateNavigator;
                     break;
                 case "Pirate Gunner":
                     pieceName.SetText("THE GUNNER");
