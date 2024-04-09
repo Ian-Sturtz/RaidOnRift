@@ -120,7 +120,7 @@ public class StoryUI : MonoBehaviour
                     break;
                 case "Pirate Mate":
                     pieceName.SetText("THE CREWMATE");
-                    pieceDesc.SetText("In the vast embrace of the cosmos, I find my freedom, a space pirate crewmate charting the unknown with a heart untamed by gravity.\n\n Aboard the starship's deck, I stand as a loyal crewmate, navigating the celestial seas. My life is a tapestry of stars and adventures, bound by camaraderie and the thrill of the unknown. Each planet and asteroid belt brings new challenges and treasures, forging my path in the cosmos. In this boundless frontier, I am a wanderer, a seeker of fortune under the galaxy's watchful eyes.");
+                    pieceDesc.SetText("In the vast embrace of the cosmos, I find my freedom, a crewmate charting the unknown with a heart untamed by gravity.\n\n Aboard the starship's deck, I stand as a loyal crewmate, navigating the celestial seas. My life is a tapestry of stars and adventures, bound by camaraderie and the thrill of the unknown. Each planet and asteroid belt brings new challenges and treasures, forging my path in the cosmos. In this boundless frontier, I am a wanderer, a seeker of fortune under the galaxy's watchful eyes.");
                     character.sprite = pirateCrew;
                     break;
                 case "Pirate Quartermaster":
