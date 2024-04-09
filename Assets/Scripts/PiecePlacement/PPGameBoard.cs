@@ -26,12 +26,19 @@ public class PPGameBoard : MonoBehaviour
     private const int TILE_COUNT_Y = 10;
     private GameObject gameBoard;   // Reference to gameBoard object
 
+    [SerializeField] private GameObject viewBlocker;
+    [SerializeField] private GameObject pirateViewBlockZone;
+    [SerializeField] private GameObject navyViewBlockZone;
+
     private BoardUI boardUI;
     private string defaultText = "Click on a piece to spawn it!";
 
+    [SerializeField] private GameObject PiecePlacerObject;
+    [SerializeField] private PiecePlacement piecePlacer;
     [SerializeField] private bool navyDone = true;
     [SerializeField] private bool pirateDone = true;
     [SerializeField] private bool piecesDone = false;
+    [SerializeField] private bool oreSpawned = false;
 
     #endregion
 
@@ -84,26 +91,58 @@ public class PPGameBoard : MonoBehaviour
         NavyPieces = new Piece[teamSize];
         PiratePieces = new Piece[teamSize];
         IdentifyBoardSquares();
+
+        piecePlacer = PiecePlacerObject.GetComponent<PiecePlacement>();
     }
 
     private void Update()
     {
-        if (navyTurn)
+        // Shifts the view blocker around the board accordingly
+        if (navyTurn && !oreSpawned)
         {
-            navyDone = true;
+            viewBlocker.transform.position = pirateViewBlockZone.transform.position;
         }
-        else
+        else if (!oreSpawned)
         {
-            pirateDone = true;
+            viewBlocker.transform.position = navyViewBlockZone.transform.position;
         }
 
+        // Checks whether each player is done
+        navyDone = true;
+        for (int i = 0; i < 30; i++)
+        {
+            if(jail.navyJailedPieces[i] != null)
+            {
+                navyDone = false;
+            }
+        }
+        
+        pirateDone = true;
+        for (int i = 0; i < 30; i++)
+        {
+            if (jail.pirateJailedPieces[i] != null)
+            {
+                pirateDone = false;
+            }
+        }
+
+        // Shifts turns when done
+        if(navyDone && navyTurn)
+        {
+            NextTurn();
+        }
+        else if(pirateDone && !navyTurn)
+        {
+            NextTurn();
+        }
+
+        // Highlights cells of current team's jail
         if (navyTurn)
         {
             for (int i = 0; i < 30; i++)
             {
                 if (jail.navyJailedPieces[i] != null)
                 {
-                    navyDone = false;
                     if (!squareSelected)
                     {
                         jail.PirateJailCells[i].GetComponent<PPJailCell>().interactable = true;
@@ -117,59 +156,74 @@ public class PPGameBoard : MonoBehaviour
             {
                 if (jail.pirateJailedPieces[i] != null)
                 {
-                    pirateDone = false;
                     if (!squareSelected)
                     {
                         jail.NavyJailCells[i].GetComponent<PPJailCell>().interactable = true;
                     }
                 }
-
             }
         }
 
         // Both teams are done being placed
         if(navyDone && pirateDone && !piecesadded)
         {
-            int totalPieces = 0;
-            piecesDone = true;
-            Debug.Log("Pieces placed");
-
-            for (int y = 0; y < 10; y++)
+            if (!oreSpawned)
             {
-                for (int x = 0; x < 10; x++)
+                viewBlocker.SetActive(false);
+                piecePlacer.SpawnOresAndShields();
+                oreSpawned = true;
+                if (PieceManager.instance.navyFirst)
                 {
-                    PPSquare activeSquare = tiles[x, y].GetComponent<PPSquare>();
-
-                    if (activeSquare.currentPiece != null)
-                    {
-                        Piece activePiece = activeSquare.currentPiece;
-
-                        PieceManager.instance.pieceTypes[totalPieces] = activePiece.type;
-                        PieceManager.instance.factions[totalPieces] = activePiece.isNavy;
-                        PieceManager.instance.pieceCoords[totalPieces, 0] = activePiece.currentX;
-                        PieceManager.instance.pieceCoords[totalPieces, 1] = activePiece.currentY;
-
-                        Debug.Log(PieceManager.instance.pieceTypes[totalPieces] + " " + PieceManager.instance.factions[totalPieces] + " {" + PieceManager.instance.pieceCoords[totalPieces, 0] + "," + PieceManager.instance.pieceCoords[totalPieces, 1] + "}");
-                        totalPieces++;
-                    }
+                    navyTurn = true;
+                }
+                else
+                {
+                    navyTurn = false;
                 }
             }
+            else
+            {
+                int totalPieces = 0;
+                piecesDone = true;
+                Debug.Log("Pieces placed");
 
-            PieceManager.instance.totalPieces = totalPieces;
-            piecesadded = true;
-            SceneManager.LoadScene("Board");
+                for (int y = 0; y < 10; y++)
+                {
+                    for (int x = 0; x < 10; x++)
+                    {
+                        PPSquare activeSquare = tiles[x, y].GetComponent<PPSquare>();
+
+                        if (activeSquare.currentPiece != null)
+                        {
+                            Piece activePiece = activeSquare.currentPiece;
+
+                            PieceManager.instance.pieceTypes[totalPieces] = activePiece.type;
+                            PieceManager.instance.factions[totalPieces] = activePiece.isNavy;
+                            PieceManager.instance.pieceCoords[totalPieces, 0] = activePiece.currentX;
+                            PieceManager.instance.pieceCoords[totalPieces, 1] = activePiece.currentY;
+
+                            Debug.Log(PieceManager.instance.pieceTypes[totalPieces] + " " + PieceManager.instance.factions[totalPieces] + " {" + PieceManager.instance.pieceCoords[totalPieces, 0] + "," + PieceManager.instance.pieceCoords[totalPieces, 1] + "}");
+                            totalPieces++;
+                        }
+                    }
+                }
+
+                PieceManager.instance.totalPieces = totalPieces;
+                piecesadded = true;
+                SceneManager.LoadScene("Board");
+            }
         }
 
         // Navy finished placing their pieces (skip their placement turn)
         else if (navyTurn && navyDone)
         {
-            NextTurn();
+            //NextTurn();
         }
 
         // Pirates finished placing their pieces (skip their placement turn)
         else if(!navyTurn && pirateDone)
         {
-            NextTurn();
+            //NextTurn();
         }
 
         // Mouse click
@@ -266,7 +320,11 @@ public class PPGameBoard : MonoBehaviour
                     tileSelected = null;
                     squareSelected = false;
                     selectedCellIndex = -1;
-                    NextTurn();
+
+                    if (oreSpawned)
+                    {
+                        NextTurn();
+                    }
                 }
             }
         }

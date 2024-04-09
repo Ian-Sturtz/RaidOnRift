@@ -232,6 +232,13 @@ public class PiecePlacement : MonoBehaviour
             jail.InsertAPiece(piece);
             piece.destroyPiece();
         }
+    }
+
+    public void SpawnOresAndShields()
+    {
+        Piece piece;
+
+        Debug.Log("Spawning all remaining pieces");
 
         piece = board.SpawnPiece(PieceType.Ore, true, -1, -1);
         jail.InsertAPiece(piece);
@@ -264,7 +271,5 @@ public class PiecePlacement : MonoBehaviour
         piece = board.SpawnPiece(PieceType.LandMine, false, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
-
-
     }
 }
