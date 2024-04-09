@@ -183,6 +183,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'CREDITS
 
+
+
     Lead Developers:
 
 
@@ -199,54 +201,101 @@ MonoBehaviour:
     developer, UI and UX specialist
 
 
-    Emily Hudson: Senior graphic designer,
-    lead animator
+
+    Senior Developers:
 
 
-    Dylan Wilson: Music designer, SFX designer
+    Emily Hudson:
+    Senior graphic designer, lead animator
 
 
-    Nathan Navarro
-    Griffin: Project Advisor
+    Dylan Wilson: Music designer, SFX
+    designer
 
 
-    Featuring Matthew Dorangriccia as the Tactician
+    Nathan Navarro Griffin: Project Advisor
 
 
 
-    Beta
-    testers:
+    Voice Acting:
+
+
+    Matthew
+    Dorangriccia as the Tactician
+
+
+
+    Beta testers:
 
     Jake Gimenez
 
-    Alec Johnson
+    Alec
+    Johnson
 
     Christian Blasi
 
-    Julia
-    Staniar
+    Julia Staniar
 
     Kellie Crosby-Sturtz
 
-    John Sturtz
+    John
+    Sturtz
 
     Kenn Sturtz
 
-    Kiera
-    Dorangriccia
+    Kiera Dorangriccia
 
     Courtland Morency
 
-    Ben Wood
+    Ben
+    Wood
 
     Jo Marvel
 
-    Charles
-    Madole
+    Charles Madole
 
     Broden McClelland
 
-'
+
+
+    Original
+    Soundtrack by Dylan Wilson:
+
+
+    "Etherial Conquest" - menu theme
+
+    Written
+    and performed by Dylan Wilson
+
+
+    "Raid Alert" - gameplay theme
+
+    Written
+    and performed by Dylan Wilson
+
+
+    "Chess 2 theme" - credits theme
+
+    Written
+    and performed by Dylan Wilson
+
+
+    Special Thanks from the Developers:
+
+
+    From
+    Ian Sturtz:
+
+    Thanks to the friends and family who stood by me and helped
+    while I devoted tons of time and energy into making this project mean something.
+    You guys are the reason why I got through it.
+
+
+    From Ian Pettersen:
+
+
+    From
+    Garrett Slattengren:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
   m_sharedMaterial: {fileID: 2383952268681313545, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
