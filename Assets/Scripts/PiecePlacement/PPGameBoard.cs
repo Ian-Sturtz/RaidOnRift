@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System;
+using Unity.Networking.Transport;
 
 public class PPGameBoard : MonoBehaviour
 {
@@ -13,7 +15,9 @@ public class PPGameBoard : MonoBehaviour
     public bool navyTurn = true;
     public GameObject[,] tiles;     // All game squares
     public Piece[] NavyPieces;      // All Navy game pieces
-    public Piece[] PiratePieces;    // All Pirate game
+    public Piece[] PiratePieces;    // All Pirate game pieces
+
+    public bool playerIsNavy = false;
 
     #endregion
 
@@ -67,12 +71,22 @@ public class PPGameBoard : MonoBehaviour
 
     bool piecesadded = false;
 
-    private void Start  ()
+    private void Awake()
+    {
+        RegisterEvents();
+    }
+
+    private void Start()
     {
         if (PieceManager.instance != null)
             navyTurn = PieceManager.instance.navyFirst;
         else
             navyTurn = true;
+
+        if (PieceManager.instance.onlineMultiplayer)
+        {
+            playerIsNavy = (MultiplayerController.Instance.currentTeam == 0);
+        }
 
         PIECES_ADDED = System.Enum.GetValues(typeof(PieceType)).Length;
 
@@ -100,11 +114,17 @@ public class PPGameBoard : MonoBehaviour
         // Shifts the view blocker around the board accordingly
         if (navyTurn && !oreSpawned)
         {
-            viewBlocker.transform.position = pirateViewBlockZone.transform.position;
+            if(PieceManager.instance.onlineMultiplayer && !playerIsNavy)
+                viewBlocker.transform.position = navyViewBlockZone.transform.position;
+            else
+                viewBlocker.transform.position = pirateViewBlockZone.transform.position;
         }
         else if (!oreSpawned)
         {
-            viewBlocker.transform.position = navyViewBlockZone.transform.position;
+            if (PieceManager.instance.onlineMultiplayer && playerIsNavy)
+                viewBlocker.transform.position = pirateViewBlockZone.transform.position;
+            else
+                viewBlocker.transform.position = navyViewBlockZone.transform.position;
         }
 
         // Checks whether each player is done
@@ -116,7 +136,6 @@ public class PPGameBoard : MonoBehaviour
                 navyDone = false;
             }
         }
-        
         pirateDone = true;
         for (int i = 0; i < 30; i++)
         {
@@ -139,26 +158,40 @@ public class PPGameBoard : MonoBehaviour
         // Highlights cells of current team's jail
         if (navyTurn)
         {
-            for (int i = 0; i < 30; i++)
+            if(PieceManager.instance.onlineMultiplayer && !playerIsNavy)
             {
-                if (jail.navyJailedPieces[i] != null)
+                boardUI.GoalText("Your opponent is placing their pieces...");
+            }
+            else
+            {
+                for (int i = 0; i < 30; i++)
                 {
-                    if (!squareSelected)
+                    if (jail.navyJailedPieces[i] != null)
                     {
-                        jail.PirateJailCells[i].GetComponent<PPJailCell>().interactable = true;
+                        if (!squareSelected)
+                        {
+                            jail.PirateJailCells[i].GetComponent<PPJailCell>().interactable = true;
+                        }
                     }
                 }
             }
         }
         else if (!navyTurn)
         {
-            for (int i = 0; i < 30; i++)
+            if (PieceManager.instance.onlineMultiplayer && playerIsNavy)
             {
-                if (jail.pirateJailedPieces[i] != null)
+                boardUI.GoalText("Your opponent is placing their pieces...");
+            }
+            else
+            {
+                for (int i = 0; i < 30; i++)
                 {
-                    if (!squareSelected)
+                    if (jail.pirateJailedPieces[i] != null)
                     {
-                        jail.NavyJailCells[i].GetComponent<PPJailCell>().interactable = true;
+                        if (!squareSelected)
+                        {
+                            jail.NavyJailCells[i].GetComponent<PPJailCell>().interactable = true;
+                        }
                     }
                 }
             }
@@ -214,18 +247,6 @@ public class PPGameBoard : MonoBehaviour
             }
         }
 
-        // Navy finished placing their pieces (skip their placement turn)
-        else if (navyTurn && navyDone)
-        {
-            //NextTurn();
-        }
-
-        // Pirates finished placing their pieces (skip their placement turn)
-        else if(!navyTurn && pirateDone)
-        {
-            //NextTurn();
-        }
-
         // Mouse click
         if (Input.GetMouseButtonDown(0))
         {
@@ -267,7 +288,7 @@ public class PPGameBoard : MonoBehaviour
                     tileSelected = null;
                     selectedCellIndex = -1;
 
-                    // A legal placement square has been selected (spawn the selected piece there)
+                // A legal placement square has been selected (spawn the selected piece there)
                 } else if (tileSelected.tag == "MoveableSquare")
                 {
                     Vector2Int spawnCoordinates = IdentifyThisBoardSquare(tileSelected);
@@ -301,6 +322,29 @@ public class PPGameBoard : MonoBehaviour
 
                     
                     SpawnPiece(currentPiece.type, currentPiece.isNavy, spawnCoordinates.x, spawnCoordinates.y);
+
+                    if (PieceManager.instance.onlineMultiplayer)
+                    {
+                        Debug.Log("Sending piece position to server");
+                        NetPositionPiece pp = new NetPositionPiece();
+
+                        if (currentPiece.isNavy)
+                        {
+                            pp.teamID = 0;
+                        }
+                        else
+                        {
+                            pp.teamID = 1;
+                        }
+
+                        pp.jailIndex = selectedCellIndex;
+                        pp.targetX = spawnCoordinates.x;
+                        pp.targetY = spawnCoordinates.y;
+
+                        Debug.Log($"ID:{pp.teamID}, index: {pp.jailIndex}: {pp.targetX}, {pp.targetY}");
+
+                        Client.Instance.SendToServer(pp);
+                    }
 
                     ResetBoardMaterials();
                     currentPiece.destroyPiece();
@@ -573,4 +617,71 @@ public class PPGameBoard : MonoBehaviour
         boardUI.UpdateTurn(navyTurn);
         boardUI.GoalText(defaultText);
     }
+
+    #region Events
+    private void RegisterEvents()
+    {
+        NetUtility.S_POSITION_PIECE += OnPositionPieceServer;
+
+        NetUtility.C_POSITION_PIECE += OnPositionPieceClient;
+    }
+
+    private void UnRegisterEvents()
+    {
+        NetUtility.S_POSITION_PIECE -= OnPositionPieceServer;
+
+        NetUtility.C_POSITION_PIECE -= OnPositionPieceClient;
+    }
+
+    // Server
+    private void OnPositionPieceServer(NetMessage msg, NetworkConnection cnn)
+    {
+        NetPositionPiece pp = msg as NetPositionPiece;
+
+        Server.Instance.Broadcast(pp);
+    }
+
+    // Client
+    private void OnPositionPieceClient(NetMessage msg)
+    {
+        NetPositionPiece pp = msg as NetPositionPiece;
+
+        Debug.Log($"{pp.teamID} at index {pp.jailIndex} spawning at {pp.targetX} {pp.targetY}");
+
+        PPJailCell currentCell;
+
+        if ((pp.teamID == 0 && !playerIsNavy) || (pp.teamID == 1 && playerIsNavy))
+        {
+            if (pp.teamID == 0)
+            {
+                currentCell = jail.PirateJailCells[pp.jailIndex].GetComponent<PPJailCell>();
+            }
+            else
+            {
+                currentCell = jail.NavyJailCells[pp.jailIndex].GetComponent<PPJailCell>();
+            }
+
+            Piece currentPiece = currentCell.currentPiece;
+
+            SpawnPiece(currentPiece.type, currentPiece.isNavy, pp.targetX, pp.targetY);
+
+            ResetBoardMaterials();
+
+            if (currentPiece.type == PieceType.Ore || currentPiece.type == PieceType.LandMine)
+                NextTurn();
+
+            currentPiece.destroyPiece();
+            currentCell.resetCell();
+
+            if (pp.teamID == 0)
+            {
+                jail.navyJailedPieces[pp.jailIndex] = null;
+            }
+            else
+            {
+                jail.pirateJailedPieces[pp.jailIndex] = null;
+            }
+        }
+    }
+    #endregion
 }

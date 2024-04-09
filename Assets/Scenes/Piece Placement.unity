@@ -3050,6 +3050,7 @@ MonoBehaviour:
   navyTurn: 1
   NavyPieces: []
   PiratePieces: []
+  playerIsNavy: 0
   tile_size: 1
   tile_size_margins: 1.05
   game_board_size: 10.55
@@ -14585,23 +14586,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onlineMultiplayer: 0
-  navyRoyal1: 0
-  navyRoyal2: 0
-  navyMate: 0
-  navyQuartermaster: 0
-  navyCannon: 0
+  navyRoyal1: 1
+  navyRoyal2: 1
+  navyMate: 3
+  navyQuartermaster: 1
+  navyCannon: 1
   navyBomber: 0
   navyVanguard: 0
   navyNavigator: 0
   navyGunner: 0
-  pirateRoyal1: 0
+  pirateRoyal1: 1
   pirateRoyal2: 0
   pirateMate: 0
-  pirateQuartermaster: 0
+  pirateQuartermaster: 1
   pirateCannon: 0
   pirateBomber: 0
-  pirateVanguard: 0
-  pirateNavigator: 0
+  pirateVanguard: 1
+  pirateNavigator: 1
   pirateGunner: 0
   navyFirst: 0
   pieceTypes: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
