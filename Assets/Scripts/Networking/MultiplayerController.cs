@@ -65,6 +65,12 @@ public class MultiplayerController : MonoBehaviour
         client.Shutdown();
     }
 
+    public void OnGameStartConfirmBack()
+    {
+        OnOnlineHostBack();
+        StopCoroutine(OnGameStart());
+    }
+
     IEnumerator OnGameStart()
     {
         hostMenu.SetActive(false);
@@ -77,8 +83,6 @@ public class MultiplayerController : MonoBehaviour
             startText.text = "The game will begin shortly.\n\nYou are playing as the Space Pirates.";        
 
         yield return new WaitForSeconds(5f);
-
-        //startMenu.SetActive(false);
 
         SceneManager.LoadScene("Piece Selection");
     }
@@ -98,11 +102,13 @@ public class MultiplayerController : MonoBehaviour
         NetUtility.C_START_GAME += OnStartGameClient;
     }
 
-    
-
     private void UnRegisterEvents()
     {
+        NetUtility.S_WELCOME -= OnWelcomeServer;
 
+        NetUtility.C_WELCOME -= OnWelcomeClient;
+
+        NetUtility.C_START_GAME -= OnStartGameClient;
     }
 
     // Server

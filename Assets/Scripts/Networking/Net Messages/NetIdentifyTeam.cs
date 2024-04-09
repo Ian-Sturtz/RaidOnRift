@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class NetIdentifyTeam : NetMessage
 {
-    public int Mate_Count { set; get; }
-    public int Bomber_Count { set; get; }
-    public int Vanguard_Count { set; get; }
-    public int Navigator_Count { set; get; }
-    public int Gunner_Count { set; get; }
-    public int Cannon_Count { set; get; }
-    public int Quartermaster_Count { set; get; }
-    public int Royal2_Count { set; get; }
-    public int Royal1_Count { set; get; }
+    public int teamID { set; get; }         // 0: Navy, 1: Pirates
+    public int totalPoints { set; get; }    // Total points of a team
+    public int Mate_Count { set; get; }     // How many Mates?
+    public int Bomber_Count { set; get; }   // How many Engineers?
+    public int Vanguard_Count { set; get; } // How many Vanguard?
+    public int Navigator_Count { set; get; }// How many Navigators?
+    public int Gunner_Count { set; get; }   // How many Gunners?
+    public int Cannon_Count { set; get; }   // How many Cannons?
+    public int Quartermaster_Count { set; get; }    // How many Quartermasters
+    public int Royal2_Count { set; get; }   // How many Royal 2s?
+    public int Royal1_Count { set; get; }   // How many Royal 1s?
 
 
     public NetIdentifyTeam()
@@ -29,6 +31,8 @@ public class NetIdentifyTeam : NetMessage
     {
         writer.WriteByte((byte)Code);
 
+        writer.WriteInt(teamID);
+        writer.WriteInt(totalPoints);
         writer.WriteInt(Mate_Count);
         writer.WriteInt(Bomber_Count);
         writer.WriteInt(Vanguard_Count);
@@ -41,6 +45,8 @@ public class NetIdentifyTeam : NetMessage
     }
     public override void Deserialize(DataStreamReader reader)
     {
+        teamID = reader.ReadInt();
+        totalPoints = reader.ReadInt();
         Mate_Count = reader.ReadInt();
         Bomber_Count = reader.ReadInt();
         Vanguard_Count = reader.ReadInt();
