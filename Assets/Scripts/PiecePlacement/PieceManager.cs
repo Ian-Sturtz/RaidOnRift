@@ -6,6 +6,8 @@ public class PieceManager : MonoBehaviour
 {
     public static PieceManager instance;
 
+    public bool onlineMultiplayer = false;
+
     public int navyRoyal1;
     public int navyRoyal2;
     public int navyMate;

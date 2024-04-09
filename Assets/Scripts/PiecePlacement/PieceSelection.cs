@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Networking.Transport;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,8 +25,13 @@ public class PieceSelection : MonoBehaviour
 
     private int totalPoints = 5;
 
-    private int navyTotal;
-    private int pirateTotal;
+    [SerializeField] private int navyTotal = 0;
+    [SerializeField] private int pirateTotal = 0;
+
+    [SerializeField] private GameObject FactionSelectMenu;
+    [SerializeField] private GameObject NavySelectMenu;
+    [SerializeField] private GameObject PirateSelectMenu;
+    [SerializeField] private GameObject WaitingForOpponentMenu;
 
     [SerializeField] private GameObject navyUI;
     [SerializeField] private GameObject pirateUI;
@@ -65,6 +71,80 @@ public class PieceSelection : MonoBehaviour
     private void Start()
     {
         videoManager = this.GetComponent<VideoManager>();
+
+        if(MultiplayerController.Instance != null)
+        {
+            PieceManager.instance.onlineMultiplayer = true;
+
+            // Starts a countdown clock of approx 5 minutes
+            StartCoroutine(PieceSelectionTimer());
+
+            if(MultiplayerController.Instance.currentTeam == 0)
+            {
+                OnNavyChosen();
+            }
+            else
+            {
+                OnPiratesChosen();
+            }
+
+            RegisterEvents();
+        }
+    }
+
+    private void Update()
+    {
+        // An online game is running and both teams have confirmed their pieces
+        // It's time to move onto the next scene
+        if(PieceManager.instance.onlineMultiplayer && navyTotal > 0 && pirateTotal > 0)
+        {
+            StopCoroutine(PieceSelectionTimer());
+
+            if (navyTotal < pirateTotal)
+                PieceManager.instance.navyFirst = true;
+            else if (navyTotal > pirateTotal)
+                PieceManager.instance.navyFirst = false;
+            else
+                PieceManager.instance.navyFirst = p1Navy;
+
+            SceneManager.LoadScene("Piece Placement");
+        }
+    }
+
+    // Waits for a certain length of time before dropping the connection
+    IEnumerator PieceSelectionTimer()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            yield return new WaitForSeconds(25f);
+            Debug.Log($"Piece Selection Timer: {25 * (i + 1)} seconds have passed");
+        }
+        
+        // Drop the connection and forfeit the match
+        if(pirateTotal == 0)
+        {
+            Debug.Log("The Pirates didn't finish picking their team");
+        }
+        else
+        {
+            Debug.Log("The Navy didn't finish picking their team");
+        }
+
+        SceneManager.LoadScene("Main Menu");
+    }
+
+    public void OnNavyChosen()
+    {
+        FactionSelectMenu.SetActive(false);
+        NavySelectMenu.SetActive(true);
+        chosenFaction(true);
+    }
+
+    public void OnPiratesChosen()
+    {
+        FactionSelectMenu.SetActive(false);
+        PirateSelectMenu.SetActive(true);
+        chosenFaction(false);
     }
 
     public void chosenFaction(bool choseNavy)
@@ -227,79 +307,108 @@ public class PieceSelection : MonoBehaviour
         displayInfo(parent);
     }
 
-    public void confirmSelection()
+    public void ConfirmSelection()
     {
-        if(navySelecting)
+        if (PieceManager.instance.onlineMultiplayer)
         {
-            PieceManager.instance.navyRoyal1 = royal1;
-            PieceManager.instance.navyRoyal2 = royal2;
-            PieceManager.instance.navyQuartermaster = quartermaster;
-            PieceManager.instance.navyCannon = cannon;
-            PieceManager.instance.navyBomber = bomber;
-            PieceManager.instance.navyVanguard = vanguard;
-            PieceManager.instance.navyNavigator = navigator;
-            PieceManager.instance.navyGunner = gunner;
-            PieceManager.instance.navyMate = mate;
-            navyTotal = totalPoints;
-        }
-        else
-        {
-            PieceManager.instance.pirateRoyal1 = royal1;
-            PieceManager.instance.pirateRoyal2 = royal2;
-            PieceManager.instance.pirateQuartermaster = quartermaster;
-            PieceManager.instance.pirateCannon = cannon;
-            PieceManager.instance.pirateBomber = bomber;
-            PieceManager.instance.pirateVanguard = vanguard;
-            PieceManager.instance.pirateNavigator = navigator;
-            PieceManager.instance.pirateGunner = gunner;
-            PieceManager.instance.pirateMate = mate;
-            pirateTotal = totalPoints;
-        }
+            WaitForOpponent();
 
-        if(navySelecting == p1Navy)
-        {
-            royal1 = 0;
-            royal2 = 0;
-            mate = 5;
-            quartermaster = 0;
-            cannon = 0;
-            bomber = 0;
-            vanguard = 0;
-            navigator = 0;
-            gunner = 0;
+            NetIdentifyTeam idTeam = new NetIdentifyTeam();
 
-            totalPoints = 5;
-
-            navySelecting = !navySelecting;
+            idTeam.totalPoints = totalPoints;
+            idTeam.Mate_Count = mate;
+            idTeam.Bomber_Count = bomber;
+            idTeam.Vanguard_Count = vanguard;
+            idTeam.Navigator_Count = navigator;
+            idTeam.Gunner_Count = gunner;
+            idTeam.Cannon_Count = cannon;
+            idTeam.Quartermaster_Count = quartermaster;
+            idTeam.Royal2_Count = royal2;
+            idTeam.Royal1_Count = royal1;
 
             if (navySelecting)
+                idTeam.teamID = 0;
+            else if (!navySelecting)
             {
-                pointsText = navyPoints;
-                videoPlayer = pirateVideo;
-
-                navyPlayer.SetText("Player 2: Select Crew");
+                idTeam.teamID = 1;
             }
-            else
-            {
-                pointsText = piratePoints;
-                videoPlayer = pirateVideo;
 
-                piratePlayer.SetText("Player 2: Select Crew");
-            }
-            videoManager.Setup(navySelecting);
-
-            navyUI.SetActive(navySelecting);
-            pirateUI.SetActive(!navySelecting);
+            Client.Instance.SendToServer(idTeam);
         }
         else
         {
-            if (navyTotal < pirateTotal)
-                PieceManager.instance.navyFirst = true;
-            else if (navyTotal > pirateTotal)
-                PieceManager.instance.navyFirst = false;
+            if (navySelecting)
+            {
+                PieceManager.instance.navyRoyal1 = royal1;
+                PieceManager.instance.navyRoyal2 = royal2;
+                PieceManager.instance.navyQuartermaster = quartermaster;
+                PieceManager.instance.navyCannon = cannon;
+                PieceManager.instance.navyBomber = bomber;
+                PieceManager.instance.navyVanguard = vanguard;
+                PieceManager.instance.navyNavigator = navigator;
+                PieceManager.instance.navyGunner = gunner;
+                PieceManager.instance.navyMate = mate;
+                navyTotal = totalPoints;
+            }
             else
-                PieceManager.instance.navyFirst = p1Navy;
-            SceneManager.LoadScene("Piece Placement");
+            {
+                PieceManager.instance.pirateRoyal1 = royal1;
+                PieceManager.instance.pirateRoyal2 = royal2;
+                PieceManager.instance.pirateQuartermaster = quartermaster;
+                PieceManager.instance.pirateCannon = cannon;
+                PieceManager.instance.pirateBomber = bomber;
+                PieceManager.instance.pirateVanguard = vanguard;
+                PieceManager.instance.pirateNavigator = navigator;
+                PieceManager.instance.pirateGunner = gunner;
+                PieceManager.instance.pirateMate = mate;
+                pirateTotal = totalPoints;
+            }
+
+            if (navySelecting == p1Navy)
+            {
+                royal1 = 0;
+                royal2 = 0;
+                mate = 5;
+                quartermaster = 0;
+                cannon = 0;
+                bomber = 0;
+                vanguard = 0;
+                navigator = 0;
+                gunner = 0;
+
+                totalPoints = 5;
+
+                navySelecting = !navySelecting;
+
+                if (navySelecting)
+                {
+                    pointsText = navyPoints;
+                    videoPlayer = pirateVideo;
+
+                    navyPlayer.SetText("Player 2: Select Crew");
+                }
+                else
+                {
+                    pointsText = piratePoints;
+                    videoPlayer = pirateVideo;
+
+                    piratePlayer.SetText("Player 2: Select Crew");
+                }
+                videoManager.Setup(navySelecting);
+
+                navyUI.SetActive(navySelecting);
+                pirateUI.SetActive(!navySelecting);
+            }
+            else
+            {
+                if (navyTotal < pirateTotal)
+                    PieceManager.instance.navyFirst = true;
+                else if (navyTotal > pirateTotal)
+                    PieceManager.instance.navyFirst = false;
+                else
+                    PieceManager.instance.navyFirst = p1Navy;
+                SceneManager.LoadScene("Piece Placement");
+            }
         }
     }
 
@@ -385,4 +494,87 @@ public class PieceSelection : MonoBehaviour
             videoPlayer.clip = videoManager.gunner;
         }
     }
+
+    public void WaitForOpponent()
+    {
+        if (PirateSelectMenu.activeInHierarchy)
+            PirateSelectMenu.SetActive(false);
+        if(NavySelectMenu.activeInHierarchy)
+            NavySelectMenu.SetActive(false);
+
+        WaitingForOpponentMenu.SetActive(true);
+    }
+
+    #region Events
+
+    private void RegisterEvents()
+    {
+        NetUtility.S_IDENTIFY_TEAM += OnIdentifyTeamServer;
+
+        NetUtility.C_IDENTIFY_TEAM += OnIdentifyTeamClient;
+    }
+
+    private void UnRegisterEvents()
+    {
+        NetUtility.S_IDENTIFY_TEAM -= OnIdentifyTeamServer;
+
+        NetUtility.C_IDENTIFY_TEAM -= OnIdentifyTeamClient;
+    }
+
+    // Server
+    private void OnIdentifyTeamServer(NetMessage msg, NetworkConnection cnn)
+    {
+        NetIdentifyTeam idTeam = msg as NetIdentifyTeam;
+        
+        Server.Instance.Broadcast(idTeam);
+    }
+
+    // Client
+    private void OnIdentifyTeamClient(NetMessage msg)
+    {
+        NetIdentifyTeam idTeam = msg as NetIdentifyTeam;
+
+        Debug.Log($"Mates: {idTeam.Mate_Count}");
+        Debug.Log($"Engineers: {idTeam.Bomber_Count}");
+        Debug.Log($"Vanguards: {idTeam.Vanguard_Count}");
+        Debug.Log($"Navigators: {idTeam.Navigator_Count}");
+        Debug.Log($"Gunners: {idTeam.Gunner_Count}");
+        Debug.Log($"Cannons: {idTeam.Cannon_Count}");
+        Debug.Log($"Quartermasters: {idTeam.Quartermaster_Count}");
+        Debug.Log($"Royal 2s: {idTeam.Royal2_Count}");
+        Debug.Log($"Royal 1s: {idTeam.Royal1_Count}");
+        Debug.Log($"Total Points: {idTeam.totalPoints}");
+
+        // Message contains the Navy's team and the active player is the Pirates
+        if (idTeam.teamID == 0)
+        {
+            PieceManager.instance.navyMate = idTeam.Mate_Count;
+            PieceManager.instance.navyBomber = idTeam.Bomber_Count;
+            PieceManager.instance.navyVanguard = idTeam.Vanguard_Count;
+            PieceManager.instance.navyNavigator = idTeam.Navigator_Count;
+            PieceManager.instance.navyGunner = idTeam.Gunner_Count;
+            PieceManager.instance.navyCannon = idTeam.Cannon_Count;
+            PieceManager.instance.navyQuartermaster = idTeam.Quartermaster_Count;
+            PieceManager.instance.navyRoyal2 = idTeam.Royal2_Count;
+            PieceManager.instance.navyRoyal1 = idTeam.Royal1_Count;
+
+            navyTotal = idTeam.totalPoints;
+        }
+        // Message contains the Pirate's team and the active player is the Navy
+        else if(idTeam.teamID == 1)
+        {
+            PieceManager.instance.pirateMate = idTeam.Mate_Count;
+            PieceManager.instance.pirateBomber = idTeam.Bomber_Count;
+            PieceManager.instance.pirateVanguard = idTeam.Vanguard_Count;
+            PieceManager.instance.pirateNavigator = idTeam.Navigator_Count;
+            PieceManager.instance.pirateGunner = idTeam.Gunner_Count;
+            PieceManager.instance.pirateCannon = idTeam.Cannon_Count;
+            PieceManager.instance.pirateQuartermaster = idTeam.Quartermaster_Count;
+            PieceManager.instance.pirateRoyal2 = idTeam.Royal2_Count;
+            PieceManager.instance.pirateRoyal1 = idTeam.Royal1_Count;
+
+            pirateTotal = idTeam.totalPoints;
+        }
+    }
+    #endregion
 }
