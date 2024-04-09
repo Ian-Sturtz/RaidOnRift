@@ -517,6 +517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b04717f7e135b46a34ebdc649dcff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onlineMultiplayer: 0
   navyRoyal1: 0
   navyRoyal2: 0
   navyMate: 0
@@ -747,7 +748,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &357039276
 Transform:
   m_ObjectHideFlags: 0
@@ -1437,32 +1438,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 677035668}
         m_TargetAssemblyTypeName: PieceSelection, Assembly-CSharp
-        m_MethodName: chosenFaction
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 212528387}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 539822242}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+        m_MethodName: OnPiratesChosen
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2249,7 +2226,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &539822243
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2361,8 +2338,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 677035668}
         m_TargetAssemblyTypeName: PieceSelection, Assembly-CSharp
-        m_MethodName: chosenFaction
-        m_Mode: 6
+        m_MethodName: OnNavyChosen
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2370,30 +2347,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 357039275}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 539822242}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &544341994
 MonoBehaviour:
@@ -3101,6 +3054,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4edf9487c03cdb49a61134ae9104f68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FactionSelectMenu: {fileID: 539822242}
+  NavySelectMenu: {fileID: 357039275}
+  PirateSelectMenu: {fileID: 212528387}
   navyUI: {fileID: 357039275}
   pirateUI: {fileID: 212528387}
   navyPoints: {fileID: 979158241}

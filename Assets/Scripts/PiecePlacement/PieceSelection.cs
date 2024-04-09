@@ -70,7 +70,19 @@ public class PieceSelection : MonoBehaviour
     {
         videoManager = this.GetComponent<VideoManager>();
 
-        
+        if(MultiplayerController.Instance != null)
+        {
+            PieceManager.instance.onlineMultiplayer = true;
+
+            if(MultiplayerController.Instance.currentTeam == 0)
+            {
+                OnNavyChosen();
+            }
+            else
+            {
+                OnPiratesChosen();
+            }
+        }
     }
 
     public void OnNavyChosen()

@@ -37,8 +37,10 @@ public class MultiplayerController : MonoBehaviour
     [SerializeField] private TMP_Text startText;
 
     [SerializeField] private TMP_InputField addressInput;
-    public int playerCount = -1;    // Used only for server interactions
-    public int currentTeam = -1;    // What team has the user been assigned
+    // Used only for server interactions
+    public int playerCount = -1;
+    // What team has the user been assigned, 0: Navy, 1: Pirates
+    public int currentTeam = -1;    
 
     public void OnOnlineHostButton()
     {
