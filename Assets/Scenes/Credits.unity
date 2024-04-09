@@ -187,70 +187,62 @@ MonoBehaviour:
 
 
     Ian Sturtz: Co-creator, co-creative
-    director, beta test director, art director, casting director
+    director, beta test director, art director, casting director, recording operator,
+    project staff director
 
 
-    Ian Pettersen:
-    Co-creator, co-creative director, Senior Programming Director, UX director
+    Ian Pettersen: Co-creator, co-creative director,
+    Senior Programming Director, UX director, HR director
 
 
-    Garrett
-    Slattengren: developer, UI and UX specialist
+    Garrett Slattengren:
+    developer, UI and UX specialist
 
 
-    Gerard Bensa: lead orphan
+    Emily Hudson: Senior graphic designer,
+    lead animator
 
 
-    Emily
-    Hudson: Senior Graphic Designer
+    Dylan Wilson: Music designer, SFX designer
 
 
-    Dylan Wilson: Music designer
+    Nathan Navarro
+    Griffin: Project Advisor
 
 
-    Nathan
-    Navarro Griffin: Project Advisor
-
-
-    Voice Actors:
-
-
-    Matthew Dorangriccia
-    as the Tactician
-
-
-    __________________ as the Corsair
+    Featuring Matthew Dorangriccia as the Tactician
 
 
 
-    Beta testers:
+    Beta
+    testers:
 
-    Jake
-    Gimenez
+    Jake Gimenez
 
     Alec Johnson
 
     Christian Blasi
 
-    Julia Staniar
+    Julia
+    Staniar
 
-    Kellie
-    Crosby-Sturtz
+    Kellie Crosby-Sturtz
 
     John Sturtz
 
     Kenn Sturtz
 
-    Kiera Dorangriccia
+    Kiera
+    Dorangriccia
 
-    Courtland
-    Morency
+    Courtland Morency
 
     Ben Wood
 
     Jo Marvel
 
-    Charles Madole
+    Charles
+    Madole
 
     Broden McClelland
 
@@ -625,7 +617,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -754.30005, y: 520.53906}
+  m_AnchoredPosition: {x: -754.3001, y: 520.53906}
   m_SizeDelta: {x: 3440, y: 2160.0781}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2693931151929891774
