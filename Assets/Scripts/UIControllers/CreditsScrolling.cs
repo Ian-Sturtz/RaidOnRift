@@ -2,46 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 
-
-public class CreditsScript : MonoBehaviour
+public class CreditsScrolling : MonoBehaviour
 {
+    [Range(0, 5)]
+    public float scrollSpeed;
+    [SerializeField] private int MaxCreditHeight;
+    [SerializeField] private RectTransform creditPosition;
+    [SerializeField] private float yPos;
+    [SerializeField] private GameObject AudioSource;
+
+    #region Old Variables
     [SerializeField] private float creditDuration = 5f;
     [SerializeField] private float sceneDuration = 1f;
     [SerializeField] private int sceneCount = 1;
-    [SerializeField] private GameObject AudioSource;
-    [SerializeField] private float audioLength;
     [SerializeField] private int currentScene = 0;
     [SerializeField] private string[] credits = new string[10];
-    [SerializeField] private TMP_Text creditText;
     [SerializeField] private float elapsedTime;
+    #endregion
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        audioLength = AudioSource.GetComponent<AudioSource>().clip.length;
-        creditDuration = audioLength;
-        sceneDuration = creditDuration / sceneCount;
-        StartCoroutine(RollCredits());
+        creditPosition = gameObject.GetComponent<RectTransform>();
+        yPos = creditPosition.anchoredPosition3D.y;
     }
 
     private void Update()
     {
+        Vector3 pos = transform.position;
+
+        Vector3 localVectorUp = transform.TransformDirection(0, 1, 0);
+        pos += localVectorUp * scrollSpeed * Time.deltaTime; 
+        transform.position = pos;
+
         // Skips the credits if any key is pressed
         if (Input.anyKey)
         {
             SceneManager.LoadScene("Main Menu");
         }
-    }
 
-    private void nextScene()
-    {
-        if (currentScene < sceneCount)
+        yPos = creditPosition.anchoredPosition3D.y;
+
+        if (yPos >= MaxCreditHeight)
         {
-            currentScene += 1;
-
-            creditText.SetText(credits[currentScene - 1]);
+            SceneManager.LoadScene("Main Menu");
         }
     }
 
@@ -49,28 +53,29 @@ public class CreditsScript : MonoBehaviour
     {
         float startTime = Time.time;
         float sceneTime = 0f;
-        nextScene();
+
 
         while (creditDuration > 0)
         {
             elapsedTime = 0f;
             elapsedTime = Time.time - startTime;
             startTime = elapsedTime;
-            creditDuration = audioLength - elapsedTime;
             sceneTime += elapsedTime;
 
-            
+
             // Scene has not gone on for long enough
-            if(sceneTime < sceneDuration)
+            if (sceneTime < sceneDuration)
             {
                 yield return new WaitForSeconds(1f);
             }
             else
             {
-                nextScene();
+                SceneManager.LoadScene("Main Menu");
             }
-        }
+            {
+                
+            }
 
-        SceneManager.LoadScene("Main Menu");
-    }
-}
+        }
+    } }
+
