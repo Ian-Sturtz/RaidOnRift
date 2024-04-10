@@ -17,7 +17,6 @@ public class Client : MonoBehaviour
     private NetworkConnection connection;
 
     public bool isActive = false;
-
     public Action connectionDropped;
 
     // Methods

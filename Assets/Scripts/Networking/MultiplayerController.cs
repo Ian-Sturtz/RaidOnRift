@@ -31,6 +31,7 @@ public class MultiplayerController : MonoBehaviour
     #endregion
 
     // UI Menus from the multiplayer lobby
+    [SerializeField] private GameObject lobbyMenu;
     [SerializeField] private GameObject hostMenu;
     [SerializeField] private GameObject joinMenu;
     [SerializeField] private GameObject startMenu;
@@ -58,6 +59,8 @@ public class MultiplayerController : MonoBehaviour
     {
         server.Shutdown();
         client.Shutdown();
+        playerCount = -1;
+        currentTeam = -1;
     }
 
     public void OnOnlineJoinBack()
@@ -65,10 +68,18 @@ public class MultiplayerController : MonoBehaviour
         client.Shutdown();
     }
 
-    public void OnGameStartConfirmBack()
+    public void OnGameStartConfirmBack(bool messageSent = false)
     {
+        if (!messageSent)
+        {
+            NetStartGame sg = new NetStartGame();
+            sg.Start_Game = 0;
+            Client.Instance.SendToServer(sg);
+        }
+        StopAllCoroutines();
         OnOnlineHostBack();
-        StopCoroutine(OnGameStart());
+        startMenu.SetActive(false);
+        lobbyMenu.SetActive(true);
     }
 
     IEnumerator OnGameStart()
@@ -96,6 +107,8 @@ public class MultiplayerController : MonoBehaviour
     private void RegisterEvents()
     {
         NetUtility.S_WELCOME += OnWelcomeServer;
+
+        NetUtility.S_START_GAME += OnStartGameServer;
 
         NetUtility.C_WELCOME += OnWelcomeClient;
 
@@ -137,10 +150,17 @@ public class MultiplayerController : MonoBehaviour
         if(playerCount == 1)
         {
             Debug.Log("Server broadcast startgame msg");
-            Server.Instance.Broadcast(new NetStartGame());
+            NetStartGame sg = new NetStartGame();
+            sg.Start_Game = 1;
+            Server.Instance.Broadcast(sg);
         }
     }
     
+    private void OnStartGameServer(NetMessage msg, NetworkConnection cnn)
+    {
+        Server.Instance.Broadcast(msg);
+    }
+
     // Client
     private void OnWelcomeClient(NetMessage msg)
     {
@@ -154,9 +174,20 @@ public class MultiplayerController : MonoBehaviour
     
     private void OnStartGameClient(NetMessage msg)
     {
-        Debug.Log("Starting the game");
-        // Runs the start sequence
-        StartCoroutine(OnGameStart());
+        NetStartGame sg = msg as NetStartGame;
+
+        if(sg.Start_Game == 1)
+        {
+            Debug.Log("Starting the game");
+            // Runs the start sequence
+            StartCoroutine(OnGameStart());
+        }
+        else
+        {
+            Debug.Log("Game Canceled");
+            // Stops the start sequence and returns to game menu
+            OnGameStartConfirmBack(true);
+        }
     }
     #endregion
 }

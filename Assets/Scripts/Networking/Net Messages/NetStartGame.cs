@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class NetStartGame : NetMessage
 {
+    public int Start_Game { set; get; }
+
     public NetStartGame()
     {
         Code = OpCode.START_GAME;
@@ -17,10 +19,11 @@ public class NetStartGame : NetMessage
     public override void Serialize(ref DataStreamWriter writer)
     {
         writer.WriteByte((byte)Code);
+        writer.WriteInt(Start_Game);
     }
     public override void Deserialize(DataStreamReader reader)
     {
-
+        Start_Game = reader.ReadInt();
     }
 
     public override void ReceivedOnClient()

@@ -13,6 +13,8 @@ public class PieceSelection : MonoBehaviour
     private bool p1Navy;
     private bool navySelecting;
 
+    #region Piece Tally
+    
     private int royal1 = 0;
     private int royal2 = 0;
     private int mate = 5;
@@ -27,12 +29,29 @@ public class PieceSelection : MonoBehaviour
 
     [SerializeField] private int navyTotal = 0;
     [SerializeField] private int pirateTotal = 0;
+    
+    #endregion
+
+    #region PS Menus
 
     [SerializeField] private GameObject FactionSelectMenu;
     [SerializeField] private GameObject NavySelectMenu;
     [SerializeField] private GameObject PirateSelectMenu;
     [SerializeField] private GameObject WaitingForOpponentMenu;
 
+    #endregion
+
+    #region PS Timer
+    [SerializeField] private GameObject Timer;
+    [SerializeField] private TMP_Text CountdownClock;
+    [SerializeField] private float timeRemaining = 75f;
+    [SerializeField] private Color clockTimer;
+    [SerializeField] private Color panicTimer;
+    bool timerIsRunning = false;
+    #endregion
+
+    #region UI
+    
     [SerializeField] private GameObject navyUI;
     [SerializeField] private GameObject pirateUI;
 
@@ -42,13 +61,18 @@ public class PieceSelection : MonoBehaviour
     private TMP_Text pointsText;
     private VideoPlayer videoPlayer;
     private VideoManager videoManager;
-
+    
     [SerializeField] private TMP_Text navyPlayer;
     [SerializeField] private TMP_Text piratePlayer;
 
     [SerializeField] private TMP_Text navyInfoText;
     [SerializeField] private TMP_Text pirateInfoText;
+    
+    [SerializeField] private VideoPlayer navyVideo;
+    [SerializeField] private VideoPlayer pirateVideo;
+    #endregion
 
+    #region Point Values/Info
     [SerializeField] private int royal1Points = 22;
     [SerializeField] private int royal2Points = 16;
     [SerializeField] private int matePoints = 1;
@@ -64,9 +88,8 @@ public class PieceSelection : MonoBehaviour
     [SerializeField] private int maxArmy = 2;
     [SerializeField] private int maxPeasants = 10;
     [SerializeField] private int minPeasants = 5;
+    #endregion
 
-    [SerializeField] private VideoPlayer navyVideo;
-    [SerializeField] private VideoPlayer pirateVideo;
 
     private void Start()
     {
@@ -94,6 +117,11 @@ public class PieceSelection : MonoBehaviour
 
     private void Update()
     {
+        if (timerIsRunning)
+            Timer.SetActive(true);
+        else
+            Timer.SetActive(false);
+
         // An online game is running and both teams have confirmed their pieces
         // It's time to move onto the next scene
         if(PieceManager.instance.onlineMultiplayer && navyTotal > 0 && pirateTotal > 0)
@@ -114,23 +142,34 @@ public class PieceSelection : MonoBehaviour
     // Waits for a certain length of time before dropping the connection
     IEnumerator PieceSelectionTimer()
     {
-        for (int i = 0; i < 4; i++)
-        {
-            yield return new WaitForSeconds(25f);
-            Debug.Log($"Piece Selection Timer: {25 * (i + 1)} seconds have passed");
-        }
-        
-        // Drop the connection and forfeit the match
-        if(pirateTotal == 0)
-        {
-            Debug.Log("The Pirates didn't finish picking their team");
-        }
-        else
-        {
-            Debug.Log("The Navy didn't finish picking their team");
-        }
+        timerIsRunning = true;
 
-        SceneManager.LoadScene("Main Menu");
+        while (timerIsRunning)
+        {
+            if(timeRemaining > 0)
+                timeRemaining -= Time.deltaTime;
+            else
+            {
+                timeRemaining = 0;
+                timerIsRunning = false;
+            }
+
+            displayTimeRemaining();
+            yield return null;
+        }
+    }
+
+    private void displayTimeRemaining()
+    {
+        float minutes = Mathf.FloorToInt(timeRemaining / 60);
+        float seconds = Mathf.FloorToInt(timeRemaining % 60);
+
+        CountdownClock.text = string.Format("{0:0}:{1:00}", minutes, seconds);
+
+        if (minutes < 1)
+            CountdownClock.color = panicTimer;
+        else
+            CountdownClock.color = clockTimer;
     }
 
     public void OnNavyChosen()

@@ -99,6 +99,13 @@ public class MainMenuManager : MonoBehaviour
         SetStartUI();
         ProcessLinks();
         SetStartVolume();
+
+        if(Client.Instance.isActive || Server.Instance.isActive)
+        {
+            Client.Instance.Shutdown();
+            Server.Instance.Shutdown();
+        }
+
         //PrepareResolutions();
     }
 

@@ -49,9 +49,8 @@ public class Server : MonoBehaviour
     {
         if (isActive)
         {
-            Debug.Log("Shutting down server now");
-            driver.Dispose();
             connections.Dispose();
+            driver.Dispose();
             isActive = false;
         }
         else
@@ -155,6 +154,4 @@ public class Server : MonoBehaviour
             }
         }
     }
-
-
 }
