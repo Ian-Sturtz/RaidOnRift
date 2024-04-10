@@ -106,8 +106,10 @@ MonoBehaviour:
   isNavy: 0
   hasCaptured: 0
   hasOre: 0
+  gameWon: 0
   currentX: -1
   currentY: -1
+  flashDelay: 1
 --- !u!1 &4613460638555210790
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,7 +183,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 4
-  m_Sprite: {fileID: 21300000, guid: ade000330d8d90d4080fe1d05ab45868, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0278c6dbb5659c541952090e0d2766c2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

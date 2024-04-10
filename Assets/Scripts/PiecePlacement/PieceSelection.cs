@@ -461,31 +461,37 @@ public class PieceSelection : MonoBehaviour
         {
             topText.SetText("Mate [" + matePoints + " point]");
             infoText.SetText("Moves one square in any direction, but cannot move backwards unless the Mate has captured an enemy piece. Captures by replacement. Can perform Jailbreaks after reaching the opponent’s Royal Zone.");
+            videoPlayer.clip = videoManager.mate;
         }
         if (name == "Select Quartermaster")
         {
             topText.SetText("Quartermaster [" + quartermasterPoints + " points]");
             infoText.SetText("Moves two spaces orthogonally and one space perpendicularly. Jumps over blockers and captures by replacement.");
+            videoPlayer.clip = videoManager.quartermaster;
         }
         if (name == "Select Cannon")
         {
             topText.SetText("Cannon [" + cannonPoints + " points]");
             infoText.SetText("Can move one unblocked space in any direction, captures by jumping any unblocked distance orthogonally and must land on the opposite adjacent square to the captured piece. A Land Mine can be jumped over in this way, but the Land Mine won’t be captured.");
+            videoPlayer.clip = videoManager.cannon;
         }
         if (name == "Select Engineer")
         {
             topText.SetText("Engineer [" + bomberPoints + " points]");
             infoText.SetText("Moves up to two unblocked squares in any direction. The only piece that can capture Land Mines by replacement, but cannot capture any other piece besides the flag. Can return one Land Mine from the Jail Zone to the game board in any open square adjacent to the Miner. Cannot move if a Jail Zone has been returned to the game board this turn.");
+            videoPlayer.clip = videoManager.engineer;
         }
         if (name == "Select Vanguard")
         {
             topText.SetText("Vanguard [" + vanguardPoints + " points]");
             infoText.SetText("Moves one square forward or backward, both orthogonally and diagonally, but can move any unblocked distance sideways. Captures by replacement.");
+            videoPlayer.clip = videoManager.vanguard;
         }
         if (name == "Select Navigator")
         {
             topText.SetText("Navigator [" + navigatorPoints + " points]");
             infoText.SetText("Moves one square sideways, both orthogonally and diagonally, but can move any unblocked distance forwards and backwards.");
+            videoPlayer.clip = videoManager.navigator;
         }
         if (name == "Select Gunner")
         {
