@@ -141,6 +141,8 @@ public class GameBoard : MonoBehaviour
         // The active player has selected a bomber or tactician to use this turn
         if (storedTileSelected != null)
         {
+            boardUI.UpdateSelectedPiece(storedTileSelected.GetComponent<Square>().currentPiece.type, storedTileSelected.GetComponent<Square>().currentPiece.isNavy);
+
             // The active player has selected a bomber to use this turn
             if (storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.Bomber) {
                 bomberSelected = true;
@@ -158,6 +160,8 @@ public class GameBoard : MonoBehaviour
         // The active player hasn't selected a tactician or bomber to use this turn
         else
         {
+            boardUI.HideSelectedPiece();
+
             bomberSelected = false;
             
             // Despawns all pieces out of Tactician inherit cells (if applicable)

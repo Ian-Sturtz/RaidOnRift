@@ -478,7 +478,7 @@ public class PieceSelection : MonoBehaviour
             else
             {
                 topText.SetText("Captain [" + royal1Points + " points]");
-                infoText.SetText("A pirate exclusive crewmate. Moves exactly five squares in any orthogonal direction, and can change direction mid-move. Cannot visit the same square twice in a move. Jumps over blockers, and captures any enemy piece in the fifth square by replacement.");
+                infoText.SetText("A pirate exclusive crewmate. Moves exactly five squares in any orthogonal direction, and can change direction mid-move. Jumps over blockers, and captures any enemy piece in the fifth square by replacement.");
             }
             videoPlayer.clip = videoManager.royal1;
         }
@@ -487,19 +487,19 @@ public class PieceSelection : MonoBehaviour
             if(navySelecting)
             {
                 topText.SetText("Tactician [" + royal2Points + " points]");
-                infoText.SetText("A navy exclusive crewmate. Moves up to two unblocked squares orthogonally, captures by replacement. Can also use the moveset of any enemy piece within whatever zone the Tactician is in (Allied Start Zone, Neutral Zone, or Enemy Start Zone).");
+                infoText.SetText("A navy exclusive crewmate. Moves up to two unblocked squares orthogonally, captures by replacement. Can also use the moveset of any enemy piece within whatever zone the Tactician is in (the 3 rows on each player's side of the board, and the 4 rows in the middle).");
             }
             else
             {
                 topText.SetText("Corsair [" + royal2Points + " points]");
-                infoText.SetText("A pirate exclusive crewmate. Moves one space diagonally, captures by replacement, or can jump to any open square on the board. If the corsair jumps this way, the corsair cannot move on player 2’s following turn.");
+                infoText.SetText("A pirate exclusive crewmate. Moves one space diagonally, captures by replacement, or can jump to any open square on the board. If the corsair jumps this way, the corsair cannot move on the following turn.");
             }
             videoPlayer.clip = videoManager.royal2;
         }
         if (name == "Select Mate")
         {
             topText.SetText("Mate [" + matePoints + " point]");
-            infoText.SetText("Moves one square in any direction, but cannot move backwards unless the Mate has captured an enemy piece. Captures by replacement. Can perform Jailbreaks after reaching the opponent’s Royal Zone.");
+            infoText.SetText("Moves one square in any direction, but cannot move backwards unless the Mate has captured an enemy piece. Captures by replacement."); // Can perform Jailbreaks after reaching the opponent’s End Zone.
             videoPlayer.clip = videoManager.mate;
         }
         if (name == "Select Quartermaster")
@@ -511,13 +511,13 @@ public class PieceSelection : MonoBehaviour
         if (name == "Select Cannon")
         {
             topText.SetText("Cannon [" + cannonPoints + " points]");
-            infoText.SetText("Can move one unblocked space in any direction, captures by jumping any unblocked distance orthogonally and must land on the opposite adjacent square to the captured piece. A Land Mine can be jumped over in this way, but the Land Mine won’t be captured.");
+            infoText.SetText("Can move one unblocked space in any direction, captures by jumping any unblocked distance orthogonally and must land on the opposite adjacent square to the captured piece. An Energy Shield can be jumped over in this way, but it won’t be captured.");
             videoPlayer.clip = videoManager.cannon;
         }
         if (name == "Select Engineer")
         {
             topText.SetText("Engineer [" + bomberPoints + " points]");
-            infoText.SetText("Moves up to two unblocked squares in any direction. The only piece that can capture Land Mines by replacement, but cannot capture any other piece besides the flag. Can return one Land Mine from the Jail Zone to the game board in any open square adjacent to the Miner. Cannot move if a Jail Zone has been returned to the game board this turn.");
+            infoText.SetText("Moves up to two unblocked squares in any direction. The only piece that can capture Energy Shields by replacement, but cannot capture any other piece besides the flag. Can return one Energy Shield from the Jail Zone to the game board in any open square adjacent to the Miner. Cannot move if a Jail Zone has been returned to the game board this turn.");
             videoPlayer.clip = videoManager.engineer;
         }
         if (name == "Select Vanguard")
@@ -535,7 +535,7 @@ public class PieceSelection : MonoBehaviour
         if (name == "Select Gunner")
         {
             topText.SetText("Gunner [" + gunnerPoints + " points]");
-            infoText.SetText("Moves one unblocked space in any direction, captures by shooting a piece up to 4 unblocked spaces away in any direction. Cannot capture by replacement and must move after capturing a piece before the Archer can capture another piece.");
+            infoText.SetText("Moves one unblocked space in any direction, captures by shooting a piece up to 4 unblocked spaces away in any direction. Cannot capture by replacement and must move after capturing a piece before the Gunner can capture another piece.");
             videoPlayer.clip = videoManager.gunner;
         }
     }
