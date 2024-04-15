@@ -43,7 +43,9 @@ public class MultiplayerController : MonoBehaviour
     // Used only for server interactions
     public int playerCount = -1;
     // What team has the user been assigned, 0: Navy, 1: Pirates
-    public int currentTeam = -1;    
+    public int currentTeam = -1;
+
+    public int gameWon = -1;    // 0 for loss, 1 for win
 
     public void OnOnlineHostButton()
     {
@@ -152,6 +154,14 @@ public class MultiplayerController : MonoBehaviour
             // Route them back to Multiplayer Lobby to attempt a reconnect
         if (SceneManager.GetActiveScene().name == "Piece Selection" || SceneManager.GetActiveScene().name == "Piece Placement")
         {
+            SceneManager.LoadScene("Connection Dropped");
+        }
+
+        // Current Scene is the main game board
+        // End the connection and allow the user to view the final game board, including who won
+        if (SceneManager.GetActiveScene().name == "Board")
+        {
+            Debug.Log("Connection ended");
             SceneManager.LoadScene("Connection Dropped");
         }
     }

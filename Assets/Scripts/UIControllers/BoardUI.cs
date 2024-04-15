@@ -36,7 +36,7 @@ public class BoardUI : MonoBehaviour
         if (navyTurn && !gameOver) { 
         
             turnDisplay.SetText("NAVY'S TURN");
-            turnDisplay.color = new UnityEngine.Color(0, 0.03921569f, 0.6666667f, 1);
+            turnDisplay.color = new UnityEngine.Color(0, 0.03921569f, 0.6666667f, 1f);
         }
         else if(!gameOver)
         {

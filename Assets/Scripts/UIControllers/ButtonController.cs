@@ -8,7 +8,12 @@ public class ButtonController : MonoBehaviour
     public void LoadMainMenu()
     {
         if (MultiplayerController.Instance != null)
+        {
+            Client.Instance.Shutdown();
+            Server.Instance.Shutdown();
             SceneManager.LoadScene("Connection Dropped");
+        }
+            
         else
             SceneManager.LoadScene("Main Menu");
     }
@@ -16,6 +21,13 @@ public class ButtonController : MonoBehaviour
     public void QuitGame()
     {
         Debug.Log("Quitting Game");
+        
+        if(MultiplayerController.Instance != null)
+        {
+            Client.Instance.Shutdown();
+            Server.Instance.Shutdown();
+        }
+
         Application.Quit();
     }
 }

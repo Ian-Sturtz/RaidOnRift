@@ -17,6 +17,8 @@ public class GameBoard : MonoBehaviour
     public Piece[] NavyPieces;      // All Navy game pieces
     public Piece[] PiratePieces;    // All Pirate game
 
+    public Bar gameTimer;
+
     #endregion
 
     #region BoardInfo
@@ -111,6 +113,11 @@ public class GameBoard : MonoBehaviour
     private void Update()
     {
         // Check for a game win
+        if (gameTimer.timeOver && !gameWon)
+        {
+            GameOver(!navyTurn);
+        }
+
         for (int i = 0; i < TILE_COUNT_X && !gameWon; i++)
         {
             Piece checkPiece = tiles[i, 0].GetComponent<Square>().currentPiece;

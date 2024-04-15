@@ -19,6 +19,9 @@ public class PPGameBoard : MonoBehaviour
 
     public bool playerIsNavy = false;
 
+    public Bar PlacementTimer;
+    public GameObject timer;
+
     #endregion
 
     #region BoardInfo
@@ -86,6 +89,11 @@ public class PPGameBoard : MonoBehaviour
         if (PieceManager.instance.onlineMultiplayer)
         {
             playerIsNavy = (MultiplayerController.Instance.currentTeam == 0);
+            navyTurn = playerIsNavy;
+        }
+        else
+        {
+            timer.SetActive(false);
         }
 
         PIECES_ADDED = System.Enum.GetValues(typeof(PieceType)).Length;
@@ -107,10 +115,28 @@ public class PPGameBoard : MonoBehaviour
         IdentifyBoardSquares();
 
         piecePlacer = PiecePlacerObject.GetComponent<PiecePlacement>();
+        PlacementTimer.time = 120;
     }
 
     private void Update()
     {
+        // Checks if the timer has run out
+        if (PieceManager.instance.onlineMultiplayer && PlacementTimer.timeOver)
+        {
+            // Player is pirates and it's the navy's turn (game won)
+            if (navyTurn && !playerIsNavy)
+                MultiplayerController.Instance.gameWon = 1;
+            // Player is navy and it's the pirate's turn (game won)
+            else if (!navyTurn && playerIsNavy)
+                MultiplayerController.Instance.gameWon = 1;
+            // Navy turn and player is navy || Pirate turn and player is pirate (game loss)
+            else
+                MultiplayerController.Instance.gameWon = 0;
+
+            // Ends the game
+            MultiplayerController.Instance.ConnectionDropped();
+        }
+
         // Shifts the view blocker around the board accordingly
         if (navyTurn && !oreSpawned)
         {
@@ -155,6 +181,8 @@ public class PPGameBoard : MonoBehaviour
             NextTurn();
         }
 
+        boardUI.UpdateTurn(navyTurn);
+
         // Highlights cells of current team's jail
         if (navyTurn)
         {
@@ -176,6 +204,7 @@ public class PPGameBoard : MonoBehaviour
                 }
             }
         }
+
         else if (!navyTurn)
         {
             if (PieceManager.instance.onlineMultiplayer && playerIsNavy)
@@ -205,14 +234,10 @@ public class PPGameBoard : MonoBehaviour
                 viewBlocker.SetActive(false);
                 piecePlacer.SpawnOresAndShields();
                 oreSpawned = true;
-                if (PieceManager.instance.navyFirst)
-                {
-                    navyTurn = true;
-                }
-                else
-                {
-                    navyTurn = false;
-                }
+
+                navyTurn = PieceManager.instance.navyFirst;
+                PlacementTimer.time = 30;
+                PlacementTimer.ResetBar();
             }
             else
             {
@@ -603,6 +628,8 @@ public class PPGameBoard : MonoBehaviour
     private void NextTurn()
     {
         ResetBoardMaterials(true);
+
+        PlacementTimer.ResetBar();
 
         if (navyTurn)
         {

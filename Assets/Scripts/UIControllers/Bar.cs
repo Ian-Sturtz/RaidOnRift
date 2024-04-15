@@ -2,19 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DentedPixel;
+using TMPro;
 
 public class Bar : MonoBehaviour
 {
-    public GameBoard a;
-    public GameObject bar;
+    [SerializeField] private GameObject bar;
+    [SerializeField] private TMP_Text timerText;
     public int time;
+    public bool timeOver = false;
 
     private Vector3 initialScale; 
 
-
     void Start()
     {
-        a = GameObject.FindGameObjectWithTag("GameBoard").GetComponent<GameBoard>();
+        if(MultiplayerController.Instance != null)
+        {
+            if(MultiplayerController.Instance.currentTeam == 0)
+                timerText.color = new UnityEngine.Color(0, 0.03921569f, 0.6666667f, 1f);
+            else
+                timerText.color = new UnityEngine.Color(0.4588234f, 0f, 0f, 1f);
+        }
+
         initialScale = bar.transform.localScale; 
         AnimateBar();
     }
@@ -33,13 +41,13 @@ public class Bar : MonoBehaviour
 
     private void TimeOut()
     {
-        a.GameOver(!a.navyTurn);
+        timeOver = true;
     }
 
     public void pauseTimer()
     {
-        //if(!multiplayer)
-        LeanTween.pause(bar);
+        if(MultiplayerController.Instance != null)
+            LeanTween.pause(bar);
     }
 
     public void resumeTimer()

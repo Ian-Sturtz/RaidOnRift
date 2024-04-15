@@ -48,6 +48,7 @@ public class PieceSelection : MonoBehaviour
     [SerializeField] private Color clockTimer;
     [SerializeField] private Color panicTimer;
     bool timerIsRunning = false;
+    bool piecesSent = false;
     #endregion
 
     #region UI
@@ -156,6 +157,16 @@ public class PieceSelection : MonoBehaviour
 
             displayTimeRemaining();
             yield return null;
+        }
+
+        if(timeRemaining == 0)
+        {
+            if (piecesSent)
+                MultiplayerController.Instance.gameWon = 1;
+            else
+                MultiplayerController.Instance.gameWon = 0;
+
+            MultiplayerController.Instance.ConnectionDropped();
         }
     }
 
@@ -371,6 +382,7 @@ public class PieceSelection : MonoBehaviour
             {
                 idTeam.teamID = 1;
             }
+            MultiplayerController.Instance.gameWon = 1;
 
             Client.Instance.SendToServer(idTeam);
         }
@@ -446,6 +458,10 @@ public class PieceSelection : MonoBehaviour
                     PieceManager.instance.navyFirst = false;
                 else
                     PieceManager.instance.navyFirst = p1Navy;
+
+                if(MultiplayerController.Instance != null)
+                    MultiplayerController.Instance.gameWon = -1;
+
                 SceneManager.LoadScene("Piece Placement");
             }
         }
@@ -542,6 +558,8 @@ public class PieceSelection : MonoBehaviour
 
     public void WaitForOpponent()
     {
+        piecesSent = true;
+
         if (PirateSelectMenu.activeInHierarchy)
             PirateSelectMenu.SetActive(false);
         if(NavySelectMenu.activeInHierarchy)

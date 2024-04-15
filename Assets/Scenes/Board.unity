@@ -3439,6 +3439,7 @@ MonoBehaviour:
   navyTurn: 1
   NavyPieces: []
   PiratePieces: []
+  gameTimer: {fileID: 519420033}
   tile_size: 1
   tile_size_margins: 1.05
   game_board_size: 10.55
@@ -9768,9 +9769,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6712492bfb840e47ac3e41b5a432386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  a: {fileID: 364305081}
   bar: {fileID: 118975436}
+  timerText: {fileID: 696156987}
   time: 60
+  timeOver: 0
 --- !u!1001 &523828691
 PrefabInstance:
   m_ObjectHideFlags: 0

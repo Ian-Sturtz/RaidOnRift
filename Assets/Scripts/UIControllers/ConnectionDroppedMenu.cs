@@ -1,13 +1,33 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class ConnectionDroppedMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private TMP_Text disconnectMessage;
+    [SerializeField] private bool gameWon;
+
     private void Awake()
     {
-        StopAllCoroutines();
+        MultiplayerController.Instance.StopAllCoroutines();
+
+        if(MultiplayerController.Instance.gameWon == 1)
+        {
+            disconnectMessage.text = "Congratulations! You have won the game!\n\nPlease wait and you will be taken to the main menu...";
+        }
+        else if(MultiplayerController.Instance.gameWon == 0)
+        {
+            disconnectMessage.text = "Too bad! You have lost the game!\n\nPlease wait and you will be taken to the main menu...";
+        }
+        else
+        {
+            disconnectMessage.text = "Your connection has ended.\n\nPlease wait and you will be taken to the main menu...";
+        }
+    }
+
+    private void Start()
+    {
         Server.Instance.Shutdown();
         Client.Instance.Shutdown();
         StartCoroutine(DisplayConnectionDropped());
