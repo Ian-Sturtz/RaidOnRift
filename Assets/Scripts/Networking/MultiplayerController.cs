@@ -47,6 +47,11 @@ public class MultiplayerController : MonoBehaviour
 
     public int gameWon = -1;    // 0 for loss, 1 for win
 
+    private void OnDestroy()
+    {
+        UnRegisterEvents();
+    }
+
     public void OnOnlineHostButton()
     {
         server.Init(8035);

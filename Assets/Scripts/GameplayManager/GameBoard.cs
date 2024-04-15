@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Networking.Transport;
 using UnityEngine;
 
 public class GameBoard : MonoBehaviour
@@ -10,6 +11,7 @@ public class GameBoard : MonoBehaviour
     public int PIECES_ADDED;
 
     // Game State Information
+    [Header("Game State Information")]
     public bool gameWon = false;
     public bool stalemate = false;
     public bool navyTurn = true;
@@ -23,6 +25,7 @@ public class GameBoard : MonoBehaviour
 
     #region BoardInfo
     // Board Information
+    [Header("Board Information")]
     public float tile_size = 1f;
     public float tile_size_margins = 1.05f;
     public float game_board_size = 10.55f;
@@ -32,14 +35,12 @@ public class GameBoard : MonoBehaviour
 
     BoardUI boardUI;
 
-    [SerializeField] private GameObject turnTimerController;
-    [SerializeField] private GameObject turnTimer;
-
     #endregion
 
     #region JailInfo
 
     // Jail State Information
+    [Header("Jail Information")]
     public GameObject JailCells;
     public JailBoard jail;
     public int teamSize = 30;
@@ -48,6 +49,7 @@ public class GameBoard : MonoBehaviour
 
     #region MovementInfo
     // Movement Information
+    [Header("Movement Information")]
     private int[,] moveAssessment;  // All legal moves of a clicked-on piece
     public bool squareSelected = false;
     public GameObject tileSelected;
@@ -56,6 +58,7 @@ public class GameBoard : MonoBehaviour
     #endregion
 
     #region PieceInteractions
+    [Header("Piece Interactions")]
     // For use with bomber interactions
     [SerializeField] private bool bomberSelected = false;
     [SerializeField] private bool landMineSelected = false;
@@ -77,14 +80,26 @@ public class GameBoard : MonoBehaviour
 
     #endregion
 
+    #region GameAudio
+
     [Header("Game Audio clips")]
     [SerializeField] AudioSource movementAudio;
     [SerializeField] AudioSource gunnerAudio;
     [SerializeField] AudioSource gunnerRecharge;
 
+    #endregion
+
+    #region PiecePrefabs
     // Piece prefabs to be spawned in as needed
     [Header("Prefabs and Materials")]
     [SerializeField] public GameObject[] PiecePrefabs;
+    #endregion
+
+    #region Multiplayer
+
+    [SerializeField] private bool playerIsNavy;
+
+    #endregion
 
     private void Start()
     {
@@ -107,7 +122,18 @@ public class GameBoard : MonoBehaviour
         IdentifyBoardSquares();
 
         SpawnAllPieces();
-        
+
+        // Identify Player ID in multiplayer
+        if (PieceManager.instance != null)
+            if(PieceManager.instance.onlineMultiplayer)
+                playerIsNavy = MultiplayerController.Instance.currentTeam == 0;
+
+        RegisterEvents();
+    }
+    
+    private void OnDestroy()
+    {
+        UnRegisterEvents();
     }
 
     private void Update()
@@ -321,8 +347,23 @@ public class GameBoard : MonoBehaviour
                     Square current_square = tileSelected.GetComponent<Square>();
                     if (current_square.currentPiece != null)
                     {
+                        // It's not your turn yet!
+                        if(PieceManager.instance.onlineMultiplayer && navyTurn != playerIsNavy)
+                        {
+                            boardUI.DisplayTempText("It's not your turn yet!", 1.5f);
+                            Debug.Log("It's not your turn!");
+                            Square selectedTile = tileSelected.GetComponent<Square>();
+                            selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
+                        }
+                        else if(PieceManager.instance.onlineMultiplayer && current_square.currentPiece.isNavy != navyTurn)
+                        {
+                            boardUI.DisplayTempText("That's not your piece!", 1.5f);
+                            Debug.Log("Wrong piece selected!");
+                            Square selectedTile = tileSelected.GetComponent<Square>();
+                            selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
+                        }
                         // The wrong team is trying to move
-                        if(current_square.currentPiece.isNavy != navyTurn)
+                        else if(current_square.currentPiece.isNavy != navyTurn)
                         {
                             boardUI.DisplayTempText("It's not your turn yet!", 1.5f);
                             Debug.Log("It's not your turn!");
@@ -372,60 +413,40 @@ public class GameBoard : MonoBehaviour
                 // A square had been previously clicked
                 else
                 {
-                    // A moveable square has been clicked
-                    if (tileSelected.tag == "MoveableSquare")
+                    // A moveable square has been clicked (or the corsair has jumped to an open space)
+                    if (tileSelected.tag == "MoveableSquare" || tileSelected.tag == "CorsairJump")
                     {
-                        movementAudio.Play();
                         Square currentSquare = storedTileSelected.GetComponent<Square>();
-
-                        // Checks if the piece is a Tactician that has moved since mimicking a Gunner
                         Piece currentPiece = currentSquare.currentPiece;
-                        if (currentPiece.type == PieceType.Royal2 && currentPiece.isNavy)
-                        {
-                            tacticianGunnerCapture = false;
-                        }
+                        Square targetSquare = tileSelected.GetComponent<Square>();
 
+                        Vector2Int currentSquareCoords = IdentifyThisBoardSquare(storedTileSelected);
                         Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
-                        if (currentSquare.currentPiece.type == PieceType.Gunner && currentSquare.currentPiece.hasCaptured)
+
+
+                        // Sends move data if online
+                        if (PieceManager.instance.onlineMultiplayer)
                         {
-                            gunnerRecharge.Play();
-                            currentSquare.currentPiece.hasCaptured = false;
+                            Debug.Log("Sending move to server");
+                            NetMovePiece mp = new NetMovePiece();
+
+                            mp.teamID = currentPiece.isNavy ? 0 : 1;
+                            mp.originalX = currentSquareCoords.x;
+                            mp.originalY = currentSquareCoords.y;
+                            mp.targetX = moveCoordinates.x;
+                            mp.targetY = moveCoordinates.y;
+                            mp.corsairJump = tileSelected.tag == "CorsairJump" ? 1 : 0;
+
+                            Debug.Log($"{mp.teamID}: {mp.originalX}{mp.originalY} to {mp.targetX}{mp.targetY}");
+                            if (mp.corsairJump == 1)
+                            {
+                                Debug.Log("Corsair is jumping");
+                            }
+
+                            Client.Instance.SendToServer(mp);
                         }
-                        MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
 
-                        ResetBoardMaterials();
-                        Square selectedTile = tileSelected.GetComponent<Square>();
-                        selectedTile.FlashMaterial(selectedTile.moveableBoardMaterial, 3);
-                        squareSelected = false;
-                        currentSquare.SquareHasBeenClicked = false;
-                        tileSelected = null;
-                        storedTileSelected = null;
-                        NextTurn();
-                    }
-
-                    // The Corsair has jumped to an open board space
-                    else if (tileSelected.tag == "CorsairJump")
-                    {
-                        Square currentSquare = storedTileSelected.GetComponent<Square>();
-
-                        // Corsair jumping requires 2 turns of cooldown before the next jump
-                        if (currentSquare.currentPiece.type == PieceType.Royal2 && !currentSquare.currentPiece.isNavy)
-                            jumpCooldown = 3;
-                        // Tactician inherits a corsair and now has a cooldown
-                        else
-                        {
-                            tacticianCorsairJump = 3;
-                        }
-                        Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
-                        MovePiece(currentSquare.currentPiece, moveCoordinates.x, moveCoordinates.y);
-                        ResetBoardMaterials();
-                        NextTurn();
-                        Square selectedTile = tileSelected.GetComponent<Square>();
-                        selectedTile.FlashMaterial(selectedTile.moveableBoardMaterial, 2);
-                        squareSelected = false;
-                        currentSquare.SquareHasBeenClicked = false;
-                        tileSelected = null;
-                        storedTileSelected = null;
+                        GameplayMovePiece(currentSquare, targetSquare, currentPiece, currentSquareCoords, moveCoordinates, tileSelected.tag == "CorsairJump");
                     }
 
                     else if (tileSelected.tag == "CaptureSquare" || tileSelected.tag == "GunnerTarget")
@@ -853,23 +874,69 @@ public class GameBoard : MonoBehaviour
         }
     }
 
+    private void GameplayMovePiece(Square currentSquare, Square targetSquare, Piece currentPiece, Vector2Int currentSquareCoords, Vector2Int moveCoordinates, bool corsairJump = false)
+    {
+        movementAudio.Play();
+
+        // Corsair jumping (or tactician imitating) requires a cooldown
+        if (corsairJump)
+        {
+            // Corsair jumping requires 2 turns of cooldown before the next jump
+            if (currentPiece.type == PieceType.Royal2 && !currentPiece.isNavy)
+                jumpCooldown = 3;
+            // Tactician inherits a corsair
+            else
+            {
+                tacticianCorsairJump = 3;
+            }
+        }
+        else
+        {
+            // Checks if the piece is a Tactician that has moved since mimicking a Gunner
+            if (currentPiece.type == PieceType.Royal2 && currentPiece.isNavy)
+            {
+                tacticianGunnerCapture = false;
+            }
+
+            if (currentPiece.type == PieceType.Gunner && currentPiece.hasCaptured)
+            {
+                gunnerRecharge.Play();
+                currentPiece.hasCaptured = false;
+            }
+        }
+        
+        MovePiece(currentPiece, moveCoordinates.x, moveCoordinates.y);
+
+        ResetBoardMaterials();
+        targetSquare.FlashMaterial(targetSquare.moveableBoardMaterial, 3);
+        squareSelected = false;
+        currentSquare.SquareHasBeenClicked = false;
+        tileSelected = null;
+        storedTileSelected = null;
+        NextTurn();
+    }
+
     private void IdentifyBoardSquares()
     {
-        string piecename;
-
         for (int x = 1; x <= TILE_COUNT_X; x++)
         {
             for (int y = 1; y <= TILE_COUNT_Y; y++)
             {
-                piecename = "{" + x + "," + y + "}";
-
-                GameObject boardSquare = GameObject.Find(piecename);
+                GameObject boardSquare = FindThisBoardSquare(x, y);
 
                 boardSquare.tag = "GameSquare";
                 
                 tiles[x - 1, y - 1] = boardSquare;
             }
         }
+    }
+
+    private GameObject FindThisBoardSquare(int x, int y)
+    {
+        string piecename = "{" + x + "," + y + "}";
+        GameObject boardSquare = GameObject.Find(piecename);
+
+        return boardSquare;
     }
 
     private void ResetBoardMaterials(bool resetJail = true)
@@ -1586,6 +1653,7 @@ public class GameBoard : MonoBehaviour
         boardUI.GameWon(teamWon, stalemate);
     }
 
+
     // Changes the turn from one player to the next
     public void NextTurn()
     {
@@ -1616,7 +1684,7 @@ public class GameBoard : MonoBehaviour
             boardUI.PlayTurnAnim(navyTurn);
         }
 
-        turnTimerController.GetComponent<Bar>().ResetBar();
+        gameTimer.ResetBar();
 
         stalemate = CheckForStalemate(navyTurn);
 
@@ -1626,4 +1694,53 @@ public class GameBoard : MonoBehaviour
             boardUI.GoalText("Click on a piece to move it!");
         }
     }
+
+    #region Events
+
+    private void RegisterEvents()
+    {
+        NetUtility.S_MOVE_PIECE += OnMovePieceServer;
+
+        NetUtility.C_MOVE_PIECE += OnMovePieceClient;
+    }
+
+    private void UnRegisterEvents()
+    {
+        NetUtility.S_MOVE_PIECE -= OnMovePieceServer;
+
+        NetUtility.C_MOVE_PIECE -= OnMovePieceClient;
+    }
+
+    // Server
+    private void OnMovePieceServer(NetMessage msg, NetworkConnection cnn)
+    {
+        Server.Instance.Broadcast(msg);
+    }
+
+    // Client
+    private void OnMovePieceClient(NetMessage msg)
+    {
+        NetMovePiece mp = msg as NetMovePiece;
+
+        if(mp.teamID == 0 && !playerIsNavy || mp.teamID == 1 && playerIsNavy)
+        {
+            Debug.Log($"{mp.originalX}{mp.originalY} moving to {mp.targetX}{mp.targetY}");
+            if (mp.corsairJump == 1)
+                Debug.Log("Corsair is jumping");
+            GameObject thisTile = FindThisBoardSquare(mp.originalX + 1, mp.originalY + 1);
+            Square thisSquare = thisTile.GetComponent<Square>();
+            Piece thisPiece = thisSquare.currentPiece;
+
+            GameObject targetTile = FindThisBoardSquare(mp.targetX + 1, mp.targetY + 1);
+            Square targetSquare = targetTile.GetComponent<Square>();
+            
+            Debug.Log("Current Square: " + thisSquare + "\nCurrent Piece: " + thisPiece);
+            Vector2Int originalCoords = new Vector2Int(mp.originalX, mp.originalY);
+            Vector2Int moveCoords = new Vector2Int(mp.targetX, mp.targetY);
+
+            GameplayMovePiece(thisSquare, targetSquare, thisPiece, originalCoords, moveCoords, mp.corsairJump == 1);
+        }
+    }
+
+    #endregion
 }

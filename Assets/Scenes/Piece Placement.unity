@@ -14985,7 +14985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b04717f7e135b46a34ebdc649dcff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onlineMultiplayer: 1
+  onlineMultiplayer: 0
   navyRoyal1: 1
   navyRoyal2: 1
   navyMate: 3
@@ -14996,7 +14996,7 @@ MonoBehaviour:
   navyNavigator: 0
   navyGunner: 0
   pirateRoyal1: 1
-  pirateRoyal2: 0
+  pirateRoyal2: 1
   pirateMate: 0
   pirateQuartermaster: 1
   pirateCannon: 0
