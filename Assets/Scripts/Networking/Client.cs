@@ -22,7 +22,12 @@ public class Client : MonoBehaviour
     // Methods
     public void Init(string ip, ushort port)
     {
-        driver = NetworkDriver.Create();
+        // Initializes the driver with a timeout of 25 seconds
+        // Keepalives are sent every 20 seconds
+        var settings = new NetworkSettings();
+        settings.WithNetworkConfigParameters(disconnectTimeoutMS: 25000);
+        driver = NetworkDriver.Create(settings);
+
         NetworkEndpoint endpoint = NetworkEndpoint.Parse(ip, port);
         Debug.Log("Attempting to connect to server at " + endpoint.Address);
         connection = driver.Connect(endpoint);
@@ -43,6 +48,9 @@ public class Client : MonoBehaviour
         {
             Debug.Log("Shutting down client now");
             UnregisterToEvent();
+
+            ClientDisconnect();
+
             driver.Dispose();
             isActive = false;
             connection = default(NetworkConnection);
@@ -51,6 +59,12 @@ public class Client : MonoBehaviour
         {
             Debug.Log("Server is already shut down");
         }
+    }
+
+    public void ClientDisconnect()
+    {
+        connection.Disconnect(driver);
+        driver.ScheduleUpdate(default).Complete();
     }
 
     public void OnDestroy()
@@ -85,24 +99,33 @@ public class Client : MonoBehaviour
         DataStreamReader stream;
         NetworkEvent.Type cmd;
 
-        while ((cmd = connection.PopEvent(driver, out stream)) != NetworkEvent.Type.Empty)
+        try
         {
-            if (cmd == NetworkEvent.Type.Connect)
+            while ((cmd = connection.PopEvent(driver, out stream)) != NetworkEvent.Type.Empty)
             {
-                SendToServer(new NetWelcome());
-                Debug.Log("Connected to server!");
+                if (cmd == NetworkEvent.Type.Connect)
+                {
+                    SendToServer(new NetWelcome());
+                    Debug.Log("Connected to server!");
+                }
+                else if (cmd == NetworkEvent.Type.Data)
+                {
+                    NetUtility.OnData(stream, default(NetworkConnection));
+                }
+                else if (cmd == NetworkEvent.Type.Disconnect)
+                {
+                    Debug.Log("Client got disconnected from server");
+                    connection = default(NetworkConnection);
+                    connectionDropped?.Invoke();
+                    Shutdown();
+                    MultiplayerController.Instance.ConnectionDropped();
+
+                }
             }
-            else if(cmd == NetworkEvent.Type.Data)
-            {
-                NetUtility.OnData(stream, default(NetworkConnection));
-            }
-            else if (cmd == NetworkEvent.Type.Disconnect)
-            {
-                Debug.Log("Client got disconnected from server");
-                connection = default(NetworkConnection);
-                connectionDropped?.Invoke();
-                Shutdown();
-            }
+        }
+        catch (ObjectDisposedException)
+        {
+            Debug.LogError("Attempted to use a disposed network resource.");
         }
     }
 

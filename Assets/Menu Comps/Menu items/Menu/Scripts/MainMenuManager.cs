@@ -100,11 +100,19 @@ public class MainMenuManager : MonoBehaviour
         ProcessLinks();
         SetStartVolume();
 
-        if(Client.Instance.isActive || Server.Instance.isActive)
+        if(Client.Instance != null && Server.Instance != null)
         {
-            Client.Instance.Shutdown();
-            Server.Instance.Shutdown();
+            if(Client.Instance.isActive || Server.Instance.isActive)
+            {
+                Client.Instance.Shutdown();
+                Server.Instance.Shutdown();
+            }
         }
+
+        //if (MultiplayerController.Instance != null && SceneManager.GetActiveScene().name == "Main Menu")
+        //{
+        //    MultiplayerController.Instance.DeleteMultiplayerInstance();
+        //}
 
         //PrepareResolutions();
     }

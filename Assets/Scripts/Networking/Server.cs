@@ -18,15 +18,20 @@ public class Server : MonoBehaviour
     [SerializeField] private NativeList<NetworkConnection> connections;
 
     public bool isActive = false;
-    private const float keepAliveTickRate = 20f;
-    private float lastKeepAlive;
+    private const float keepAliveTickRate = 20f;    // KeepAlives are sent every 20 seconds
+    private float lastKeepAlive;                    // Timeout rate is set to 25 seconds
 
     public Action connectionDropped;
 
     // Methods
     public void Init(ushort port)
     {
-        driver = NetworkDriver.Create();
+        // Initializes the driver with a timeout of 25 seconds
+        // Keepalives are sent every 20 seconds
+        var settings = new NetworkSettings();
+        settings.WithNetworkConfigParameters(disconnectTimeoutMS: 25000);
+        driver = NetworkDriver.Create(settings);
+
         NetworkEndpoint endpoint = NetworkEndpoint.AnyIpv4;
         endpoint.Port = port;
 
@@ -49,6 +54,8 @@ public class Server : MonoBehaviour
     {
         if (isActive)
         {
+            ServerDisconnect();
+
             connections.Dispose();
             driver.Dispose();
             isActive = false;
@@ -57,6 +64,20 @@ public class Server : MonoBehaviour
         {
             Debug.Log("Server is already shut down");
         }
+    }
+
+    public void ServerDisconnect()
+    {
+        for (int i = 0; i < connections.Length; i++)
+        {
+            if (connections[i] != default(NetworkConnection))
+            {
+                connections[i].Disconnect(driver);
+                driver.ScheduleUpdate(default).Complete();
+            }
+        }
+
+        Cleanupconnections();
     }
 
     public void OnDestroy()
@@ -117,21 +138,33 @@ public class Server : MonoBehaviour
 
         for (int i = 0; i < connections.Length; i++)
         {
-            NetworkEvent.Type cmd;
-            while ((cmd = driver.PopEventForConnection(connections[i], out stream)) != NetworkEvent.Type.Empty)
+            if(connections[i] != default(NetworkConnection) && isActive)
             {
-                if (cmd == NetworkEvent.Type.Data)
+                try
                 {
-                    NetUtility.OnData(stream, connections[i], this);
+                    NetworkEvent.Type cmd;
+                    while ((cmd = driver.PopEventForConnection(connections[i], out stream)) != NetworkEvent.Type.Empty)
+                    {
+                        if (cmd == NetworkEvent.Type.Data)
+                        {
+                            NetUtility.OnData(stream, connections[i], this);
+                        }
+                        else if (cmd == NetworkEvent.Type.Disconnect)
+                        {
+                            Debug.Log("Client disconnected from server");
+                            connections[i] = default(NetworkConnection);
+                            connectionDropped?.Invoke();
+                            Shutdown();
+                            MultiplayerController.Instance.ConnectionDropped();
+                        }
+                    }
                 }
-                else if (cmd == NetworkEvent.Type.Disconnect)
+                catch (ObjectDisposedException)
                 {
-                    Debug.Log("Client disconnected from server");
-                    connections[i] = default(NetworkConnection);
-                    connectionDropped?.Invoke();
-                    Shutdown();
+                    Debug.LogError("Attempted to use a disposed network resource.");
                 }
-            }
+                
+            }   
         }
     }
 

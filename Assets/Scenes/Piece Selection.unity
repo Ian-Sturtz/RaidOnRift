@@ -3100,7 +3100,7 @@ MonoBehaviour:
   WaitingForOpponentMenu: {fileID: 194218939}
   Timer: {fileID: 2027925438}
   CountdownClock: {fileID: 1178123243}
-  timeRemaining: 75
+  timeRemaining: 180
   clockTimer: {r: 1, g: 1, b: 1, a: 1}
   panicTimer: {r: 0.78616345, g: 0.07169407, b: 0.07169407, a: 1}
   navyUI: {fileID: 357039275}

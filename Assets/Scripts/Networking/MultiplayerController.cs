@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Networking.Transport;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Text.RegularExpressions;
 
 public class MultiplayerController : MonoBehaviour
 {
@@ -17,12 +18,13 @@ public class MultiplayerController : MonoBehaviour
     {
         if (Instance != null)
         {
-            Destroy(gameObject);
-            return;
+            Destroy(Instance.gameObject);
+            //return;
         }
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
         server = gameObject.GetComponent<Server>();
         client = gameObject.GetComponent<Client>();
 
@@ -52,7 +54,41 @@ public class MultiplayerController : MonoBehaviour
     public void OnOnlineConnectButton()
     {
         Debug.Log("Attempting to connect to " + addressInput.text);
-        client.Init(addressInput.text, 8035);
+
+        if (IsValidIP(addressInput.text))
+        {
+            string inputIP = addressInput.text;
+            client.Init(inputIP, 8035);
+            addressInput.text = $"Connecting to {inputIP}";
+        }
+        else
+        {
+            Debug.Log("Invalid Input");
+            addressInput.text = "";
+        }
+    }
+
+    private bool IsValidIP(string ip)
+    {
+        string pattern = @"^(\d{1,3}\.){3}\d{1,3}$";
+        Regex regex = new Regex(pattern);
+
+        if (regex.IsMatch(ip))
+        {
+            string[] parts = ip.Split('.');
+            foreach (string part in parts)
+            {
+                int intPart = int.Parse(part);
+                if (intPart < 0 || intPart > 255)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     public void OnOnlineHostBack()
@@ -65,6 +101,7 @@ public class MultiplayerController : MonoBehaviour
 
     public void OnOnlineJoinBack()
     {
+        addressInput.text = "";
         client.Shutdown();
     }
 
@@ -78,8 +115,8 @@ public class MultiplayerController : MonoBehaviour
         }
         StopAllCoroutines();
         OnOnlineHostBack();
-        startMenu.SetActive(false);
-        lobbyMenu.SetActive(true);
+
+        SceneManager.LoadScene("Connection Dropped");
     }
 
     IEnumerator OnGameStart()
@@ -98,8 +135,30 @@ public class MultiplayerController : MonoBehaviour
         SceneManager.LoadScene("Piece Selection");
     }
 
+    public void ConnectionDropped()
+    {
+        Debug.Log("Connection has ended, routing user to appropriate menu");
+
+        // Current Scene is Multiplayer Lobby
+        // Inform player that the connection has dropped
+        if(SceneManager.GetActiveScene().name == "Multiplayer Lobby")
+        {
+            SceneManager.LoadScene("Connection Dropped");
+        }
+
+        // Current Scene is Piece Selection or Piece Placement
+        // Route players to Connection Dropped menu
+            // Inform players the connection has dropped
+            // Route them back to Multiplayer Lobby to attempt a reconnect
+        if (SceneManager.GetActiveScene().name == "Piece Selection" || SceneManager.GetActiveScene().name == "Piece Placement")
+        {
+            SceneManager.LoadScene("Connection Dropped");
+        }
+    }
+
     public void DeleteMultiplayerInstance()
     {
+        Instance = null;
         Destroy(gameObject);
     }
 
@@ -180,13 +239,14 @@ public class MultiplayerController : MonoBehaviour
         {
             Debug.Log("Starting the game");
             // Runs the start sequence
-            StartCoroutine(OnGameStart());
+            Instance.StartCoroutine(OnGameStart());
         }
         else
         {
             Debug.Log("Game Canceled");
+            StopAllCoroutines();
             // Stops the start sequence and returns to game menu
-            OnGameStartConfirmBack(true);
+            ConnectionDropped();
         }
     }
     #endregion

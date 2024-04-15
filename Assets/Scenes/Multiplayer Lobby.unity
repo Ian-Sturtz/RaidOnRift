@@ -486,6 +486,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   server: {fileID: 383124362}
   client: {fileID: 383124361}
+  lobbyMenu: {fileID: 2693931153558577195}
   hostMenu: {fileID: 522231051}
   joinMenu: {fileID: 1183018683}
   startMenu: {fileID: 1959670022}
@@ -3145,7 +3146,7 @@ MonoBehaviour:
       - m_Target: {fileID: 383124363}
         m_TargetAssemblyTypeName: MultiplayerController, Assembly-CSharp
         m_MethodName: OnGameStartConfirmBack
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

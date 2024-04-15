@@ -7,7 +7,10 @@ public class ButtonController : MonoBehaviour
 {
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene("Main Menu");
+        if (MultiplayerController.Instance != null)
+            SceneManager.LoadScene("Connection Dropped");
+        else
+            SceneManager.LoadScene("Main Menu");
     }
 
     public void QuitGame()
