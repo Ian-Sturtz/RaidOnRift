@@ -483,6 +483,10 @@ public class GameBoard : MonoBehaviour
                         {
                             MovePiece(currentPiece, moveCoordinates.x, moveCoordinates.y);
                         }
+                        else
+                        {
+                            AnimGun(currentPiece, moveCoordinates.x, moveCoordinates.y);
+                        }
                         CurrentSquare.SquareHasBeenClicked = false;
                         targetSquare.FlashMaterial(targetSquare.clickedBoardMaterial, 2);
 
@@ -985,6 +989,14 @@ public class GameBoard : MonoBehaviour
         {
             piece.transform.position = targetPosition;
         }
+    }
+
+    public void AnimGun(Piece piece, int x, int y)
+    {
+        Vector3 startPosition = piece.transform.position;
+        Vector3 targetPosition = tiles[x, y].transform.position;
+        bool isNavy = piece.isNavy;
+        StartCoroutine(boardUI.AnimGunner(startPosition, targetPosition, isNavy));
     }
 
     IEnumerator LerpPosition(Piece piece, Vector3 targetPosition, float duration = 0.1f)
