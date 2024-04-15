@@ -11,7 +11,8 @@ public enum OpCode
     IDENTIFY_TEAM = 4,
     POSITION_PIECE = 5,
     MOVE_PIECE = 6,
-    REMATCH = 7
+    GAME_WON = 7,
+    REMATCH = 8
 }
 
 public static class NetUtility
@@ -28,6 +29,7 @@ public static class NetUtility
             case OpCode.IDENTIFY_TEAM: msg = new NetIdentifyTeam(stream); break;
             case OpCode.POSITION_PIECE: msg = new NetPositionPiece(stream); break;
             case OpCode.MOVE_PIECE: msg = new NetMovePiece(stream); break;
+            case OpCode.GAME_WON: msg = new NetGameWon(stream); break;
             //case OpCode.REMATCH: msg = new NetRematch(stream); break;
 
             default:
@@ -52,6 +54,7 @@ public static class NetUtility
     public static Action<NetMessage> C_IDENTIFY_TEAM;
     public static Action<NetMessage> C_POSITION_PIECE;
     public static Action<NetMessage> C_MOVE_PIECE;
+    public static Action<NetMessage> C_GAME_WON;
     public static Action<NetMessage> C_REMATCH;
 
     public static Action<NetMessage, NetworkConnection> S_KEEP_ALIVE;
@@ -60,6 +63,7 @@ public static class NetUtility
     public static Action<NetMessage, NetworkConnection> S_IDENTIFY_TEAM;
     public static Action<NetMessage, NetworkConnection> S_POSITION_PIECE;
     public static Action<NetMessage, NetworkConnection> S_MOVE_PIECE;
+    public static Action<NetMessage, NetworkConnection> S_GAME_WON;
     public static Action<NetMessage, NetworkConnection> S_REMATCH;
 
 }

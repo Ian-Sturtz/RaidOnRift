@@ -96,7 +96,7 @@ public class PPGameBoard : MonoBehaviour
             timer.SetActive(false);
         }
 
-        PIECES_ADDED = System.Enum.GetValues(typeof(PieceType)).Length;
+        PIECES_ADDED = Enum.GetValues(typeof(PieceType)).Length;
 
         //Initialize the game board and all variables
         gameBoard = GameObject.FindGameObjectWithTag("GameBoard");

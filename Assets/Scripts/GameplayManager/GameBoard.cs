@@ -1653,6 +1653,19 @@ public class GameBoard : MonoBehaviour
         boardUI.GameWon(teamWon, stalemate);
     }
 
+    public void ForfeitGame()
+    {
+        if (PieceManager.instance != null)
+        {
+            if (PieceManager.instance.onlineMultiplayer)
+            {
+                NetGameWon gw = new NetGameWon();
+                gw.teamID = playerIsNavy ? 1 : 0;
+
+                Client.Instance.SendToServer(gw);
+            }
+        }
+    }
 
     // Changes the turn from one player to the next
     public void NextTurn()
@@ -1700,19 +1713,28 @@ public class GameBoard : MonoBehaviour
     private void RegisterEvents()
     {
         NetUtility.S_MOVE_PIECE += OnMovePieceServer;
+        NetUtility.S_GAME_WON += OnGameWonServer;
 
         NetUtility.C_MOVE_PIECE += OnMovePieceClient;
+        NetUtility.C_GAME_WON += OnGameWonClient;
     }
 
     private void UnRegisterEvents()
     {
         NetUtility.S_MOVE_PIECE -= OnMovePieceServer;
+        NetUtility.S_GAME_WON -= OnGameWonServer;
 
         NetUtility.C_MOVE_PIECE -= OnMovePieceClient;
+        NetUtility.C_GAME_WON -= OnGameWonClient;
     }
 
     // Server
     private void OnMovePieceServer(NetMessage msg, NetworkConnection cnn)
+    {
+        Server.Instance.Broadcast(msg);
+    }
+
+    private void OnGameWonServer(NetMessage msg, NetworkConnection cnn)
     {
         Server.Instance.Broadcast(msg);
     }
@@ -1740,6 +1762,13 @@ public class GameBoard : MonoBehaviour
 
             GameplayMovePiece(thisSquare, targetSquare, thisPiece, originalCoords, moveCoords, mp.corsairJump == 1);
         }
+    }
+
+    private void OnGameWonClient(NetMessage msg)
+    {
+        NetGameWon gw = msg as NetGameWon;
+
+        GameOver(gw.teamID == 0);
     }
 
     #endregion
