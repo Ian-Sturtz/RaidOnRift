@@ -190,7 +190,8 @@ public class Tactician : Piece
                 Square squareInRange = tiles[x, y].GetComponent<Square>();
                 if (squareInRange.currentPiece != null)
                 {
-                    if (!squareInRange.currentPiece.isNavy)
+                    // Isolates non-orebearer pirates
+                    if (!squareInRange.currentPiece.isNavy && !squareInRange.currentPiece.hasOre)
                     {
                         if(squareInRange.currentPiece.type == PieceType.Mate && !mimicPieces[0])
                         {

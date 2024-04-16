@@ -180,11 +180,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Congratulations! You have won the game!
+  m_text: 'Your connection has ended.
 
 
-    Please wait and you will
-    be taken to the main menu...'
+    Please wait and you will be taken to
+    the main menu...'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
   m_sharedMaterial: {fileID: 2383952268681313545, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56.15
+  m_fontSize: 57.15
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

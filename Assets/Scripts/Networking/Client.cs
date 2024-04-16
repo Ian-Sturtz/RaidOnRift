@@ -63,8 +63,10 @@ public class Client : MonoBehaviour
 
     public void ClientDisconnect()
     {
+        Debug.Log("Client is disconnecting");
         connection.Disconnect(driver);
         driver.ScheduleUpdate(default).Complete();
+        Debug.Log("Client has disconnected");
     }
 
     public void OnDestroy()
@@ -126,6 +128,7 @@ public class Client : MonoBehaviour
         catch (ObjectDisposedException)
         {
             Debug.LogError("Attempted to use a disposed network resource.");
+            throw;
         }
     }
 

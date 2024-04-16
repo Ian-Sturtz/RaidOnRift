@@ -28,6 +28,7 @@ public class ConnectionDroppedMenu : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("The Connection Dropped scene is managing server interactions");
         Server.Instance.Shutdown();
         Client.Instance.Shutdown();
         StartCoroutine(DisplayConnectionDropped());

@@ -134,7 +134,22 @@ public class PieceSelection : MonoBehaviour
             else if (navyTotal > pirateTotal)
                 PieceManager.instance.navyFirst = false;
             else
-                PieceManager.instance.navyFirst = p1Navy;
+            {
+                if (Server.Instance.isActive)
+                {
+                    Debug.Log("This is a multiplayer game, the host is going first");
+                    PieceManager.instance.navyFirst = MultiplayerController.Instance.currentTeam == 0;
+                }
+                else
+                {
+                    Debug.Log("This is a multiplayer game, the client is not going first");
+                    PieceManager.instance.navyFirst = MultiplayerController.Instance.currentTeam == 1;
+                }
+            }
+
+            Debug.Log("Navy first: " + PieceManager.instance.navyFirst);
+
+            MultiplayerController.Instance.gameWon = -1;
 
             SceneManager.LoadScene("Piece Placement");
         }
@@ -457,10 +472,9 @@ public class PieceSelection : MonoBehaviour
                 else if (navyTotal > pirateTotal)
                     PieceManager.instance.navyFirst = false;
                 else
-                    PieceManager.instance.navyFirst = p1Navy;
+                    PieceManager.instance.navyFirst = p1Navy;   // Player 1 will go first in the event of a tie
 
-                if(MultiplayerController.Instance != null)
-                    MultiplayerController.Instance.gameWon = -1;
+                Debug.Log("Navy first: " + PieceManager.instance.navyFirst);
 
                 SceneManager.LoadScene("Piece Placement");
             }

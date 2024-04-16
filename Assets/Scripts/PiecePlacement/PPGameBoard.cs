@@ -171,14 +171,27 @@ public class PPGameBoard : MonoBehaviour
             }
         }
 
-        // Shifts turns when done
-        if(navyDone && navyTurn)
+        if(MultiplayerController.Instance == null)
         {
-            NextTurn();
+            if(navyDone && navyTurn)
+            {
+                NextTurn();
+            }else if(pirateDone && !navyTurn)
+            {
+                NextTurn();
+            }
         }
-        else if(pirateDone && !navyTurn)
+
+        if(MultiplayerController.Instance != null)
         {
-            NextTurn();
+            if(navyDone && playerIsNavy)
+            {
+                MultiplayerController.Instance.gameWon = 1;
+            }
+            else if(pirateDone && !playerIsNavy)
+            {
+                MultiplayerController.Instance.gameWon = 1;
+            }
         }
 
         boardUI.UpdateTurn(navyTurn);
@@ -233,7 +246,11 @@ public class PPGameBoard : MonoBehaviour
             {
                 viewBlocker.SetActive(false);
                 piecePlacer.SpawnOresAndShields();
+                if (MultiplayerController.Instance != null)
+                    MultiplayerController.Instance.gameWon = -1;
                 oreSpawned = true;
+
+                Debug.Log($"navy first: {PieceManager.instance.navyFirst}");
 
                 navyTurn = PieceManager.instance.navyFirst;
                 PlacementTimer.time = 30;

@@ -68,6 +68,8 @@ public class Server : MonoBehaviour
 
     public void ServerDisconnect()
     {
+        Debug.Log("Server is disconnecting");
+
         for (int i = 0; i < connections.Length; i++)
         {
             if (connections[i] != default(NetworkConnection))
@@ -77,7 +79,7 @@ public class Server : MonoBehaviour
             }
         }
 
-        Cleanupconnections();
+        Debug.Log("Server has disconnected");
     }
 
     public void OnDestroy()
@@ -138,9 +140,9 @@ public class Server : MonoBehaviour
 
         for (int i = 0; i < connections.Length; i++)
         {
-            if(connections[i] != default(NetworkConnection) && isActive)
+            try
             {
-                try
+                if (connections[i] != default(NetworkConnection) && isActive)
                 {
                     NetworkEvent.Type cmd;
                     while ((cmd = driver.PopEventForConnection(connections[i], out stream)) != NetworkEvent.Type.Empty)
@@ -159,12 +161,11 @@ public class Server : MonoBehaviour
                         }
                     }
                 }
-                catch (ObjectDisposedException)
-                {
-                    Debug.LogError("Attempted to use a disposed network resource.");
-                }
-                
-            }   
+            }
+            catch (ObjectDisposedException)
+            {
+                Debug.LogError("Attempted to use a disposed network resource.");
+            }
         }
     }
 

@@ -125,12 +125,12 @@ public class GameBoard : MonoBehaviour
 
         // Identify Player ID in multiplayer
         if (PieceManager.instance != null)
-            if(PieceManager.instance.onlineMultiplayer)
+            if (PieceManager.instance.onlineMultiplayer)
                 playerIsNavy = MultiplayerController.Instance.currentTeam == 0;
 
         RegisterEvents();
     }
-    
+
     private void OnDestroy()
     {
         UnRegisterEvents();
@@ -196,7 +196,7 @@ public class GameBoard : MonoBehaviour
             boardUI.HideSelectedPiece();
 
             bomberSelected = false;
-            
+
             // Despawns all pieces out of Tactician inherit cells (if applicable)
             if (tacticianSelected)
             {
@@ -206,7 +206,7 @@ public class GameBoard : MonoBehaviour
                 for (int i = 0; i < 9; i++)
                 {
 
-                    if(jail.tacticianMimicPieces[i] != null)
+                    if (jail.tacticianMimicPieces[i] != null)
                         jail.tacticianMimicPieces[i].GetComponent<Piece>().destroyPiece();
                     jail.TacticianMimicCells[i].GetComponent<JailCell>().resetCell();
                     ResetBoardMaterials(true);
@@ -232,7 +232,7 @@ public class GameBoard : MonoBehaviour
                     // Searches jail for the corresponding captured bomb
                     for (int i = 0; i < teamSize; i++)
                     {
-                        if(jail.NavyJailCells[i].GetComponent<JailCell>().currentPiece == tileSelected.GetComponent<Square>().currentPiece.GetComponent<Bomber>().capturedBomb)
+                        if (jail.NavyJailCells[i].GetComponent<JailCell>().currentPiece == tileSelected.GetComponent<Square>().currentPiece.GetComponent<Bomber>().capturedBomb)
                         {
                             cellToHighlight = i;
                         }
@@ -275,11 +275,11 @@ public class GameBoard : MonoBehaviour
         }
 
         // Highlights all possible pieces that tactician can inherit
-        if(tacticianSelected)
+        if (tacticianSelected)
         {
             for (int i = 0; i < 9; i++)
             {
-                if(jail.TacticianMimicCells[i].GetComponent<JailCell>().hasPiece == true) {
+                if (jail.TacticianMimicCells[i].GetComponent<JailCell>().hasPiece == true) {
                     // Tactician has inherited a piece
                     if (tacticianInheritSelected)
                     {
@@ -336,7 +336,7 @@ public class GameBoard : MonoBehaviour
                 tileSelected = GameObject.Find(hit.collider.name);
 
                 // A jail cell was clicked
-                if(tileSelected.tag == "JailCell")
+                if (tileSelected.tag == "JailCell")
                 {
                     // Do nothing
                 }
@@ -348,14 +348,14 @@ public class GameBoard : MonoBehaviour
                     if (current_square.currentPiece != null)
                     {
                         // It's not your turn yet!
-                        if(PieceManager.instance.onlineMultiplayer && navyTurn != playerIsNavy)
+                        if (PieceManager.instance.onlineMultiplayer && navyTurn != playerIsNavy)
                         {
                             boardUI.DisplayTempText("It's not your turn yet!", 1.5f);
                             Debug.Log("It's not your turn!");
                             Square selectedTile = tileSelected.GetComponent<Square>();
                             selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
                         }
-                        else if(PieceManager.instance.onlineMultiplayer && current_square.currentPiece.isNavy != navyTurn)
+                        else if (PieceManager.instance.onlineMultiplayer && current_square.currentPiece.isNavy != navyTurn)
                         {
                             boardUI.DisplayTempText("That's not your piece!", 1.5f);
                             Debug.Log("Wrong piece selected!");
@@ -363,7 +363,7 @@ public class GameBoard : MonoBehaviour
                             selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
                         }
                         // The wrong team is trying to move
-                        else if(current_square.currentPiece.isNavy != navyTurn)
+                        else if (current_square.currentPiece.isNavy != navyTurn)
                         {
                             boardUI.DisplayTempText("It's not your turn yet!", 1.5f);
                             Debug.Log("It's not your turn!");
@@ -373,11 +373,11 @@ public class GameBoard : MonoBehaviour
                         // The right team is trying to move
                         else
                         {
-                            if(current_square.currentPiece.type == PieceType.Royal2 && current_square.currentPiece.isNavy)
+                            if (current_square.currentPiece.type == PieceType.Royal2 && current_square.currentPiece.isNavy)
                             {
                                 tacticianSelected = true;
                             }
-                            if(current_square.currentPiece.type == PieceType.Bomber)
+                            if (current_square.currentPiece.type == PieceType.Bomber)
                             {
                                 bomberSelected = true;
                             }
@@ -407,7 +407,7 @@ public class GameBoard : MonoBehaviour
                             current_square.SquareHasBeenClicked = true;
                             DetectLegalMoves(tileSelected, current_square.currentPiece);
                         }
-                        
+
                     }
                 }
                 // A square had been previously clicked
@@ -454,121 +454,25 @@ public class GameBoard : MonoBehaviour
                         Square CurrentSquare = storedTileSelected.GetComponent<Square>();
                         Square targetSquare = tileSelected.GetComponent<Square>();
                         Piece currentPiece = CurrentSquare.currentPiece;
-                        Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
                         Piece capturedPiece = targetSquare.currentPiece;
+                        Vector2Int currentCoordinates = IdentifyThisBoardSquare(storedTileSelected);
+                        Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
 
-                        // Check if capture target is the ore
-                        if (capturedPiece.type == PieceType.Ore)
+                        GameplayCapturePiece(CurrentSquare, targetSquare, currentPiece, capturedPiece, moveCoordinates, tileSelected.tag == "GunnerTarget");
+
+                        if (PieceManager.instance.onlineMultiplayer)
                         {
-                            currentPiece.hasOre = true;
+                            NetCapturePiece cp = new NetCapturePiece();
 
-                            // Update UI
-                            boardUI.UpdateGoal(navyTurn, true);
-                        }
+                            cp.teamID = currentPiece.isNavy ? 0 : 1;
+                            cp.originalX = currentCoordinates.x;
+                            cp.originalY = currentCoordinates.y;
+                            cp.targetX = moveCoordinates.x;
+                            cp.targetY = moveCoordinates.y;
+                            cp.gunnerCapture = tileSelected.tag == "GunnerTarget" ? 1 : 0;
+                            cp.turnOver = (resetOre || orebearerSecondMove) ? 0 : 1;
 
-                        // If the orebearer is being captured, the ore needs to be reset
-                        if (capturedPiece.hasOre)
-                        {
-                            resetOre = true;
-                        }
-
-                        // Capture that Piece
-                        jail.InsertAPiece(capturedPiece);
-                        capturedPiece.destroyPiece();
-                        currentPiece.hasCaptured = true;
-
-                        if (capturedPiece.type == PieceType.LandMine && currentPiece.type == PieceType.Bomber)
-                        {
-                            int bombJailIndex = jail.FindLastSlot(!currentPiece.isNavy);
-                            Debug.Log(bombJailIndex);
-                            if (currentPiece.isNavy)
-                            {
-                                currentPiece.GetComponent<Bomber>().capturedBomb = jail.pirateJailedPieces[bombJailIndex];
-                            }
-                            else
-                            {
-                                currentPiece.GetComponent<Bomber>().capturedBomb = jail.navyJailedPieces[bombJailIndex];
-                            }
-                        }
-
-                        // Prevents the Tactician from mimicking a Gunner and capturing twice
-                        if (tileSelected.tag == "GunnerTarget")
-                        {
-                            gunnerAudio.Play();
-
-                            if (currentPiece.type == PieceType.Royal2 && currentPiece.isNavy)
-                            {
-                                tacticianGunnerCapture = true;
-                            }
-                        }
-                        else
-                        {
-                            // Play regular capture audio
-                        }
-
-                        // Move current piece to the new square (unless it's a gunner)
-                        if (tileSelected.tag != "GunnerTarget")
-                        {
-                            MovePiece(currentPiece, moveCoordinates.x, moveCoordinates.y);
-                        }
-                        else
-                        {
-                            AnimGun(currentPiece, moveCoordinates.x, moveCoordinates.y);
-                        }
-                        CurrentSquare.SquareHasBeenClicked = false;
-                        targetSquare.FlashMaterial(targetSquare.clickedBoardMaterial, 2);
-
-                        // Clean up board now that move has completed
-                        ResetBoardMaterials();
-
-                        // Ore needs to be reset before the turn ends
-                        if (resetOre)
-                        {
-                            if(currentPiece.type == PieceType.Gunner)
-                            {
-                                tileSelected = storedTileSelected;
-                            }
-                            else
-                            {
-                                storedTileSelected = tileSelected;
-                            }
-                            targetSquare.tag = "CaptureSquare";
-                            DetectLegalMoves(storedTileSelected, currentPiece);
-
-                            // Update UI
-                            boardUI.UpdateGoal(!navyTurn, false);
-                        }
-                        // The orebearer just captured and gets to take a second turn
-                        if (currentPiece.hasOre && !orebearerSecondMove)
-                        {
-                            orebearerSecondMove = true;
-                            if (currentPiece.type == PieceType.Gunner)
-                            {
-                                CurrentSquare.SquareHasBeenClicked = true;
-                                currentPiece.type = PieceType.Mate;
-                            }
-                            else
-                            {
-                                storedTileSelected = tileSelected;
-                                targetSquare.SquareHasBeenClicked = true;
-                            }
-
-                            DetectLegalMoves(storedTileSelected, currentPiece);
-                        }
-                        // The orebearer has just taken a second turn
-                        else if (currentPiece.hasOre && orebearerSecondMove)
-                        {
-                            orebearerSecondMove = false;
-                        }
-
-                        // Turn is now over
-                        if (!resetOre && !orebearerSecondMove)
-                        {
-                            squareSelected = false;
-                            tileSelected = null;
-                            storedTileSelected = null;
-                            ResetBoardMaterials();
-                            NextTurn();
+                            Client.Instance.SendToServer(cp);
                         }
                     }
 
@@ -721,7 +625,7 @@ public class GameBoard : MonoBehaviour
                                 DetectLegalMoves(storedTileSelected, storedTileSelected.GetComponent<Square>().currentPiece);
                             }
                         }
-                        
+
                         // The tactician is trying to mimic a piece
                         if (tacticianSelected)
                         {
@@ -730,7 +634,7 @@ public class GameBoard : MonoBehaviour
                             {
                                 for (int i = 0; i < 9; i++)
                                 {
-                                    if(jail.TacticianMimicCells[i].GetComponent<JailCell>().hasPiece)
+                                    if (jail.TacticianMimicCells[i].GetComponent<JailCell>().hasPiece)
                                         jail.TacticianMimicCells[i].GetComponent<JailCell>().interactable = true;
                                 }
 
@@ -904,7 +808,7 @@ public class GameBoard : MonoBehaviour
                 currentPiece.hasCaptured = false;
             }
         }
-        
+
         MovePiece(currentPiece, moveCoordinates.x, moveCoordinates.y);
 
         ResetBoardMaterials();
@@ -914,6 +818,132 @@ public class GameBoard : MonoBehaviour
         tileSelected = null;
         storedTileSelected = null;
         NextTurn();
+    }
+
+    private void GameplayCapturePiece(Square CurrentSquare, Square targetSquare, Piece currentPiece, Piece capturedPiece, Vector2Int moveCoordinates, bool gunnerCapture = false, bool turnOver = true)
+    {
+        // Check if capture target is the ore
+        if (capturedPiece.type == PieceType.Ore)
+        {
+            currentPiece.hasOre = true;
+            currentPiece.type = PieceType.Mate; // Gets rid of any fancy moves at their disposal
+
+            // Update UI
+            if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == currentPiece.isNavy))
+                boardUI.UpdateGoal(navyTurn, true);
+        }
+
+        // If the orebearer is being captured, the ore needs to be reset (handled by opponent in multiplayer)
+        if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == currentPiece.isNavy))
+            if (capturedPiece.hasOre)
+            {
+                resetOre = true;
+                turnOver = false;
+            }
+
+        // Capture that Piece
+        jail.InsertAPiece(capturedPiece);
+        capturedPiece.destroyPiece();
+        currentPiece.hasCaptured = true;
+
+        // Links the engineer with his captured shield
+        if (capturedPiece.type == PieceType.LandMine && currentPiece.type == PieceType.Bomber)
+        {
+            int bombJailIndex = jail.FindLastSlot(!currentPiece.isNavy);
+            Debug.Log(bombJailIndex);
+            if (currentPiece.isNavy)
+            {
+                currentPiece.GetComponent<Bomber>().capturedBomb = jail.pirateJailedPieces[bombJailIndex];
+            }
+            else
+            {
+                currentPiece.GetComponent<Bomber>().capturedBomb = jail.navyJailedPieces[bombJailIndex];
+            }
+        }
+
+        // Prevents the Tactician from mimicking a Gunner and capturing twice
+        if (gunnerCapture)
+        {
+            gunnerAudio.Play();
+
+            if (currentPiece.type == PieceType.Royal2 && currentPiece.isNavy)
+            {
+                tacticianGunnerCapture = true;
+            }
+        }
+        else
+        {
+            // Play regular capture audio
+        }
+
+        // Move current piece to the new square (unless it's a gunner)
+        if (!gunnerCapture)
+        {
+            MovePiece(currentPiece, moveCoordinates.x, moveCoordinates.y);
+        }
+        else
+        {
+            AnimGun(currentPiece, moveCoordinates.x, moveCoordinates.y);
+        }
+        CurrentSquare.SquareHasBeenClicked = false;
+        targetSquare.FlashMaterial(targetSquare.clickedBoardMaterial, 2);
+
+        // Clean up board now that move has completed
+        ResetBoardMaterials();
+
+        // Ore needs to be reset before the turn ends
+        if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == currentPiece.isNavy))
+        {
+            if (resetOre)
+            {
+                if (currentPiece.type == PieceType.Gunner)
+                {
+                    tileSelected = storedTileSelected;
+                }
+                else
+                {
+                    storedTileSelected = tileSelected;
+                }
+                targetSquare.tag = "CaptureSquare";
+                DetectLegalMoves(storedTileSelected, currentPiece);
+
+                // Update UI
+                boardUI.UpdateGoal(!navyTurn, false);
+            }
+            // The orebearer just captured and gets to take a second turn
+            if (currentPiece.hasOre && !orebearerSecondMove)
+            {
+                orebearerSecondMove = true;
+                turnOver = false;
+                if (currentPiece.type == PieceType.Gunner)
+                {
+                    CurrentSquare.SquareHasBeenClicked = true;
+                    currentPiece.type = PieceType.Mate;
+                }
+                else
+                {
+                    storedTileSelected = tileSelected;
+                    targetSquare.SquareHasBeenClicked = true;
+                }
+
+                DetectLegalMoves(storedTileSelected, currentPiece);
+            }
+            // The orebearer has just taken a second turn
+            else if (currentPiece.hasOre && orebearerSecondMove)
+            {
+                orebearerSecondMove = false;
+            }
+        }
+
+        // Turn is now over
+        if (turnOver)
+        {
+            squareSelected = false;
+            tileSelected = null;
+            storedTileSelected = null;
+            ResetBoardMaterials();
+            NextTurn();
+        }
     }
 
     private void IdentifyBoardSquares()
@@ -1713,23 +1743,32 @@ public class GameBoard : MonoBehaviour
     private void RegisterEvents()
     {
         NetUtility.S_MOVE_PIECE += OnMovePieceServer;
+        NetUtility.S_MOVE_PIECE += OnCapturePieceServer;
         NetUtility.S_GAME_WON += OnGameWonServer;
 
         NetUtility.C_MOVE_PIECE += OnMovePieceClient;
+        NetUtility.C_MOVE_PIECE += OnCapturePieceClient;
         NetUtility.C_GAME_WON += OnGameWonClient;
     }
 
     private void UnRegisterEvents()
     {
         NetUtility.S_MOVE_PIECE -= OnMovePieceServer;
+        NetUtility.S_MOVE_PIECE -= OnCapturePieceServer;
         NetUtility.S_GAME_WON -= OnGameWonServer;
 
         NetUtility.C_MOVE_PIECE -= OnMovePieceClient;
+        NetUtility.C_MOVE_PIECE -= OnCapturePieceClient;
         NetUtility.C_GAME_WON -= OnGameWonClient;
     }
 
     // Server
     private void OnMovePieceServer(NetMessage msg, NetworkConnection cnn)
+    {
+        Server.Instance.Broadcast(msg);
+    }
+
+    private void OnCapturePieceServer(NetMessage msg, NetworkConnection cnn)
     {
         Server.Instance.Broadcast(msg);
     }
@@ -1761,6 +1800,31 @@ public class GameBoard : MonoBehaviour
             Vector2Int moveCoords = new Vector2Int(mp.targetX, mp.targetY);
 
             GameplayMovePiece(thisSquare, targetSquare, thisPiece, originalCoords, moveCoords, mp.corsairJump == 1);
+        }
+    }
+
+    private void OnCapturePieceClient(NetMessage msg)
+    {
+        NetCapturePiece cp = msg as NetCapturePiece;
+
+        bool pieceIsNavy = cp.teamID == 0;
+
+        if(pieceIsNavy != playerIsNavy)
+        {
+            Debug.Log($"{cp.originalX},{cp.originalY} captures a piece on {cp.targetX},{cp.targetY}");
+            if(cp.gunnerCapture == 1)
+            {
+                Debug.Log("A gunner is capturing");
+            }
+            else
+            {
+                Debug.Log("Regular capture");
+            }
+
+            if(cp.turnOver == 0)
+            {
+                Debug.Log("The turn isn't over yet, more stuff needs to happen first");
+            }
         }
     }
 
