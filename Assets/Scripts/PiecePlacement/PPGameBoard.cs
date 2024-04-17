@@ -171,7 +171,7 @@ public class PPGameBoard : MonoBehaviour
             }
         }
 
-        if(MultiplayerController.Instance == null)
+        if(PieceManager.instance.onlineMultiplayer)
         {
             if(navyDone && navyTurn)
             {
@@ -181,8 +181,19 @@ public class PPGameBoard : MonoBehaviour
                 NextTurn();
             }
         }
+        else
+        {
+            if (navyDone && navyTurn)
+            {
+                NextTurn();
+            }
+            else if (pirateDone && !navyTurn)
+            {
+                NextTurn();
+            }
+        }
 
-        if(MultiplayerController.Instance != null)
+        if(PieceManager.instance.onlineMultiplayer)
         {
             if(navyDone && playerIsNavy)
             {
@@ -246,7 +257,7 @@ public class PPGameBoard : MonoBehaviour
             {
                 viewBlocker.SetActive(false);
                 piecePlacer.SpawnOresAndShields();
-                if (MultiplayerController.Instance != null)
+                if (PieceManager.instance.onlineMultiplayer)
                     MultiplayerController.Instance.gameWon = -1;
                 oreSpawned = true;
 
@@ -277,7 +288,7 @@ public class PPGameBoard : MonoBehaviour
                             PieceManager.instance.pieceCoords[totalPieces, 0] = activePiece.currentX;
                             PieceManager.instance.pieceCoords[totalPieces, 1] = activePiece.currentY;
 
-                            Debug.Log(PieceManager.instance.pieceTypes[totalPieces] + " " + PieceManager.instance.factions[totalPieces] + " {" + PieceManager.instance.pieceCoords[totalPieces, 0] + "," + PieceManager.instance.pieceCoords[totalPieces, 1] + "}");
+                            // Debug.Log(PieceManager.instance.pieceTypes[totalPieces] + " " + PieceManager.instance.factions[totalPieces] + " {" + PieceManager.instance.pieceCoords[totalPieces, 0] + "," + PieceManager.instance.pieceCoords[totalPieces, 1] + "}");
                             totalPieces++;
                         }
                     }

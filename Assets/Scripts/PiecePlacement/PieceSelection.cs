@@ -98,21 +98,25 @@ public class PieceSelection : MonoBehaviour
 
         if(MultiplayerController.Instance != null)
         {
-            PieceManager.instance.onlineMultiplayer = true;
+            if(Server.Instance.isActive || Client.Instance.isActive)
+                PieceManager.instance.onlineMultiplayer = true;
 
-            // Starts a countdown clock of approx 5 minutes
-            StartCoroutine(PieceSelectionTimer());
-
-            if(MultiplayerController.Instance.currentTeam == 0)
+            if(PieceManager.instance.onlineMultiplayer)
             {
-                OnNavyChosen();
-            }
-            else
-            {
-                OnPiratesChosen();
-            }
+                // Starts a countdown clock of 3 minutes
+                StartCoroutine(PieceSelectionTimer());
 
-            RegisterEvents();
+                if(MultiplayerController.Instance.currentTeam == 0)
+                {
+                    OnNavyChosen();
+                }
+                else
+                {
+                    OnPiratesChosen();
+                }
+
+                RegisterEvents();
+            }
         }
     }
 

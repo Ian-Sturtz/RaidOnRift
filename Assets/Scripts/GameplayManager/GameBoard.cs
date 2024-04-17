@@ -458,20 +458,36 @@ public class GameBoard : MonoBehaviour
                         Vector2Int currentCoordinates = IdentifyThisBoardSquare(storedTileSelected);
                         Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
 
-                        GameplayCapturePiece(CurrentSquare, targetSquare, currentPiece, capturedPiece, moveCoordinates, tileSelected.tag == "GunnerTarget");
+                        NetCapturePiece cp = new NetCapturePiece();
 
                         if (PieceManager.instance.onlineMultiplayer)
                         {
-                            NetCapturePiece cp = new NetCapturePiece();
+                            Debug.Log("Sending capture to server");
 
+                            if (currentPiece.isNavy)
+                                cp.teamID = 0;
+                            else
+                                cp.teamID = 1;
                             cp.teamID = currentPiece.isNavy ? 0 : 1;
                             cp.originalX = currentCoordinates.x;
                             cp.originalY = currentCoordinates.y;
                             cp.targetX = moveCoordinates.x;
                             cp.targetY = moveCoordinates.y;
                             cp.gunnerCapture = tileSelected.tag == "GunnerTarget" ? 1 : 0;
-                            cp.turnOver = (resetOre || orebearerSecondMove) ? 0 : 1;
 
+
+                            Debug.Log($"{cp.teamID}: {cp.originalX},{cp.originalY} moving to {cp.targetX},{cp.targetY}");
+                            if (cp.gunnerCapture == 1)
+                                Debug.Log("Gunner is capturing");
+                            else
+                                Debug.Log("Gunner is not capturing " + cp.gunnerCapture);
+                        }
+
+                        GameplayCapturePiece(CurrentSquare, targetSquare, currentPiece, capturedPiece, moveCoordinates, tileSelected.tag == "GunnerTarget");
+                        
+                        if(PieceManager.instance.onlineMultiplayer)
+                        {
+                            cp.turnOver = (resetOre || orebearerSecondMove) ? 0 : 1;
                             Client.Instance.SendToServer(cp);
                         }
                     }
@@ -1729,7 +1745,7 @@ public class GameBoard : MonoBehaviour
 
         gameTimer.ResetBar();
 
-        stalemate = CheckForStalemate(navyTurn);
+        //stalemate = CheckForStalemate(navyTurn);
 
         // Update UI if no stalemate
         if (!stalemate) 
@@ -1743,22 +1759,22 @@ public class GameBoard : MonoBehaviour
     private void RegisterEvents()
     {
         NetUtility.S_MOVE_PIECE += OnMovePieceServer;
-        NetUtility.S_MOVE_PIECE += OnCapturePieceServer;
+        NetUtility.S_CAPTURE_PIECE += OnCapturePieceServer;
         NetUtility.S_GAME_WON += OnGameWonServer;
 
         NetUtility.C_MOVE_PIECE += OnMovePieceClient;
-        NetUtility.C_MOVE_PIECE += OnCapturePieceClient;
+        NetUtility.C_CAPTURE_PIECE += OnCapturePieceClient;
         NetUtility.C_GAME_WON += OnGameWonClient;
     }
 
     private void UnRegisterEvents()
     {
         NetUtility.S_MOVE_PIECE -= OnMovePieceServer;
-        NetUtility.S_MOVE_PIECE -= OnCapturePieceServer;
+        NetUtility.S_CAPTURE_PIECE -= OnCapturePieceServer;
         NetUtility.S_GAME_WON -= OnGameWonServer;
 
         NetUtility.C_MOVE_PIECE -= OnMovePieceClient;
-        NetUtility.C_MOVE_PIECE -= OnCapturePieceClient;
+        NetUtility.C_CAPTURE_PIECE -= OnCapturePieceClient;
         NetUtility.C_GAME_WON -= OnGameWonClient;
     }
 
@@ -1767,12 +1783,10 @@ public class GameBoard : MonoBehaviour
     {
         Server.Instance.Broadcast(msg);
     }
-
     private void OnCapturePieceServer(NetMessage msg, NetworkConnection cnn)
     {
         Server.Instance.Broadcast(msg);
     }
-
     private void OnGameWonServer(NetMessage msg, NetworkConnection cnn)
     {
         Server.Instance.Broadcast(msg);
@@ -1825,6 +1839,21 @@ public class GameBoard : MonoBehaviour
             {
                 Debug.Log("The turn isn't over yet, more stuff needs to happen first");
             }
+
+
+
+            GameObject thisTile = FindThisBoardSquare(cp.originalX + 1, cp.originalY + 1);
+            Square thisSquare = thisTile.GetComponent<Square>();
+            Piece thisPiece = thisSquare.currentPiece;
+
+            GameObject targetTile = FindThisBoardSquare(cp.targetX + 1, cp.targetY + 1);
+            Square targetSquare = targetTile.GetComponent<Square>();
+            Piece targetPiece = targetSquare.currentPiece;
+
+            Vector2Int originalCoords = new Vector2Int(cp.originalX, cp.originalY);
+            Vector2Int moveCoords = new Vector2Int(cp.targetX, cp.targetY);
+
+            GameplayCapturePiece(thisSquare, targetSquare, thisPiece, targetPiece, moveCoords, cp.gunnerCapture == 1, cp.turnOver == 1);
         }
     }
 
