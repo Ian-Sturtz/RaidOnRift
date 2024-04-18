@@ -5179,6 +5179,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.5
   transparency: 0.75
+  navyRoyal1: {fileID: 0}
+  navyRoyal2: {fileID: 0}
+  pirateRoyal1: {fileID: 0}
+  pirateRoyal2: {fileID: 0}
+  quartermaster: {fileID: 32900000, guid: 2497a9385302e034da4136d9c0b43a05, type: 3}
+  cannon: {fileID: 0}
+  engineer: {fileID: 0}
+  vanguard: {fileID: 0}
+  navigator: {fileID: 0}
+  gunner: {fileID: 0}
+  mate: {fileID: 0}
+  royal1: {fileID: 0}
+  royal2: {fileID: 0}
   menu: {fileID: 503209056}
   background: {fileID: 1893111418}
   pieceName: {fileID: 1814891185}

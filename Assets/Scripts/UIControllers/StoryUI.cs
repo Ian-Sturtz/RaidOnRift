@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class StoryUI : MonoBehaviour
 {
@@ -14,8 +15,26 @@ public class StoryUI : MonoBehaviour
     bool menuTop;
     Vector2 bottomPos;
 
+    [SerializeField] private VideoClip navyRoyal1;
+    [SerializeField] private VideoClip navyRoyal2;
+
+    [SerializeField] private VideoClip pirateRoyal1;
+    [SerializeField] private VideoClip pirateRoyal2;
+
+    [SerializeField] public VideoClip quartermaster;
+    [SerializeField] public VideoClip cannon;
+    [SerializeField] public VideoClip engineer;
+    [SerializeField] public VideoClip vanguard;
+    [SerializeField] public VideoClip navigator;
+    [SerializeField] public VideoClip gunner;
+    [SerializeField] public VideoClip mate;
+
+    [HideInInspector] public VideoClip royal1;
+    [HideInInspector] public VideoClip royal2;
+
     public GameObject menu;
     public GameObject background;
+    public GameObject Video;
     public TMP_Text pieceName;
     public TMP_Text pieceDesc;
     public Image character;
@@ -41,6 +60,19 @@ public class StoryUI : MonoBehaviour
     public Sprite pirateQuatermaster;
     public Sprite pirateVanguard;
 
+    public void Setup(bool isNavy)
+    {
+        if (isNavy)
+        {
+            royal1 = navyRoyal1;
+            royal2 = navyRoyal2;
+        }
+        else
+        {
+            royal1 = pirateRoyal1;
+            royal2 = pirateRoyal2;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -66,6 +98,7 @@ public class StoryUI : MonoBehaviour
                     pieceName.SetText("THE ADMIRAL");
                     pieceDesc.SetText("They call me fierce. They call me cunning. Above all, they call me relentless.\r\n\nFollowing my monumental victory on the planet Gyzax, I was promoted to admiral and assigned lordship over the Ore refinery on the Rift. Now, as Lord of the Rift, I have supreme access to the entire facility, and can use the knowledge, agility, and skill in battle to maintain dominance over my domain.\r\n\nI am revered by my army but feared by my enemies. I promise defeat to all who challenge my rule.");
                     character.sprite = admiral;
+                  
                     break;
                 case "Tactician":
                     pieceName.SetText("THE TACTICIAN");
