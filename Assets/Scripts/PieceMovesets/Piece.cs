@@ -24,6 +24,7 @@ public class Piece : MonoBehaviour
     public Material NavyOre;
     public Material PirateOre;
 
+    public PieceType originalType;
     public PieceType type;
     public bool isNavy;
     public bool hasCaptured;
@@ -34,6 +35,11 @@ public class Piece : MonoBehaviour
 
     [SerializeField] private float flashDelay = 1f;
     private bool continualFlash = false;
+
+    private void Awake()
+    {
+        originalType = type;
+    }
 
     private void Update()
     {

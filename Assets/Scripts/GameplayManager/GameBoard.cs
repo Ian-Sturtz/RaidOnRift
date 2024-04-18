@@ -449,6 +449,7 @@ public class GameBoard : MonoBehaviour
                         GameplayMovePiece(currentSquare, targetSquare, currentPiece, currentSquareCoords, moveCoordinates, tileSelected.tag == "CorsairJump");
                     }
 
+                    // A capturable piece has been clicked (regular pieces or gunners)
                     else if (tileSelected.tag == "CaptureSquare" || tileSelected.tag == "GunnerTarget")
                     {
                         Square CurrentSquare = storedTileSelected.GetComponent<Square>();
@@ -513,7 +514,7 @@ public class GameBoard : MonoBehaviour
                                 Debug.Log("Found Right");
                                 captureSquare = tiles[moveCoordinates.x + 1, moveCoordinates.y].GetComponent<Square>();
                                 capturedPiece = captureSquare.currentPiece;
-                                captureSquare.currentPiece = null;
+                                //captureSquare.currentPiece = null;
                             }
                         }
                         // Checks the square to the left of move square
@@ -525,7 +526,7 @@ public class GameBoard : MonoBehaviour
                                 Debug.Log("Found Left");
                                 captureSquare = tiles[moveCoordinates.x - 1, moveCoordinates.y].GetComponent<Square>();
                                 capturedPiece = captureSquare.currentPiece;
-                                captureSquare.currentPiece = null;
+                                //captureSquare.currentPiece = null;
                             }
                         }
                         // Checks the square above the move square
@@ -537,7 +538,7 @@ public class GameBoard : MonoBehaviour
                                 Debug.Log("Found Up");
                                 captureSquare = tiles[moveCoordinates.x, moveCoordinates.y + 1].GetComponent<Square>();
                                 capturedPiece = captureSquare.currentPiece;
-                                captureSquare.currentPiece = null;
+                                //captureSquare.currentPiece = null;
                             }
                         }
                         // Checks the square below the move square
@@ -549,73 +550,75 @@ public class GameBoard : MonoBehaviour
                                 Debug.Log("Found Down");
                                 captureSquare = tiles[moveCoordinates.x, moveCoordinates.y - 1].GetComponent<Square>();
                                 capturedPiece = captureSquare.currentPiece;
-                                captureSquare.currentPiece = null;
+                                //captureSquare.currentPiece = null;
                             }
                         }
 
-                        // A piece is being captured
-                        if (capturedPiece != null)
-                        {
-                            // Check if the captured piece is the ore
-                            if (capturedPiece.type == PieceType.Ore)
-                            {
-                                currentPiece.hasOre = true;
+                        GameplayCannonCapture(CurrentSquare, targetSquare, currentPiece, capturedPiece, moveCoordinates);
 
-                                // Update UI
-                                boardUI.UpdateGoal(navyTurn, true);
-                            }
+                        //// A piece is being captured
+                        //if (capturedPiece != null)
+                        //{
+                        //    // Check if the captured piece is the ore
+                        //    if (capturedPiece.type == PieceType.Ore)
+                        //    {
+                        //        currentPiece.hasOre = true;
 
-                            // If the orebearer is being captured, the ore needs to be reset
-                            if (capturedPiece.hasOre)
-                            {
-                                resetOre = true;
-                            }
+                        //        // Update UI
+                        //        boardUI.UpdateGoal(navyTurn, true);
+                        //    }
 
-                            // Capture that piece
-                            jail.InsertAPiece(capturedPiece);
-                            capturedPiece.destroyPiece();
-                            currentPiece.hasCaptured = true;
-                        }
+                        //    // If the orebearer is being captured, the ore needs to be reset
+                        //    if (capturedPiece.hasOre)
+                        //    {
+                        //        resetOre = true;
+                        //    }
 
-                        // Move current piece to that square
-                        MovePiece(currentPiece, moveCoordinates.x, moveCoordinates.y);
-                        CurrentSquare.SquareHasBeenClicked = false;
-                        targetSquare.FlashMaterial(targetSquare.clickedBoardMaterial, 2);
+                        //    // Capture that piece
+                        //    jail.InsertAPiece(capturedPiece);
+                        //    capturedPiece.destroyPiece();
+                        //    currentPiece.hasCaptured = true;
+                        //}
 
-                        // Clean up board now that move has completed
-                        ResetBoardMaterials();
+                        //// Move current piece to that square
+                        //MovePiece(currentPiece, moveCoordinates.x, moveCoordinates.y);
+                        //CurrentSquare.SquareHasBeenClicked = false;
+                        //targetSquare.FlashMaterial(targetSquare.clickedBoardMaterial, 2);
 
-                        // Ore needs to be reset before the turn ends
-                        if (resetOre)
-                        {
-                            storedTileSelected = tileSelected;
-                            targetSquare.tag = "CaptureSquare";
-                            DetectLegalMoves(storedTileSelected, currentPiece);
-                        }
-                        // The orebearer just captured and gets to take a second turn
-                        if (currentPiece.hasOre && !orebearerSecondMove)
-                        {
-                            orebearerSecondMove = true;
-                            storedTileSelected = tileSelected;
-                            targetSquare.SquareHasBeenClicked = true;
+                        //// Clean up board now that move has completed
+                        //ResetBoardMaterials();
 
-                            DetectLegalMoves(storedTileSelected, currentPiece);
-                        }
-                        // The orebearer has just taken a second turn
-                        else if (currentPiece.hasOre && orebearerSecondMove)
-                        {
-                            orebearerSecondMove = false;
-                        }
+                        //// Ore needs to be reset before the turn ends
+                        //if (resetOre)
+                        //{
+                        //    storedTileSelected = tileSelected;
+                        //    targetSquare.tag = "CaptureSquare";
+                        //    DetectLegalMoves(storedTileSelected, currentPiece);
+                        //}
+                        //// The orebearer just captured and gets to take a second turn
+                        //if (currentPiece.hasOre && !orebearerSecondMove)
+                        //{
+                        //    orebearerSecondMove = true;
+                        //    storedTileSelected = tileSelected;
+                        //    targetSquare.SquareHasBeenClicked = true;
 
-                        // Turn is now over
-                        if (!resetOre && !orebearerSecondMove)
-                        {
-                            squareSelected = false;
-                            tileSelected = null;
-                            storedTileSelected = null;
-                            ResetBoardMaterials();
-                            NextTurn();
-                        }
+                        //    DetectLegalMoves(storedTileSelected, currentPiece);
+                        //}
+                        //// The orebearer has just taken a second turn
+                        //else if (currentPiece.hasOre && orebearerSecondMove)
+                        //{
+                        //    orebearerSecondMove = false;
+                        //}
+
+                        //// Turn is now over
+                        //if (!resetOre && !orebearerSecondMove)
+                        //{
+                        //    squareSelected = false;
+                        //    tileSelected = null;
+                        //    storedTileSelected = null;
+                        //    ResetBoardMaterials();
+                        //    NextTurn();
+                        //}
                     }
 
                     // A landmine has been selected from jail or a tactician is mimicking a piece
@@ -953,6 +956,74 @@ public class GameBoard : MonoBehaviour
 
         // Turn is now over
         if (turnOver)
+        {
+            squareSelected = false;
+            tileSelected = null;
+            storedTileSelected = null;
+            ResetBoardMaterials();
+            NextTurn();
+        }
+    }
+
+    private void GameplayCannonCapture(Square CurrentSquare, Square targetSquare, Piece currentPiece, Piece capturedPiece, Vector2Int moveCoordinates, bool turnOver = true)
+    {
+        // A piece is being captured
+        if (capturedPiece != null)
+        {
+            // Check if the captured piece is the ore
+            if (capturedPiece.type == PieceType.Ore)
+            {
+                currentPiece.hasOre = true;
+
+                // Update UI
+                boardUI.UpdateGoal(navyTurn, true);
+            }
+
+            // If the orebearer is being captured, the ore needs to be reset
+            if (capturedPiece.hasOre)
+            {
+                turnOver = false;
+                resetOre = true;
+            }
+
+            // Capture that piece
+            jail.InsertAPiece(capturedPiece);
+            capturedPiece.destroyPiece();
+            currentPiece.hasCaptured = true;
+        }
+
+        // Move current piece to that square
+        MovePiece(currentPiece, moveCoordinates.x, moveCoordinates.y);
+        CurrentSquare.SquareHasBeenClicked = false;
+        targetSquare.FlashMaterial(targetSquare.clickedBoardMaterial, 2);
+
+        // Clean up board now that move has completed
+        ResetBoardMaterials();
+
+        // Ore needs to be reset before the turn ends
+        if (resetOre)
+        {
+            storedTileSelected = tileSelected;
+            targetSquare.tag = "CaptureSquare";
+            DetectLegalMoves(storedTileSelected, currentPiece);
+        }
+        // The orebearer just captured and gets to take a second turn
+        if (currentPiece.hasOre && !orebearerSecondMove)
+        {
+            orebearerSecondMove = true;
+            storedTileSelected = tileSelected;
+            targetSquare.SquareHasBeenClicked = true;
+
+            DetectLegalMoves(storedTileSelected, currentPiece);
+        }
+        // The orebearer has just taken a second turn
+        else if (currentPiece.hasOre && orebearerSecondMove)
+        {
+            orebearerSecondMove = false;
+        }
+
+        // Turn is now over
+        if (!resetOre && !orebearerSecondMove)
         {
             squareSelected = false;
             tileSelected = null;

@@ -186,6 +186,7 @@ MonoBehaviour:
   NavyPiece: {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
   NavyOre: {fileID: 2100000, guid: b1f0623e1f035104ba60e5ad7d6cc221, type: 2}
   PirateOre: {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
+  originalType: 4
   type: 4
   isNavy: 1
   hasCaptured: 0

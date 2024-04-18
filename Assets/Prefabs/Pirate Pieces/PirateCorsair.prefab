@@ -186,6 +186,7 @@ MonoBehaviour:
   NavyPiece: {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
   NavyOre: {fileID: 2100000, guid: b1f0623e1f035104ba60e5ad7d6cc221, type: 2}
   PirateOre: {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
+  originalType: 9
   type: 9
   isNavy: 0
   hasCaptured: 0
@@ -197,4 +198,6 @@ MonoBehaviour:
   PieceImage: {fileID: 3121823922205218531}
   jumpReady: {fileID: 21300000, guid: 10635e4bbdcc27c4ba8f33e84b72c242, type: 3}
   cooldown: {fileID: 21300000, guid: 523d286f321f4bb4ca5a1a671c572c10, type: 3}
+  GameBoard: {fileID: 0}
+  board: {fileID: 0}
   canJump: 0

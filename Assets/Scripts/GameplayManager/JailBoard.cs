@@ -70,6 +70,13 @@ public class JailBoard : MonoBehaviour
             cellToPlaceIn = FindFirstOpen(TacticianMimicCells, true);
             pieceIndex = FindNextSlot(tacticianMimicPieces, true);
 
+            // This piece is an orebearer, so it's type is a Mate regardless of what piece it actually is
+            if (piece.hasOre)
+            {
+                // Resets their type to match what it was originally
+                piece.type = piece.originalType;
+            }
+
             tacticianMimicPieces[pieceIndex] = SpawnPiece(piece.type, true, cellToPlaceIn, true);
             TacticianMimicCells[cellToPlaceIn].GetComponent<JailCell>().hasPiece = true;
             cell = TacticianMimicCells[cellToPlaceIn].GetComponent<JailCell>();
