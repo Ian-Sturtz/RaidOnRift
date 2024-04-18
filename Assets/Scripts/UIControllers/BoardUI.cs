@@ -6,6 +6,8 @@ using System.Drawing;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BoardUI : MonoBehaviour
 {
@@ -28,6 +30,9 @@ public class BoardUI : MonoBehaviour
 
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private GameObject particles;
+
+    [SerializeField] private GameObject rematchButton;
+    [SerializeField] private GameObject quitButton;
 
     private Coroutine a, b;
 
@@ -69,6 +74,8 @@ public class BoardUI : MonoBehaviour
             turnDisplay.SetText("PIRATES WIN!");
             turnDisplay.color = new UnityEngine.Color(0.4588234f, 0f, 0f, 1f);
         }
+
+        PlayVictory(navyWon);
     }
 
     public void UpdateGoal(bool navyTurn, bool hasOre)
@@ -156,7 +163,7 @@ public class BoardUI : MonoBehaviour
         b = StartCoroutine(AnimText());
     }
 
-    IEnumerator AnimBackground()
+    IEnumerator AnimBackground(bool gameOver = false)
     {
         animBackground.SetActive(true);
         float timeElapsed = 0;
@@ -173,17 +180,45 @@ public class BoardUI : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         timeElapsed = 0;
-        while(timeElapsed < 0.25f)
-        {
-            float val = Mathf.SmoothStep(250, 0, timeElapsed / 0.25f);
-            animBackground.GetComponent<RectTransform>().sizeDelta = new Vector2(2000, val);
-            timeElapsed += Time.deltaTime;
-            yield return null;
+        if(!gameOver) { 
+            while(timeElapsed < 0.25f)
+            {
+                float val = Mathf.SmoothStep(250, 0, timeElapsed / 0.25f);
+                animBackground.GetComponent<RectTransform>().sizeDelta = new Vector2(2000, val);
+                timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+            animBackground.SetActive(false);
         }
-        animBackground.SetActive(false);
+        else
+        {
+            yield return new WaitForSeconds(0.5f);
+            rematchButton.SetActive(true);
+            quitButton.SetActive(true);
+
+            Image image1 = rematchButton.GetComponent<Image>();
+            Image image2 = quitButton.GetComponent<Image>();
+            TMP_Text text1 = rematchButton.transform.GetChild(0).GetComponent<TMP_Text>();
+            TMP_Text text2 = quitButton.transform.GetChild(0).GetComponent<TMP_Text>();
+            timeElapsed = 0;
+            while(timeElapsed < 0.5f)
+            {
+                float val = Mathf.SmoothStep(0, 1, timeElapsed / 0.5f);
+                image1.color = new UnityEngine.Color(0, 0, 0, val);
+                image2.color = new UnityEngine.Color(0, 0, 0, val);
+                text1.color = new UnityEngine.Color(1, 1, 1, val);
+                text2.color = new UnityEngine.Color(1, 1, 1, val);
+                timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+            image1.color = new UnityEngine.Color(0, 0, 0, 1);
+            image2.color = new UnityEngine.Color(0, 0, 0, 1);
+            text1.color = new UnityEngine.Color(1, 1, 1, 1);
+            text2.color = new UnityEngine.Color(1, 1, 1, 1);
+        }
     }
 
-    IEnumerator AnimText()
+    IEnumerator AnimText(bool gameOver = false)
     {
         animTextObj.SetActive(true);
         float timeElapsed = 0;
@@ -203,15 +238,42 @@ public class BoardUI : MonoBehaviour
         animText.color = new UnityEngine.Color(red, green, blue, 1);
         yield return new WaitForSeconds(0.5f);
 
-        timeElapsed = 0;
-        while (timeElapsed < 0.25f)
+        if (!gameOver)
         {
-            float val = Mathf.Lerp(1, 0, timeElapsed / 0.25f);
-            animText.color = new UnityEngine.Color(red, green, blue, val);
-            timeElapsed += Time.deltaTime;
-            yield return null;
+            timeElapsed = 0;
+            while (timeElapsed < 0.25f)
+            {
+                float val = Mathf.Lerp(1, 0, timeElapsed / 0.25f);
+                animText.color = new UnityEngine.Color(red, green, blue, val);
+                timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+            animTextObj.SetActive(false);
         }
-        animTextObj.SetActive(false);
+    }
+
+    public void PlayVictory(bool winner)
+    {
+        if (a != null)
+        {
+            StopCoroutine(a);
+            StopCoroutine(b);
+        }
+
+
+        if (winner)
+        {
+
+            animText.SetText("NAVY WINS");
+            animText.color = new UnityEngine.Color(0, 0.03921569f, 0.6666667f, 1);
+        }
+        else
+        {
+            animText.SetText("PIRATES WIN");
+            animText.color = new UnityEngine.Color(0.4588234f, 0f, 0f, 1f);
+        }
+        a = StartCoroutine(AnimBackground(true));
+        b = StartCoroutine(AnimText(true));
     }
 
     public IEnumerator AnimGunner(Vector3 startPos, Vector3 targetPos, bool isNavy)
@@ -307,5 +369,16 @@ public class BoardUI : MonoBehaviour
     public void HideSelectedPiece()
     {
         pieceDisplay.SetActive(false);
+    }
+
+    public void Rematch()
+    {
+        // Set up rematch for online here
+        SceneManager.LoadScene("Piece Selection");
+    }
+
+    public void QuitToMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
     }
 }
