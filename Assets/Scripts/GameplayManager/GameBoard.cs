@@ -2078,7 +2078,6 @@ public class GameBoard : MonoBehaviour
                     deployPiece = jail.navyJailedPieces[rs.jailIndex].GetComponent<Piece>();
                 else
                     deployPiece = jail.pirateJailedPieces[rs.jailIndex].GetComponent<Piece>();
-
             }
             else
             {
