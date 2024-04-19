@@ -687,7 +687,7 @@ public class GameBoard : MonoBehaviour
                         cellToHighlight = jail.FindPiece(PieceType.Ore, pieceSquare.currentPiece.isNavy);
 
                         Piece orePiece;
-                        if (pieceSquare.currentPiece.isNavy)
+                        if (pieceSquare.currentPiece.isNavy || tacticianSelected)
                             orePiece = jail.navyJailedPieces[cellToHighlight].GetComponent<Piece>();
                         else
                             orePiece = jail.pirateJailedPieces[cellToHighlight].GetComponent<Piece>();
@@ -882,7 +882,7 @@ public class GameBoard : MonoBehaviour
             // Ore needs to be reset before the turn ends
             if (resetOre)
             {
-                if (currentPiece.type == PieceType.Gunner)
+                if (currentPiece.type == PieceType.Gunner || tacticianInheritSelected)
                 {
                     tileSelected = storedTileSelected;
                 }

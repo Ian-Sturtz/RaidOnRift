@@ -42,13 +42,14 @@ public class PieceSelection : MonoBehaviour
     #endregion
 
     #region PS Timer
-    [SerializeField] private GameObject Timer;
-    [SerializeField] private TMP_Text CountdownClock;
-    [SerializeField] private float timeRemaining = 75f;
-    [SerializeField] private Color clockTimer;
-    [SerializeField] private Color panicTimer;
-    bool timerIsRunning = false;
-    bool piecesSent = false;
+    [SerializeField] private TimerController timer;
+    
+    //[SerializeField] private GameObject Timer;
+    //[SerializeField] private TMP_Text CountdownClock;
+    //[SerializeField] private float timeRemaining = 75f;
+    //[SerializeField] private Color clockTimer;
+    //[SerializeField] private Color panicTimer;
+    //bool timerIsRunning = false;
     #endregion
 
     #region UI
@@ -103,8 +104,8 @@ public class PieceSelection : MonoBehaviour
 
             if(PieceManager.instance.onlineMultiplayer)
             {
-                // Starts a countdown clock of 3 minutes
-                StartCoroutine(PieceSelectionTimer());
+                timer.gameObject.SetActive(true);
+                timer.startTimer();
 
                 if(MultiplayerController.Instance.currentTeam == 0)
                 {
@@ -127,16 +128,11 @@ public class PieceSelection : MonoBehaviour
 
     private void Update()
     {
-        if (timerIsRunning)
-            Timer.SetActive(true);
-        else
-            Timer.SetActive(false);
-
         // An online game is running and both teams have confirmed their pieces
         // It's time to move onto the next scene
         if(PieceManager.instance.onlineMultiplayer && navyTotal > 0 && pirateTotal > 0)
         {
-            StopCoroutine(PieceSelectionTimer());
+            timer.stopTimer();
 
             if (navyTotal < pirateTotal)
                 PieceManager.instance.navyFirst = true;
@@ -162,49 +158,6 @@ public class PieceSelection : MonoBehaviour
 
             SceneManager.LoadScene("Piece Placement");
         }
-    }
-
-    // Waits for a certain length of time before dropping the connection
-    IEnumerator PieceSelectionTimer()
-    {
-        timerIsRunning = true;
-
-        while (timerIsRunning)
-        {
-            if(timeRemaining > 0)
-                timeRemaining -= Time.deltaTime;
-            else
-            {
-                timeRemaining = 0;
-                timerIsRunning = false;
-            }
-
-            displayTimeRemaining();
-            yield return null;
-        }
-
-        if(timeRemaining == 0)
-        {
-            if (piecesSent)
-                MultiplayerController.Instance.gameWon = 1;
-            else
-                MultiplayerController.Instance.gameWon = 0;
-
-            MultiplayerController.Instance.ConnectionDropped();
-        }
-    }
-
-    private void displayTimeRemaining()
-    {
-        float minutes = Mathf.FloorToInt(timeRemaining / 60);
-        float seconds = Mathf.FloorToInt(timeRemaining % 60);
-
-        CountdownClock.text = string.Format("{0:0}:{1:00}", minutes, seconds);
-
-        if (minutes < 1)
-            CountdownClock.color = panicTimer;
-        else
-            CountdownClock.color = clockTimer;
     }
 
     public void OnNavyChosen()
@@ -409,6 +362,8 @@ public class PieceSelection : MonoBehaviour
             MultiplayerController.Instance.gameWon = 1;
 
             Client.Instance.SendToServer(idTeam);
+
+            timer.piecesSent = true;
         }
         else
         {
@@ -581,8 +536,6 @@ public class PieceSelection : MonoBehaviour
 
     public void WaitForOpponent()
     {
-        piecesSent = true;
-
         if (PirateSelectMenu.activeInHierarchy)
             PirateSelectMenu.SetActive(false);
         if(NavySelectMenu.activeInHierarchy)

@@ -553,6 +553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b04717f7e135b46a34ebdc649dcff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActive: 0
   onlineMultiplayer: 0
   navyRoyal1: 0
   navyRoyal2: 0
@@ -3071,7 +3072,6 @@ RectTransform:
   - {fileID: 357039276}
   - {fileID: 212528388}
   - {fileID: 194218940}
-  - {fileID: 2027925439}
   - {fileID: 304441675}
   m_Father: {fileID: 1044066239}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3098,11 +3098,7 @@ MonoBehaviour:
   NavySelectMenu: {fileID: 357039275}
   PirateSelectMenu: {fileID: 212528387}
   WaitingForOpponentMenu: {fileID: 194218939}
-  Timer: {fileID: 2027925438}
-  CountdownClock: {fileID: 1178123243}
-  timeRemaining: 180
-  clockTimer: {r: 1, g: 1, b: 1, a: 1}
-  panicTimer: {r: 0.78616345, g: 0.07169407, b: 0.07169407, a: 1}
+  timer: {fileID: 2027925442}
   navyUI: {fileID: 357039275}
   pirateUI: {fileID: 212528387}
   navyPoints: {fileID: 979158241}
@@ -4683,6 +4679,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2088430111}
+  - {fileID: 2027925439}
   - {fileID: 677035667}
   - {fileID: 1312595157}
   m_Father: {fileID: 0}
@@ -8955,6 +8952,7 @@ GameObject:
   - component: {fileID: 2027925439}
   - component: {fileID: 2027925441}
   - component: {fileID: 2027925440}
+  - component: {fileID: 2027925442}
   m_Layer: 5
   m_Name: Timer
   m_TagString: Untagged
@@ -8975,7 +8973,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1178123245}
-  m_Father: {fileID: 677035667}
+  m_Father: {fileID: 1044066239}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9081,6 +9079,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2027925438}
   m_CullTransparentMesh: 1
+--- !u!114 &2027925442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027925438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60735e58eb4993f4fb7c49d3d9ac1716, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Timer: {fileID: 2027925438}
+  CountdownClock: {fileID: 1178123243}
+  timeRemaining: 180
+  clockTimer: {r: 1, g: 1, b: 1, a: 1}
+  panicTimer: {r: 0.78431374, g: 0.07058824, b: 0.07058824, a: 1}
 --- !u!1 &2081456879
 GameObject:
   m_ObjectHideFlags: 0
