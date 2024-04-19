@@ -150,6 +150,9 @@ public class GameBoard : MonoBehaviour
 
     private void Update()
     {
+        // Checking for tutorial scene
+        Scene currentScene = SceneManager.GetActiveScene();
+        
         // Check for a game win
         if (gameTimer.timeOver && !gameWon)
         {
@@ -184,7 +187,7 @@ public class GameBoard : MonoBehaviour
         boardUI.UpdateTurn(navyTurn);
 
         // The active player has selected a bomber or tactician to use this turn
-        if (storedTileSelected != null)
+        if (currentScene.name != "TTBoard" || storedTileSelected != null)
         {
             boardUI.UpdateSelectedPiece(storedTileSelected.GetComponent<Square>().currentPiece.type, storedTileSelected.GetComponent<Square>().currentPiece.isNavy);
 
@@ -360,14 +363,14 @@ public class GameBoard : MonoBehaviour
                     if (current_square.currentPiece != null)
                     {
                         // It's not your turn yet!
-                        if (PieceManager.instance.onlineMultiplayer && navyTurn != playerIsNavy)
+                        if (currentScene.name != "TTBoard" && PieceManager.instance.onlineMultiplayer && navyTurn != playerIsNavy)
                         {
                             boardUI.DisplayTempText("It's not your turn yet!", 1.5f);
                             Debug.Log("It's not your turn!");
                             Square selectedTile = tileSelected.GetComponent<Square>();
                             selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
                         }
-                        else if (PieceManager.instance.onlineMultiplayer && current_square.currentPiece.isNavy != navyTurn)
+                        else if (currentScene.name != "TTBoard" && PieceManager.instance.onlineMultiplayer && current_square.currentPiece.isNavy != navyTurn)
                         {
                             boardUI.DisplayTempText("That's not your piece!", 1.5f);
                             Debug.Log("Wrong piece selected!");
@@ -437,7 +440,7 @@ public class GameBoard : MonoBehaviour
 
 
                         // Sends move data if online
-                        if (PieceManager.instance.onlineMultiplayer)
+                        if (currentScene.name != "TTBoard" && PieceManager.instance.onlineMultiplayer)
                         {
                             Debug.Log("Sending move to server");
                             NetMovePiece mp = new NetMovePiece();
@@ -473,7 +476,7 @@ public class GameBoard : MonoBehaviour
 
                         NetCapturePiece cp = new NetCapturePiece();
 
-                        if (PieceManager.instance.onlineMultiplayer)
+                        if (currentScene.name != "TTBoard" && PieceManager.instance.onlineMultiplayer)
                         {
                             Debug.Log("Sending capture to server");
 
@@ -498,7 +501,7 @@ public class GameBoard : MonoBehaviour
 
                         GameplayCapturePiece(CurrentSquare, targetSquare, currentPiece, capturedPiece, moveCoordinates, tileSelected.tag == "GunnerTarget");
                         
-                        if(PieceManager.instance.onlineMultiplayer)
+                        if(currentScene.name != "TTBoard" && PieceManager.instance.onlineMultiplayer)
                         {
                             cp.turnOver = (resetOre || orebearerSecondMove) ? 0 : 1;
                             Client.Instance.SendToServer(cp);
@@ -789,6 +792,8 @@ public class GameBoard : MonoBehaviour
 
     private void GameplayCapturePiece(Square CurrentSquare, Square targetSquare, Piece currentPiece, Piece capturedPiece, Vector2Int moveCoordinates, bool gunnerCapture = false, bool turnOver = true)
     {
+        Scene currentScene = SceneManager.GetActiveScene();
+        
         // Check if capture target is the ore
         if (capturedPiece.type == PieceType.Ore)
         {
@@ -801,12 +806,15 @@ public class GameBoard : MonoBehaviour
         }
 
         // If the orebearer is being captured, the ore needs to be reset (handled by opponent in multiplayer)
-        if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == currentPiece.isNavy))
+        if (currentScene.name != "TTBoard")
         {
-            if (capturedPiece.hasOre)
+            if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == currentPiece.isNavy))
             {
-                resetOre = true;
-                turnOver = false;
+                if (capturedPiece.hasOre)
+                {
+                    resetOre = true;
+                    turnOver = false;
+                }
             }
         }
 
@@ -860,7 +868,7 @@ public class GameBoard : MonoBehaviour
         // Clean up board now that move has completed
         ResetBoardMaterials();
 
-        if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == currentPiece.isNavy))
+        if (currentScene.name != "TTBoard" && (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == currentPiece.isNavy)))
         {
             // Ore needs to be reset before the turn ends
             if (resetOre)
@@ -917,6 +925,7 @@ public class GameBoard : MonoBehaviour
 
     private void GameplayCannonCapture(Square CurrentSquare, Square targetSquare, Piece currentPiece, Piece capturedPiece, Vector2Int moveCoordinates, bool turnOver = true)
     {
+        Scene currentScene = SceneManager.GetActiveScene();
         // A piece is being captured
         if (capturedPiece != null)
         {
@@ -931,7 +940,7 @@ public class GameBoard : MonoBehaviour
             }
 
             // If the orebearer is being captured, the ore needs to be reset (handled by opponent in multiplayer)
-            if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == currentPiece.isNavy))
+            if (currentScene.name == "TTBoard" || (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == currentPiece.isNavy)))
             {
                 if (capturedPiece.hasOre)
                 {
@@ -1652,59 +1661,96 @@ public class GameBoard : MonoBehaviour
 
         Scene currentScene = SceneManager.GetActiveScene();
 
-        if(currentScene.name == "TTBoard")
+        if(currentScene.name == "TTBoard" && StoryUI.tutorialToLoad != 0)
         {
             if (StoryUI.tutorialToLoad == 1)
             {
                 // mate tutorial
                 NavyPieces[0] = SpawnPiece(PieceType.Mate, true, 5, 5);
-                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 2, 7);
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 3, 7);
+                PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 6, 3);
 
             }
             else if(StoryUI.tutorialToLoad == 2)
             {
                 // Quartermaster tutorial
+                NavyPieces[0] = SpawnPiece(PieceType.Quartermaster, true, 5, 5);
+                PiratePieces[0] = SpawnPiece(PieceType. LandMine, false, 4, 6);
+                PiratePieces[1] = SpawnPiece(PieceType. LandMine, false, 5, 6);
+                PiratePieces[2] = SpawnPiece(PieceType. Mate, false, 6, 9);
+
             }
             else if(StoryUI.tutorialToLoad == 3)
             {
                 // Cannon tutorial
+                NavyPieces[0] = SpawnPiece(PieceType.Cannon, true, 5, 5);
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 5, 9);
+                PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 6, 8);
             }
             else if(StoryUI.tutorialToLoad == 4)
             {
                 // Engineer tutorial
+                NavyPieces[0] = SpawnPiece(PieceType.Bomber, true, 5, 5);
+                NavyPieces[1] = SpawnPiece(PieceType.LandMine, true, 5, 4);
+                PiratePieces[0] = SpawnPiece(PieceType.LandMine, false, 6, 6);
+                PiratePieces[1] = SpawnPiece(PieceType.LandMine, false, 6, 5);
+                PiratePieces[2] = SpawnPiece(PieceType.Mate, false, 5, 9);
             }
             else if(StoryUI.tutorialToLoad == 5)
             {
                 // Vanguard tutorial
+                NavyPieces[0] = SpawnPiece(PieceType.Vanguard, true, 5, 5);
+                NavyPieces[1] = SpawnPiece(PieceType.LandMine, true, 3, 5);
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 5, 8);
+                PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 7, 6);
             }
             else if(StoryUI.tutorialToLoad == 6)
             {
                 // Navigator tutorial
+                NavyPieces[0] = SpawnPiece(PieceType.Navigator, true, 5, 5);
+                NavyPieces[1] = SpawnPiece(PieceType.LandMine, true, 5, 3);
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 8, 5);
+                PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 6, 7);
             }
             else if(StoryUI.tutorialToLoad == 7)
             {
                 // Gunner tutorial
+                NavyPieces[0] = SpawnPiece(PieceType.Gunner, true, 5, 5);
+                NavyPieces[1] = SpawnPiece(PieceType.LandMine, true, 5, 7);
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 5, 8);
+                PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 6, 8);
+                PiratePieces[2] = SpawnPiece(PieceType.Mate, false, 5, 2);
             }
             else if(StoryUI.tutorialToLoad == 8)
             {
                 // Captain tutorial
+                PiratePieces[0] = SpawnPiece(PieceType.Royal1, false, 5, 5);
+                PiratePieces[1] = SpawnPiece(PieceType.LandMine, false, 4, 5);
+                NavyPieces[0] = SpawnPiece(PieceType.Mate, true, 5, 7);
+                NavyPieces[1] = SpawnPiece(PieceType.LandMine, true, 5, 6);
+                NavyPieces[2] = SpawnPiece(PieceType.LandMine, true, 5, 4);
             }
             else if(StoryUI.tutorialToLoad == 9)
             {
                 // Corsair tutorial
+                PiratePieces[0] = SpawnPiece(PieceType.Royal2, false, 5, 5);
             }
             else if(StoryUI.tutorialToLoad == 10)
             {
                 // Admiral tutorial
+                NavyPieces[0] = SpawnPiece(PieceType.Royal1, true, 5, 5);
             }
             else if(StoryUI.tutorialToLoad == 11)
             {
                 // Tactician tutorial
+                NavyPieces[0] = SpawnPiece(PieceType.Royal2, true, 5, 4);
+                PiratePieces[0] = SpawnPiece(PieceType.Gunner, false, 8, 6);
+                PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 5, 7);
+
             }
 
         }
-        else
-         if(PieceManager.instance == null)
+        else if(PieceManager.instance == null)
         {
             Debug.Log("No pieces available, using default spawn");
 

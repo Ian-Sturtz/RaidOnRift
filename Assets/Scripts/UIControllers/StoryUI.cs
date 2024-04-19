@@ -91,6 +91,8 @@ public class StoryUI : MonoBehaviour
     {
         StopAllCoroutines();
 
+        Scene currentScene = SceneManager.GetActiveScene();
+
         if (!menuTop)
         {
             switch(piece)
@@ -204,6 +206,104 @@ public class StoryUI : MonoBehaviour
                     character.sprite = pirateGunner;
                     tutorialToLoad = 7;
                     break;
+                case "Tutorial":
+                    
+                    switch (tutorialToLoad)
+                    {
+                        case 10:
+                            pieceName.SetText("THE ADMIRAL");
+                            pieceDesc.SetText("Moves any unblocked distance in any direction, captures by replacement.\r\n\nUse the tactician's movement to capture all the navy mates with the least amount of moves possible.");
+                            character.sprite = admiral;             
+                            break;
+                        case 11:
+                            pieceName.SetText("THE TACTICIAN");
+                            pieceDesc.SetText("Moves up to two unblocked squares orthogonally, captures by replacement. Can also use the moveset of any enemy piece within whatever zone the Tactician is in (Allied Start Zone, Neutral Zone, or Enemy Start Zone).\r\n\nUse the Tacticians special ability to imitate the gunner within the same zone, and then use the gunner's shot to capture the pirate mate.");
+                            character.sprite = tactician;
+                            break;
+                        case 1:
+                            pieceName.SetText("THE CREWMATE");
+                            pieceDesc.SetText("Moves one square in any direction, but cannot move backwards unless the Mate has captured an enemy piece. Captures by replacement. Can perform Jailbreaks after reaching the opponent’s Royal Zone.\r\n\nUse the navy to capture the pirate mate up top first for it to gain the ability to move backwards, and then capture the other pirate beneath.");
+                            character.sprite = navyCrew;
+                            break;
+                        case 2:
+                            pieceName.SetText("THE QUARTERMASTER");
+                            pieceDesc.SetText("Moves two spaces orthogonally and one space perpendicularly. Jumps over blockers and captures by replacement.\r\n\nUse the Quatermaster's movement to jump over the energy shield and capture the pirate mate.");
+                            character.sprite = navyQuatermaster;
+                            break;
+                        case 3:
+                            pieceName.SetText("THE CANNONEER");
+                            pieceDesc.SetText("Can move one unblocked space in any direction, captures by jumping any unblocked distance orthogonally and must land on the opposite adjacent square to the captured piece. An Energy Shield can be jumped over in this way, but the Energy Shield won’t be captured.\r\n\nSince the cannoneer can't jump over energy shields, move to the side to be able to capture the unlbocked pirate mate.");
+                            character.sprite = navyCannon;
+                            break;
+                        case 4:
+                            pieceName.SetText("THE ENGINEER");
+                            pieceDesc.SetText("Moves up to two unblocked spaces in any direction, can capture enemy Land Mines, ore, and orebearers by replacement. Once a bomber has captured a Land Mine, it can capture any enemy piece for as long as that Land Mine remains captured. Can also place one enemy Land Mine from the Jail Zone back to the game board in any square orthogonally adjacent instead of moving or capturing in a turn.\r\n\nTest how the engineer can capture enemy energy shields (you'll notice you can't do the same with friendly ones) and relocate the energy shields around you.");
+                            character.sprite = navyEngineer;
+                            break;
+                        case 5:
+                            pieceName.SetText("THE VANGUARD");
+                            pieceDesc.SetText("Moves one square forward or backward, both orthogonally and diagonally, but can move any unblocked distance sideways. Captures by replacement.\r\n\nTaking into account the Vanguard's movement, try figuring out which pirate mate will take less moves to capture and then test if you were right.");
+                            character.sprite = navyVanguard;
+                            break;
+                        case 6:
+                            pieceName.SetText("THE NAVIGATOR");
+                            pieceDesc.SetText("Moves one square sideways, both orthogonally and diagonally, but can move any unblocked distance forwards and backwards. Captures by replacement.\r\n\nTaking into account the Navigator's movement, try figuring out which pirate mate will take less moves to capture and then test if you were right.");
+                            character.sprite = navyNavigator;
+                            break;
+                        case 7:
+                            pieceName.SetText("THE GUNNER");
+                            pieceDesc.SetText("In the dance of photons and fate, my aim is true, a laser gunner's vow to safeguard the rift with light's silent strike.\n\nIn the shadow of tomorrow's warfare, I stand as the Navy's laser gunner, wielding light with lethal precision. My role marries technology and tenacity, mastering beams that cut through the silence of the skies. Each pulse is a testament to modern warfare's evolution, protecting the rift with an unseen force. My vigilance shapes the unseen battlefield, a silent guardian of the future's peace.");
+                            character.sprite = navyGunner;
+                            break;
+
+                        case 8:
+                            pieceName.SetText("THE CAPTAIN");
+                            pieceDesc.SetText("In the vast canvas of the cosmos, I carve my destiny with bold strokes, a space pirate captain, unfettered by laws but bound by the stars.\n\n Amidst the endless expanse of stars, I navigate the cosmos as a space pirate captain, a master of the uncharted. With a crew as diverse as the planets we've seen, my ship cuts through the void, a beacon of freedom and fortune. In the silence of space, my command is law, chasing adventure and treasure beyond the grasp of galactic authorities, a rebel heart beating in the dark.");
+                            character.sprite = Captain;
+                            break;
+                        case 9:
+                            pieceName.SetText("THE CORSAIR");
+                            pieceDesc.SetText("Amongst the starlit void, my blade sings the anthem of the free, a Corsairs vow to carve a path of honor and rebellion.\n\n As a Corsair, I wield my blade with the precision of a comet slicing through the dark. My skill is honed in the vacuum of space, a dance of steel and stars against any who dare cross our path. Leading my crew with the edge of my sword, I seek fortune and glory beyond the frontiers, a master of combat in the endless night.");
+                            character.sprite = Corsair;
+                            break;
+                        // case "Pirate Mate":
+                        //     pieceName.SetText("THE CREWMATE");
+                        //     pieceDesc.SetText("In the vast embrace of the cosmos, I find my freedom, a crewmate charting the unknown with a heart untamed by gravity.\n\n Aboard the starship's deck, I stand as a loyal crewmate, navigating the celestial seas. My life is a tapestry of stars and adventures, bound by camaraderie and the thrill of the unknown. Each planet and asteroid belt brings new challenges and treasures, forging my path in the cosmos. In this boundless frontier, I am a wanderer, a seeker of fortune under the galaxy's watchful eyes.");
+                        //     character.sprite = pirateCrew;
+                        //     break;
+                        // case "Pirate Quartermaster":
+                        //     pieceName.SetText("THE QUARTERMASTER");
+                        //     pieceDesc.SetText("In the infinite chess game of the cosmos, I move with precision, a quartermaster guiding our crew through the stars with cunning and care.\n\n As the quartermaster of my crew, I am the backbone of our celestial odyssey, managing treasures and supplies with an iron hand. My expertise in logistics and strategy ensures our ship thrives in the unforgiving void of space. I stand at the intersection of survival and ambition, navigating the delicate balance between risk and reward. In the vast expanse, my wisdom steers us toward prosperity.");
+                        //     character.sprite = pirateQuatermaster;
+                        //     break;
+                        // case "Pirate Cannon":
+                        //     pieceName.SetText("THE CANNONEER");
+                        //     pieceDesc.SetText("Through the void, my cannons roar, a symphony of resistance and liberation, etching our mark among the stars.\n\n In the echoing silence of space, my role as a cannoneer speaks volumes. Sending volleys of defiance through the vacuum. Each shot is a declaration of our sovereignty, a blend of precision and power. Amidst asteroids and enemy fleets, I carve our path to freedom, a guardian of our crew's rebellious spirit.");
+                        //     character.sprite = pirateCannon;
+                        //     break;
+                        // case "Pirate Engineer":
+                        //     pieceName.SetText("THE ENGINEER");
+                        //     pieceDesc.SetText("In the engine's hum and the stars' glow, I find my purpose, engineering our path through the cosmos, where innovation meets adventure.\n\n Within the heart of our star-bound vessel, I serve as the engineer, a custodian of the technology that propels us through the cosmos. My hands, stained with oil and stardust, mend and master the machinery that defies gravity. In the vast silence, my work ensures our survival and success, turning the impossible into the backbone of our adventures among the stars.");
+                        //     character.sprite = pirateEngineer;
+                        //     break;
+                        // case "Pirate Vanguard":
+                        //     pieceName.SetText("THE VANGUARD");
+                        //     pieceDesc.SetText("Where the dark veil of space dares to suffocate hope, I shine as the vanguard, cutting through fear with the courage of a comet.\n\n As the vanguard of our crew, I lead our forays into the unknown, the first to face danger in the vacuum of space. My resolve is as unyielding as the metal of my armor, steering us through cosmic storms and enemy blockades. In the frontier of the galaxy, my bravery lights our way, a beacon of defiance and exploration, charting a course through the stars.");
+                        //     character.sprite = pirateVanguard;
+                        //     break;
+                        // case "Pirate Navigator":
+                        //     pieceName.SetText("THE NAVIGATOR");
+                        //     pieceDesc.SetText("Amongst the tapestry of the cosmos, I draw our path, a navigator's vow to sail the stars, where adventure and mystery intertwine.\n\n As the navigator of our crew, I chart our course through the star-studded infinity. My eyes decipher the cosmos, turning celestial bodies into waypoints on our treasure-laden journey. In this vast, silent ocean, my calculations fuel our adventures, threading through wormholes and asteroid fields. Guided by constellations, I steer our ship towards fortunes untold, a cosmic pathfinder in the endless night.");
+                        //     character.sprite = pirateNavigator;
+                        //     break;
+                        // case "Pirate Gunner":
+                        //     pieceName.SetText("THE GUNNER");
+                        //     pieceDesc.SetText("With every burst from my cannon, I write our legacy among the stars, a gunner's promise to defend our freedom in the cosmic sea.\n\n Amid the silence of space, I stand as the gunner, master of my personal arsenal. My aim is guided by the stars, firing with precision that rivals the pull of gravity. Each shot declares our freedom, echoing through the void. In the dance of combat and cosmos, my skills safeguard our quest for adventure and treasure, a relentless defender of our celestial domain.");
+                        //     character.sprite = pirateGunner;
+                        //     break;
+                    }
+                    break;
+
             }
             Vector2 topPos = bottomPos + Vector2.up * topHeight;
             StartCoroutine(MoveInfo(topPos));
@@ -251,7 +351,7 @@ public class StoryUI : MonoBehaviour
 
     public void toMain()
     {
-        SceneManager.LoadScene("Main Menu");
+        SceneManager.LoadScene("TTBoard");
     }
 
     public void toTutorial()
