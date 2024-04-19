@@ -34,14 +34,14 @@ public class Cannon : Piece
                 if(IsSquareOnBoard(currentX, currentY + change))
                 {
                     Square possibleSquare = tiles[currentX, currentY + change].GetComponent<Square>();
-                    
+
                     // Piece has been found
-                    if(possibleSquare.currentPiece != null)
+                    if (possibleSquare.currentPiece != null)
                     {
                         up = false;
-                        
+
                         // It is an enemy piece
-                        if(isNavy != possibleSquare.currentPiece.isNavy || possibleSquare.currentPiece.type == PieceType.LandMine)
+                        if (isNavy != possibleSquare.currentPiece.isNavy || possibleSquare.currentPiece.type == PieceType.LandMine)
                         {
                             if(IsSquareOnBoard(currentX, currentY + change + 1))
                             {

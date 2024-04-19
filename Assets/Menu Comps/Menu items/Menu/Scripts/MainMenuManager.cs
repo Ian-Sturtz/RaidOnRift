@@ -109,10 +109,10 @@ public class MainMenuManager : MonoBehaviour
             }
         }
 
-        //if (MultiplayerController.Instance != null && SceneManager.GetActiveScene().name == "Main Menu")
-        //{
-        //    MultiplayerController.Instance.DeleteMultiplayerInstance();
-        //}
+        if (PieceManager.instance != null)
+        {
+            Destroy(PieceManager.instance.gameObject);
+        }
 
         //PrepareResolutions();
     }

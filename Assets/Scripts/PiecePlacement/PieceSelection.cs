@@ -120,6 +120,11 @@ public class PieceSelection : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        UnRegisterEvents();
+    }
+
     private void Update()
     {
         if (timerIsRunning)

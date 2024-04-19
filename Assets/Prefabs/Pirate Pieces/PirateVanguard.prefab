@@ -188,7 +188,7 @@ MonoBehaviour:
   PirateOre: {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
   originalType: 4
   type: 4
-  isNavy: 1
+  isNavy: 0
   hasCaptured: 0
   hasOre: 0
   gameWon: 0

@@ -118,6 +118,11 @@ public class PPGameBoard : MonoBehaviour
         PlacementTimer.time = 120;
     }
 
+    private void OnDestroy()
+    {
+        UnRegisterEvents();
+    }
+
     private void Update()
     {
         // Checks if the timer has run out

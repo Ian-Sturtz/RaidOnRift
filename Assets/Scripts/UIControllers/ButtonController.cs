@@ -7,7 +7,7 @@ public class ButtonController : MonoBehaviour
 {
     public void LoadMainMenu()
     {
-        if (MultiplayerController.Instance != null)
+        if (PieceManager.instance.onlineMultiplayer)
         {
             Client.Instance.Shutdown();
             Server.Instance.Shutdown();
@@ -22,7 +22,7 @@ public class ButtonController : MonoBehaviour
     {
         Debug.Log("Quitting Game");
         
-        if(MultiplayerController.Instance != null)
+        if(PieceManager.instance.onlineMultiplayer)
         {
             Client.Instance.Shutdown();
             Server.Instance.Shutdown();

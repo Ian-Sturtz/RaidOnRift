@@ -13,8 +13,9 @@ public enum OpCode
     MOVE_PIECE = 6,
     CAPTURE_PIECE = 7,
     CANNON_CAPTURE = 8,
-    GAME_WON = 9,
-    REMATCH = 10
+    RESPAWN = 9,
+    GAME_WON = 10,
+    REMATCH = 11
 }
 
 public static class NetUtility
@@ -33,6 +34,7 @@ public static class NetUtility
             case OpCode.MOVE_PIECE: msg = new NetMovePiece(stream); break;
             case OpCode.CAPTURE_PIECE: msg = new NetCapturePiece(stream); break;
             case OpCode.CANNON_CAPTURE: msg = new NetCannonCapture(stream); break;
+            case OpCode.RESPAWN: msg = new NetRespawn(stream); break;
             case OpCode.GAME_WON: msg = new NetGameWon(stream); break;
             //case OpCode.REMATCH: msg = new NetRematch(stream); break;
 
@@ -60,6 +62,7 @@ public static class NetUtility
     public static Action<NetMessage> C_MOVE_PIECE;
     public static Action<NetMessage> C_CAPTURE_PIECE;
     public static Action<NetMessage> C_CANNON_CAPTURE;
+    public static Action<NetMessage> C_RESPAWN;
     public static Action<NetMessage> C_GAME_WON;
     public static Action<NetMessage> C_REMATCH;
 
@@ -71,6 +74,7 @@ public static class NetUtility
     public static Action<NetMessage, NetworkConnection> S_MOVE_PIECE;
     public static Action<NetMessage, NetworkConnection> S_CAPTURE_PIECE;
     public static Action<NetMessage, NetworkConnection> S_CANNON_CAPTURE;
+    public static Action<NetMessage, NetworkConnection> S_RESPAWN;
     public static Action<NetMessage, NetworkConnection> S_GAME_WON;
     public static Action<NetMessage, NetworkConnection> S_REMATCH;
 

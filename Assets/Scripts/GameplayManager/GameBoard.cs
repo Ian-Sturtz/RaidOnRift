@@ -499,11 +499,14 @@ public class GameBoard : MonoBehaviour
                         Square CurrentSquare = storedTileSelected.GetComponent<Square>();
                         Square targetSquare = tileSelected.GetComponent<Square>();
                         Piece currentPiece = CurrentSquare.currentPiece;
+                        Vector2Int currentCoordinates = IdentifyThisBoardSquare(storedTileSelected);
                         Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
 
                         // Find which piece is being captured
                         Square captureSquare;
                         Piece capturedPiece = null;
+
+                        int captureDirection = -1;
 
                         // Checks the square to the right of move square
                         if (moveCoordinates.x + 1 < 10)
@@ -514,7 +517,7 @@ public class GameBoard : MonoBehaviour
                                 Debug.Log("Found Right");
                                 captureSquare = tiles[moveCoordinates.x + 1, moveCoordinates.y].GetComponent<Square>();
                                 capturedPiece = captureSquare.currentPiece;
-                                //captureSquare.currentPiece = null;
+                                captureDirection = 1;
                             }
                         }
                         // Checks the square to the left of move square
@@ -526,7 +529,7 @@ public class GameBoard : MonoBehaviour
                                 Debug.Log("Found Left");
                                 captureSquare = tiles[moveCoordinates.x - 1, moveCoordinates.y].GetComponent<Square>();
                                 capturedPiece = captureSquare.currentPiece;
-                                //captureSquare.currentPiece = null;
+                                captureDirection = 3;
                             }
                         }
                         // Checks the square above the move square
@@ -538,7 +541,7 @@ public class GameBoard : MonoBehaviour
                                 Debug.Log("Found Up");
                                 captureSquare = tiles[moveCoordinates.x, moveCoordinates.y + 1].GetComponent<Square>();
                                 capturedPiece = captureSquare.currentPiece;
-                                //captureSquare.currentPiece = null;
+                                captureDirection = 0;
                             }
                         }
                         // Checks the square below the move square
@@ -550,11 +553,31 @@ public class GameBoard : MonoBehaviour
                                 Debug.Log("Found Down");
                                 captureSquare = tiles[moveCoordinates.x, moveCoordinates.y - 1].GetComponent<Square>();
                                 capturedPiece = captureSquare.currentPiece;
-                                //captureSquare.currentPiece = null;
+                                captureDirection = 2;
                             }
                         }
 
+                        NetCannonCapture cc = new NetCannonCapture();
+
+                        if (PieceManager.instance.onlineMultiplayer)
+                        {
+                            Debug.Log("Sending cannon capture to server");
+
+                            cc.teamID = currentPiece.isNavy ? 0 : 1;
+                            cc.originalX = currentCoordinates.x;
+                            cc.originalY = currentCoordinates.y;
+                            cc.targetX = moveCoordinates.x;
+                            cc.targetY = moveCoordinates.y;
+                            cc.captureDir = captureDirection;
+                        }
+
                         GameplayCannonCapture(CurrentSquare, targetSquare, currentPiece, capturedPiece, moveCoordinates);
+
+                        if (PieceManager.instance.onlineMultiplayer)
+                        {
+                            cc.turnOver = (resetOre || orebearerSecondMove) ? 0 : 1;
+                            Client.Instance.SendToServer(cc);
+                        }
                     }
 
                     // A landmine has been selected from jail or a tactician is mimicking a piece
@@ -629,33 +652,29 @@ public class GameBoard : MonoBehaviour
                     else if (tileSelected.tag == "MineDeploy")
                     {
                         Debug.Log("Deploying mine");
-                        Square bomberSquare = storedTileSelected.GetComponent<Square>();
+                        Square mineSquare = storedTileSelected.GetComponent<Square>();
                         Vector2Int deployCoordinates = IdentifyThisBoardSquare(tileSelected);
-                        int spawnIndex = FindFirstOpenTeamSlot(!bomberSquare.currentPiece.isNavy);
 
-                        if (bomberSquare.currentPiece.isNavy)
-                        {
-                            jail.pirateJailedPieces[cellToHighlight].GetComponent<Piece>().destroyPiece();
-                            jail.NavyJailCells[cellToHighlight].GetComponent<JailCell>().resetCell();
-                            PiratePieces[spawnIndex] = SpawnPiece(PieceType.LandMine, false, deployCoordinates.x, deployCoordinates.y);
-                        }
+                        Piece shieldPiece;
+                        if (!mineSquare.currentPiece.isNavy)
+                            shieldPiece = jail.navyJailedPieces[cellToHighlight].GetComponent<Piece>();
                         else
+                            shieldPiece = jail.pirateJailedPieces[cellToHighlight].GetComponent<Piece>();
+
+                        if (PieceManager.instance.onlineMultiplayer)
                         {
-                            jail.navyJailedPieces[cellToHighlight].GetComponent<Piece>().destroyPiece();
-                            jail.PirateJailCells[cellToHighlight].GetComponent<JailCell>().resetCell();
-                            NavyPieces[spawnIndex] = SpawnPiece(PieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y);
+                            NetRespawn rs = new NetRespawn();
+
+                            rs.teamID = shieldPiece.isNavy ? 0 : 1;
+                            rs.jailIndex = cellToHighlight;
+                            rs.targetX = deployCoordinates.x;
+                            rs.targetY = deployCoordinates.y;
+                            rs.specialPiece = 0;
+
+                            Client.Instance.SendToServer(rs);
                         }
 
-                        // Clean up now that mine has been deployed
-                        ResetBoardMaterials();
-                        squareSelected = false;
-                        tileSelected.GetComponent<Square>().SquareHasBeenClicked = false;
-                        tileSelected = null;
-                        storedTileSelected.GetComponent<Square>().SquareHasBeenClicked = false;
-                        storedTileSelected = null;
-                        bomberSelected = false;
-                        landMineSelected = false;
-                        NextTurn();
+                        GameplayDeployPiece(shieldPiece, deployCoordinates, cellToHighlight, 0);
                     }
 
                     // The ore is being redeployed to the board
@@ -664,43 +683,36 @@ public class GameBoard : MonoBehaviour
                         Debug.Log("Redeploying Ore");
                         Square pieceSquare = storedTileSelected.GetComponent<Square>();
                         Vector2Int deployCoordinates = IdentifyThisBoardSquare(tileSelected);
-                        int spawnIndex = FindFirstOpenTeamSlot(pieceSquare.currentPiece.isNavy);
 
                         cellToHighlight = jail.FindPiece(PieceType.Ore, pieceSquare.currentPiece.isNavy);
 
+                        Piece orePiece;
+                        if (pieceSquare.currentPiece.isNavy)
+                            orePiece = jail.navyJailedPieces[cellToHighlight].GetComponent<Piece>();
+                        else
+                            orePiece = jail.pirateJailedPieces[cellToHighlight].GetComponent<Piece>();
+
                         Debug.Log(cellToHighlight);
 
-                        if (pieceSquare.currentPiece.isNavy)
+                        int turnOver = orebearerSecondMove ? 2 : 1;
+
+                        if (PieceManager.instance.onlineMultiplayer)
                         {
-                            jail.navyJailedPieces[cellToHighlight].GetComponent<Piece>().destroyPiece();
-                            jail.PirateJailCells[cellToHighlight].GetComponent<JailCell>().resetCell();
-                            NavyPieces[spawnIndex] = SpawnPiece(PieceType.Ore, true, deployCoordinates.x, deployCoordinates.y);
-                        }
-                        else
-                        {
-                            jail.pirateJailedPieces[cellToHighlight].GetComponent<Piece>().destroyPiece();
-                            jail.NavyJailCells[cellToHighlight].GetComponent<JailCell>().resetCell();
-                            PiratePieces[spawnIndex] = SpawnPiece(PieceType.Ore, false, deployCoordinates.x, deployCoordinates.y);
+                            NetRespawn rs = new NetRespawn();
+
+                            rs.teamID = orePiece.isNavy ? 0 : 1;
+                            rs.jailIndex = cellToHighlight;
+                            rs.targetX = deployCoordinates.x;
+                            rs.targetY = deployCoordinates.y;
+                            rs.specialPiece = turnOver;
+
+                            Client.Instance.SendToServer(rs);
                         }
 
-                        // Clean up now that ore has been redeployed
-                        ResetBoardMaterials();
-                        resetOre = false;
-                        tileSelected.GetComponent<Square>().SquareHasBeenClicked = false;
-                        tileSelected = null;
-                        bomberSelected = false;
-                        landMineSelected = false;
+                        GameplayDeployPiece(orePiece, deployCoordinates, cellToHighlight, turnOver);
 
-                        // Turn is now over
-                        if (!orebearerSecondMove)
-                        {
-                            squareSelected = false;
-                            storedTileSelected.GetComponent<Square>().SquareHasBeenClicked = false;
-                            storedTileSelected = null;
-                            NextTurn();
-                        }
                         // Return control to the orebearer for a second turn
-                        else
+                        if(orebearerSecondMove)
                         {
                             pieceSquare.SquareHasBeenClicked = true;
                             DetectLegalMoves(storedTileSelected, pieceSquare.currentPiece);
@@ -716,6 +728,23 @@ public class GameBoard : MonoBehaviour
                         // Ends turn if orebearer decides not to move a second time
                         if (tileSelected.GetComponent<Square>().currentPiece.hasOre && orebearerSecondMove)
                         {
+                            // Send a blank move message to the opponent so they can end the turn
+                            if (PieceManager.instance.onlineMultiplayer)
+                            {
+                                Square currentSquare = tileSelected.GetComponent<Square>();
+                                Piece currentPiece = currentSquare.currentPiece;
+
+                                NetMovePiece mp = new NetMovePiece();
+                                mp.teamID = currentPiece.isNavy ? 0 : 1;
+                                mp.originalX = currentPiece.currentX;
+                                mp.originalY = currentPiece.currentY;
+                                mp.targetX = currentPiece.currentX;
+                                mp.targetY = currentPiece.currentY;
+                                mp.corsairJump = 0;
+
+                                Client.Instance.SendToServer(mp);
+                            }
+
                             orebearerSecondMove = false;
                             NextTurn();
                         }
@@ -929,7 +958,9 @@ public class GameBoard : MonoBehaviour
             }
 
             // Blanks out the captured piece's square
-            
+            GameObject captureTile = FindThisBoardSquare(capturedPiece.currentX + 1, capturedPiece.currentY + 1);
+            Square captureSquare = captureTile.GetComponent<Square>();
+            captureSquare.currentPiece = null;
 
             // Capture that piece
             jail.InsertAPiece(capturedPiece);
@@ -978,6 +1009,69 @@ public class GameBoard : MonoBehaviour
             tileSelected = null;
             storedTileSelected = null;
             ResetBoardMaterials();
+            NextTurn();
+        }
+    }
+
+    private void GameplayDeployPiece(Piece currentPiece, Vector2Int deployCoordinates, int jailIndex, int deployPieceType)
+    {
+        Debug.Log("Redeploying Piece");
+
+        int spawnIndex = FindFirstOpenTeamSlot(currentPiece.isNavy);
+
+        if (currentPiece.isNavy)
+        {
+            jail.navyJailedPieces[jailIndex].GetComponent<Piece>().destroyPiece();
+            jail.PirateJailCells[jailIndex].GetComponent<JailCell>().resetCell();
+
+            if (deployPieceType == 0)
+                NavyPieces[spawnIndex] = SpawnPiece(PieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y);
+            else
+                NavyPieces[spawnIndex] = SpawnPiece(PieceType.Ore, true, deployCoordinates.x, deployCoordinates.y);
+        }
+        else
+        {
+            jail.pirateJailedPieces[jailIndex].GetComponent<Piece>().destroyPiece();
+            jail.NavyJailCells[jailIndex].GetComponent<JailCell>().resetCell();
+
+            if (deployPieceType == 0)
+                PiratePieces[spawnIndex] = SpawnPiece(PieceType.LandMine, false, deployCoordinates.x, deployCoordinates.y);
+            else
+                PiratePieces[spawnIndex] = SpawnPiece(PieceType.Ore, false, deployCoordinates.x, deployCoordinates.y);
+        }
+
+        bool navyMove;
+
+        if(deployPieceType == 0)
+        {
+            navyMove = !currentPiece.isNavy;
+        }
+        else
+        {
+            navyMove = currentPiece.isNavy;
+        }
+
+        Debug.Log(navyMove);
+
+        // Clean up now that piece has been redeployed
+        if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == navyMove))
+            tileSelected.GetComponent<Square>().SquareHasBeenClicked = false;
+
+        tileSelected = null;
+        bomberSelected = false;
+        landMineSelected = false;
+        resetOre = false;
+        ResetBoardMaterials();
+
+
+        // Turn is now over (unless the orebearer still needs to make another move)
+        if(deployPieceType <= 1)
+        {
+            if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == navyMove))
+                storedTileSelected.GetComponent<Square>().SquareHasBeenClicked = false;
+
+            squareSelected = false;
+            storedTileSelected = null;
             NextTurn();
         }
     }
@@ -1780,21 +1874,29 @@ public class GameBoard : MonoBehaviour
     {
         NetUtility.S_MOVE_PIECE += OnMovePieceServer;
         NetUtility.S_CAPTURE_PIECE += OnCapturePieceServer;
+        NetUtility.S_CANNON_CAPTURE += OnCannonCaptureServer;
+        NetUtility.S_RESPAWN += OnRespawnServer;
         NetUtility.S_GAME_WON += OnGameWonServer;
 
         NetUtility.C_MOVE_PIECE += OnMovePieceClient;
         NetUtility.C_CAPTURE_PIECE += OnCapturePieceClient;
+        NetUtility.C_CANNON_CAPTURE += OnCannonCaptureClient;
+        NetUtility.C_RESPAWN += OnRespawnClient;
         NetUtility.C_GAME_WON += OnGameWonClient;
     }
 
     private void UnRegisterEvents()
-    {
+    { 
         NetUtility.S_MOVE_PIECE -= OnMovePieceServer;
         NetUtility.S_CAPTURE_PIECE -= OnCapturePieceServer;
+        NetUtility.S_CANNON_CAPTURE -= OnCannonCaptureServer;
+        NetUtility.S_RESPAWN -= OnRespawnServer;
         NetUtility.S_GAME_WON -= OnGameWonServer;
 
         NetUtility.C_MOVE_PIECE -= OnMovePieceClient;
         NetUtility.C_CAPTURE_PIECE -= OnCapturePieceClient;
+        NetUtility.C_CANNON_CAPTURE -= OnCannonCaptureClient;
+        NetUtility.C_RESPAWN -= OnRespawnClient;
         NetUtility.C_GAME_WON -= OnGameWonClient;
     }
 
@@ -1804,6 +1906,14 @@ public class GameBoard : MonoBehaviour
         Server.Instance.Broadcast(msg);
     }
     private void OnCapturePieceServer(NetMessage msg, NetworkConnection cnn)
+    {
+        Server.Instance.Broadcast(msg);
+    }
+    private void OnCannonCaptureServer(NetMessage msg, NetworkConnection cnn)
+    {
+        Server.Instance.Broadcast(msg);
+    }
+    private void OnRespawnServer(NetMessage msg, NetworkConnection cnn)
     {
         Server.Instance.Broadcast(msg);
     }
@@ -1877,11 +1987,111 @@ public class GameBoard : MonoBehaviour
         }
     }
 
+    private void OnCannonCaptureClient(NetMessage msg)
+    {
+        NetCannonCapture cc = msg as NetCannonCapture;
+
+        bool pieceIsNavy = cc.teamID == 0;
+        
+        if(pieceIsNavy != playerIsNavy)
+        {
+            Debug.Log($"{cc.originalX},{cc.originalY} is moving");
+
+            GameObject thisTile = FindThisBoardSquare(cc.originalX + 1, cc.originalY + 1);
+            Square thisSquare = thisTile.GetComponent<Square>();
+            Piece thisPiece = thisSquare.currentPiece;
+
+            GameObject targetTile = FindThisBoardSquare(cc.targetX + 1, cc.targetY + 1);
+            Square targetSquare = targetTile.GetComponent<Square>();
+
+            Vector2Int originalCoords = new Vector2Int(cc.originalX, cc.originalY);
+            Vector2Int moveCoords = new Vector2Int(cc.targetX, cc.targetY);
+
+            GameObject captureTile = null;
+            Square captureSquare = null;
+            Piece capturePiece = null;
+
+            switch (cc.captureDir)
+            {
+                case 0: 
+                    Debug.Log("Capturing Up");
+                    captureTile = FindThisBoardSquare(cc.targetX + 1, cc.targetY + 2);
+                    captureSquare = captureTile.GetComponent<Square>();
+                    capturePiece = captureSquare.currentPiece;
+                    break;
+                case 1:
+                    Debug.Log("Capturing Right");
+                    captureTile = FindThisBoardSquare(cc.targetX + 2, cc.targetY + 1);
+                    captureSquare = captureTile.GetComponent<Square>();
+                    capturePiece = captureSquare.currentPiece;
+                    break;
+                case 2:
+                    Debug.Log("Capturing Down");
+                    captureTile = FindThisBoardSquare(cc.targetX + 1, cc.targetY);
+                    captureSquare = captureTile.GetComponent<Square>();
+                    capturePiece = captureSquare.currentPiece;
+                    break;
+                case 3:
+                    Debug.Log("Capturing Left");
+                    captureTile = FindThisBoardSquare(cc.targetX, cc.targetY + 1);
+                    captureSquare = captureTile.GetComponent<Square>();
+                    capturePiece = captureSquare.currentPiece;
+                    break;
+                default:
+                    Debug.Log("Not capturing a piece");
+                    break;
+            }
+
+            GameplayCannonCapture(thisSquare, targetSquare, thisPiece, capturePiece, moveCoords, cc.turnOver == 1);
+        }
+    }
+
     private void OnGameWonClient(NetMessage msg)
     {
         NetGameWon gw = msg as NetGameWon;
 
         GameOver(gw.teamID == 0);
+    }
+
+    private void OnRespawnClient(NetMessage msg)
+    {
+        NetRespawn rs = msg as NetRespawn;
+
+        bool navyMove;
+
+        Debug.Log($"{rs.teamID}: deploying piece type {rs.specialPiece} from {rs.jailIndex} to {rs.targetX},{rs.targetY}");
+
+        if(rs.specialPiece == 0)
+            navyMove = rs.teamID == 1;
+        else
+            navyMove = rs.teamID == 0;
+
+        if (navyMove != playerIsNavy)
+        {
+            Debug.Log("Received a move from opponent!");
+
+            Piece deployPiece;
+
+            if(rs.specialPiece == 0)
+            {
+                if (rs.teamID == 0)
+                    deployPiece = jail.navyJailedPieces[rs.jailIndex].GetComponent<Piece>();
+                else
+                    deployPiece = jail.pirateJailedPieces[rs.jailIndex].GetComponent<Piece>();
+
+            }
+            else
+            {
+                if(rs.teamID == 0)
+                    deployPiece = jail.navyJailedPieces[rs.jailIndex].GetComponent<Piece>();
+                else
+                    deployPiece = jail.pirateJailedPieces[rs.jailIndex].GetComponent<Piece>();
+            }
+
+            Vector2Int deployCoordinates = new Vector2Int(rs.targetX, rs.targetY);
+
+            GameplayDeployPiece(deployPiece, deployCoordinates, rs.jailIndex, rs.specialPiece);
+        }
     }
 
     #endregion

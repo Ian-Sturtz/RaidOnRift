@@ -5,7 +5,7 @@ using UnityEngine;
 public class PieceManager : MonoBehaviour
 {
     public static PieceManager instance;
-
+    public bool isActive = false;
     public bool onlineMultiplayer = false;
 
     public int navyRoyal1;
@@ -44,6 +44,7 @@ public class PieceManager : MonoBehaviour
         }
 
         instance = this;
+        isActive = true;
         DontDestroyOnLoad(gameObject);
     }
 }
