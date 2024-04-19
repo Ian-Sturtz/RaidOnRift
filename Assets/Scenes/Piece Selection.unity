@@ -3141,8 +3141,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   navyRoyal1: {fileID: 32900000, guid: bbfd988d825bdde4bb0d1cc3a21ef441, type: 3}
   navyRoyal2: {fileID: 32900000, guid: 04404465afaa5764e9cebe23d9fa5188, type: 3}
+  navyQuartermaster: {fileID: 32900000, guid: 2497a9385302e034da4136d9c0b43a05, type: 3}
+  navyCannon: {fileID: 32900000, guid: ecf3b981a41b78044a91c459995ca176, type: 3}
+  navyEngineer: {fileID: 32900000, guid: 8dc6a946d1fef17478469a5032e120a6, type: 3}
+  navyVanguard: {fileID: 32900000, guid: be1c9b261979a384bb266bf99b2af0b9, type: 3}
+  navyNavigator: {fileID: 32900000, guid: a9558fb236e1ebf45803c5bf294bd2dd, type: 3}
+  navyGunner: {fileID: 32900000, guid: f7e6f3e58b276804b8f344dcfa6166e0, type: 3}
+  navyMate: {fileID: 32900000, guid: 502355665ac33de448926ace3ba3c1c3, type: 3}
   pirateRoyal1: {fileID: 32900000, guid: 9e10f8db7ae932842810545d4e258b96, type: 3}
   pirateRoyal2: {fileID: 32900000, guid: 2f4239277670f174dbf2843c9f61eab1, type: 3}
+  pirateQuartermaster: {fileID: 32900000, guid: 49fae48130d95604491030b6b8110888, type: 3}
+  pirateCannon: {fileID: 32900000, guid: 0b548a62ca032c94cac5e58acf3e4cde, type: 3}
+  pirateEngineer: {fileID: 32900000, guid: e3fde35d607594144a3a595257cbbe6b, type: 3}
+  pirateVanguard: {fileID: 32900000, guid: 5e99fe3ec4f24074599db769a24773bd, type: 3}
+  pirateNavigator: {fileID: 32900000, guid: 65da425791116f448909d544134bee6a, type: 3}
+  pirateGunner: {fileID: 32900000, guid: 81a1574a197969646ad396bcaa232d90, type: 3}
+  pirateMate: {fileID: 32900000, guid: 4cb652d5898324c4a97d683167a312dd, type: 3}
+  royal1: {fileID: 0}
+  royal2: {fileID: 0}
   quartermaster: {fileID: 32900000, guid: 2497a9385302e034da4136d9c0b43a05, type: 3}
   cannon: {fileID: 32900000, guid: ecf3b981a41b78044a91c459995ca176, type: 3}
   engineer: {fileID: 32900000, guid: 8dc6a946d1fef17478469a5032e120a6, type: 3}
@@ -3150,8 +3166,6 @@ MonoBehaviour:
   navigator: {fileID: 32900000, guid: a9558fb236e1ebf45803c5bf294bd2dd, type: 3}
   gunner: {fileID: 32900000, guid: f7e6f3e58b276804b8f344dcfa6166e0, type: 3}
   mate: {fileID: 32900000, guid: 502355665ac33de448926ace3ba3c1c3, type: 3}
-  royal1: {fileID: 0}
-  royal2: {fileID: 0}
 --- !u!1 &680376055
 GameObject:
   m_ObjectHideFlags: 0
