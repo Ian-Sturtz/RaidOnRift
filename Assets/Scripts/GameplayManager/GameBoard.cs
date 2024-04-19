@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Networking.Transport;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameBoard : MonoBehaviour
 {
@@ -101,6 +102,12 @@ public class GameBoard : MonoBehaviour
 
     #endregion
 
+    // #region Tutorial
+
+    // string sceneName;
+
+    // #endregion
+
     private void Start()
     {
         PIECES_ADDED = System.Enum.GetValues(typeof(PieceType)).Length;
@@ -122,6 +129,11 @@ public class GameBoard : MonoBehaviour
         IdentifyBoardSquares();
 
         SpawnAllPieces();
+
+        // Checking for tutorial scene
+        // Scene currentScene = SceneManager.GetActiveScene();
+        // sceneName = currentScene.name;
+        // Debug.Log(sceneName);
 
         // Identify Player ID in multiplayer
         if (PieceManager.instance != null)
@@ -1638,7 +1650,61 @@ public class GameBoard : MonoBehaviour
         int navyPiecesAdded = 0;
         int piratePiecesAdded = 0;
 
-        if(PieceManager.instance == null)
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        if(currentScene.name == "TTBoard")
+        {
+            if (StoryUI.tutorialToLoad == 1)
+            {
+                // mate tutorial
+                NavyPieces[0] = SpawnPiece(PieceType.Mate, true, 5, 5);
+                PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 2, 7);
+
+            }
+            else if(StoryUI.tutorialToLoad == 2)
+            {
+                // Quartermaster tutorial
+            }
+            else if(StoryUI.tutorialToLoad == 3)
+            {
+                // Cannon tutorial
+            }
+            else if(StoryUI.tutorialToLoad == 4)
+            {
+                // Engineer tutorial
+            }
+            else if(StoryUI.tutorialToLoad == 5)
+            {
+                // Vanguard tutorial
+            }
+            else if(StoryUI.tutorialToLoad == 6)
+            {
+                // Navigator tutorial
+            }
+            else if(StoryUI.tutorialToLoad == 7)
+            {
+                // Gunner tutorial
+            }
+            else if(StoryUI.tutorialToLoad == 8)
+            {
+                // Captain tutorial
+            }
+            else if(StoryUI.tutorialToLoad == 9)
+            {
+                // Corsair tutorial
+            }
+            else if(StoryUI.tutorialToLoad == 10)
+            {
+                // Admiral tutorial
+            }
+            else if(StoryUI.tutorialToLoad == 11)
+            {
+                // Tactician tutorial
+            }
+
+        }
+        else
+         if(PieceManager.instance == null)
         {
             Debug.Log("No pieces available, using default spawn");
 

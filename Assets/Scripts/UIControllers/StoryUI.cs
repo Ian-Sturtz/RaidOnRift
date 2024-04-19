@@ -11,7 +11,7 @@ public class StoryUI : MonoBehaviour
     private float topHeight = Screen.height;
     public float duration = 0.5f;
     public float transparency = 0.75f;
-    public int tutorialToLoad = 0;
+    public static int tutorialToLoad = 0;
 
     bool menuTop;
     Vector2 bottomPos;
