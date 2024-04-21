@@ -15369,7 +15369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &514029956
 Transform:
   m_ObjectHideFlags: 0
@@ -15383,6 +15383,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1929870216}
   - {fileID: 611828873}
   - {fileID: 1578083201}
   - {fileID: 2078234137}
@@ -52323,12 +52324,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1929870215}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.46, y: 1.32, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.21, y: -0.62, z: -14742.813}
+  m_LocalScale: {x: 0.7913236, y: 0.7913236, z: 0.7913236}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2134487387}
+  m_Father: {fileID: 514029956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!199 &1929870217
 ParticleSystemRenderer:
@@ -52371,7 +52372,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 92
   m_RenderMode: 1
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -62828,7 +62829,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 51499221}
-  - {fileID: 1929870216}
   m_Father: {fileID: 579836665}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!210 &2134487388
