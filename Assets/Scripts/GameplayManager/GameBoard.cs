@@ -88,6 +88,8 @@ public class GameBoard : MonoBehaviour
     [SerializeField] AudioSource movementAudio;
     [SerializeField] AudioSource gunnerAudio;
     [SerializeField] AudioSource gunnerRecharge;
+    [SerializeField] AudioSource Capture;
+
 
     #endregion
 
@@ -448,6 +450,9 @@ public class GameBoard : MonoBehaviour
 
                         Vector2Int currentSquareCoords = IdentifyThisBoardSquare(storedTileSelected);
                         Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
+
+                    
+
 
 
                         // Sends move data if online
@@ -885,7 +890,7 @@ public class GameBoard : MonoBehaviour
         }
         else
         {
-            // Play regular capture audio
+            Capture.Play();
         }
 
         // Move current piece to the new square (unless it's a gunner)
