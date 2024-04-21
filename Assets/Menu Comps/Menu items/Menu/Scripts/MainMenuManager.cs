@@ -31,7 +31,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] Color32 secondaryColor;
 
     [Header("Version")]
-    [Space(10)] [SerializeField] string version = "v.0105";
+    [SerializeField] TMP_Text versionText;
 
     [Header("Texts")]
     [Space(10)] [SerializeField] string play = "Play";
@@ -81,7 +81,6 @@ public class MainMenuManager : MonoBehaviour
     [Space(10)] [SerializeField] TextMeshProUGUI playText;
     [SerializeField] TextMeshProUGUI settingsText;
     [SerializeField] TextMeshProUGUI quitText;
-    [SerializeField] TextMeshProUGUI versionText;   
 
     [Header("Settings")]
     [Space(10)] [SerializeField] Slider volumeSlider;
@@ -96,6 +95,10 @@ public class MainMenuManager : MonoBehaviour
 
     void Start()
     {
+        double versionNumber;
+        double.TryParse(Application.version, out versionNumber);
+        versionText.text = "V." + versionNumber;
+
         SetStartUI();
         ProcessLinks();
         SetStartVolume();
@@ -192,12 +195,6 @@ public class MainMenuManager : MonoBehaviour
 
         if (quitText != null)
             quitText.text = quit;
-
-        // Version number
-        versionText.gameObject.SetActive(showVersion);
-        if (versionText != null)
-            versionText.text = version;
-
         #endregion
 
 

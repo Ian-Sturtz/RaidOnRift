@@ -7,6 +7,7 @@ public class ConnectionDroppedMenu : MonoBehaviour
 {
     [SerializeField] private TMP_Text disconnectMessage;
     [SerializeField] private bool gameWon;
+    private bool outdated = false;
 
     private void Awake()
     {
@@ -19,6 +20,11 @@ public class ConnectionDroppedMenu : MonoBehaviour
         else if(MultiplayerController.Instance.gameWon == 0)
         {
             disconnectMessage.text = "Too bad! You have lost the game!\n\nPlease wait and you will be taken to the main menu...";
+        }
+        else if (MultiplayerController.Instance.gameWon == -5)
+        {
+            outdated = true;
+            disconnectMessage.text = "Your game version doesn't match your opponent's.\n\nPlease make sure you're playing the latest version for best results!";
         }
         else
         {
@@ -42,6 +48,9 @@ public class ConnectionDroppedMenu : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        SceneManager.LoadScene("Main Menu");
+        if (outdated)
+            SceneManager.LoadScene("Multiplayer Lobby");
+        else
+            SceneManager.LoadScene("Main Menu");
     }
 }

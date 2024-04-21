@@ -401,6 +401,7 @@ public class BoardUI : MonoBehaviour
         // Set up rematch for online here
         if (PieceManager.instance.onlineMultiplayer)
         {
+            rematchButton.SetActive(false);
             NetRematch rm = new NetRematch();
 
             rm.teamID = MultiplayerController.Instance.currentTeam;

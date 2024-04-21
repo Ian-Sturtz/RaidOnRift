@@ -64,7 +64,7 @@ public class Square : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (!board.squareSelected && !flashing)
+        if (!board.squareSelected && !flashing && !board.gameOver)
             SetMaterial(hoveredBoardMaterial);
     }
 

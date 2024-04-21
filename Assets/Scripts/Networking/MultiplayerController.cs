@@ -62,6 +62,12 @@ public class MultiplayerController : MonoBehaviour
     {
         Debug.Log("Attempting to connect to " + addressInput.text);
 
+        if(addressInput.text == "self")
+        {
+            Debug.Log("Connecting to self");
+            addressInput.text = "127.0.0.1";
+        }
+
         if (IsValidIP(addressInput.text))
         {
             string inputIP = addressInput.text;
@@ -194,6 +200,8 @@ public class MultiplayerController : MonoBehaviour
     {
         NetUtility.S_WELCOME -= OnWelcomeServer;
 
+        NetUtility.S_START_GAME -= OnStartGameServer;
+
         NetUtility.C_WELCOME -= OnWelcomeClient;
 
         NetUtility.C_START_GAME -= OnStartGameClient;
@@ -204,30 +212,46 @@ public class MultiplayerController : MonoBehaviour
     {
         NetWelcome nw = msg as NetWelcome;
 
-        // Assigns player 1 a team randomly
-        // 0 = Navy, 1 = Pirates
-        if(currentTeam == -1)
+        double version;
+        if (double.TryParse(Application.version, out version)) ;
+        else
+            Debug.Log("Version parse error");
+
+        if(version != nw.VersionNumber)
         {
-            playerCount++;
-            nw.AssignedTeam = Random.Range(0, 2);
+            Debug.Log("Version mismatch");
+            gameWon = -5;
+            NetStartGame sg = new NetStartGame();
+            sg.Start_Game = 2;
+            Server.Instance.Broadcast(sg);
         }
-        // Assigns player 2 whatever team is left
         else
         {
-            playerCount++;
-            nw.AssignedTeam = 1 - currentTeam;
-        }
+            // Assigns player 1 a team randomly
+            // 0 = Navy, 1 = Pirates
+            if (currentTeam == -1)
+            {
+                playerCount++;
+                nw.AssignedTeam = Random.Range(0, 2);
+            }
+            // Assigns player 2 whatever team is left
+            else
+            {
+                playerCount++;
+                nw.AssignedTeam = 1 - currentTeam;
+            }
 
-        // Returns back to client
-        Server.Instance.SendToClient(cnn, nw);
+            // Returns back to client
+            Server.Instance.SendToClient(cnn, nw);
 
-        // Start the game when the connection is full
-        if(playerCount == 1)
-        {
-            Debug.Log("Server broadcast startgame msg");
-            NetStartGame sg = new NetStartGame();
-            sg.Start_Game = 1;
-            Server.Instance.Broadcast(sg);
+            // Start the game when the connection is full
+            if (playerCount == 1)
+            {
+                Debug.Log("Server broadcast startgame msg");
+                NetStartGame sg = new NetStartGame();
+                sg.Start_Game = 1;
+                Server.Instance.Broadcast(sg);
+            }
         }
     }
     
@@ -257,9 +281,15 @@ public class MultiplayerController : MonoBehaviour
             // Runs the start sequence
             Instance.StartCoroutine(OnGameStart());
         }
+        else if (sg.Start_Game == 2)
+        {
+            Debug.Log("Version mismatch");
+            gameWon = -5;
+            ConnectionDropped();
+        }
         else
         {
-            Debug.Log("Game Canceled");
+            Debug.Log($"Game Canceled: {sg.Start_Game}");
             StopAllCoroutines();
             // Stops the start sequence and returns to game menu
             ConnectionDropped();

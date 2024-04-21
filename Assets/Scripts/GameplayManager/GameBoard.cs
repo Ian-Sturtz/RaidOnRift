@@ -14,6 +14,7 @@ public class GameBoard : MonoBehaviour
     // Game State Information
     [Header("Game State Information")]
     public bool gameWon = false;
+    public bool gameOver { set; get; } = false;
     public bool stalemate = false;
     public bool navyTurn = true;
     public GameObject[,] tiles;     // All game squares
@@ -1825,6 +1826,7 @@ public class GameBoard : MonoBehaviour
 
     public void GameOver(bool teamWon, bool stalemate = false)
     {
+        gameOver = true;
         gameWon = true;
         gameTimer.pauseTimer();
         boardUI.GameWon(teamWon, stalemate);
