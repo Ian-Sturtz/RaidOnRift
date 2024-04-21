@@ -36,7 +36,7 @@ public static class NetUtility
             case OpCode.CANNON_CAPTURE: msg = new NetCannonCapture(stream); break;
             case OpCode.RESPAWN: msg = new NetRespawn(stream); break;
             case OpCode.GAME_WON: msg = new NetGameWon(stream); break;
-            //case OpCode.REMATCH: msg = new NetRematch(stream); break;
+            case OpCode.REMATCH: msg = new NetRematch(stream); break;
 
             default:
                 Debug.LogError("Message received had no OpCode");

@@ -167,7 +167,8 @@ public class MultiplayerController : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "Board")
         {
             Debug.Log("Connection ended");
-            SceneManager.LoadScene("Connection Dropped");
+
+            gameWon = 1;
         }
     }
 

@@ -9,6 +9,8 @@ public class ButtonController : MonoBehaviour
     {
         if (PieceManager.instance.onlineMultiplayer)
         {
+            MultiplayerController.Instance.gameWon = 0;
+
             Client.Instance.Shutdown();
             Server.Instance.Shutdown();
             SceneManager.LoadScene("Connection Dropped");
@@ -24,6 +26,8 @@ public class ButtonController : MonoBehaviour
         
         if(PieceManager.instance.onlineMultiplayer)
         {
+            MultiplayerController.Instance.gameWon = 0;
+
             Client.Instance.Shutdown();
             Server.Instance.Shutdown();
         }

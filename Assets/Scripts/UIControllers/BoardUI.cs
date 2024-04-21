@@ -1,10 +1,8 @@
 // Implemented by Garrett Slattengren
 
 using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
 using TMPro;
-using Unity.VisualScripting;
+using Unity.Networking.Transport;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,7 +16,7 @@ public class BoardUI : MonoBehaviour
     private bool pirateHasOre = false;
 
     private bool navyTurn = true;
-    private bool gameOver = false;
+    public bool gameOver = false;
 
     [SerializeField] private GameObject animTextObj;   
     [SerializeField] private TMP_Text animText;
@@ -33,8 +31,27 @@ public class BoardUI : MonoBehaviour
 
     [SerializeField] private GameObject rematchButton;
     [SerializeField] private GameObject quitButton;
+    [SerializeField] private GameObject rematchPrompt;
+
+    private GameObject gameBoardObject;
+    private GameBoard board;
+
+    private bool[] playerRematch = new bool[2];
 
     private Coroutine a, b;
+
+    private void Awake()
+    {
+        RegisterToEvents();
+
+        gameBoardObject = GameObject.FindGameObjectWithTag("GameBoard");
+        board = gameBoardObject.GetComponent<GameBoard>();
+    }
+
+    private void OnDestroy()
+    {
+        UnRegisterToEvents();
+    }
 
     private void Update()
     {
@@ -374,11 +391,69 @@ public class BoardUI : MonoBehaviour
     public void Rematch()
     {
         // Set up rematch for online here
-        SceneManager.LoadScene("Piece Selection");
+        if (PieceManager.instance.onlineMultiplayer)
+        {
+            NetRematch rm = new NetRematch();
+
+            rm.teamID = MultiplayerController.Instance.currentTeam;
+            rm.wantRematch = 1;
+
+            Client.Instance.SendToServer(rm);
+        }
+        else
+            SceneManager.LoadScene("Piece Selection");
     }
 
     public void QuitToMenu()
     {
-        SceneManager.LoadScene("Main Menu");
+        if (PieceManager.instance.onlineMultiplayer)
+        {
+            MultiplayerController.Instance.gameWon = board.gameWon ? 1 : 0;
+            SceneManager.LoadScene("Connection Dropped");
+        }
+
+        else
+            SceneManager.LoadScene("Main Menu");
+    }
+
+    private void RegisterToEvents()
+    {
+        NetUtility.S_REMATCH += OnRematchServer;
+
+        NetUtility.C_REMATCH += OnRematchClient;
+    }
+    private void UnRegisterToEvents()
+    {
+        NetUtility.S_REMATCH -= OnRematchServer;
+
+        NetUtility.C_REMATCH -= OnRematchClient;
+    }
+
+    // Server
+    private void OnRematchServer(NetMessage msg, NetworkConnection cnn)
+    {
+        Server.Instance.Broadcast(msg);
+    }
+
+    // Client
+    private void OnRematchClient(NetMessage msg)
+    {
+        NetRematch rm = msg as NetRematch;
+
+        // Set the boolean for rematch
+        playerRematch[rm.teamID] = rm.wantRematch == 1;
+
+        // Activate UI to inform player that opponent wants a rematch
+        if (MultiplayerController.Instance.currentTeam != rm.teamID)
+        {
+            Debug.Log("Opponent wants a rematch");
+            rematchPrompt.SetActive(true);
+        }
+
+        // If both players want a rematch
+        if (playerRematch[0] && playerRematch[1])
+        {
+            SceneManager.LoadScene("Board");
+        }
     }
 }

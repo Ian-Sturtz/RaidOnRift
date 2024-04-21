@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Networking.Transport;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameBoard : MonoBehaviour
 {
@@ -98,8 +99,15 @@ public class GameBoard : MonoBehaviour
     #region Multiplayer
 
     [SerializeField] private bool playerIsNavy;
+    private bool[] playerRematch = new bool[2];
 
     #endregion
+
+    private void Awake()
+    {
+        if (PieceManager.instance.onlineMultiplayer)
+            MultiplayerController.Instance.gameWon = -1;
+    }
 
     private void Start()
     {
@@ -143,6 +151,23 @@ public class GameBoard : MonoBehaviour
         {
             GameOver(!navyTurn);
         }
+
+        // Check for connection drop
+        if (PieceManager.instance.onlineMultiplayer)
+        {
+            if (MultiplayerController.Instance.gameWon != -1 && boardUI.gameOver == false)
+            {
+                if (MultiplayerController.Instance.gameWon == 0)
+                {
+                    GameOver(!playerIsNavy);
+                }
+                else
+                {
+                    GameOver(playerIsNavy);
+                }
+            }
+        }
+
 
         for (int i = 0; i < TILE_COUNT_X && !gameWon; i++)
         {
@@ -1485,15 +1510,6 @@ public class GameBoard : MonoBehaviour
             }
         }
 
-        //bool moveAble = false;
-        //bool captureAble = false;
-        //bool gunnerAble = false;
-        //bool cannonTarget = false;
-        //bool cannonJump = false;
-        //bool mineDeploy = false;
-        //bool oreDeploy = false;
-        //bool corsairJump = false;
-
         // Displays current possible game actions in goal text
         if (!invalidPiece && !moveAble && !captureAble && !gunnerAble && !cannonJump && !mineDeploy && !oreDeploy && !corsairJump)
         {
@@ -1810,6 +1826,7 @@ public class GameBoard : MonoBehaviour
     public void GameOver(bool teamWon, bool stalemate = false)
     {
         gameWon = true;
+        gameTimer.pauseTimer();
         boardUI.GameWon(teamWon, stalemate);
     }
 
@@ -1892,6 +1909,7 @@ public class GameBoard : MonoBehaviour
         NetUtility.S_CANNON_CAPTURE -= OnCannonCaptureServer;
         NetUtility.S_RESPAWN -= OnRespawnServer;
         NetUtility.S_GAME_WON -= OnGameWonServer;
+
 
         NetUtility.C_MOVE_PIECE -= OnMovePieceClient;
         NetUtility.C_CAPTURE_PIECE -= OnCapturePieceClient;
