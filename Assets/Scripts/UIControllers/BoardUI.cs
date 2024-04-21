@@ -340,53 +340,53 @@ public class BoardUI : MonoBehaviour
                 if (isNavy)
                 {
                     pieceDisplayName.SetText("Admiral");
-                    pieceDescription.SetText("Moves any unblocked distance in any direction, captures by landing on an enemy.");
+                    pieceDescription.SetText("Moves any unblocked distance in any direction. She captures by landing on an enemy.");
                 }
                 else
                 {
                     pieceDisplayName.SetText("Captain");
-                    pieceDescription.SetText("Moves exactly five squares in any up/down or left/right direction, and can change direction mid-move. Jumps over blockers, and captures any enemy piece in the fifth square by landing on an enemy.");
+                    pieceDescription.SetText("Moves exactly five squares in any up/down or left/right direction, and can change direction while moving. He jumps over blockers, and captures enemies in the fifth square by landing on them.");
                 }
                 break;
             case PieceType.Royal2:
                 if (isNavy)
                 {
                     pieceDisplayName.SetText("Tactician");
-                    pieceDescription.SetText("Moves up to two unblocked squares up/down or left/right, captures by landing on an enemy. Can also use the moveset of any enemy piece within whatever zone the Tactician is in (the 3 rows on each player's side of the board, and the 4 rows in the middle).");
+                    pieceDescription.SetText("Moves up to two open squares up/down or left/right, and captures by landing on an enemy. It can also use the moveset of any enemy within whatever zone the it's in (the 3 rows on each player's side of the board, or the 4 rows in the middle).");
                 }
                 else
                 {
                     pieceDisplayName.SetText("Corsair");
-                    pieceDescription.SetText("Moves one space diagonally, captures by landing on an enemy, or can jump to any open square on the board. If the corsair jumps this way, the corsair cannot move on the following turn.");
+                    pieceDescription.SetText("Moves up to two open squares diagonally, and captures by landing on an enemy. She can also jump to any open square on the board, but if she does, she can't jump on her next turn.");
                 }
                 break;
             case PieceType.Mate:
                 pieceDisplayName.SetText("Mate");
-                pieceDescription.SetText("Moves one square in any direction, but cannot move backwards unless the Mate has captured an enemy piece. captures by landing on an enemy.");
+                pieceDescription.SetText("Moves one square in any direction, but cannot move backwards unless he's captured an enemy piece. He captures by landing on an enemy.");
                 break;
             case PieceType.Quartermaster:
                 pieceDisplayName.SetText("Quartermaster");
-                pieceDescription.SetText("Moves two spaces up/down or left/right and one space perpendicularly. Jumps over blockers and captures by landing on an enemy.");
+                pieceDescription.SetText("Moves two spaces up/down or left/right and one space perpendicular. He jumps over enemies in his way and captures by landing on an enemy.");
                 break;
             case PieceType.Cannon:
                 pieceDisplayName.SetText("Cannon");
-                pieceDescription.SetText("Can move one unblocked space in any direction, captures by jumping any unblocked distance up/down or left/right and must land on the opposite next to square to the captured piece. An Energy Shield can be jumped over in this way, but it won’t be captured.");
+                pieceDescription.SetText("Moves one open square in any direction, or captures by jumping over enemies. He can cross any open distance while jumping, but he needs space on the other side to land or else he can't make the jump. He can jump over Energy Shields like this, but can't capture them.");
                 break;
             case PieceType.Bomber:
                 pieceDisplayName.SetText("Engineer");
-                pieceDescription.SetText("Moves up to two unblocked squares in any direction. The only piece that can capture Energy Shields by landing on them, but cannot capture any other piece besides the flag. Can return one Energy Shield from the Jail Zone to the game board in any open square next to to the Miner. Cannot move if a Jail Zone has been returned to the game board this turn.");
+                pieceDescription.SetText("Moves up to two open squares in any direction. He's the only piece that can capture Energy Shields by landing on them and can redeploy spare Energy Shields back to the board, but he can't capture any enemies unless he's armed with a spare Energy Shield.");
                 break;
             case PieceType.Vanguard:
                 pieceDisplayName.SetText("Vanguard");
-                pieceDescription.SetText("Moves one square forward or backward, both up/down or left/right and diagonally, but can move any unblocked distance sideways. captures by landing on an enemy.");
+                pieceDescription.SetText("Moves one square forwards or backwards, both up/down or left/right and diagonally, but can move any open distance sideways. He captures by landing on an enemy.");
                 break;
             case PieceType.Navigator:
                 pieceDisplayName.SetText("Navigator");
-                pieceDescription.SetText("Moves one square sideways, both up/down or left/right and diagonally, but can move any unblocked distance forwards and backwards.");
+                pieceDescription.SetText("Moves one square sideways, both up/down or left/right and diagonally, but can move any open distance forwards and backwards. He captures by landing on an enemy.");
                 break;
             case PieceType.Gunner:
                 pieceDisplayName.SetText("Gunner");
-                pieceDescription.SetText("Moves one unblocked space in any direction, captures by shooting a piece up to 4 unblocked spaces away in any direction. Cannot capture by landing on enemy and must move after capturing a piece before the Gunner can capture another piece.");
+                pieceDescription.SetText("Moves one open space in any direction, or he captures by shooting an enemy up to 3 unblocked spaces away in any direction. He has to move somewhere to reload his weapon before he can capture again. Be warned, he can't shoot the enemy Ore or he might destroy it!");
                 break;
         }
     }

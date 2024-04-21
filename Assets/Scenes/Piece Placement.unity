@@ -4863,7 +4863,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -6613,7 +6613,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9f969442a242ed74d8fae84008d916a7, type: 2}
+  - {fileID: 2100000, guid: 48e908150bbb2cf429c88d3084ce9542, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15323,6 +15323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnDisplay: {fileID: 566834205}
   goalDisplay: {fileID: 1936544617}
+  gameOver: 0
   animTextObj: {fileID: 0}
   animText: {fileID: 0}
   animBackground: {fileID: 0}
@@ -15331,6 +15332,10 @@ MonoBehaviour:
   pieceDescription: {fileID: 0}
   lineRenderer: {fileID: 0}
   particles: {fileID: 0}
+  rematchButton: {fileID: 0}
+  quitButton: {fileID: 0}
+  viewBoard: {fileID: 0}
+  rematchPrompt: {fileID: 0}
 --- !u!224 &2112768615
 RectTransform:
   m_ObjectHideFlags: 0

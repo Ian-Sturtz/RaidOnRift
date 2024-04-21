@@ -42,7 +42,7 @@ public class ConnectionDroppedMenu : MonoBehaviour
 
     IEnumerator DisplayConnectionDropped()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
         {
             Debug.Log("Waiting for seconds");
             yield return new WaitForSeconds(1f);
