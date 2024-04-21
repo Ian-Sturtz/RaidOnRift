@@ -31,6 +31,7 @@ public class BoardUI : MonoBehaviour
 
     [SerializeField] private GameObject rematchButton;
     [SerializeField] private GameObject quitButton;
+    [SerializeField] private GameObject viewBoard;
     [SerializeField] private GameObject rematchPrompt;
 
     private GameObject gameBoardObject;
@@ -212,26 +213,33 @@ public class BoardUI : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             rematchButton.SetActive(true);
             quitButton.SetActive(true);
+            viewBoard.SetActive(true);
 
             Image image1 = rematchButton.GetComponent<Image>();
             Image image2 = quitButton.GetComponent<Image>();
+            Image image3 = viewBoard.GetComponent<Image>();
             TMP_Text text1 = rematchButton.transform.GetChild(0).GetComponent<TMP_Text>();
             TMP_Text text2 = quitButton.transform.GetChild(0).GetComponent<TMP_Text>();
+            TMP_Text text3 = rematchButton.transform.GetChild(0).GetComponent<TMP_Text>();
             timeElapsed = 0;
             while(timeElapsed < 0.5f)
             {
                 float val = Mathf.SmoothStep(0, 1, timeElapsed / 0.5f);
                 image1.color = new UnityEngine.Color(0, 0, 0, val);
                 image2.color = new UnityEngine.Color(0, 0, 0, val);
+                image3.color = new UnityEngine.Color(0, 0, 0, val);
                 text1.color = new UnityEngine.Color(1, 1, 1, val);
                 text2.color = new UnityEngine.Color(1, 1, 1, val);
+                text3.color = new UnityEngine.Color(1, 1, 1, val);
                 timeElapsed += Time.deltaTime;
                 yield return null;
             }
             image1.color = new UnityEngine.Color(0, 0, 0, 1);
             image2.color = new UnityEngine.Color(0, 0, 0, 1);
+            image3.color = new UnityEngine.Color(0, 0, 0, 1);
             text1.color = new UnityEngine.Color(1, 1, 1, 1);
             text2.color = new UnityEngine.Color(1, 1, 1, 1);
+            text3.color = new UnityEngine.Color(1, 1, 1, 1);
         }
     }
 
