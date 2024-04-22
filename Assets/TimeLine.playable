@@ -1741,7 +1741,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 11.699999809265137
+    m_Start: 16.5
     m_ClipIn: 0
     m_Asset: {fileID: -557685842624325587}
     m_Duration: 6.8
@@ -1807,7 +1807,7 @@ MonoBehaviour:
     m_PostExtrapolationMode: 1
     m_PreExtrapolationMode: 1
     m_PostExtrapolationTime: Infinity
-    m_PreExtrapolationTime: 11.699999809265137
+    m_PreExtrapolationTime: 16.5
     m_DisplayName: Recorded (14)
   m_Markers:
     m_Objects: []
@@ -2146,7 +2146,7 @@ MonoBehaviour:
   m_Name: Recorded (14)
   m_EditorClassIdentifier: 
   m_Clip: {fileID: 3138965416304110317}
-  m_Position: {x: -226.04, y: -144.16, z: -5.9}
+  m_Position: {x: -230.3, y: -144.16, z: -5.9}
   m_EulerAngles: {x: 359.9913, y: 177.56587, z: 359.79523}
   m_UseTrackMatchFields: 1
   m_MatchTargetFields: 63
@@ -2429,7 +2429,7 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: 1252725301427064952}
-    m_Duration: 59.29687074829932
+    m_Duration: 64.93333333333334
     m_TimeScale: 1
     m_ParentTrack: {fileID: 575908816892302332}
     m_EaseInDuration: 0
@@ -2534,7 +2534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f10dd60657c6004587f237a7e90f8e4, type: 3}
   m_Name: AudioPlayableAsset
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 8300000, guid: 0579166001b850244b505da507d5f59f, type: 3}
+  m_Clip: {fileID: 8300000, guid: 697c589878fb7d04e814c148857880c2, type: 3}
   m_Loop: 0
   m_bufferingTime: 0.1
   m_ClipProperties:
@@ -2684,7 +2684,7 @@ MonoBehaviour:
   m_Name: Recorded (15)
   m_EditorClassIdentifier: 
   m_Clip: {fileID: 7881968796020045639}
-  m_Position: {x: -233.97, y: -144.18, z: -6.114627}
+  m_Position: {x: -238.8, y: -144.18, z: -6.114627}
   m_EulerAngles: {x: 0, y: 0, z: -0.000000056305073}
   m_UseTrackMatchFields: 1
   m_MatchTargetFields: 63
@@ -3886,7 +3886,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 11.316666603088379
+    m_Start: 16.5
     m_ClipIn: 0
     m_Asset: {fileID: 1503713509830833011}
     m_Duration: 13.233333333333333
@@ -3952,7 +3952,7 @@ MonoBehaviour:
     m_PostExtrapolationMode: 1
     m_PreExtrapolationMode: 1
     m_PostExtrapolationTime: Infinity
-    m_PreExtrapolationTime: 11.316666603088379
+    m_PreExtrapolationTime: 16.5
     m_DisplayName: Recorded (15)
   m_Markers:
     m_Objects: []
