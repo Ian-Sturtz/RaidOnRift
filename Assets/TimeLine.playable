@@ -1376,11 +1376,11 @@ MonoBehaviour:
     m_Recordable: 1
     m_PostExtrapolationMode: 0
     m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 17.366666666666667
+    m_PostExtrapolationTime: 16.29687074829932
     m_PreExtrapolationTime: 13.033333333333335
     m_DisplayName: Recorded (3)
   - m_Version: 1
-    m_Start: 58.36666666666667
+    m_Start: 57.29687074829932
     m_ClipIn: 0
     m_Asset: {fileID: -2223997863491091258}
     m_Duration: 2
@@ -1446,7 +1446,7 @@ MonoBehaviour:
     m_PostExtrapolationMode: 0
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: Infinity
-    m_PreExtrapolationTime: 17.366666666666667
+    m_PreExtrapolationTime: 16.29687074829932
     m_DisplayName: Recorded (5)
   - m_Version: 1
     m_Start: 9.983333333333333
@@ -4931,7 +4931,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 59.31666666666667
+    m_Start: 58.11758056428904
     m_ClipIn: 0
     m_Asset: {fileID: -6344330563811057766}
     m_Duration: 5.61666666666666
