@@ -37,6 +37,8 @@ public class GameBoard : MonoBehaviour
 
     BoardUI boardUI;
 
+    public bool pieceMoving = false;
+
     #endregion
 
     #region JailInfo
@@ -138,6 +140,20 @@ public class GameBoard : MonoBehaviour
         if (PieceManager.instance != null)
             if (PieceManager.instance.onlineMultiplayer)
                 playerIsNavy = MultiplayerController.Instance.currentTeam == 0;
+
+        if (PieceManager.instance.navyFirst)
+        {
+            navyTurn = true;
+        }
+        else
+        {
+            navyTurn = false;
+        }
+
+        if (!PieceManager.instance.onlineMultiplayer && !navyTurn)
+            StartCoroutine(RotateBoard(false));
+        else if (PieceManager.instance.onlineMultiplayer && !playerIsNavy)
+            StartCoroutine(RotateBoard(false));
 
         RegisterEvents();
     }
@@ -1055,20 +1071,42 @@ public class GameBoard : MonoBehaviour
             jail.navyJailedPieces[jailIndex].GetComponent<Piece>().destroyPiece();
             jail.PirateJailCells[jailIndex].GetComponent<JailCell>().resetCell();
 
-            if (deployPieceType == 0)
-                NavyPieces[spawnIndex] = SpawnPiece(PieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y);
+            if(PieceManager.instance.onlineMultiplayer && !playerIsNavy)
+            {
+                if (deployPieceType == 0)
+                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y, true);
+                else
+                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.Ore, true, deployCoordinates.x, deployCoordinates.y, true);
+            }
             else
-                NavyPieces[spawnIndex] = SpawnPiece(PieceType.Ore, true, deployCoordinates.x, deployCoordinates.y);
+            {
+                if (deployPieceType == 0)
+                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y);
+                else
+                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.Ore, true, deployCoordinates.x, deployCoordinates.y);
+            }
+
         }
         else
         {
             jail.pirateJailedPieces[jailIndex].GetComponent<Piece>().destroyPiece();
             jail.NavyJailCells[jailIndex].GetComponent<JailCell>().resetCell();
 
-            if (deployPieceType == 0)
-                PiratePieces[spawnIndex] = SpawnPiece(PieceType.LandMine, false, deployCoordinates.x, deployCoordinates.y);
+            if (PieceManager.instance.onlineMultiplayer && !playerIsNavy)
+            {
+                if (deployPieceType == 0)
+                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.LandMine, false, deployCoordinates.x, deployCoordinates.y, true);
+                else
+                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.Ore, false, deployCoordinates.x, deployCoordinates.y, true);
+            }
             else
-                PiratePieces[spawnIndex] = SpawnPiece(PieceType.Ore, false, deployCoordinates.x, deployCoordinates.y);
+            {
+                if (deployPieceType == 0)
+                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.LandMine, false, deployCoordinates.x, deployCoordinates.y);
+                else
+                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.Ore, false, deployCoordinates.x, deployCoordinates.y);
+            }
+
         }
 
         bool navyMove;
@@ -1205,7 +1243,7 @@ public class GameBoard : MonoBehaviour
         tiles[x, y].GetComponent<Square>().currentPiece = null;
     }
 
-    public Piece SpawnPiece(PieceType type, bool isNavy, int startingX = -1, int startingY = -1)
+    public Piece SpawnPiece(PieceType type, bool isNavy, int startingX = -1, int startingY = -1, bool pirateRotate = false)
     {
         Piece cp;
 
@@ -1223,6 +1261,11 @@ public class GameBoard : MonoBehaviour
         cp.type = type;
         cp.isNavy = isNavy;
 
+        if (pirateRotate)
+        {
+            cp.transform.Rotate(0, 0, 180f, Space.Self);
+        }
+
         if(startingX != -1 && startingY != -1)
         {
             MovePiece(cp, startingX, startingY, false);
@@ -1233,6 +1276,8 @@ public class GameBoard : MonoBehaviour
 
     public void MovePiece(Piece piece, int x, int y, bool lerpMove = true)
     {
+        pieceMoving = true;
+
         Vector3 targetPosition = tiles[x, y].transform.position;
 
         // Removes piece from original square and puts it in new square
@@ -1253,6 +1298,7 @@ public class GameBoard : MonoBehaviour
         else
         {
             piece.transform.position = targetPosition;
+            pieceMoving = false;
         }
     }
 
@@ -1266,6 +1312,7 @@ public class GameBoard : MonoBehaviour
 
     IEnumerator LerpPosition(Piece piece, Vector3 targetPosition, float duration = 0.1f)
     {
+        pieceMoving = true;
         float time = 0;
         Vector3 startPosition = piece.transform.position;
         while (time < duration)
@@ -1275,6 +1322,8 @@ public class GameBoard : MonoBehaviour
             yield return null;
         }
         piece.transform.position = targetPosition;
+
+        pieceMoving = false;
     }
 
     private void DetectLegalMoves(GameObject current, Piece piece)
@@ -1608,147 +1657,6 @@ public class GameBoard : MonoBehaviour
         }
     }
 
-    // Checks if a team has no valid moves left to trigger a stalemate
-    private bool CheckForStalemate(bool checkingNavy)
-    {
-        bool noLegalMoves = true;
-        Piece possiblePiece = null;
-
-        moveAssessment = new int[TILE_COUNT_X, TILE_COUNT_Y];
-
-        // Checks all pieces left on the Navy's board to ensure there are legal moves open
-        for (int i = 0; i < teamSize; i++)
-        {
-            if (checkingNavy)
-            {
-                if (NavyPieces[i] != null)
-                {
-                    possiblePiece = NavyPieces[i];
-                }
-            }
-            else
-            {
-                if (PiratePieces[i] != null)
-                {
-                    possiblePiece = PiratePieces[i];
-                }
-            }
-
-            if (possiblePiece != null)
-            {
-                switch (possiblePiece.type)
-                {
-                    case PieceType.Mate:
-                        moveAssessment = possiblePiece.GetComponent<Mate>().GetValidMoves(tiles);
-                        break;
-                    case PieceType.Bomber:
-                        moveAssessment = possiblePiece.GetComponent<Bomber>().GetValidMoves(tiles);
-                        break;
-                    case PieceType.Vanguard:
-                        moveAssessment = possiblePiece.GetComponent<Vanguard>().GetValidMoves(tiles);
-                        break;
-                    case PieceType.Navigator:
-                        moveAssessment = possiblePiece.GetComponent<Navigator>().GetValidMoves(tiles);
-                        break;
-                    case PieceType.Gunner:
-                        moveAssessment = possiblePiece.GetComponent<Gunner>().GetValidMoves(tiles);
-                        break;
-                    case PieceType.Cannon:
-                        moveAssessment = possiblePiece.GetComponent<Cannon>().GetValidMoves(tiles);
-                        break;
-                    case PieceType.Quartermaster:
-                        moveAssessment = possiblePiece.GetComponent<Quartermaster>().GetValidMoves(tiles);
-                        break;
-                    case PieceType.Royal2:
-                        if(checkingNavy)
-                            moveAssessment = possiblePiece.GetComponent<Tactician>().GetValidMoves(tiles);
-                        else
-                            moveAssessment = possiblePiece.GetComponent<Corsair>().GetValidMoves(tiles);
-                        break;
-                    case PieceType.Royal1:
-                        if (checkingNavy)
-                            moveAssessment = possiblePiece.GetComponent<Admiral>().GetValidMoves(tiles);
-                        else
-                            moveAssessment = possiblePiece.GetComponent<Captain>().GetValidMoves(tiles);
-                        break;
-                }
-            }
-
-            // Ensures that an enemy is not moving to a landmine or allied occupied square
-            for (int x = 0; x < TILE_COUNT_X && !possiblePiece.hasOre; x++)
-            {
-                for (int y = 0; y < TILE_COUNT_Y; y++)
-                {
-                    if (moveAssessment[x, y] == 1)
-                    {
-                        Piece targetPiece = tiles[x, y].GetComponent<Square>().currentPiece;
-
-                        // There is a piece in that possible move square
-                        if (targetPiece != null)
-                        {
-                            // That piece is on the same team (can't move there)
-                            if (possiblePiece.isNavy == targetPiece.isNavy)
-                            {
-                                moveAssessment[x, y] = -1;
-                            }
-                            // That piece is a land mine (can't move there)
-                            else if (targetPiece.type == PieceType.LandMine)
-                            {
-                                if (possiblePiece.type == PieceType.Bomber)
-                                {
-                                    moveAssessment[x, y] = 2;
-                                }
-                                else
-                                {
-                                    moveAssessment[x, y] = -1;
-                                }
-                            }
-                            // That piece is an enemy piece that can be captured
-                            else
-                            {
-                                // The current Piece is a Gunner or Cannon that can't capture regularly
-                                if (possiblePiece.type == PieceType.Gunner || possiblePiece.type == PieceType.Cannon)
-                                {
-                                    moveAssessment[x, y] = -1;
-                                }
-                                // That piece can be captured
-                                else
-                                {
-                                    moveAssessment[x, y] = 2;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (int x = 0; x < TILE_COUNT_X; x++)
-            {
-                for (int y = 0; y < TILE_COUNT_Y; y++)
-                {
-                    if (moveAssessment[x, y] > 0)   // A legal move exists in a given square
-                    {
-                        noLegalMoves = false;
-                    }
-                }
-            }
-        }
-
-        ResetBoardMaterials(true);
-        ResetBoardMaterials(true);
-
-        if (noLegalMoves)
-        {
-            GameOver(!checkingNavy, true);
-            Debug.Log("Stalemate!");
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     private void SpawnAllPieces()
     {
         int navyPiecesAdded = 0;
@@ -1851,6 +1759,61 @@ public class GameBoard : MonoBehaviour
         }
     }
 
+    IEnumerator RotateBoard(bool navyAtBottom)
+    {
+        Debug.Log($"Positioning the {navyAtBottom} pieces to the bottom of the screen");
+
+        while (pieceMoving)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        if (navyAtBottom)
+        {
+            if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy))
+            {
+                Debug.Log("Putting the navy at the bottom of the screen");
+                gameBoard.transform.Rotate(0f, 0f, -180f, Space.Self);
+
+                for (int i = 0; i < teamSize; i++)
+                {
+                    if(NavyPieces[i] != null)
+                    {
+                        NavyPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                    }
+
+                    if(PiratePieces[i] != null)
+                    {
+                        PiratePieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && !playerIsNavy))
+            {
+                Debug.Log("Putting the pirates at the bottom of the screen");
+                gameBoard.transform.Rotate(0f, 0f, 180f, Space.Self);
+
+                for (int i = 0; i < teamSize; i++)
+                {
+                    if (NavyPieces[i] != null)
+                    {
+                        NavyPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                    }
+
+                    if (PiratePieces[i] != null)
+                    {
+                        PiratePieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                    }
+                }
+            }
+        }
+
+        yield return null;
+    }
+
     // Changes the turn from one player to the next
     public void NextTurn()
     {
@@ -1873,10 +1836,14 @@ public class GameBoard : MonoBehaviour
             if (navyTurn)
             {
                 navyTurn = false;
+                if(!PieceManager.instance.onlineMultiplayer)
+                    StartCoroutine(RotateBoard(navyTurn));
             }
             else
             {
                 navyTurn = true;
+                if(!PieceManager.instance.onlineMultiplayer)
+                    StartCoroutine(RotateBoard(navyTurn));
             }
             boardUI.PlayTurnAnim(navyTurn);
         }
