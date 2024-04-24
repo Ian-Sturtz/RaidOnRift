@@ -8,8 +8,10 @@ public class Gunner : Piece
     [SerializeField] private Sprite unloaded;
     [SerializeField] private Sprite loaded;
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (hasCaptured)
         {
             PieceImage.GetComponent<SpriteRenderer>().sprite = unloaded;

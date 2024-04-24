@@ -27,9 +27,11 @@ public class Corsair : Piece
         }
     }
 
-    private void Update()
+    protected override void Update()
     {
-        if(!pieceSelectionScene)
+        base.Update();
+
+        if (!pieceSelectionScene)
             if(!board.tacticianSelected)
                 canJump = (board.jumpCooldown == 0);
 

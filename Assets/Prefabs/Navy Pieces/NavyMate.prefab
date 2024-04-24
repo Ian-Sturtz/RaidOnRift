@@ -111,6 +111,7 @@ MonoBehaviour:
   currentX: -1
   currentY: -1
   flashDelay: 1
+  superPowered: 0
 --- !u!1 &7053664756983758090
 GameObject:
   m_ObjectHideFlags: 0

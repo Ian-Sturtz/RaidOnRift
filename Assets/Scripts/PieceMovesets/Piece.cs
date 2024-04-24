@@ -41,7 +41,7 @@ public class Piece : MonoBehaviour
         originalType = type;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (!gameWon)
         {
