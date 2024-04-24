@@ -48,6 +48,7 @@ public class PPGameBoard : MonoBehaviour
     [SerializeField] private bool oreSpawned = false;
 
     public bool pieceMoving = false;
+    private bool boardRotated = false;
 
     #endregion
 
@@ -188,12 +189,21 @@ public class PPGameBoard : MonoBehaviour
 
         if(PieceManager.instance.onlineMultiplayer)
         {
+            if(navyDone && navyTurn && oreSpawned)
+            {
+                NextTurn();
+            }else if(pirateDone && !navyTurn && oreSpawned)
+            {
+                NextTurn();
+            }
+
             if(navyDone && navyTurn)
             {
-                NextTurn();
-            }else if(pirateDone && !navyTurn)
+                boardUI.GoalText("Your opponent is placing their pieces...");
+            }
+            else if (pirateDone && !navyTurn)
             {
-                NextTurn();
+                boardUI.GoalText("Your opponent is placing their pieces...");
             }
         }
         else
@@ -346,8 +356,9 @@ public class PPGameBoard : MonoBehaviour
                         DetectValidSquares(currentSquare);
                     }
 
-                    // The same piece was clicked twice (cancel piece selection)
-                } else if (tileSelected.tag == "InteractablePiece")
+                // The same piece was clicked twice (cancel piece selection)
+                } 
+                else if (tileSelected.tag == "InteractablePiece")
                 {
                     boardUI.GoalText(defaultText);
                     ResetBoardMaterials();
@@ -357,7 +368,8 @@ public class PPGameBoard : MonoBehaviour
                     selectedCellIndex = -1;
 
                 // A legal placement square has been selected (spawn the selected piece there)
-                } else if (tileSelected.tag == "MoveableSquare")
+                } 
+                else if (tileSelected.tag == "MoveableSquare")
                 {
                     Vector2Int spawnCoordinates = IdentifyThisBoardSquare(tileSelected);
                     tileSelected.GetComponent<PPSquare>().FlashMaterial(tileSelected.GetComponent<PPSquare>().moveableBoardMaterial, 2);
@@ -387,9 +399,16 @@ public class PPGameBoard : MonoBehaviour
                     PPSquare currentSquare = tileSelected.GetComponent<PPSquare>();
                     PPJailCell currentCell = storedTileSelected.GetComponent<PPJailCell>();
                     Piece currentPiece = currentCell.currentPiece;
+                    int spawnIndex = FindFirstOpenTeamSlot(navyTurn);
 
-                    
-                    SpawnPiece(currentPiece.type, currentPiece.isNavy, spawnCoordinates.x, spawnCoordinates.y);
+                    if (navyTurn)
+                    {
+                        NavyPieces[spawnIndex] = SpawnPiece(currentPiece.type, currentPiece.isNavy, spawnCoordinates.x, spawnCoordinates.y);
+                    }
+                    else
+                    {
+                        PiratePieces[spawnIndex] = SpawnPiece(currentPiece.type, currentPiece.isNavy, spawnCoordinates.x, spawnCoordinates.y);
+                    }
 
                     if (PieceManager.instance.onlineMultiplayer)
                     {
@@ -461,6 +480,34 @@ public class PPGameBoard : MonoBehaviour
         }
     }
 
+    private int FindFirstOpenTeamSlot(bool teamNavy)
+    {
+        int index;
+
+        if (teamNavy)
+        {
+            for (index = 0; index < teamSize; index++)
+            {
+                if (NavyPieces[index] == null)
+                {
+                    return index;
+                }
+            }
+        }
+        else
+        {
+            for (index = 0; index < teamSize; index++)
+            {
+                if (PiratePieces[index] == null)
+                {
+                    return index;
+                }
+            }
+        }
+
+        return -1;
+    }
+
     private void ResetBoardMaterials(bool resetJail = true)
     {
         if (resetJail)
@@ -514,7 +561,6 @@ public class PPGameBoard : MonoBehaviour
         if (!isNavy)
         {
             cp = Instantiate(PiecePrefabs[(int)type + PIECES_ADDED], this.transform).GetComponent<Piece>();
-            cp.transform.Rotate(0f, 0f, 180f);
         }
         else
         {
@@ -526,7 +572,10 @@ public class PPGameBoard : MonoBehaviour
         cp.type = type;
         cp.isNavy = isNavy;
 
-        if(startingX != -1 && startingY != -1)
+        if (boardRotated)
+            cp.transform.Rotate(0, 0, 180f, Space.Self);
+
+        if (startingX != -1 && startingY != -1)
         {
             MovePiece(cp, startingX, startingY);
         }
@@ -688,14 +737,18 @@ public class PPGameBoard : MonoBehaviour
                 {
                     if (NavyPieces[i] != null)
                     {
+                        Debug.Log($"Rotated the {i}th piece");
                         NavyPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
                     }
 
                     if (PiratePieces[i] != null)
                     {
+                        Debug.Log($"Rotated the {i}th piece");
                         PiratePieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
                     }
                 }
+
+                boardRotated = false;
             }
         }
         else
@@ -709,14 +762,18 @@ public class PPGameBoard : MonoBehaviour
                 {
                     if (NavyPieces[i] != null)
                     {
+                        Debug.Log($"Rotated the {i}th piece");
                         NavyPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
                     }
 
                     if (PiratePieces[i] != null)
                     {
+                        Debug.Log($"Rotated the {i}th piece");
                         PiratePieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
                     }
                 }
+
+                boardRotated = true;
             }
         }
 
@@ -733,10 +790,14 @@ public class PPGameBoard : MonoBehaviour
         if (navyTurn)
         {
             navyTurn = false;
+            if (!PieceManager.instance.onlineMultiplayer)
+                StartCoroutine(RotateBoard(navyTurn));
         }
         else
         {
             navyTurn = true;
+            if (!PieceManager.instance.onlineMultiplayer)
+                StartCoroutine(RotateBoard(navyTurn));
         }
 
         // Update UI
@@ -792,7 +853,7 @@ public class PPGameBoard : MonoBehaviour
 
             SpawnPiece(currentPiece.type, currentPiece.isNavy, pp.targetX, pp.targetY);
 
-            ResetBoardMaterials();
+            // ResetBoardMaterials();
 
             if (currentPiece.type == PieceType.Ore || currentPiece.type == PieceType.LandMine)
                 NextTurn();

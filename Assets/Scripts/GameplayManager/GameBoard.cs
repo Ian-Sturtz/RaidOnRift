@@ -1782,12 +1782,12 @@ public class GameBoard : MonoBehaviour
 
                 for (int i = 0; i < teamSize; i++)
                 {
-                    if(NavyPieces[i] != null)
+                    if (NavyPieces[i] != null)
                     {
                         NavyPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
                     }
 
-                    if(PiratePieces[i] != null)
+                    if (PiratePieces[i] != null)
                     {
                         PiratePieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
                     }
