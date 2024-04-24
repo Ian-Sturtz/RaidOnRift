@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Networking.Transport;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.ParticleSystem;
 
 public class GameBoard : MonoBehaviour
 {
@@ -81,6 +83,9 @@ public class GameBoard : MonoBehaviour
 
     // Corsair mechanics
     public int jumpCooldown = 0;
+
+    [SerializeField] private GameObject gunnerLine;
+    [SerializeField] private GameObject gunnerParticles;
 
     #endregion
 
@@ -1780,6 +1785,11 @@ public class GameBoard : MonoBehaviour
                 Debug.Log("Putting the navy at the bottom of the screen");
                 gameBoard.transform.Rotate(0f, 0f, -180f, Space.Self);
 
+                // Make sure gunner animates correctly
+                gunnerLine.transform.Rotate(0f, 0f, -180f, Space.Self);
+                Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1);
+                gunnerParticles.GetComponent<Transform>().transform.position = targetPos;
+
                 for (int i = 0; i < teamSize; i++)
                 {
                     if (NavyPieces[i] != null)
@@ -1792,6 +1802,10 @@ public class GameBoard : MonoBehaviour
                         PiratePieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
                     }
                 }
+
+                yield return new WaitForSeconds(1f);
+                gunnerLine.transform.Rotate(0f, 0f, 180f, Space.Self);
+
             }
         }
         else
@@ -1800,6 +1814,11 @@ public class GameBoard : MonoBehaviour
             {
                 Debug.Log("Putting the pirates at the bottom of the screen");
                 gameBoard.transform.Rotate(0f, 0f, 180f, Space.Self);
+
+                // Make sure gunner animates correctly
+                gunnerLine.transform.Rotate(0f, 0f, 180f, Space.Self);
+                Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1);
+                gunnerParticles.GetComponent<Transform>().transform.position = targetPos;
 
                 for (int i = 0; i < teamSize; i++)
                 {
@@ -1813,6 +1832,9 @@ public class GameBoard : MonoBehaviour
                         PiratePieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
                     }
                 }
+
+                yield return new WaitForSeconds(1f);
+                gunnerLine.transform.Rotate(0f, 0f, -180f, Space.Self);
             }
         }
 

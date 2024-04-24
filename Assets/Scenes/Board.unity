@@ -3728,6 +3728,8 @@ MonoBehaviour:
   resetOre: 0
   orebearerSecondMove: 0
   jumpCooldown: 0
+  gunnerLine: {fileID: 589166029}
+  gunnerParticles: {fileID: 482784830}
   movementAudio: {fileID: 1401357077}
   gunnerAudio: {fileID: 1267500023}
   gunnerRecharge: {fileID: 1034613091}
