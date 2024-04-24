@@ -126,7 +126,7 @@ public class GameBoard : MonoBehaviour
         teamSize = 30;
 
         boardUI = FindObjectOfType<BoardUI>();
-        boardUI.GoalText("Click on a piece to move it!");
+        
 
         JailCells = GameObject.FindGameObjectWithTag("JailBoard");
         jail = JailCells.GetComponent<JailBoard>();
@@ -154,6 +154,11 @@ public class GameBoard : MonoBehaviour
             StartCoroutine(RotateBoard(false));
         else if (PieceManager.instance.onlineMultiplayer && !playerIsNavy)
             StartCoroutine(RotateBoard(false));
+
+        if(!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == navyTurn))
+            boardUI.GoalText("Click on a piece to move it!");
+        else
+            boardUI.GoalText("Waiting for opponent to move.");
 
         RegisterEvents();
     }
@@ -1855,7 +1860,10 @@ public class GameBoard : MonoBehaviour
         // Update UI if no stalemate
         if (!stalemate) 
         {
-            boardUI.GoalText("Click on a piece to move it!");
+            if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == navyTurn))
+                boardUI.GoalText("Click on a piece to move it!");
+            else
+                boardUI.GoalText("Waiting for opponent to move.");
         }
     }
 
