@@ -487,7 +487,7 @@ public class PieceSelection : MonoBehaviour
         if (name == "Select Mate")
         {
             topText.SetText("Mate [" + matePoints + " point]");
-            infoText.SetText("Moves one square in any direction, but cannot move backwards unless he's captured an enemy piece. He captures by landing on an enemy.");
+            infoText.SetText("Moves one square in any direction, but cannot move backwards unless he's captured an enemy piece. He captures by landing on an enemy. Get him across the board and see how strong this unassuming crewmate can become...");
             videoPlayer.clip = videoManager.mate;
         }
         if (name == "Select Quartermaster")
