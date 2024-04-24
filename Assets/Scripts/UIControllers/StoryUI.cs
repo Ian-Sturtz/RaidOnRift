@@ -101,13 +101,13 @@ public class StoryUI : MonoBehaviour
                     pieceName.SetText("THE ADMIRAL");
                     pieceDesc.SetText("They call me fierce. They call me cunning. Above all, they call me relentless.\r\n\nFollowing my monumental victory on the planet Gyzax, I was promoted to admiral and assigned lordship over the Ore refinery on the Rift. Now, as Lord of the Rift, I have supreme access to the entire facility, and can use the knowledge, agility, and skill in battle to maintain dominance over my domain.\r\n\nI am revered by my army but feared by my enemies. I promise defeat to all who challenge my rule.");
                     character.sprite = admiral;
-                    tutorialToLoad = 10;                  
+                    tutorialToLoad = 8;                  
                     break;
                 case "Tactician":
                     pieceName.SetText("THE TACTICIAN");
                     pieceDesc.SetText("My intellect is unrivaled, and my stratagems are unyielding.\r\n\nI have served the Imperial Navy for centuries now as chief military strategist. I have flourished under the Admiral since the war on planet Gyzax. I have witnessed a thousand enemies and assimilated tactics from each of them, fusing their styles into my own to form an unconquerable plan to defeat those who oppose me.\r\n\nI am the echo of countless talents, and the strength of many forged into one.");
                     character.sprite = tactician;
-                    tutorialToLoad = 11;
+                    tutorialToLoad = 9;
                     break;
                 case "Navy Mate":
                     pieceName.SetText("THE CREWMATE");
@@ -156,13 +156,13 @@ public class StoryUI : MonoBehaviour
                     pieceName.SetText("THE CAPTAIN");
                     pieceDesc.SetText("In the vast canvas of the cosmos, I carve my destiny with bold strokes, a space pirate captain, unfettered by laws but bound by the stars.\n\n Amidst the endless expanse of stars, I navigate the cosmos as a space pirate captain, a master of the uncharted. With a crew as diverse as the planets we've seen, my ship cuts through the void, a beacon of freedom and fortune. In the silence of space, my command is law, chasing adventure and treasure beyond the grasp of galactic authorities, a rebel heart beating in the dark.");
                     character.sprite = Captain;
-                    tutorialToLoad = 8;
+                    tutorialToLoad = 10;
                     break;
                 case "Corsair":
                     pieceName.SetText("THE CORSAIR");
                     pieceDesc.SetText("Amongst the starlit void, my blade sings the anthem of the free, a Corsairs vow to carve a path of honor and rebellion.\n\n As a Corsair, I wield my blade with the precision of a comet slicing through the dark. My skill is honed in the vacuum of space, a dance of steel and stars against any who dare cross our path. Leading my crew with the edge of my sword, I seek fortune and glory beyond the frontiers, a master of combat in the endless night.");
                     character.sprite = Corsair;
-                    tutorialToLoad = 9;
+                    tutorialToLoad = 11;
                     break;
                 case "Pirate Mate":
                     pieceName.SetText("THE CREWMATE");
@@ -209,17 +209,7 @@ public class StoryUI : MonoBehaviour
                 case "Tutorial":
                     
                     switch (tutorialToLoad)
-                    {
-                        case 10:
-                            pieceName.SetText("THE ADMIRAL");
-                            pieceDesc.SetText("Moves any unblocked distance in any direction, captures by replacement.\r\n\nUse the tactician's movement to capture all the navy mates with the least amount of moves possible.");
-                            character.sprite = admiral;             
-                            break;
-                        case 11:
-                            pieceName.SetText("THE TACTICIAN");
-                            pieceDesc.SetText("Moves up to two unblocked squares orthogonally, captures by replacement. Can also use the moveset of any enemy piece within whatever zone the Tactician is in (Allied Start Zone, Neutral Zone, or Enemy Start Zone).\r\n\nUse the Tacticians special ability to imitate the gunner within the same zone, and then use the gunner's shot to capture the pirate mate.");
-                            character.sprite = tactician;
-                            break;
+                    {                        
                         case 1:
                             pieceName.SetText("THE CREWMATE");
                             pieceDesc.SetText("Moves one square in any direction, but cannot move backwards unless the Mate has captured an enemy piece. Captures by replacement. Can perform Jailbreaks after reaching the opponent’s Royal Zone.\r\n\nUse the navy to capture the pirate mate up top first for it to gain the ability to move backwards, and then capture the other pirate beneath.");
@@ -255,13 +245,22 @@ public class StoryUI : MonoBehaviour
                             pieceDesc.SetText("In the dance of photons and fate, my aim is true, a laser gunner's vow to safeguard the rift with light's silent strike.\n\nIn the shadow of tomorrow's warfare, I stand as the Navy's laser gunner, wielding light with lethal precision. My role marries technology and tenacity, mastering beams that cut through the silence of the skies. Each pulse is a testament to modern warfare's evolution, protecting the rift with an unseen force. My vigilance shapes the unseen battlefield, a silent guardian of the future's peace.");
                             character.sprite = navyGunner;
                             break;
-
                         case 8:
+                            pieceName.SetText("THE ADMIRAL");
+                            pieceDesc.SetText("Moves any unblocked distance in any direction, captures by replacement.\r\n\nUse the tactician's movement to capture all the navy mates with the least amount of moves possible.");
+                            character.sprite = admiral;             
+                            break;
+                        case 9:
+                            pieceName.SetText("THE TACTICIAN");
+                            pieceDesc.SetText("Moves up to two unblocked squares orthogonally, captures by replacement. Can also use the moveset of any enemy piece within whatever zone the Tactician is in (Allied Start Zone, Neutral Zone, or Enemy Start Zone).\r\n\nUse the Tacticians special ability to imitate the gunner within the same zone, and then use the gunner's shot to capture the pirate mate.");
+                            character.sprite = tactician;
+                            break;
+                        case 10:
                             pieceName.SetText("THE CAPTAIN");
                             pieceDesc.SetText("In the vast canvas of the cosmos, I carve my destiny with bold strokes, a space pirate captain, unfettered by laws but bound by the stars.\n\n Amidst the endless expanse of stars, I navigate the cosmos as a space pirate captain, a master of the uncharted. With a crew as diverse as the planets we've seen, my ship cuts through the void, a beacon of freedom and fortune. In the silence of space, my command is law, chasing adventure and treasure beyond the grasp of galactic authorities, a rebel heart beating in the dark.");
                             character.sprite = Captain;
                             break;
-                        case 9:
+                        case 11:
                             pieceName.SetText("THE CORSAIR");
                             pieceDesc.SetText("Amongst the starlit void, my blade sings the anthem of the free, a Corsairs vow to carve a path of honor and rebellion.\n\n As a Corsair, I wield my blade with the precision of a comet slicing through the dark. My skill is honed in the vacuum of space, a dance of steel and stars against any who dare cross our path. Leading my crew with the edge of my sword, I seek fortune and glory beyond the frontiers, a master of combat in the endless night.");
                             character.sprite = Corsair;
