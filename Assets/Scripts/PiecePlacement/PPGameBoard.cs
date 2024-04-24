@@ -126,6 +126,8 @@ public class PPGameBoard : MonoBehaviour
             StartCoroutine(RotateBoard(false));
         else if (PieceManager.instance.onlineMultiplayer && !playerIsNavy)
             StartCoroutine(RotateBoard(false));
+
+        boardUI.PlayTurnAnim(navyTurn);
     }
            
        
@@ -745,6 +747,7 @@ public class PPGameBoard : MonoBehaviour
         // Update UI
         boardUI.UpdateTurn(navyTurn);
         boardUI.GoalText(defaultText);
+        boardUI.PlayTurnAnim(navyTurn);
     }
 
     #region Events
