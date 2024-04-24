@@ -47,6 +47,8 @@ public class PPGameBoard : MonoBehaviour
     [SerializeField] private bool piecesDone = false;
     [SerializeField] private bool oreSpawned = false;
 
+    public bool pieceMoving = false;
+
     #endregion
 
     #region JailInfo
@@ -96,27 +98,38 @@ public class PPGameBoard : MonoBehaviour
             timer.SetActive(false);
         }
 
+
         PIECES_ADDED = Enum.GetValues(typeof(PieceType)).Length;
 
         //Initialize the game board and all variables
-        gameBoard = GameObject.FindGameObjectWithTag("GameBoard");
-        game_board_size = gameBoard.transform.localScale.x;
-        tile_size = gameBoard.transform.localScale.x / game_board_size;
-        tiles = new GameObject[TILE_COUNT_X, TILE_COUNT_Y];
-        teamSize = 30;
+        {
+            gameBoard = GameObject.FindGameObjectWithTag("GameBoard");
+            game_board_size = gameBoard.transform.localScale.x;
+            tile_size = gameBoard.transform.localScale.x / game_board_size;
+            tiles = new GameObject[TILE_COUNT_X, TILE_COUNT_Y];
+            teamSize = 30;
 
-        boardUI = FindObjectOfType<BoardUI>();
-        boardUI.GoalText(defaultText);
+            boardUI = FindObjectOfType<BoardUI>();
+            boardUI.GoalText(defaultText);
 
-        JailCells = GameObject.FindGameObjectWithTag("JailBoard");
-        jail = JailCells.GetComponent<PPJailBoard>();
-        NavyPieces = new Piece[teamSize];
-        PiratePieces = new Piece[teamSize];
-        IdentifyBoardSquares();
+            JailCells = GameObject.FindGameObjectWithTag("JailBoard");
+            jail = JailCells.GetComponent<PPJailBoard>();
+            NavyPieces = new Piece[teamSize];
+            PiratePieces = new Piece[teamSize];
+            IdentifyBoardSquares();
 
-        piecePlacer = PiecePlacerObject.GetComponent<PiecePlacement>();
-        PlacementTimer.time = 120;
+            piecePlacer = PiecePlacerObject.GetComponent<PiecePlacement>();
+            PlacementTimer.time = 120;
+        }
+
+        if (!PieceManager.instance.onlineMultiplayer && !navyTurn)
+            StartCoroutine(RotateBoard(false));
+        else if (PieceManager.instance.onlineMultiplayer && !playerIsNavy)
+            StartCoroutine(RotateBoard(false));
     }
+           
+       
+        
 
     private void OnDestroy()
     {
@@ -504,6 +517,7 @@ public class PPGameBoard : MonoBehaviour
         if (!isNavy)
         {
             cp = Instantiate(PiecePrefabs[(int)type + PIECES_ADDED], this.transform).GetComponent<Piece>();
+            cp.transform.Rotate(0f, 0f, 180f);
         }
         else
         {
@@ -539,6 +553,7 @@ public class PPGameBoard : MonoBehaviour
 
 
         piece.transform.position = targetPosition;
+        
     }
 
     public void DetectValidSquares(PPJailCell currentSquare)
@@ -655,6 +670,60 @@ public class PPGameBoard : MonoBehaviour
 
         boardUI.GoalText("Click on a green square to place that piece there,", true);
         boardUI.GoalText("or click the piece again to cancel.", true);
+    }
+    IEnumerator RotateBoard(bool navyAtBottom)
+    {
+        Debug.Log($"Positioning the {navyAtBottom} pieces to the bottom of the screen");
+
+        while (pieceMoving)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        if (navyAtBottom)
+        {
+            if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy))
+            {
+                Debug.Log("Putting the navy at the bottom of the screen");
+                gameBoard.transform.Rotate(0f, 0f, -180f, Space.Self);
+
+                for (int i = 0; i < teamSize; i++)
+                {
+                    if (NavyPieces[i] != null)
+                    {
+                        NavyPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                    }
+
+                    if (PiratePieces[i] != null)
+                    {
+                        PiratePieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && !playerIsNavy))
+            {
+                Debug.Log("Putting the pirates at the bottom of the screen");
+                gameBoard.transform.Rotate(0f, 0f, 180f, Space.Self);
+
+                for (int i = 0; i < teamSize; i++)
+                {
+                    if (NavyPieces[i] != null)
+                    {
+                        NavyPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                    }
+
+                    if (PiratePieces[i] != null)
+                    {
+                        PiratePieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                    }
+                }
+            }
+        }
+
+        yield return null;
     }
 
     // Changes the turn from one player to the next
