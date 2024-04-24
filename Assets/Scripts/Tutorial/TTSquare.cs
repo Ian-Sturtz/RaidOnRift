@@ -21,7 +21,7 @@ public class TTSquare : MonoBehaviour
     private void Start()
     {
         gameBoard = GameObject.FindGameObjectWithTag("GameBoard");
-        board = gameBoard.GetComponent<GameBoard>();
+        board = gameBoard.GetComponent<TTGameBoard>();
         SetMaterial(defaultBoardMaterial);
     }
 
