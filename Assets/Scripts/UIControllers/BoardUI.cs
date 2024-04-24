@@ -391,6 +391,25 @@ public class BoardUI : MonoBehaviour
         }
     }
 
+    public void SetPieceDisplay(string pieceNameText, string pieceDescriptionText)
+    {
+        pieceDisplay.SetActive(true);
+        pieceDisplayName.SetText(pieceNameText);
+        PieceDisplayDescription(pieceDescriptionText);
+    }
+
+    public void PieceDisplayDescription(string pieceDescriptionText, bool append = false)
+    {
+        if (append)
+        {
+            string currentText = pieceDescription.text;
+
+            pieceDescription.SetText(currentText + "\n" + pieceDescriptionText);
+        }
+        else
+            pieceDescription.SetText(pieceDescriptionText);
+    }
+
     public void HideSelectedPiece()
     {
         pieceDisplay.SetActive(false);

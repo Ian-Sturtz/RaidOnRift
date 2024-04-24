@@ -102,25 +102,23 @@ public class PPGameBoard : MonoBehaviour
         PIECES_ADDED = Enum.GetValues(typeof(PieceType)).Length;
 
         //Initialize the game board and all variables
-        {
-            gameBoard = GameObject.FindGameObjectWithTag("GameBoard");
-            game_board_size = gameBoard.transform.localScale.x;
-            tile_size = gameBoard.transform.localScale.x / game_board_size;
-            tiles = new GameObject[TILE_COUNT_X, TILE_COUNT_Y];
-            teamSize = 30;
+        gameBoard = GameObject.FindGameObjectWithTag("GameBoard");
+        game_board_size = gameBoard.transform.localScale.x;
+        tile_size = gameBoard.transform.localScale.x / game_board_size;
+        tiles = new GameObject[TILE_COUNT_X, TILE_COUNT_Y];
+        teamSize = 30;
 
-            boardUI = FindObjectOfType<BoardUI>();
-            boardUI.GoalText(defaultText);
+        boardUI = FindObjectOfType<BoardUI>();
+        boardUI.GoalText(defaultText);
 
-            JailCells = GameObject.FindGameObjectWithTag("JailBoard");
-            jail = JailCells.GetComponent<PPJailBoard>();
-            NavyPieces = new Piece[teamSize];
-            PiratePieces = new Piece[teamSize];
-            IdentifyBoardSquares();
+        JailCells = GameObject.FindGameObjectWithTag("JailBoard");
+        jail = JailCells.GetComponent<PPJailBoard>();
+        NavyPieces = new Piece[teamSize];
+        PiratePieces = new Piece[teamSize];
+        IdentifyBoardSquares();
 
-            piecePlacer = PiecePlacerObject.GetComponent<PiecePlacement>();
-            PlacementTimer.time = 120;
-        }
+        piecePlacer = PiecePlacerObject.GetComponent<PiecePlacement>();
+        PlacementTimer.time = 120;
 
         if (!PieceManager.instance.onlineMultiplayer && !navyTurn)
             StartCoroutine(RotateBoard(false));
@@ -129,9 +127,6 @@ public class PPGameBoard : MonoBehaviour
 
         boardUI.PlayTurnAnim(navyTurn);
     }
-           
-       
-        
 
     private void OnDestroy()
     {

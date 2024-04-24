@@ -7,15 +7,17 @@ public class ButtonController : MonoBehaviour
 {
     public void LoadMainMenu()
     {
-        if (PieceManager.instance.onlineMultiplayer)
+        if(PieceManager.instance != null)
         {
-            MultiplayerController.Instance.gameWon = 0;
+            if (PieceManager.instance.onlineMultiplayer)
+            {
+                MultiplayerController.Instance.gameWon = 0;
 
-            Client.Instance.Shutdown();
-            Server.Instance.Shutdown();
-            SceneManager.LoadScene("Connection Dropped");
+                Client.Instance.Shutdown();
+                Server.Instance.Shutdown();
+                SceneManager.LoadScene("Connection Dropped");
+            }
         }
-            
         else
             SceneManager.LoadScene("Main Menu");
     }
@@ -24,12 +26,15 @@ public class ButtonController : MonoBehaviour
     {
         Debug.Log("Quitting Game");
         
-        if(PieceManager.instance.onlineMultiplayer)
+        if(PieceManager.instance != null)
         {
-            MultiplayerController.Instance.gameWon = 0;
+            if(PieceManager.instance.onlineMultiplayer)
+            {
+                MultiplayerController.Instance.gameWon = 0;
 
-            Client.Instance.Shutdown();
-            Server.Instance.Shutdown();
+                Client.Instance.Shutdown();
+                Server.Instance.Shutdown();
+            }
         }
 
         Application.Quit();
