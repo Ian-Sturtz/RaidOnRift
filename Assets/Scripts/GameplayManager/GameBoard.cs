@@ -1787,7 +1787,7 @@ public class GameBoard : MonoBehaviour
 
                 // Make sure gunner animates correctly
                 gunnerLine.transform.Rotate(0f, 0f, -180f, Space.Self);
-                Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1);
+                Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1) * -1;
                 gunnerParticles.GetComponent<Transform>().transform.position = targetPos;
 
                 for (int i = 0; i < teamSize; i++)
@@ -1803,7 +1803,7 @@ public class GameBoard : MonoBehaviour
                     }
                 }
 
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.5f);
                 gunnerLine.transform.Rotate(0f, 0f, 180f, Space.Self);
 
             }
@@ -1817,7 +1817,7 @@ public class GameBoard : MonoBehaviour
 
                 // Make sure gunner animates correctly
                 gunnerLine.transform.Rotate(0f, 0f, 180f, Space.Self);
-                Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1);
+                Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1) * -1;
                 gunnerParticles.GetComponent<Transform>().transform.position = targetPos;
 
                 for (int i = 0; i < teamSize; i++)
@@ -1833,7 +1833,7 @@ public class GameBoard : MonoBehaviour
                     }
                 }
 
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.5f);
                 gunnerLine.transform.Rotate(0f, 0f, -180f, Space.Self);
             }
         }
