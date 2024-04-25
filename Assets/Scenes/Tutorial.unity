@@ -1752,15 +1752,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4484401511224434991, guid: 75472581a562d90478324a94fd368014, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4484401511224434991, guid: 75472581a562d90478324a94fd368014, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4484401511224434991, guid: 75472581a562d90478324a94fd368014, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4484401511224434991, guid: 75472581a562d90478324a94fd368014, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6761,10 +6761,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 41
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
@@ -10079,15 +10079,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4484401511224434991, guid: 75472581a562d90478324a94fd368014, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4484401511224434991, guid: 75472581a562d90478324a94fd368014, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4484401511224434991, guid: 75472581a562d90478324a94fd368014, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4484401511224434991, guid: 75472581a562d90478324a94fd368014, type: 3}
       propertyPath: m_LocalPosition.x
