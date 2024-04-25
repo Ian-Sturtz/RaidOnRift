@@ -17,6 +17,8 @@ public class ButtonController : MonoBehaviour
                 Server.Instance.Shutdown();
                 SceneManager.LoadScene("Connection Dropped");
             }
+            else
+                SceneManager.LoadScene("Main Menu");
         }
         else
             SceneManager.LoadScene("Main Menu");

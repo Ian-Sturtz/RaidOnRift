@@ -46,8 +46,17 @@ public class Bar : MonoBehaviour
 
     public void pauseTimer()
     {
-        if(MultiplayerController.Instance != null)
+        if (PieceManager.instance != null)
+        {
+            if (!PieceManager.instance.onlineMultiplayer)
+            {
+                LeanTween.pause(bar);
+            }
+        }
+        else
+        {
             LeanTween.pause(bar);
+        }
     }
 
     public void resumeTimer()
