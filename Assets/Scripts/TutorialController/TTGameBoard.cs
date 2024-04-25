@@ -158,8 +158,8 @@ public class TTGameBoard : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
 
-        boardUI.PieceDisplayDescription("This is the Quartermaster! The Quartermaster is a very agile piece.");
-        boardUI.PieceDisplayDescription("\nWith a fairly inexpensive cost to clone for your team, he's great at applying pressure around the rift.", true);
+        boardUI.PieceDisplayDescription("This is the Quartermaster! The Quartermaster is very agile.");
+        boardUI.PieceDisplayDescription("\nWith a moderate cost to clone for your team, he's versatile and great at applying pressure around the rift.", true);
         boardUI.PieceDisplayDescription("\nClick on the flashing green Quartermaster to see how he can move.", true);
 
         TTSquare currentSquare = tiles[5, 3].GetComponent<TTSquare>();
@@ -207,9 +207,9 @@ public class TTGameBoard : MonoBehaviour
 
         tiles[6, 5].tag = "InteractablePiece";
 
-        boardUI.PieceDisplayDescription("The Quartermaster can move in an 'L' shape direction, making him mobile!");
-        boardUI.PieceDisplayDescription("\nNotice he can jump over the enemys mines!", true);
-        boardUI.PieceDisplayDescription("\nClick on the flashing green square to move the Navigator there.", true);
+        boardUI.PieceDisplayDescription("The Quartermaster can move in an 'L' shape direction!");
+        boardUI.PieceDisplayDescription("\nNotice he can jump over both allied and enemy Shields.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green square to move the Quartermaster there.", true);
 
         while (true)
         {
@@ -230,7 +230,7 @@ public class TTGameBoard : MonoBehaviour
 
                         yield return new WaitForSeconds(.5f);
 
-                        MovePiece(PiratePieces[0], 5, 7);
+                        MovePiece(PiratePieces[1], 5, 7);
                         break;
                     }
                 }
@@ -241,9 +241,9 @@ public class TTGameBoard : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        boardUI.PieceDisplayDescription("Look! The enemys Quartermaster has moved up lets be careful of him!");
-        boardUI.PieceDisplayDescription("\nNotice one of the mines is blocking some of the Quartermasters moves, be sure to rember that mines can block a moveset for the Quartermaster", true);
-        boardUI.PieceDisplayDescription("\nClick on the Navy Quartermaster to get ready to capture the enemys Quartermaster, and then capture the enemy!", true);
+        boardUI.PieceDisplayDescription("Look! The enemy's Quartermaster has moved up. You need to be careful of him!");
+        boardUI.PieceDisplayDescription("\nNotice there's an allied Shield blocking the Quartermaster's path to the right. Even though he can jump over Shields, he still can't land on them.", true);
+        boardUI.PieceDisplayDescription("\nClick on the Navy Quartermaster to get ready to capture the enemy.", true);
 
         currentSquare = tiles[6, 5].GetComponent<TTSquare>();
         currentSquare.tag = "InteractablePiece";
@@ -310,14 +310,14 @@ public class TTGameBoard : MonoBehaviour
                     if (tileSelected.tag == "CaptureSquare")
                     {
                         ResetBoardMaterials();
-                        jail.InsertAPiece(PiratePieces[0]);
-                        PiratePieces[0].destroyPiece();
+                        jail.InsertAPiece(PiratePieces[1]);
+                        PiratePieces[1].destroyPiece();
                         NavyPieces[0].hasCaptured = true;
                         MovePiece(NavyPieces[0], 5, 7);
 
                         yield return new WaitForSeconds(.5f);
 
-                        MovePiece(PiratePieces[1], 4, 8);
+                        MovePiece(PiratePieces[0], 4, 8);
 
                         break;
                     }
@@ -327,9 +327,9 @@ public class TTGameBoard : MonoBehaviour
             yield return null;
         }
 
-        boardUI.PieceDisplayDescription("Good job! You captured the piece!");
-        boardUI.PieceDisplayDescription("\nThe enemy Quartermaster is trying to defend the ore, lets show him his moves wont work!", true);
-        boardUI.PieceDisplayDescription("\nClick on the Navy Quartermaster to get ready to move up, and take the ore!", true);
+        boardUI.PieceDisplayDescription("Good job! You captured the enemy Quartermaster!");
+        boardUI.PieceDisplayDescription("\nNow the other enemy Quartermaster is setting up a defense around their Ore, let's show him his defense doesn't intimidate us!", true);
+        boardUI.PieceDisplayDescription("\nClick on the Navy Quartermaster to get ready to push forward and take the ore!", true);
 
         currentSquare = tiles[5, 7].GetComponent<TTSquare>();
         currentSquare.tag = "InteractablePiece";
@@ -411,9 +411,9 @@ public class TTGameBoard : MonoBehaviour
             yield return null;
         }
 
-        boardUI.PieceDisplayDescription("Awesome! you captured the ore! You now have the ore bearer's moveset!");
-        boardUI.PieceDisplayDescription("\nThe ore bear gets to take two turns", true);
-        boardUI.PieceDisplayDescription("\nClick on the Navy Quartermaster to use your second move to move out of the enemys Quartermasters move range!", true);
+        boardUI.PieceDisplayDescription("Awesome! You captured the Ore! Now you move like an Orebearer!");
+        boardUI.PieceDisplayDescription("\nThe Orebearer gets to make an extra move after capturing an enemy piece, so it's still your turn.", true);
+        boardUI.PieceDisplayDescription("\nClick on the Navy Quartermaster to use your second move to move out of your enemy's trap!", true);
 
         currentSquare = tiles[6, 9].GetComponent<TTSquare>();
         currentSquare.tag = "InteractablePiece";
@@ -500,9 +500,6 @@ public class TTGameBoard : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("Story");
-
-
-
     }
 
     IEnumerator TestCaptain()
