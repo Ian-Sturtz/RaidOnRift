@@ -424,6 +424,7 @@ public class BoardUI : MonoBehaviour
         }
         else
             pieceDescription.SetText(pieceDescriptionText);
+    }
     public void TTUpdateSelectedPiece(TTPieceType piece, bool isNavy)
     {
         if (piece == TTPieceType.Ore || piece == TTPieceType.LandMine)

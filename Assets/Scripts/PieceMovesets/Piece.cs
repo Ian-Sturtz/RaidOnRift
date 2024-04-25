@@ -149,7 +149,7 @@ public class Piece : MonoBehaviour
                 {
                     if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
                     {
-                        TTSquare possibleSquare = tiles[currentX + x_change, currentY + y_change].GetComponent<TTSquare>();
+                        Square possibleSquare = tiles[currentX + x_change, currentY + y_change].GetComponent<Square>();
                         if (possibleSquare.currentPiece == null)
                             moveAssessment[currentX + x_change, currentY + y_change] = 1;
                         else if (isNavy != possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
