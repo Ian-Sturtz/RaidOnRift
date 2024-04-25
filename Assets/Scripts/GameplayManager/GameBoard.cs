@@ -247,8 +247,6 @@ public class GameBoard : MonoBehaviour
         // The active player hasn't selected a tactician or bomber to use this turn
         else
         {
-            boardUI.HideSelectedPiece();
-
             bomberSelected = false;
 
             // Despawns all pieces out of Tactician inherit cells (if applicable)
@@ -415,6 +413,8 @@ public class GameBoard : MonoBehaviour
                             Debug.Log("Wrong piece selected!");
                             Square selectedTile = tileSelected.GetComponent<Square>();
                             selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
+
+                            boardUI.UpdateSelectedPiece(current_square.currentPiece.type, current_square.currentPiece.isNavy);
                         }
                         // The wrong team is trying to move
                         else if (current_square.currentPiece.isNavy != navyTurn)
@@ -423,6 +423,8 @@ public class GameBoard : MonoBehaviour
                             Debug.Log("It's not your turn!");
                             Square selectedTile = tileSelected.GetComponent<Square>();
                             selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
+
+                            boardUI.UpdateSelectedPiece(current_square.currentPiece.type, current_square.currentPiece.isNavy);
                         }
                         // The right team is trying to move
                         else
@@ -477,7 +479,7 @@ public class GameBoard : MonoBehaviour
                         Vector2Int currentSquareCoords = IdentifyThisBoardSquare(storedTileSelected);
                         Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
 
-                    
+                        boardUI.HideSelectedPiece();
 
 
 
@@ -781,6 +783,7 @@ public class GameBoard : MonoBehaviour
                     {
                         ResetBoardMaterials(true);
                         boardUI.GoalText("Click on a piece to move it!");
+                        boardUI.HideSelectedPiece();
 
                         // Ends turn if orebearer decides not to move a second time
                         if (tileSelected.GetComponent<Square>().currentPiece.hasOre && orebearerSecondMove)
