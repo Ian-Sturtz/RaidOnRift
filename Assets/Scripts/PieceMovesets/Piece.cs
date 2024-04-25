@@ -122,18 +122,39 @@ public class Piece : MonoBehaviour
             for (int y = 0; y < 10; y++)
                 moveAssessment[x, y] = -1;
 
-        // For all squares +/- 1 away from current position
-        for (int x_change = -1; x_change < 2; x_change++)
+        if (SceneManager.GetActiveScene().name == "Board")
         {
-            for (int y_change = -1; y_change < 2; y_change++)
+            // For all squares +/- 1 away from current position
+            for (int x_change = -1; x_change < 2; x_change++)
             {
-                if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                for (int y_change = -1; y_change < 2; y_change++)
                 {
-                    Square possibleSquare = tiles[currentX + x_change, currentY + y_change].GetComponent<Square>();
-                    if (possibleSquare.currentPiece == null)
-                        moveAssessment[currentX + x_change, currentY + y_change] = 1;
-                    else if (isNavy != possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
-                        moveAssessment[currentX + x_change, currentY + y_change] = 2;
+                    if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                    {
+                        Square possibleSquare = tiles[currentX + x_change, currentY + y_change].GetComponent<Square>();
+                        if (possibleSquare.currentPiece == null)
+                            moveAssessment[currentX + x_change, currentY + y_change] = 1;
+                        else if (isNavy != possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                            moveAssessment[currentX + x_change, currentY + y_change] = 2;
+                    }
+                }
+            }
+        }
+        else
+        {
+            // For all squares +/- 1 away from current position
+            for (int x_change = -1; x_change < 2; x_change++)
+            {
+                for (int y_change = -1; y_change < 2; y_change++)
+                {
+                    if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                    {
+                        TTSquare possibleSquare = tiles[currentX + x_change, currentY + y_change].GetComponent<TTSquare>();
+                        if (possibleSquare.currentPiece == null)
+                            moveAssessment[currentX + x_change, currentY + y_change] = 1;
+                        else if (isNavy != possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                            moveAssessment[currentX + x_change, currentY + y_change] = 2;
+                    }
                 }
             }
         }
