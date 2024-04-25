@@ -355,7 +355,9 @@ public class PPGameBoard : MonoBehaviour
 
                         DetectValidSquares(currentSquare);
 
-                        boardUI.UpdateSelectedPiece(currentSquare.currentPiece.type, currentSquare.currentPiece.isNavy);
+                        if(currentSquare.currentPiece.type == PieceType.Ore || currentSquare.currentPiece.type == PieceType.LandMine) 
+                            boardUI.UpdateSelectedPiece(currentSquare.currentPiece.type, currentSquare.currentPiece.isNavy, false, true);
+                        else boardUI.UpdateSelectedPiece(currentSquare.currentPiece.type, currentSquare.currentPiece.isNavy);
                     }
 
                 // The same piece was clicked twice (cancel piece selection)
