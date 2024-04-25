@@ -110,8 +110,6 @@ public class TTGameBoard : MonoBehaviour
 
     private void Awake()
     {
-        // if (PieceManager.instance.onlineMultiplayer)
-        //     MultiplayerController.Instance.gameWon = -1;
         if (StoryUI.tutorialToLoad >= 10)
         {
             navyTurn = false;
@@ -148,32 +146,6 @@ public class TTGameBoard : MonoBehaviour
         IdentifyBoardSquares();
 
         SpawnAllPieces();
-
-        // Identify Player ID in multiplayer
-        // if (PieceManager.instance != null)
-        //     if (PieceManager.instance.onlineMultiplayer)
-        //         playerIsNavy = MultiplayerController.Instance.currentTeam == 0;
-
-        // if (StoryUI.tutorialToLoad <= 9)
-        // {
-        //     navyTurn = true;
-        // }
-        // else
-        // {
-        //     navyTurn = false;
-        // }
-
-        // if (!PieceManager.instance.onlineMultiplayer && !navyTurn)
-        //     StartCoroutine(RotateBoard(false));
-        // else if (PieceManager.instance.onlineMultiplayer && !playerIsNavy)
-        //     StartCoroutine(RotateBoard(false));
-
-        // if(!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == navyTurn))
-        //     boardUI.GoalText("Click on a piece to move it!");
-        // else
-        //     boardUI.GoalText("Waiting for opponent to move.");
-
-        // RegisterEvents();
     }
 
     private void OnDestroy()
@@ -188,23 +160,6 @@ public class TTGameBoard : MonoBehaviour
         {
             GameOver(!navyTurn);
         }
-
-        // Check for connection drop
-        // if (PieceManager.instance.onlineMultiplayer)
-        // {
-        //     if (MultiplayerController.Instance.gameWon != -1 && boardUI.gameOver == false)
-        //     {
-        //         if (MultiplayerController.Instance.gameWon == 0)
-        //         {
-        //             GameOver(!playerIsNavy);
-        //         }
-        //         else
-        //         {
-        //             GameOver(playerIsNavy);
-        //         }
-        //     }
-        // }
-
 
         for (int i = 0; i < TILE_COUNT_X && !gameWon; i++)
         {
@@ -230,20 +185,6 @@ public class TTGameBoard : MonoBehaviour
                 }
             }
         }
-
-        // boardUI.UpdateTurn(navyTurn);
-
-        // if (navyTurn == true)
-        // {
-        //     navyTurn = false;
-        //     Debug.Log("update");
-        // }
-        // else if (navyTurn == false)
-        // {
-        //     navyTurn = true;
-        //     Debug.Log("update");
-        // }
-
 
 
         // The active player has selected a bomber or tactician to use this turn
@@ -498,32 +439,6 @@ public class TTGameBoard : MonoBehaviour
                         Vector2Int currentSquareCoords = IdentifyThisBoardSquare(storedTileSelected);
                         Vector2Int moveCoordinates = IdentifyThisBoardSquare(tileSelected);
 
-                    
-
-
-
-                        // Sends move data if online
-                        // if (PieceManager.instance.onlineMultiplayer)
-                        // {
-                        //     Debug.Log("Sending move to server");
-                        //     NetMovePiece mp = new NetMovePiece();
-
-                        //     mp.teamID = currentPiece.isNavy ? 0 : 1;
-                        //     mp.originalX = currentSquareCoords.x;
-                        //     mp.originalY = currentSquareCoords.y;
-                        //     mp.targetX = moveCoordinates.x;
-                        //     mp.targetY = moveCoordinates.y;
-                        //     mp.corsairJump = tileSelected.tag == "CorsairJump" ? 1 : 0;
-
-                        //     Debug.Log($"{mp.teamID}: {mp.originalX}{mp.originalY} to {mp.targetX}{mp.targetY}");
-                        //     if (mp.corsairJump == 1)
-                        //     {
-                        //         Debug.Log("Corsair is jumping");
-                        //     }
-
-                        //     Client.Instance.SendToServer(mp);
-                        // }
-
                         GameplayMovePiece(currentSquare, targetSquare, currentPiece, currentSquareCoords, moveCoordinates, tileSelected.tag == "CorsairJump");
                     }
 
@@ -539,37 +454,9 @@ public class TTGameBoard : MonoBehaviour
 
                         NetCapturePiece cp = new NetCapturePiece();
 
-                        // if (PieceManager.instance.onlineMultiplayer)
-                        // {
-                        //     Debug.Log("Sending capture to server");
-
-                        //     if (currentPiece.isNavy)
-                        //         cp.teamID = 0;
-                        //     else
-                        //         cp.teamID = 1;
-                        //     cp.teamID = currentPiece.isNavy ? 0 : 1;
-                        //     cp.originalX = currentCoordinates.x;
-                        //     cp.originalY = currentCoordinates.y;
-                        //     cp.targetX = moveCoordinates.x;
-                        //     cp.targetY = moveCoordinates.y;
-                        //     cp.gunnerCapture = tileSelected.tag == "GunnerTarget" ? 1 : 0;
-
-
-                        //     Debug.Log($"{cp.teamID}: {cp.originalX},{cp.originalY} moving to {cp.targetX},{cp.targetY}");
-                        //     if (cp.gunnerCapture == 1)
-                        //         Debug.Log("Gunner is capturing");
-                        //     else
-                        //         Debug.Log("Gunner is not capturing " + cp.gunnerCapture);
-                        // }
                         Debug.Log("skip server msg");
 
                         GameplayCapturePiece(CurrentSquare, targetSquare, currentPiece, capturedPiece, moveCoordinates, tileSelected.tag == "GunnerTarget");
-                        
-                        // if(PieceManager.instance.onlineMultiplayer)
-                        // {
-                        //     cp.turnOver = (resetOre || orebearerSecondMove) ? 0 : 1;
-                        //     Client.Instance.SendToServer(cp);
-                        // }
                     }
 
                     // Cannon is capturing a piece by jumping
@@ -638,25 +525,7 @@ public class TTGameBoard : MonoBehaviour
 
                         NetCannonCapture cc = new NetCannonCapture();
 
-                        // if (PieceManager.instance.onlineMultiplayer)
-                        // {
-                        //     Debug.Log("Sending cannon capture to server");
-
-                        //     cc.teamID = currentPiece.isNavy ? 0 : 1;
-                        //     cc.originalX = currentCoordinates.x;
-                        //     cc.originalY = currentCoordinates.y;
-                        //     cc.targetX = moveCoordinates.x;
-                        //     cc.targetY = moveCoordinates.y;
-                        //     cc.captureDir = captureDirection;
-                        // }
-
                         GameplayCannonCapture(CurrentSquare, targetSquare, currentPiece, capturedPiece, moveCoordinates);
-
-                        // if (PieceManager.instance.onlineMultiplayer)
-                        // {
-                        //     cc.turnOver = (resetOre || orebearerSecondMove) ? 0 : 1;
-                        //     Client.Instance.SendToServer(cc);
-                        // }
                     }
 
                     // A landmine has been selected from jail or a tactician is mimicking a piece
@@ -740,19 +609,6 @@ public class TTGameBoard : MonoBehaviour
                         else
                             shieldPiece = jail.pirateJailedPieces[cellToHighlight].GetComponent<TTPiece>();
 
-                        // if (PieceManager.instance.onlineMultiplayer)
-                        // {
-                        //     NetRespawn rs = new NetRespawn();
-
-                        //     rs.teamID = shieldPiece.isNavy ? 0 : 1;
-                        //     rs.jailIndex = cellToHighlight;
-                        //     rs.targetX = deployCoordinates.x;
-                        //     rs.targetY = deployCoordinates.y;
-                        //     rs.specialPiece = 0;
-
-                        //     Client.Instance.SendToServer(rs);
-                        // }
-
                         GameplayDeployPiece(shieldPiece, deployCoordinates, cellToHighlight, 0);
                     }
 
@@ -774,19 +630,6 @@ public class TTGameBoard : MonoBehaviour
                         Debug.Log(cellToHighlight);
 
                         int turnOver = orebearerSecondMove ? 2 : 1;
-
-                        // if (PieceManager.instance.onlineMultiplayer)
-                        // {
-                        //     NetRespawn rs = new NetRespawn();
-
-                        //     rs.teamID = orePiece.isNavy ? 0 : 1;
-                        //     rs.jailIndex = cellToHighlight;
-                        //     rs.targetX = deployCoordinates.x;
-                        //     rs.targetY = deployCoordinates.y;
-                        //     rs.specialPiece = turnOver;
-
-                        //     Client.Instance.SendToServer(rs);
-                        // }
 
                         GameplayDeployPiece(orePiece, deployCoordinates, cellToHighlight, turnOver);
 
@@ -1834,24 +1677,6 @@ public class TTGameBoard : MonoBehaviour
             PiratePieces[21] = SpawnPiece(TTPieceType.Vanguard, false, 9, 9);
         }
 
-        // else
-        // {
-        //     navyTurn = PieceManager.instance.navyFirst;
-        //     for (int i = 0; i < PieceManager.instance.totalPieces; i++)
-        //     {
-        //         if (PieceManager.instance.factions[i])
-        //         {
-        //             NavyPieces[navyPiecesAdded] = SpawnPiece(PieceManager.instance.pieceTypes[i], true, PieceManager.instance.pieceCoords[i,0], PieceManager.instance.pieceCoords[i,1]);
-        //             navyPiecesAdded++;
-        //         }
-        //         else
-        //         {
-        //             PiratePieces[piratePiecesAdded] = SpawnPiece(PieceManager.instance.pieceTypes[i], false, PieceManager.instance.pieceCoords[i, 0], PieceManager.instance.pieceCoords[i, 1]);
-        //             piratePiecesAdded++;
-        //         }
-        //     }
-        // }
-
         boardUI.PlayTurnAnim(navyTurn);
     }
 
@@ -1862,75 +1687,6 @@ public class TTGameBoard : MonoBehaviour
         gameTimer.pauseTimer();
         boardUI.GameWon(teamWon, stalemate);
     }
-
-    // public void ForfeitGame()
-    // {
-    //     if (PieceManager.instance != null)
-    //     {
-    //         if (PieceManager.instance.onlineMultiplayer)
-    //         {
-    //             NetGameWon gw = new NetGameWon();
-    //             gw.teamID = playerIsNavy ? 1 : 0;
-
-    //             Client.Instance.SendToServer(gw);
-    //         }
-    //     }
-    // }
-
-    // IEnumerator RotateBoard(bool navyAtBottom)
-    // {
-    //     Debug.Log($"Positioning the {navyAtBottom} pieces to the bottom of the screen");
-
-    //     while (pieceMoving)
-    //     {
-    //         yield return new WaitForFixedUpdate();
-    //     }
-
-    //     if (navyAtBottom)
-    //     {
-    //         if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy))
-    //         {
-    //             Debug.Log("Putting the navy at the bottom of the screen");
-    //             gameBoard.transform.Rotate(0f, 0f, -180f, Space.Self);
-
-    //             for (int i = 0; i < teamSize; i++)
-    //             {
-    //                 if(NavyPieces[i] != null)
-    //                 {
-    //                     NavyPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
-    //                 }
-
-    //                 if(PiratePieces[i] != null)
-    //                 {
-    //                     PiratePieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //         if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && !playerIsNavy))
-    //         {
-    //             Debug.Log("Putting the pirates at the bottom of the screen");
-    //             gameBoard.transform.Rotate(0f, 0f, 180f, Space.Self);
-
-    //             for (int i = 0; i < teamSize; i++)
-    //             {
-    //                 if (NavyPieces[i] != null)
-    //                 {
-    //                     NavyPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
-    //                 }
-
-    //                 if (PiratePieces[i] != null)
-    //                 {
-    //                     PiratePieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     yield return null;
-    // }
 
     // Changes the turn from one player to the next
     public void NextTurn(string debug)
@@ -1955,15 +1711,11 @@ public class TTGameBoard : MonoBehaviour
             {
                 navyTurn = false;
                 playerIsNavy = false;
-                // if(!PieceManager.instance.onlineMultiplayer)
-                //     StartCoroutine(RotateBoard(navyTurn));
             }
             else if(!navyTurn)
             {
                 navyTurn = true;
                 playerIsNavy = true;
-                // if(!PieceManager.instance.onlineMultiplayer)
-                //     StartCoroutine(RotateBoard(navyTurn));
             }
             boardUI.PlayTurnAnim(navyTurn);
         }
@@ -1971,51 +1723,9 @@ public class TTGameBoard : MonoBehaviour
         gameTimer.ResetBar();
 
         Debug.Log(debug);
-
-        //stalemate = CheckForStalemate(navyTurn);
-
-        // Update UI if no stalemate
-        // if (!stalemate) 
-        // {
-        //     if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy == navyTurn))
-        //         boardUI.GoalText("Click on a piece to move it!");
-        //     else
-        //         boardUI.GoalText("Waiting for opponent to move.");
-        // }
     }
 
     #region Events
-
-    // private void RegisterEvents()
-    // {
-    //     NetUtility.S_MOVE_PIECE += OnMovePieceServer;
-    //     NetUtility.S_CAPTURE_PIECE += OnCapturePieceServer;
-    //     NetUtility.S_CANNON_CAPTURE += OnCannonCaptureServer;
-    //     NetUtility.S_RESPAWN += OnRespawnServer;
-    //     NetUtility.S_GAME_WON += OnGameWonServer;
-
-    //     NetUtility.C_MOVE_PIECE += OnMovePieceClient;
-    //     NetUtility.C_CAPTURE_PIECE += OnCapturePieceClient;
-    //     NetUtility.C_CANNON_CAPTURE += OnCannonCaptureClient;
-    //     NetUtility.C_RESPAWN += OnRespawnClient;
-    //     NetUtility.C_GAME_WON += OnGameWonClient;
-    // }
-
-    // private void UnRegisterEvents()
-    // { 
-    //     NetUtility.S_MOVE_PIECE -= OnMovePieceServer;
-    //     NetUtility.S_CAPTURE_PIECE -= OnCapturePieceServer;
-    //     NetUtility.S_CANNON_CAPTURE -= OnCannonCaptureServer;
-    //     NetUtility.S_RESPAWN -= OnRespawnServer;
-    //     NetUtility.S_GAME_WON -= OnGameWonServer;
-
-
-    //     NetUtility.C_MOVE_PIECE -= OnMovePieceClient;
-    //     NetUtility.C_CAPTURE_PIECE -= OnCapturePieceClient;
-    //     NetUtility.C_CANNON_CAPTURE -= OnCannonCaptureClient;
-    //     NetUtility.C_RESPAWN -= OnRespawnClient;
-    //     NetUtility.C_GAME_WON -= OnGameWonClient;
-    // }
 
     // Server
     private void OnMovePieceServer(NetMessage msg, NetworkConnection cnn)
@@ -2038,31 +1748,6 @@ public class TTGameBoard : MonoBehaviour
     {
         Server.Instance.Broadcast(msg);
     }
-
-    // Client
-    // private void OnMovePieceClient(NetMessage msg)
-    // {
-    //     NetMovePiece mp = msg as NetMovePiece;
-
-    //     if(mp.teamID == 0 && !playerIsNavy || mp.teamID == 1 && playerIsNavy)
-    //     {
-    //         Debug.Log($"{mp.originalX}{mp.originalY} moving to {mp.targetX}{mp.targetY}");
-    //         if (mp.corsairJump == 1)
-    //             Debug.Log("Corsair is jumping");
-    //         GameObject thisTile = FindThisBoardSquare(mp.originalX + 1, mp.originalY + 1);
-    //         TTSquare thisSquare = thisTile.GetComponent<TTSquare>();
-    //         Piece thisPiece = thisSquare.currentPiece;
-
-    //         GameObject targetTile = FindThisBoardSquare(mp.targetX + 1, mp.targetY + 1);
-    //         TTSquare targetSquare = targetTile.GetComponent<TTSquare>();
-            
-    //         Debug.Log("Current Square: " + thisSquare + "\nCurrent Piece: " + thisPiece);
-    //         Vector2Int originalCoords = new Vector2Int(mp.originalX, mp.originalY);
-    //         Vector2Int moveCoords = new Vector2Int(mp.targetX, mp.targetY);
-
-    //         GameplayMovePiece(thisSquare, targetSquare, thisPiece, originalCoords, moveCoords, mp.corsairJump == 1);
-    //     }
-    // }
 
     private void OnCapturePieceClient(NetMessage msg)
     {
