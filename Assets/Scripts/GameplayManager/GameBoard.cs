@@ -97,6 +97,7 @@ public class GameBoard : MonoBehaviour
     [SerializeField] AudioSource gunnerRecharge;
     [SerializeField] AudioSource Capture;
     [SerializeField] AudioSource corsairMove;
+    [SerializeField] AudioSource tacticianMove;
 
 
     #endregion
@@ -1424,6 +1425,8 @@ public class GameBoard : MonoBehaviour
                     if (piece.isNavy && !tacticianInheritSelected)
                     {
                         moveAssessment = piece.GetComponent<Tactician>().GetValidMoves(tiles);
+                        tacticianMove.Play();
+                        //play tact sound
                     }
                     else
                     {
