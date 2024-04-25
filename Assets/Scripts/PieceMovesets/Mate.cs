@@ -18,9 +18,9 @@ public class Mate : Piece
             superPowered = true;
 
         if (superPowered)
+        {
             PieceImage.GetComponent<SpriteRenderer>().sprite = superpoweredSprite;
-        else
-            PieceImage.GetComponent<SpriteRenderer>().sprite = regularSprite;
+        }
     }
 
     public int[,] GetValidMoves(GameObject[,] tiles)
