@@ -98,7 +98,10 @@ public class GameBoard : MonoBehaviour
     [SerializeField] AudioSource Capture;
     [SerializeField] AudioSource corsairMove;
     [SerializeField] AudioSource tacticianMove;
-
+    [SerializeField] AudioSource captainCapture;
+    [SerializeField] AudioSource engineerDrill;
+    [SerializeField] AudioSource admiralCapture;
+    [SerializeField] AudioSource cannonCapture;
 
     #endregion
 
@@ -832,7 +835,16 @@ public class GameBoard : MonoBehaviour
 
     private void GameplayMovePiece(Square currentSquare, Square targetSquare, Piece currentPiece, Vector2Int currentSquareCoords, Vector2Int moveCoordinates, bool corsairJump = false)
     {
-        movementAudio.Play();
+        // Plays specific audio for moving
+        switch (currentPiece.type)
+        {
+            case PieceType.Royal2:
+                if (currentPiece.isNavy) tacticianMove.Play();
+                break;
+            default:
+                movementAudio.Play();
+                break;
+        }
 
         // Corsair jumping (or tactician imitating) requires a cooldown
         if (corsairJump)
@@ -915,6 +927,7 @@ public class GameBoard : MonoBehaviour
             {
                 currentPiece.GetComponent<Bomber>().capturedBomb = jail.navyJailedPieces[bombJailIndex];
             }
+            engineerDrill.Play();
         }
 
         // Prevents the Tactician from mimicking a Gunner and capturing twice
@@ -929,7 +942,20 @@ public class GameBoard : MonoBehaviour
         }
         else
         {
-            Capture.Play();
+            // Plays specific audio for capturing
+            switch (currentPiece.type)
+            {
+                case PieceType.Royal1:
+                    if (currentPiece.isNavy) admiralCapture.Play();
+                    else captainCapture.Play();
+                    break;
+                case PieceType.Royal2:
+                    if (!currentPiece.isNavy) captainCapture.Play();
+                    break;
+                default:
+                    Capture.Play();
+                    break;
+            }
         }
 
         // Move current piece to the new square (unless it's a gunner)
@@ -1007,6 +1033,7 @@ public class GameBoard : MonoBehaviour
         // A piece is being captured
         if (capturedPiece != null)
         {
+            cannonCapture.Play();
             // Check if the captured piece is the ore
             if (capturedPiece.type == PieceType.Ore)
             {
@@ -1431,8 +1458,6 @@ public class GameBoard : MonoBehaviour
                     if (piece.isNavy && !tacticianInheritSelected)
                     {
                         moveAssessment = piece.GetComponent<Tactician>().GetValidMoves(tiles);
-                        tacticianMove.Play();
-                        //play tact sound
                     }
                     else
                     {

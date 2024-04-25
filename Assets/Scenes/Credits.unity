@@ -2604,7 +2604,19 @@ MonoBehaviour:
     inspiration on this project!
 
 
-    From Garrett Slattengren:'
+    From Garrett Slattengren:
+
+
+    Thank you
+    to my family and friends for supporting me through my senior year of college.
+    I would not have made it this far without all of you there supporting me! And
+    thank you to both Ians for inviting me to work on this project that I have become
+    so passionate about!
+
+
+
+    ...and finally, thank you for playing our game! We
+    hope you enjoyed it!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
   m_sharedMaterial: {fileID: 2383952268681313545, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
@@ -4910,7 +4922,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -754.3002, y: 520.53906}
+  m_AnchoredPosition: {x: -754.30023, y: 520.53906}
   m_SizeDelta: {x: 3440, y: 2160.0781}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2693931151929891774
