@@ -84,6 +84,7 @@ public class TTGameBoard : MonoBehaviour
                 break;
             case PieceType.Vanguard:
                 Debug.Log("Testing Vanguard");
+                StartCoroutine(TestVanguard());
                 break;
             case PieceType.Navigator:
                 Debug.Log("Testing Navigator");
@@ -119,9 +120,278 @@ public class TTGameBoard : MonoBehaviour
                 break;
             default:
                 Debug.Log("Default test case");
-                StartCoroutine(TestMate());
+                StartCoroutine(TestVanguard());
                 break;
         }
+    }
+
+    IEnumerator TestVanguard()
+    {
+        NavyPieces[0] = SpawnPiece(PieceType.Vanguard, true, 7, 2);
+        NavyPieces[1] = SpawnPiece(PieceType.Vanguard, true, 0, 1);
+        NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 5, 0);
+        NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 5, 5);
+        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 3, 3);
+
+        PiratePieces[0] = SpawnPiece(PieceType.Vanguard, false, 4, 1);
+        PiratePieces[1] = SpawnPiece(PieceType.Vanguard, false, 9, 1);
+        PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 6, 9);
+        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 2, 5);
+        PiratePieces[4] = SpawnPiece(PieceType.LandMine, false, 8, 4);
+        PiratePieces[5] = SpawnPiece(PieceType.Vanguard, false, 8, 6);
+
+        boardUI.GoalText("Raid On Rift: Tutorial Mode");
+
+        string tutorialHeader = "Vanguard";
+        boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Vanguard.\n\nClick anywhere to continue.");
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+                break;
+            else
+                yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("This is the Vanguard! The Vanguard is essential to a strong defensive strategy.");
+        boardUI.PieceDisplayDescription("\nWith a fairly inexpensive cost to clone for your team, he makes a great addition to your ore protection plans.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green Vanguard to see how he can move.", true);
+
+        TTSquare currentSquare = tiles[7, 2].GetComponent<TTSquare>();
+        tiles[7, 2].tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                        break;
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        ResetBoardMaterials();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[0].GetComponent<Vanguard>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    tiles[x, y].tag = "MoveableSquare";
+                    moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                }
+            }
+        }
+
+        tiles[4, 2].tag = "InteractablePiece";
+
+        boardUI.PieceDisplayDescription("The Vanguard can move any open distance side to side, making him great at protecting your home rows.");
+        boardUI.PieceDisplayDescription("\nHe can only move one space forwards or backwards, though, making him not as effective at getting back to your opponent's territory.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green square to move the Vanguard there.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        MovePiece(NavyPieces[0], 4, 2);
+                        jail.InsertAPiece(NavyPieces[2]);
+                        NavyPieces[2].destroyPiece();
+                        PiratePieces[0].hasCaptured = true;
+                        PiratePieces[0].hasOre = true;
+                        MovePiece(PiratePieces[0], 5, 0);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        MovePiece(PiratePieces[0], 5, 1);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Uh Oh! The Pirate Vanguard has taken your ore on his turn!");
+        boardUI.PieceDisplayDescription("\nYou'll lose the game if he gets back to his home row on the other side of the board!", true);
+        boardUI.PieceDisplayDescription("\nClick on the Navy Vanguard again to take back your ore.", true);
+
+        currentSquare = tiles[4, 2].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[0].GetComponent<Vanguard>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if(moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                }
+            }
+        }
+
+        tiles[5, 1].tag = "CaptureSquare";
+        tiles[5, 1].GetComponent<TTSquare>().SetMaterial(currentSquare.enemyBoardMaterial);
+
+        boardUI.PieceDisplayDescription("The Vanguard captures by landing on another piece.");
+        boardUI.PieceDisplayDescription("\nThe enemy Orebearer is now in range! Notice how the Vanguard can't touch the Energy Shields, though?", true);
+        boardUI.PieceDisplayDescription("\nClick on the red square to capture that piece.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "CaptureSquare")
+                    {
+                        ResetBoardMaterials();
+                        jail.InsertAPiece(PiratePieces[0]);
+                        PiratePieces[0].destroyPiece();
+                        NavyPieces[0].hasCaptured = true;
+                        MovePiece(NavyPieces[0], 5, 1);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare = tiles[5, 1].GetComponent<TTSquare>();
+        currentSquare.tag = "CaptureSquare";
+        moveAssessment = NavyPieces[0].GetComponent<Piece>().GetValidOreReset(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 7)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.enemyBoardMaterial);
+                    }
+                }
+            }
+        }
+
+        jail.PirateJailCells[0].GetComponent<TTJailCell>().interactable = true;
+
+        boardUI.PieceDisplayDescription("Good Job! You've captured the enemy Orebearer!");
+        boardUI.PieceDisplayDescription("\nYour ore is safe for another turn, and now needs to get redeployed back to the battlefield.", true);
+        boardUI.PieceDisplayDescription("\nClick on any of the red squares to redeploy your ore and finish this tutorial!", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "MoveableSquare")
+                    {
+                        Vector2Int respawnCoords = IdentifyThisBoardSquare(tileSelected);
+                        ResetBoardMaterials();
+                        jail.navyJailedPieces[0].GetComponent<Piece>().destroyPiece();
+                        jail.PirateJailCells[0].GetComponent<TTJailCell>().resetCell();
+                        NavyPieces[0] = SpawnPiece(PieceType.Ore, true, respawnCoords.x, respawnCoords.y);
+                        tileSelected.GetComponent<TTSquare>().FlashMaterial(currentSquare.moveableBoardMaterial, 3);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        boardUI.PieceDisplayDescription("Congrats on finishing this tutorial!");
+        boardUI.PieceDisplayDescription("\nGood luck!", true);
+
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("Story");
     }
 
     IEnumerator TestMate()
@@ -152,7 +422,7 @@ public class TTGameBoard : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        boardUI.PieceDisplayDescription("This is the mate! The mate is one of the fundamental crewmates to have on your team.");
+        boardUI.PieceDisplayDescription("This is the Mate! The Mate is one of the fundamental crewmates to have on your team.");
         boardUI.PieceDisplayDescription("\nHe's inexpensive to clone more of for your team and can be very helpful both for defensive and offensive strategies.", true);
         boardUI.PieceDisplayDescription("\nClick on the flashing green Mate to see how he can move.", true);
 
