@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Gunner : Piece
 {
@@ -39,217 +40,219 @@ public class Gunner : Piece
         for (int x = 0; x < 10; x++)
             for (int y = 0; y < 10; y++)
                 moveAssessment[x, y] = -1;
-
-        // Movement
-        for (int x_change = -1; x_change <= 1; x_change++)
-            for (int y_change = -1; y_change <= 1; y_change++)
-                if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
-                    if(tiles[currentX + x_change, currentY + y_change].GetComponent<Square>().currentPiece == null)
-                        moveAssessment[currentX + x_change, currentY + y_change] = 1;
-
-        // Capturing
-        if (!hasCaptured)
+        if (SceneManager.GetActiveScene().name == "Board")
         {
-            Square possibleSquare;
+            // Movement
+            for (int x_change = -1; x_change <= 1; x_change++)
+                for (int y_change = -1; y_change <= 1; y_change++)
+                    if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                        if(tiles[currentX + x_change, currentY + y_change].GetComponent<Square>().currentPiece == null)
+                            moveAssessment[currentX + x_change, currentY + y_change] = 1;
 
-            // Iterates through all squares within attack range
-            for(int x_change = 0; x_change <= 3; x_change++)
+            // Capturing
+            if (!hasCaptured)
             {
-                int y_change = x_change;
-                if (x_change != 0) {
-                    // Continues searching straight up for obstructions
-                    if (up)
-                    {
-                        if (IsSquareOnBoard(currentX, currentY + y_change))
+                Square possibleSquare;
+
+                // Iterates through all squares within attack range
+                for(int x_change = 0; x_change <= 3; x_change++)
+                {
+                    int y_change = x_change;
+                    if (x_change != 0) {
+                        // Continues searching straight up for obstructions
+                        if (up)
                         {
-                            possibleSquare = tiles[currentX, currentY + y_change].GetComponent<Square>();
-
-                            // Obstruction found
-                            if (possibleSquare.currentPiece != null)
+                            if (IsSquareOnBoard(currentX, currentY + y_change))
                             {
-                                up = false; // Must stop searching in this direction
+                                possibleSquare = tiles[currentX, currentY + y_change].GetComponent<Square>();
 
-                                // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
                                 {
-                                    // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    up = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                     {
-                                        moveAssessment[currentX, currentY + y_change] = 3;
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX, currentY + y_change] = 3;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // Continues searching up-left for obstructions
-                    if (up_left)
-                    {
-                        if (IsSquareOnBoard(currentX - x_change, currentY + y_change))
+                        // Continues searching up-left for obstructions
+                        if (up_left)
                         {
-                            possibleSquare = tiles[currentX - x_change, currentY + y_change].GetComponent<Square>();
-
-                            // Obstruction found
-                            if (possibleSquare.currentPiece != null)
+                            if (IsSquareOnBoard(currentX - x_change, currentY + y_change))
                             {
-                                up_left = false; // Must stop searching in this direction
+                                possibleSquare = tiles[currentX - x_change, currentY + y_change].GetComponent<Square>();
 
-                                // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
                                 {
-                                    // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    up_left = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                     {
-                                        moveAssessment[currentX - x_change, currentY + y_change] = 3;
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX - x_change, currentY + y_change] = 3;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // Continues searching up-right for obstructions
-                    if (up_right)
-                    {
-                        if (IsSquareOnBoard(currentX + x_change, currentY + y_change)){
-                            possibleSquare = tiles[currentX + x_change, currentY + y_change].GetComponent<Square>();
+                        // Continues searching up-right for obstructions
+                        if (up_right)
+                        {
+                            if (IsSquareOnBoard(currentX + x_change, currentY + y_change)){
+                                possibleSquare = tiles[currentX + x_change, currentY + y_change].GetComponent<Square>();
 
-                            // Obstruction found
-                            if(possibleSquare.currentPiece != null)
-                            {
-                                up_right = false; // Must stop searching in this direction
-
-                                // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                // Obstruction found
+                                if(possibleSquare.currentPiece != null)
                                 {
-                                    // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    up_right = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                     {
-                                        moveAssessment[currentX + x_change, currentY + y_change] = 3;
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX + x_change, currentY + y_change] = 3;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // Continues searching straight down for obstructions
-                    if (down)
-                    {
-                        if (IsSquareOnBoard(currentX, currentY - y_change))
+                        // Continues searching straight down for obstructions
+                        if (down)
                         {
-                            possibleSquare = tiles[currentX, currentY - y_change].GetComponent<Square>();
-
-                            // Obstruction found
-                            if (possibleSquare.currentPiece != null)
+                            if (IsSquareOnBoard(currentX, currentY - y_change))
                             {
-                                down = false; // Must stop searching in this direction
+                                possibleSquare = tiles[currentX, currentY - y_change].GetComponent<Square>();
 
-                                // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
                                 {
-                                    // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    down = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                     {
-                                        moveAssessment[currentX, currentY - y_change] = 3;
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX, currentY - y_change] = 3;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // Continues searching down-left for obstructions
-                    if (down_left)
-                    {
-                        if (IsSquareOnBoard(currentX - x_change, currentY - y_change))
+                        // Continues searching down-left for obstructions
+                        if (down_left)
                         {
-                            possibleSquare = tiles[currentX - x_change, currentY - y_change].GetComponent<Square>();
-
-                            // Obstruction found
-                            if (possibleSquare.currentPiece != null)
+                            if (IsSquareOnBoard(currentX - x_change, currentY - y_change))
                             {
-                                down_left = false; // Must stop searching in this direction
+                                possibleSquare = tiles[currentX - x_change, currentY - y_change].GetComponent<Square>();
 
-                                // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
                                 {
-                                    // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    down_left = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                     {
-                                        moveAssessment[currentX - x_change, currentY - y_change] = 3;
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX - x_change, currentY - y_change] = 3;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // Continues searching down-right for obstructions
-                    if (down_right)
-                    {
-                        if (IsSquareOnBoard(currentX + x_change, currentY - y_change))
+                        // Continues searching down-right for obstructions
+                        if (down_right)
                         {
-                            possibleSquare = tiles[currentX + x_change, currentY - y_change].GetComponent<Square>();
-
-                            // Obstruction found
-                            if (possibleSquare.currentPiece != null)
+                            if (IsSquareOnBoard(currentX + x_change, currentY - y_change))
                             {
-                                down_right = false; // Must stop searching in this direction
+                                possibleSquare = tiles[currentX + x_change, currentY - y_change].GetComponent<Square>();
 
-                                // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
                                 {
-                                    // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    down_right = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                     {
-                                        moveAssessment[currentX + x_change, currentY - y_change] = 3;
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX + x_change, currentY - y_change] = 3;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // Continues searching right for obstructions
-                    if (right)
-                    {
-                        if (IsSquareOnBoard(currentX + x_change, currentY))
+                        // Continues searching right for obstructions
+                        if (right)
                         {
-                            possibleSquare = tiles[currentX + x_change, currentY].GetComponent<Square>();
-
-                            // Obstruction found
-                            if (possibleSquare.currentPiece != null)
+                            if (IsSquareOnBoard(currentX + x_change, currentY))
                             {
-                                right = false; // Must stop searching in this direction
+                                possibleSquare = tiles[currentX + x_change, currentY].GetComponent<Square>();
 
-                                // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
                                 {
-                                    // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    right = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                     {
-                                        moveAssessment[currentX + x_change, currentY] = 3;
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX + x_change, currentY] = 3;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // Continues searching right for obstructions
-                    if (left)
-                    {
-                        if (IsSquareOnBoard(currentX - x_change, currentY))
+                        // Continues searching right for obstructions
+                        if (left)
                         {
-                            possibleSquare = tiles[currentX - x_change, currentY].GetComponent<Square>();
-
-                            // Obstruction found
-                            if (possibleSquare.currentPiece != null)
+                            if (IsSquareOnBoard(currentX - x_change, currentY))
                             {
-                                left = false; // Must stop searching in this direction
+                                possibleSquare = tiles[currentX - x_change, currentY].GetComponent<Square>();
 
-                                // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
                                 {
-                                    // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    left = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
                                     {
-                                        moveAssessment[currentX - x_change, currentY] = 3;
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX - x_change, currentY] = 3;
+                                        }
                                     }
                                 }
                             }
@@ -258,6 +261,231 @@ public class Gunner : Piece
                 }
             }
         }
+        // Tutorial Scene
+        else
+        {
+            // Movement
+            for (int x_change = -1; x_change <= 1; x_change++)
+                for (int y_change = -1; y_change <= 1; y_change++)
+                    if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                        if (tiles[currentX + x_change, currentY + y_change].GetComponent<TTSquare>().currentPiece == null)
+                            moveAssessment[currentX + x_change, currentY + y_change] = 1;
+
+            // Capturing
+            if (!hasCaptured)
+            {
+                TTSquare possibleSquare;
+
+                // Iterates through all squares within attack range
+                for (int x_change = 0; x_change <= 3; x_change++)
+                {
+                    int y_change = x_change;
+                    if (x_change != 0)
+                    {
+                        // Continues searching straight up for obstructions
+                        if (up)
+                        {
+                            if (IsSquareOnBoard(currentX, currentY + y_change))
+                            {
+                                possibleSquare = tiles[currentX, currentY + y_change].GetComponent<TTSquare>();
+
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
+                                {
+                                    up = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                    {
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX, currentY + y_change] = 3;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Continues searching up-left for obstructions
+                        if (up_left)
+                        {
+                            if (IsSquareOnBoard(currentX - x_change, currentY + y_change))
+                            {
+                                possibleSquare = tiles[currentX - x_change, currentY + y_change].GetComponent<TTSquare>();
+
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
+                                {
+                                    up_left = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                    {
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX - x_change, currentY + y_change] = 3;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Continues searching up-right for obstructions
+                        if (up_right)
+                        {
+                            if (IsSquareOnBoard(currentX + x_change, currentY + y_change))
+                            {
+                                possibleSquare = tiles[currentX + x_change, currentY + y_change].GetComponent<TTSquare>();
+
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
+                                {
+                                    up_right = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                    {
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX + x_change, currentY + y_change] = 3;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Continues searching straight down for obstructions
+                        if (down)
+                        {
+                            if (IsSquareOnBoard(currentX, currentY - y_change))
+                            {
+                                possibleSquare = tiles[currentX, currentY - y_change].GetComponent<TTSquare>();
+
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
+                                {
+                                    down = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                    {
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX, currentY - y_change] = 3;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Continues searching down-left for obstructions
+                        if (down_left)
+                        {
+                            if (IsSquareOnBoard(currentX - x_change, currentY - y_change))
+                            {
+                                possibleSquare = tiles[currentX - x_change, currentY - y_change].GetComponent<TTSquare>();
+
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
+                                {
+                                    down_left = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                    {
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX - x_change, currentY - y_change] = 3;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Continues searching down-right for obstructions
+                        if (down_right)
+                        {
+                            if (IsSquareOnBoard(currentX + x_change, currentY - y_change))
+                            {
+                                possibleSquare = tiles[currentX + x_change, currentY - y_change].GetComponent<TTSquare>();
+
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
+                                {
+                                    down_right = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                    {
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX + x_change, currentY - y_change] = 3;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Continues searching right for obstructions
+                        if (right)
+                        {
+                            if (IsSquareOnBoard(currentX + x_change, currentY))
+                            {
+                                possibleSquare = tiles[currentX + x_change, currentY].GetComponent<TTSquare>();
+
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
+                                {
+                                    right = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                    {
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX + x_change, currentY] = 3;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Continues searching right for obstructions
+                        if (left)
+                        {
+                            if (IsSquareOnBoard(currentX - x_change, currentY))
+                            {
+                                possibleSquare = tiles[currentX - x_change, currentY].GetComponent<TTSquare>();
+
+                                // Obstruction found
+                                if (possibleSquare.currentPiece != null)
+                                {
+                                    left = false; // Must stop searching in this direction
+
+                                    // Obstruction is an enemy piece
+                                    if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                    {
+                                        // Obstruction is not a land mine
+                                        if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                        {
+                                            moveAssessment[currentX - x_change, currentY] = 3;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         moveAssessment[currentX, currentY] = 0;
 
