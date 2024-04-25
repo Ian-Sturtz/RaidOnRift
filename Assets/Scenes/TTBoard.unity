@@ -9439,7 +9439,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -771.0249, y: 33.629974}
+  m_AnchoredPosition: {x: -771.0249, y: -418}
   m_SizeDelta: {x: 71.6342, y: 27.312202}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &502453044
@@ -18805,7 +18805,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -987.63}
+  m_AnchoredPosition: {x: 0, y: -1049}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &959164073
@@ -25796,6 +25796,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: Bar, Assembly-CSharp
         m_MethodName: resumeTimer
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 2112768613}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -43287,6 +43299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnDisplay: {fileID: 566834205}
   goalDisplay: {fileID: 1936544617}
+  gameOver: 0
   animTextObj: {fileID: 1010962958}
   animText: {fileID: 1010962960}
   animBackground: {fileID: 1532464774}
@@ -43297,6 +43310,8 @@ MonoBehaviour:
   particles: {fileID: 482784830}
   rematchButton: {fileID: 667932517}
   quitButton: {fileID: 787118455}
+  viewBoard: {fileID: 0}
+  rematchPrompt: {fileID: 0}
 --- !u!224 &2112768615
 RectTransform:
   m_ObjectHideFlags: 0
