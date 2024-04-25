@@ -296,7 +296,7 @@ public class TTGameBoard : MonoBehaviour
             if (tileSelected.GetComponent<TTSquare>().currentPiece.isNavy)
             {
                 // The bomber hasn't captured a bomb yet
-                if (tileSelected.GetComponent<TTSquare>().currentPiece.GetComponent<Bomber>().capturedBomb == null)
+                if (tileSelected.GetComponent<TTSquare>().currentPiece.GetComponent<TuBomber>().capturedBomb == null)
                 {
                     Debug.Log("No bombs captured, searching for one");
                     cellToHighlight = jail.FindPiece(PieceType.LandMine, false);
@@ -307,7 +307,7 @@ public class TTGameBoard : MonoBehaviour
                     // Searches jail for the corresponding captured bomb
                     for (int i = 0; i < teamSize; i++)
                     {
-                        if (jail.NavyJailCells[i].GetComponent<TTJailCell>().currentPiece == tileSelected.GetComponent<TTSquare>().currentPiece.GetComponent<Bomber>().capturedBomb)
+                        if (jail.NavyJailCells[i].GetComponent<TTJailCell>().currentPiece == tileSelected.GetComponent<TTSquare>().currentPiece.GetComponent<TuBomber>().capturedBomb)
                         {
                             cellToHighlight = i;
                         }
@@ -324,7 +324,7 @@ public class TTGameBoard : MonoBehaviour
             else
             {
                 // The bomber hasn't captured a bomb yet
-                if (tileSelected.GetComponent<TTSquare>().currentPiece.GetComponent<Bomber>().capturedBomb == null)
+                if (tileSelected.GetComponent<TTSquare>().currentPiece.GetComponent<TuBomber>().capturedBomb == null)
                 {
                     Debug.Log("No bombs captured, searching for one");
                     cellToHighlight = jail.FindPiece(PieceType.LandMine, true);
@@ -335,7 +335,7 @@ public class TTGameBoard : MonoBehaviour
                     // Searches jail for the corresponding captured bomb
                     for (int i = 0; i < teamSize; i++)
                     {
-                        if (jail.PirateJailCells[i].GetComponent<TTJailCell>().currentPiece == tileSelected.GetComponent<TTSquare>().currentPiece.GetComponent<Bomber>().capturedBomb)
+                        if (jail.PirateJailCells[i].GetComponent<TTJailCell>().currentPiece == tileSelected.GetComponent<TTSquare>().currentPiece.GetComponent<TuBomber>().capturedBomb)
                         {
                             cellToHighlight = i;
                         }
@@ -918,11 +918,11 @@ public class TTGameBoard : MonoBehaviour
             Debug.Log(bombJailIndex);
             if (currentPiece.isNavy)
             {
-                currentPiece.GetComponent<Bomber>().capturedBomb = jail.pirateJailedPieces[bombJailIndex];
+                currentPiece.GetComponent<TuBomber>().capturedBomb = jail.pirateJailedPieces[bombJailIndex];
             }
             else
             {
-                currentPiece.GetComponent<Bomber>().capturedBomb = jail.navyJailedPieces[bombJailIndex];
+                currentPiece.GetComponent<TuBomber>().capturedBomb = jail.navyJailedPieces[bombJailIndex];
             }
         }
 
@@ -1409,57 +1409,57 @@ public class TTGameBoard : MonoBehaviour
                 case PieceType.Bomber:
                     if (landMineSelected)
                     {
-                        moveAssessment = piece.GetComponent<Bomber>().DetectBombDeploy(tiles);
+                        moveAssessment = piece.GetComponent<TuBomber>().DetectBombDeploy(tiles);
                     }
                     else
                     {
-                        moveAssessment = piece.GetComponent<Bomber>().GetValidMoves(tiles, landMineInJail);
+                        moveAssessment = piece.GetComponent<TuBomber>().GetValidMoves(tiles, landMineInJail);
                     }
                     break;
                 case PieceType.Vanguard:
-                    moveAssessment = piece.GetComponent<Vanguard>().GetValidMoves(tiles);
+                    moveAssessment = piece.GetComponent<TuVanguard>().GetValidMoves(tiles);
                     break;
                 case PieceType.Navigator:
-                    moveAssessment = piece.GetComponent<Navigator>().GetValidMoves(tiles);
+                    moveAssessment = piece.GetComponent<TuNavigator>().GetValidMoves(tiles);
                     break;
                 case PieceType.Gunner:
-                    moveAssessment = piece.GetComponent<Gunner>().GetValidMoves(tiles);
+                    moveAssessment = piece.GetComponent<TuGunner>().GetValidMoves(tiles);
                     break;
                 case PieceType.Cannon:
-                    moveAssessment = piece.GetComponent<Cannon>().GetValidMoves(tiles);
+                    moveAssessment = piece.GetComponent<TuCannon>().GetValidMoves(tiles);
                     break;
                 case PieceType.Quartermaster:
-                    moveAssessment = piece.GetComponent<Quartermaster>().GetValidMoves(tiles);
+                    moveAssessment = piece.GetComponent<TuQuartermaster>().GetValidMoves(tiles);
                     break;
                 case PieceType.Royal2:
                     if (piece.isNavy && !tacticianInheritSelected)
                     {
-                        moveAssessment = piece.GetComponent<Tactician>().GetValidMoves(tiles);
+                        moveAssessment = piece.GetComponent<TuTactician>().GetValidMoves(tiles);
                     }
                     else
                     {
                         if(jumpCooldown > 0 && !tacticianSelected)
                         {
-                            moveAssessment = piece.GetComponent<Corsair>().GetValidMoves(tiles, false);
+                            moveAssessment = piece.GetComponent<TuCorsair>().GetValidMoves(tiles, false);
                         }
                         else if(tacticianCorsairJump > 0 && tacticianSelected)
                         {
-                            moveAssessment = piece.GetComponent<Corsair>().GetValidMoves(tiles, false);
+                            moveAssessment = piece.GetComponent<TuCorsair>().GetValidMoves(tiles, false);
                         }
                         else
                         {
-                            moveAssessment = piece.GetComponent<Corsair>().GetValidMoves(tiles);
+                            moveAssessment = piece.GetComponent<TuCorsair>().GetValidMoves(tiles);
                         }
                     }
                     break;
                 case PieceType.Royal1:
                     if (piece.isNavy && !tacticianInheritSelected)
                     {
-                        moveAssessment = piece.GetComponent<Admiral>().GetValidMoves(tiles);
+                        moveAssessment = piece.GetComponent<TuAdmiral>().GetValidMoves(tiles);
                     }
                     else
                     {
-                        moveAssessment = piece.GetComponent<Captain>().GetValidMoves(tiles);
+                        moveAssessment = piece.GetComponent<TuCaptain>().GetValidMoves(tiles);
                     }
                     break;
                 default:
