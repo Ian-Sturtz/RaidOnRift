@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 502396672919878912}
   - component: {fileID: 4097857006788528370}
   - component: {fileID: 3259306767081401735}
-  - component: {fileID: 1839461951846578200}
+  - component: {fileID: 854684277809875035}
+  - component: {fileID: 3720225228823990935}
   m_Layer: 8
-  m_Name: TTBoardSquare
-  m_TagString: GameSquare
+  m_Name: TTJailBoardCell
+  m_TagString: JailCell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.50000024, y: -4.7500014, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -54,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d0083b1e859096144a067ba53d830ea0, type: 2}
+  - {fileID: 2100000, guid: 70dd8934f47d686468dc8363948f5453, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -129,9 +130,29 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.05, y: 1.05}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &1839461951846578200
+--- !u!114 &854684277809875035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2216884578387355243}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81a81b3720454a64f95a7f6935fb490b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inactiveJailMaterial: {fileID: 2100000, guid: 1a687eeb90a0d714eac1c38a471602a9, type: 2}
+  activeJailMaterial: {fileID: 2100000, guid: 70dd8934f47d686468dc8363948f5453, type: 2}
+  interactableJailMaterial: {fileID: 2100000, guid: ad9ac2889dbcafc448bab697e6ea4bef, type: 2}
+  clickedJailMaterial: {fileID: 2100000, guid: e7ccabd546951604b87b2e3277a96435, type: 2}
+  currentPiece: {fileID: 0}
+  hasPiece: 0
+  clicked: 0
+  interactable: 0
+--- !u!114 &3720225228823990935
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,14 +161,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2216884578387355243}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f988187d2e671fe4dbd16f4b2a1667c7, type: 3}
+  m_Script: {fileID: 11500000, guid: d04d76ae53d40854bb9be24ded06cf89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameBoard: {fileID: 0}
-  defaultBoardMaterial: {fileID: 2100000, guid: d0083b1e859096144a067ba53d830ea0, type: 2}
-  hoveredBoardMaterial: {fileID: 2100000, guid: 9912fce311274024390740068e158a10, type: 2}
-  clickedBoardMaterial: {fileID: 2100000, guid: e7ccabd546951604b87b2e3277a96435, type: 2}
-  moveableBoardMaterial: {fileID: 2100000, guid: 2c8196b42a2633d419e15a4b183d712f, type: 2}
-  enemyBoardMaterial: {fileID: 2100000, guid: 90a4f9e7b8b60af45975f83575dde431, type: 2}
+  inactiveJailMaterial: {fileID: 2100000, guid: 1a687eeb90a0d714eac1c38a471602a9, type: 2}
+  activeJailMaterial: {fileID: 2100000, guid: 70dd8934f47d686468dc8363948f5453, type: 2}
+  interactableJailMaterial: {fileID: 2100000, guid: ad9ac2889dbcafc448bab697e6ea4bef, type: 2}
+  clickedJailMaterial: {fileID: 2100000, guid: e7ccabd546951604b87b2e3277a96435, type: 2}
   currentPiece: {fileID: 0}
-  SquareHasBeenClicked: 0
+  hasPiece: 0
+  clicked: 0
+  interactable: 0

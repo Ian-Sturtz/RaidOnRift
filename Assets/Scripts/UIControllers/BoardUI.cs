@@ -424,6 +424,67 @@ public class BoardUI : MonoBehaviour
         }
         else
             pieceDescription.SetText(pieceDescriptionText);
+    public void TTUpdateSelectedPiece(TTPieceType piece, bool isNavy)
+    {
+        if (piece == TTPieceType.Ore || piece == TTPieceType.LandMine)
+            return;
+
+        pieceDisplay.SetActive(true);
+        switch (piece)
+        {
+            case TTPieceType.Royal1:
+                if (isNavy)
+                {
+                    pieceDisplayName.SetText("Admiral");
+                    pieceDescription.SetText("Moves any unblocked distance in any direction, captures by replacement.");
+                }
+                else
+                {
+                    pieceDisplayName.SetText("Captain");
+                    pieceDescription.SetText("Moves exactly five squares in any orthogonal direction, and can change direction mid-move. Jumps over blockers, and captures any enemy piece in the fifth square by replacement.");
+                }
+                break;
+            case TTPieceType.Royal2:
+                if (isNavy)
+                {
+                    pieceDisplayName.SetText("Tactician");
+                    pieceDescription.SetText("Moves up to two unblocked squares orthogonally, captures by replacement. Can also use the moveset of any enemy piece within whatever zone the Tactician is in (the 3 rows on each player's side of the board, and the 4 rows in the middle).");
+                }
+                else
+                {
+                    pieceDisplayName.SetText("Corsair");
+                    pieceDescription.SetText("Moves one space diagonally, captures by replacement, or can jump to any open square on the board. If the corsair jumps this way, the corsair cannot move on the following turn.");
+                }
+                break;
+            case TTPieceType.Mate:
+                pieceDisplayName.SetText("Mate");
+                pieceDescription.SetText("Moves one square in any direction, but cannot move backwards unless the Mate has captured an enemy piece. Captures by replacement.");
+                break;
+            case TTPieceType.Quartermaster:
+                pieceDisplayName.SetText("Quartermaster");
+                pieceDescription.SetText("Moves two spaces orthogonally and one space perpendicularly. Jumps over blockers and captures by replacement.");
+                break;
+            case TTPieceType.Cannon:
+                pieceDisplayName.SetText("Cannon");
+                pieceDescription.SetText("Can move one unblocked space in any direction, captures by jumping any unblocked distance orthogonally and must land on the opposite adjacent square to the captured piece. An Energy Shield can be jumped over in this way, but it won�t be captured.");
+                break;
+            case TTPieceType.Bomber:
+                pieceDisplayName.SetText("Engineer");
+                pieceDescription.SetText("Moves up to two unblocked squares in any direction. The only piece that can capture Energy Shields by replacement, but cannot capture any other piece besides the flag. Can return one Energy Shield from the Jail Zone to the game board in any open square adjacent to the Miner. Cannot move if a Jail Zone has been returned to the game board this turn.");
+                break;
+            case TTPieceType.Vanguard:
+                pieceDisplayName.SetText("Vanguard");
+                pieceDescription.SetText("Moves one square forward or backward, both orthogonally and diagonally, but can move any unblocked distance sideways. Captures by replacement.");
+                break;
+            case TTPieceType.Navigator:
+                pieceDisplayName.SetText("Navigator");
+                pieceDescription.SetText("Moves one square sideways, both orthogonally and diagonally, but can move any unblocked distance forwards and backwards.");
+                break;
+            case TTPieceType.Gunner:
+                pieceDisplayName.SetText("Gunner");
+                pieceDescription.SetText("Moves one unblocked space in any direction, captures by shooting a piece up to 4 unblocked spaces away in any direction. Cannot capture by replacement and must move after capturing a piece before the Gunner can capture another piece.");
+                break;
+        }
     }
 
     public void HideSelectedPiece()
