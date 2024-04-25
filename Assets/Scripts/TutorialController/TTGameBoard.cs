@@ -81,6 +81,7 @@ public class TTGameBoard : MonoBehaviour
                 break;
             case PieceType.Bomber:
                 Debug.Log("Testing Engineer");
+                StartCoroutine(TestEngineer());
                 break;
             case PieceType.Vanguard:
                 Debug.Log("Testing Vanguard");
@@ -96,6 +97,7 @@ public class TTGameBoard : MonoBehaviour
                 break;
             case PieceType.Cannon:
                 Debug.Log("Testing Cannon");
+                StartCoroutine(TestCannon());
                 break;
             case PieceType.Quartermaster:
                 Debug.Log("Testing Quartermaster");
@@ -105,10 +107,12 @@ public class TTGameBoard : MonoBehaviour
                 if (StaticTutorialControl.isNavy)
                 {
                     Debug.Log("Testing Tactician");
+                    StartCoroutine(TestTactician());
                 }
                 else
                 {
                     Debug.Log("Testing Corsair");
+                    StartCoroutine(TestCorsair());
                 }
                 break;
             case PieceType.Royal1:
@@ -125,10 +129,397 @@ public class TTGameBoard : MonoBehaviour
                 break;
             default:
                 Debug.Log("Default test case");
-                StartCoroutine(TestGunner());
+                StartCoroutine(TestMate());
                 break;
         }
     }
+
+    IEnumerator TestTactician()
+    {
+        NavyPieces[0] = SpawnPiece(PieceType.Royal2, true, 5, 5);
+
+        boardUI.GoalText("Raid On Rift: Tutorial Mode");
+
+        string tutorialHeader = "Tactician - 16 Points";
+        boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Tactician.\n\nClick anywhere to continue.");
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+                break;
+            else
+                yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Congrats on finishing this tutorial!");
+        boardUI.PieceDisplayDescription("\nGood luck!", true);
+
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("Story");
+    }
+
+    IEnumerator TestCannon()
+    {
+        NavyPieces[0] = SpawnPiece(PieceType.Cannon, true, 5, 5);
+
+        boardUI.GoalText("Raid On Rift: Tutorial Mode");
+
+        string tutorialHeader = "Cannon - 7 Points";
+        boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Cannon.\n\nClick anywhere to continue.");
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+                break;
+            else
+                yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Congrats on finishing this tutorial!");
+        boardUI.PieceDisplayDescription("\nGood luck!", true);
+
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("Story");
+    }
+
+    IEnumerator TestEngineer()
+    {
+        NavyPieces[0] = SpawnPiece(PieceType.Bomber, true, 5, 5);
+
+        boardUI.GoalText("Raid On Rift: Tutorial Mode");
+
+        string tutorialHeader = "Engineer - 3 Points";
+        boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Engineer.\n\nClick anywhere to continue.");
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+                break;
+            else
+                yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Congrats on finishing this tutorial!");
+        boardUI.PieceDisplayDescription("\nGood luck!", true);
+
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("Story");
+    }
+
+    IEnumerator TestCorsair()
+    {
+        navyTurn = false;
+        boardUI.UpdateTurn(false);
+
+        PiratePieces[0] = SpawnPiece(PieceType.Royal2, false, 2, 2);
+        PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 7, 3);
+        PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 5, 0);
+        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 5);
+        PiratePieces[4] = SpawnPiece(PieceType.LandMine, false, 6, 6);
+
+        NavyPieces[0] = SpawnPiece(PieceType.Mate, true, 8, 7);
+        NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 2, 8);
+        NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 6, 9);
+        NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 3, 5);
+        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 5, 5);
+
+
+        boardUI.GoalText("Raid On Rift: Tutorial Mode");
+
+        string tutorialHeader = "Corsair - 16 Points";
+        boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Corsair.\n\nClick anywhere to continue.");
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+                break;
+            else
+                yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+
+        boardUI.PieceDisplayDescription("This is the Corsair! The Corsair is quick, nimble, and dangerously cunning.");
+        boardUI.PieceDisplayDescription("\nAlthough she's one of the most expensive to have on your team, her fast-paced surgical precision makes her tough to beat.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green Corsair to see how she can move.", true);
+
+        TTSquare currentSquare = tiles[2, 2].GetComponent<TTSquare>();
+        tiles[2, 2].tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                        break;
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        ResetBoardMaterials();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = PiratePieces[0].GetComponent<Corsair>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    tiles[x, y].tag = "MoveableSquare";
+                    moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                }
+
+                if (moveAssessment[x, y] == 8)
+                {
+                    tiles[x, y].tag = "CorsairJump";
+                }
+            }
+        }
+
+        tiles[6, 7].tag = "CaptureSquare";
+        tiles[6, 7].GetComponent<TTSquare>().SetMaterial(currentSquare.enemyBoardMaterial);
+
+        boardUI.PieceDisplayDescription("The Corsair can move up to 2 open squares diagonally without effort.");
+        boardUI.PieceDisplayDescription("\nShe can also jump to any square on the board that doesn't have anyone else there, but this takes a lot of effort so she can't do it all the time.", true);
+        boardUI.PieceDisplayDescription("\nClick on the red square in the upper corner to jump the Corsair there.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "CaptureSquare")
+                    {
+                        ResetBoardMaterials();
+                        MovePiece(PiratePieces[0], 6, 7);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        MovePiece(NavyPieces[0], 7, 7);
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Nice jump! But look at how tired the Corsair is now...");
+        boardUI.PieceDisplayDescription("\nThat enemy Mate moved awfully close on his turn though, so you'll still need to keep your guard up.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing Corsair again to keep moving.", true);
+
+        currentSquare = tiles[6, 7].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = PiratePieces[0].GetComponent<Corsair>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                }
+            }
+        }
+
+        tiles[5, 8].tag = "InteractablePiece";
+        tiles[5, 8].GetComponent<TTSquare>().SetMaterial(currentSquare.moveableBoardMaterial);
+
+        boardUI.PieceDisplayDescription("Since the Corsair jumped around on her last turn, she has to take it a little slower this turn.");
+        boardUI.PieceDisplayDescription("\nNotice how she can only move along her regular diagonal path? She can't jump around this turn.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green square to move the Corsair there while her strength builds back up.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        MovePiece(PiratePieces[0], 5, 8);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        MovePiece(NavyPieces[1], 3, 8);
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Nice! The Corsair is looking like she's ready to mess up her enemy's day again!");
+        boardUI.PieceDisplayDescription("\nSince you jumped within an inch of the enemy Ore, why not grab it for yourself while you're here?", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing Corsair again to prepare to capture the Ore.", true);
+
+        currentSquare = tiles[5, 8].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = PiratePieces[0].GetComponent<Corsair>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                }
+                else if (moveAssessment[x, y] == 8)
+                {
+                    tiles[x, y].tag = "CorsairJump";
+                }
+            }
+        }
+
+        tiles[6, 9].tag = "CaptureSquare";
+        tiles[6, 9].GetComponent<TTSquare>().SetMaterial(currentSquare.enemyBoardMaterial);
+
+        boardUI.PieceDisplayDescription("The Corsair captures by landing on another piece while moving diagonally.");
+        boardUI.PieceDisplayDescription("\nNotice how she can jump to any open square again? But since the Ore is within her range, she's in prime position to scoop that up.", true);
+        boardUI.PieceDisplayDescription("\nClick on the red Ore to capture it for yourself and finish the tutorial.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "CaptureSquare")
+                    {
+                        ResetBoardMaterials();
+                        jail.InsertAPiece(NavyPieces[2]);
+                        NavyPieces[2].destroyPiece();
+                        PiratePieces[0].hasCaptured = true;
+                        PiratePieces[0].hasOre = true;
+                        MovePiece(PiratePieces[0], 6, 9);
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        boardUI.PieceDisplayDescription("Congrats on finishing this tutorial!");
+        boardUI.PieceDisplayDescription("\nGood luck!", true);
+
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("Story");
+    }
+
     IEnumerator TestGunner()
     {
         NavyPieces[0] = SpawnPiece(PieceType.Gunner, true, 5, 3);
@@ -148,7 +539,7 @@ public class TTGameBoard : MonoBehaviour
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
 
-        string tutorialHeader = "Gunner";
+        string tutorialHeader = "Gunner - 7 Points";
         boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Gunner.\n\nClick anywhere to continue.");
 
         while (true)
@@ -161,8 +552,8 @@ public class TTGameBoard : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        boardUI.PieceDisplayDescription("This is the Gunner! The Gunner is incredible at holding enemys off at a distance.");
-        boardUI.PieceDisplayDescription("\nWith a fairly expensive cost to clone for your team, he makes a great addition to putting pressure on your opponent.", true);
+        boardUI.PieceDisplayDescription("This is the Gunner! The Gunner is incredible at holding enemies off at a distance.");
+        boardUI.PieceDisplayDescription("\nDespite a fairly expensive cost to clone for your team, his incredible power makes him a great addition for putting pressure on your opponent.", true);
         boardUI.PieceDisplayDescription("\nClick on the flashing green gunner to see what he can do.", true);
 
         TTSquare currentSquare = tiles[6, 7].GetComponent<TTSquare>();
@@ -193,7 +584,7 @@ public class TTGameBoard : MonoBehaviour
         ResetBoardMaterials();
 
         boardUI.PieceDisplayDescription("The Gunner can capture pieces at a range of 3 spaces in any direction, or he can also move one unblocked space in any direction");
-        boardUI.PieceDisplayDescription("\nNotice the gunner cant capture the ore, but the enemy Gunner is in range of the Navy Gunner for capture.", true);
+        boardUI.PieceDisplayDescription("\nNotice the gunner can't capture the ore and the enemy Mate to the left is too far away for the Navy Gunner to see, but the enemy Gunner is in range of the Navy Gunner for capture.", true);
         boardUI.PieceDisplayDescription("\nClick on the enemy Gunner to capture him!", true);
 
 
@@ -250,8 +641,8 @@ public class TTGameBoard : MonoBehaviour
         }
 
         boardUI.PieceDisplayDescription("Good job! You captured the piece!");
-        boardUI.PieceDisplayDescription("\nUse the other Navy Gunner to capture the enemy mate!", true);
-        boardUI.PieceDisplayDescription("\nKeep watch though, the other enemy mate has moved and captured the ore. We will need to something about that", true);
+        boardUI.PieceDisplayDescription("\nKeep watch though, the other enemy Mate is getting dangerously close to your Ore. You'll need to something about that soon.", true);
+        boardUI.PieceDisplayDescription("\nFor now, use the other Navy Gunner to capture the enemy mate!", true);
 
         currentSquare = tiles[5, 3].GetComponent<TTSquare>();
         currentSquare.tag = "InteractablePiece";
@@ -343,10 +734,9 @@ public class TTGameBoard : MonoBehaviour
             yield return null;
         }
 
-        boardUI.PieceDisplayDescription("Awesome! you captured the enemy Mate.");
-        boardUI.PieceDisplayDescription("\nUh Oh! It looks like that pesky Mate captured the ore, and was able to make an additonal move.", true);
-        boardUI.PieceDisplayDescription("\nThe Gunner gets to reload after making an move on the board.", true);
-        boardUI.PieceDisplayDescription("\nClick on the Navy Gunner to move and reload the Gun.", true);
+        boardUI.PieceDisplayDescription("\nUh Oh! It looks like while you were busy with that other Mate, that pesky first Mate captured the ore.");
+        boardUI.PieceDisplayDescription("\nThe Gunner needs to reload after capturing an enemy before he can capture again, so he can't deal with that pesky Mate yet.", true);
+        boardUI.PieceDisplayDescription("\nClick on the Navy Gunner to quickly reload the gun.", true);
 
         currentSquare = tiles[5, 3].GetComponent<TTSquare>();
         currentSquare.tag = "InteractablePiece";
@@ -375,6 +765,10 @@ public class TTGameBoard : MonoBehaviour
         }
 
         yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("\nThe Gunner can't capture again until after he reloads.");
+        boardUI.PieceDisplayDescription("\nHe reloads his gun by moving to any nearby open space on his turn.", true);
+        boardUI.PieceDisplayDescription("\nClick the flashing green square to move the Gunner there and reload his gun.", true);
 
         currentSquare.SquareHasBeenClicked = true;
         moveAssessment = NavyPieces[0].GetComponent<Gunner>().GetValidMoves(tiles);
@@ -430,8 +824,8 @@ public class TTGameBoard : MonoBehaviour
             yield return null;
         }
 
-        boardUI.PieceDisplayDescription("Very nice! we are in a great position to capture the ore bearer and take the ore back.");
-        boardUI.PieceDisplayDescription("\nClick on the Navy Gunner, then shoot the enemy ore bearer and take back whats ours!", true);
+        boardUI.PieceDisplayDescription("Very nice! We are in a great position to capture the Orebearer and take the Ore back.");
+        boardUI.PieceDisplayDescription("\nClick on the Navy Gunner, then shoot the enemy Orebearer and take back what's ours!", true);
 
         currentSquare = tiles[6, 3].GetComponent<TTSquare>();
         currentSquare.tag = "InteractablePiece";
@@ -576,6 +970,7 @@ public class TTGameBoard : MonoBehaviour
         SceneManager.LoadScene("Story");
 
     }
+
     IEnumerator TestQuartermaster()
     {
         NavyPieces[0] = SpawnPiece(PieceType.Quartermaster, true, 5, 3);
@@ -1342,7 +1737,7 @@ public class TTGameBoard : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         boardUI.PieceDisplayDescription("This is the Navigator! The Navigator is essential to a strong offensive strategy.");
-        boardUI.PieceDisplayDescription("\nWith a fairly inexpensive cost to clone for your team, he makes a great addition to your ore protection plans.", true);
+        boardUI.PieceDisplayDescription("\nWith a fairly inexpensive cost to clone for your team, he makes a great addition to your battle siege plans.", true);
         boardUI.PieceDisplayDescription("\nClick on the flashing green Navigator to see how he can move.", true);
 
         TTSquare currentSquare = tiles[6, 2].GetComponent<TTSquare>();
@@ -1409,6 +1804,7 @@ public class TTGameBoard : MonoBehaviour
                     {
                         ResetBoardMaterials();
                         MovePiece(NavyPieces[1], 6, 7);
+                        yield return new WaitForSeconds(.5f);
                         MovePiece(PiratePieces[1], 5, 8);
                         break;
                     }
@@ -1420,8 +1816,8 @@ public class TTGameBoard : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        boardUI.PieceDisplayDescription("Look! The enemys Navigator is able to be captured!");
-        boardUI.PieceDisplayDescription("\nTake this oppurtunity to capture the piece, notice the enemys shield cant be captured. The Navigator cant capture shields!", true);
+        boardUI.PieceDisplayDescription("Look! The enemy's Navigator is right in range!");
+        boardUI.PieceDisplayDescription("\nTake this oppurtunity to capture the enemy. Also notice the enemy's shield can't be captured. The Navigator can't capture shields!", true);
         boardUI.PieceDisplayDescription("\nClick on the Navy Navigator to get ready to capture, and then capture the enemy!", true);
 
         currentSquare = tiles[6, 7].GetComponent<TTSquare>();
@@ -1508,7 +1904,7 @@ public class TTGameBoard : MonoBehaviour
 
 
         boardUI.PieceDisplayDescription("Good job! You captured the piece!");
-        boardUI.PieceDisplayDescription("\nMove the Navy Navigator up to the higlighted position to capture the enemys ore!", true);
+        boardUI.PieceDisplayDescription("\nMove the Navy Navigator up to the higlighted position to capture the enemy's ore!", true);
         boardUI.PieceDisplayDescription("\nClick on the Navy Navigator to get ready to move up, and take the ore!", true);
 
         currentSquare = tiles[5, 8].GetComponent<TTSquare>();
@@ -1591,9 +1987,9 @@ public class TTGameBoard : MonoBehaviour
             yield return null;
         }
 
-        boardUI.PieceDisplayDescription("Awesome! you captured the ore! You now have the ore bearer's moveset!");
-        boardUI.PieceDisplayDescription("\nThe ore bear gets to take two turns", true);
-        boardUI.PieceDisplayDescription("\nClick on the Navy Navigator to use your second move to capture the Enemy Navigator", true);
+        boardUI.PieceDisplayDescription("Awesome! you captured the Ore! You now have the Orebearer's moveset!");
+        boardUI.PieceDisplayDescription("\nThe Orebear gets to move an additional time in a turn after capturing an enemy piece.", true);
+        boardUI.PieceDisplayDescription("\nClick on the Navy Navigator and use your second move to capture the Enemy Navigator!", true);
 
         currentSquare = tiles[4, 9].GetComponent<TTSquare>();
         currentSquare.tag = "InteractablePiece";
@@ -1783,7 +2179,7 @@ public class TTGameBoard : MonoBehaviour
                     {
                         ResetBoardMaterials();
                         MovePiece(NavyPieces[0], 8, 7);
-                        yield return new WaitForEndOfFrame();
+                        yield return new WaitForSeconds(.5f);
                         MovePiece(PiratePieces[0], 7, 8);
                         break;
                     }
@@ -1873,7 +2269,7 @@ public class TTGameBoard : MonoBehaviour
                         NavyPieces[0].hasCaptured = true;
                         MovePiece(NavyPieces[0], 7, 8);
 
-                        yield return new WaitForEndOfFrame();
+                        yield return new WaitForSeconds(.5f);
                         MovePiece(PiratePieces[1], 4, 6);
                         break;
                     }
@@ -2081,10 +2477,10 @@ public class TTGameBoard : MonoBehaviour
                         NavyPieces[2].destroyPiece();
                         PiratePieces[0].hasCaptured = true;
                         PiratePieces[0].hasOre = true;
-                        MovePiece(PiratePieces[0], 5, 0);
 
                         yield return new WaitForSeconds(.5f);
-
+                        MovePiece(PiratePieces[0], 5, 0);
+                        yield return new WaitForSeconds(.5f);
                         MovePiece(PiratePieces[0], 5, 1);
 
                         break;
@@ -2344,6 +2740,9 @@ public class TTGameBoard : MonoBehaviour
                     {
                         ResetBoardMaterials();
                         MovePiece(NavyPieces[0], 6, 6);
+
+                        yield return new WaitForSeconds(.5f);
+
                         MovePiece(PiratePieces[3], 6, 7);
                         ResetBoardMaterials();
                         break;
@@ -2433,6 +2832,9 @@ public class TTGameBoard : MonoBehaviour
                         PiratePieces[3].destroyPiece();
                         NavyPieces[0].hasCaptured = true;
                         MovePiece(NavyPieces[0], 6, 7);
+
+                        yield return new WaitForSeconds(.5f);
+
                         MovePiece(PiratePieces[2], 3, 6);
                         break;
                     }
@@ -2515,6 +2917,9 @@ public class TTGameBoard : MonoBehaviour
                     {
                         ResetBoardMaterials();
                         MovePiece(NavyPieces[0], 6, 8);
+
+                        yield return new WaitForSeconds(.5f);
+
                         MovePiece(PiratePieces[2], 4, 5);
                         break;
                     }
@@ -2596,6 +3001,9 @@ public class TTGameBoard : MonoBehaviour
                     {
                         ResetBoardMaterials();
                         MovePiece(NavyPieces[0], 6, 9);
+
+                        yield return new WaitForSeconds(.5f);
+
                         MovePiece(PiratePieces[2], 5, 4);
                         break;
                     }
@@ -2684,7 +3092,6 @@ public class TTGameBoard : MonoBehaviour
                         PiratePieces[0].destroyPiece();
                         MovePiece(NavyPieces[0], 0, 9);
                         NavyPieces[0].hasOre = true;
-                        MovePiece(PiratePieces[2], 5, 3);
                         break;
                     }
                 }
