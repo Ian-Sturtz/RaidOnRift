@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TuVanguard : Piece
+public class TuVanguard : TTPiece
 {
     public int[,] GetValidMoves(GameObject[,] tiles)
     {

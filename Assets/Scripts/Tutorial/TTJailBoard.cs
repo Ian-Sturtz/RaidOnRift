@@ -10,9 +10,9 @@ public class TTJailBoard : MonoBehaviour
     public GameObject[] PirateJailCells;    // Cells in the Pirate Jail (where Navy go)
     public GameObject[] TacticianMimicCells;// Buttons for the tactician to mimic
 
-    public Piece[] navyJailedPieces;        // Captured Navy Pieces
-    public Piece[] pirateJailedPieces;      // Captured Pirate Pieces
-    public Piece[] tacticianMimicPieces;    // Pieces tactician can inherit
+    public TTPiece[] navyJailedPieces;        // Captured Navy Pieces
+    public TTPiece[] pirateJailedPieces;      // Captured Pirate Pieces
+    public TTPiece[] tacticianMimicPieces;    // Pieces tactician can inherit
     private float jail_square_size = .5f;
 
     private void Start()
@@ -23,11 +23,11 @@ public class TTJailBoard : MonoBehaviour
         NavyJailCells = new GameObject[board.teamSize];
         PirateJailCells = new GameObject[board.teamSize];
         
-        navyJailedPieces = new Piece[board.teamSize];
-        pirateJailedPieces = new Piece[board.teamSize];
+        navyJailedPieces = new TTPiece[board.teamSize];
+        pirateJailedPieces = new TTPiece[board.teamSize];
 
         TacticianMimicCells = new GameObject[9];
-        tacticianMimicPieces = new Piece[9];
+        tacticianMimicPieces = new TTPiece[9];
 
         IdentifyJailSquares();
     }
@@ -59,7 +59,7 @@ public class TTJailBoard : MonoBehaviour
         }
     }
 
-    public void InsertAPiece(Piece piece, bool tactician = false)
+    public void InsertAPiece(TTPiece piece, bool tactician = false)
     {
         int cellToPlaceIn;
         int pieceIndex;
@@ -104,15 +104,15 @@ public class TTJailBoard : MonoBehaviour
 
         if (piece.isNavy && !tactician)
         {
-            PirateJailCells[cellToPlaceIn].GetComponent<TTJailCell>().currentPiece = navyJailedPieces[cellToPlaceIn].GetComponent<Piece>();
+            PirateJailCells[cellToPlaceIn].GetComponent<TTJailCell>().currentPiece = navyJailedPieces[cellToPlaceIn].GetComponent<TTPiece>();
         }
         else if (!piece.isNavy && !tactician)
         {
-            NavyJailCells[cellToPlaceIn].GetComponent<TTJailCell>().currentPiece = pirateJailedPieces[cellToPlaceIn].GetComponent<Piece>();
+            NavyJailCells[cellToPlaceIn].GetComponent<TTJailCell>().currentPiece = pirateJailedPieces[cellToPlaceIn].GetComponent<TTPiece>();
         }
         else
         {
-            TacticianMimicCells[cellToPlaceIn].GetComponent<TTJailCell>().currentPiece = tacticianMimicPieces[cellToPlaceIn].GetComponent<Piece>();
+            TacticianMimicCells[cellToPlaceIn].GetComponent<TTJailCell>().currentPiece = tacticianMimicPieces[cellToPlaceIn].GetComponent<TTPiece>();
         }
 
         if(!tactician)
@@ -147,7 +147,7 @@ public class TTJailBoard : MonoBehaviour
         return -1;
     }
 
-    protected int FindNextSlot(Piece[] jailedPieces, bool tactician = false)
+    protected int FindNextSlot(TTPiece[] jailedPieces, bool tactician = false)
     {
         int maxSize;
 
@@ -198,26 +198,26 @@ public class TTJailBoard : MonoBehaviour
         return -1;
     }
 
-    public Piece SpawnPiece(PieceType type, bool isNavy, int cellToPlaceIn, bool tactician = false)
+    public TTPiece SpawnPiece(TTPieceType type, bool isNavy, int cellToPlaceIn, bool tactician = false)
     {
-        Piece cp;
+        TTPiece cp;
         Vector3 targetPosition;
 
         if (tactician)
         {
-            cp = Instantiate(board.PiecePrefabs[(int)type + board.PIECES_ADDED], this.transform).GetComponent<Piece>();
+            cp = Instantiate(board.PiecePrefabs[(int)type + board.PIECES_ADDED], this.transform).GetComponent<TTPiece>();
             targetPosition = TacticianMimicCells[cellToPlaceIn].transform.position;
         }
         else
         {
             if (!isNavy)
             {
-                cp = Instantiate(board.PiecePrefabs[(int)type + board.PIECES_ADDED], this.transform).GetComponent<Piece>();
+                cp = Instantiate(board.PiecePrefabs[(int)type + board.PIECES_ADDED], this.transform).GetComponent<TTPiece>();
                 targetPosition = NavyJailCells[cellToPlaceIn].transform.position;
             }
             else
             {
-                cp = Instantiate(board.PiecePrefabs[(int)type], this.transform).GetComponent<Piece>();
+                cp = Instantiate(board.PiecePrefabs[(int)type], this.transform).GetComponent<TTPiece>();
                 targetPosition = PirateJailCells[cellToPlaceIn].transform.position;
             }
         }
@@ -233,7 +233,7 @@ public class TTJailBoard : MonoBehaviour
     }
 
     // Finds a given piece within the specified Jail
-    public int FindPiece(PieceType type, bool pieceIsNavy)
+    public int FindPiece(TTPieceType type, bool pieceIsNavy)
     {
         int index;
 

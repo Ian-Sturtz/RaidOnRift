@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TuCorsair : Piece
+public class TuCorsair : TTPiece
 {
     
     [SerializeField] private GameObject PieceImage;

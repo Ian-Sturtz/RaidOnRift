@@ -10,7 +10,7 @@ public class TTJailCell : MonoBehaviour
     public Material interactableJailMaterial;
     public Material clickedJailMaterial;
 
-    public Piece currentPiece;
+    public TTPiece currentPiece;
     public bool hasPiece = false;
 
     public bool clicked = false;
@@ -29,7 +29,7 @@ public class TTJailCell : MonoBehaviour
         {
             if (currentPiece != null)
             {
-                if (currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                if (currentPiece.GetComponent<TTPiece>().type != TTPieceType.Ore)
                     tag = "InteractablePiece";
             }
             

@@ -265,41 +265,6 @@ public class StoryUI : MonoBehaviour
                             pieceDesc.SetText("Amongst the starlit void, my blade sings the anthem of the free, a Corsairs vow to carve a path of honor and rebellion.\n\n As a Corsair, I wield my blade with the precision of a comet slicing through the dark. My skill is honed in the vacuum of space, a dance of steel and stars against any who dare cross our path. Leading my crew with the edge of my sword, I seek fortune and glory beyond the frontiers, a master of combat in the endless night.");
                             character.sprite = Corsair;
                             break;
-                        // case "Pirate Mate":
-                        //     pieceName.SetText("THE CREWMATE");
-                        //     pieceDesc.SetText("In the vast embrace of the cosmos, I find my freedom, a crewmate charting the unknown with a heart untamed by gravity.\n\n Aboard the starship's deck, I stand as a loyal crewmate, navigating the celestial seas. My life is a tapestry of stars and adventures, bound by camaraderie and the thrill of the unknown. Each planet and asteroid belt brings new challenges and treasures, forging my path in the cosmos. In this boundless frontier, I am a wanderer, a seeker of fortune under the galaxy's watchful eyes.");
-                        //     character.sprite = pirateCrew;
-                        //     break;
-                        // case "Pirate Quartermaster":
-                        //     pieceName.SetText("THE QUARTERMASTER");
-                        //     pieceDesc.SetText("In the infinite chess game of the cosmos, I move with precision, a quartermaster guiding our crew through the stars with cunning and care.\n\n As the quartermaster of my crew, I am the backbone of our celestial odyssey, managing treasures and supplies with an iron hand. My expertise in logistics and strategy ensures our ship thrives in the unforgiving void of space. I stand at the intersection of survival and ambition, navigating the delicate balance between risk and reward. In the vast expanse, my wisdom steers us toward prosperity.");
-                        //     character.sprite = pirateQuatermaster;
-                        //     break;
-                        // case "Pirate Cannon":
-                        //     pieceName.SetText("THE CANNONEER");
-                        //     pieceDesc.SetText("Through the void, my cannons roar, a symphony of resistance and liberation, etching our mark among the stars.\n\n In the echoing silence of space, my role as a cannoneer speaks volumes. Sending volleys of defiance through the vacuum. Each shot is a declaration of our sovereignty, a blend of precision and power. Amidst asteroids and enemy fleets, I carve our path to freedom, a guardian of our crew's rebellious spirit.");
-                        //     character.sprite = pirateCannon;
-                        //     break;
-                        // case "Pirate Engineer":
-                        //     pieceName.SetText("THE ENGINEER");
-                        //     pieceDesc.SetText("In the engine's hum and the stars' glow, I find my purpose, engineering our path through the cosmos, where innovation meets adventure.\n\n Within the heart of our star-bound vessel, I serve as the engineer, a custodian of the technology that propels us through the cosmos. My hands, stained with oil and stardust, mend and master the machinery that defies gravity. In the vast silence, my work ensures our survival and success, turning the impossible into the backbone of our adventures among the stars.");
-                        //     character.sprite = pirateEngineer;
-                        //     break;
-                        // case "Pirate Vanguard":
-                        //     pieceName.SetText("THE VANGUARD");
-                        //     pieceDesc.SetText("Where the dark veil of space dares to suffocate hope, I shine as the vanguard, cutting through fear with the courage of a comet.\n\n As the vanguard of our crew, I lead our forays into the unknown, the first to face danger in the vacuum of space. My resolve is as unyielding as the metal of my armor, steering us through cosmic storms and enemy blockades. In the frontier of the galaxy, my bravery lights our way, a beacon of defiance and exploration, charting a course through the stars.");
-                        //     character.sprite = pirateVanguard;
-                        //     break;
-                        // case "Pirate Navigator":
-                        //     pieceName.SetText("THE NAVIGATOR");
-                        //     pieceDesc.SetText("Amongst the tapestry of the cosmos, I draw our path, a navigator's vow to sail the stars, where adventure and mystery intertwine.\n\n As the navigator of our crew, I chart our course through the star-studded infinity. My eyes decipher the cosmos, turning celestial bodies into waypoints on our treasure-laden journey. In this vast, silent ocean, my calculations fuel our adventures, threading through wormholes and asteroid fields. Guided by constellations, I steer our ship towards fortunes untold, a cosmic pathfinder in the endless night.");
-                        //     character.sprite = pirateNavigator;
-                        //     break;
-                        // case "Pirate Gunner":
-                        //     pieceName.SetText("THE GUNNER");
-                        //     pieceDesc.SetText("With every burst from my cannon, I write our legacy among the stars, a gunner's promise to defend our freedom in the cosmic sea.\n\n Amid the silence of space, I stand as the gunner, master of my personal arsenal. My aim is guided by the stars, firing with precision that rivals the pull of gravity. Each shot declares our freedom, echoing through the void. In the dance of combat and cosmos, my skills safeguard our quest for adventure and treasure, a relentless defender of our celestial domain.");
-                        //     character.sprite = pirateGunner;
-                        //     break;
                     }
                     break;
 
@@ -350,7 +315,7 @@ public class StoryUI : MonoBehaviour
 
     public void toMain()
     {
-        SceneManager.LoadScene("TTBoard");
+        SceneManager.LoadScene("Main Menu");
     }
 
     public void toTutorial()

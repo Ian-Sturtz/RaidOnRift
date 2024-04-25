@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2040952411381913586}
   - component: {fileID: 4833898257165064853}
   - component: {fileID: 5425058452558433379}
+  - component: {fileID: 4111975728429545051}
   m_Layer: 0
   m_Name: PirateLandMine
   m_TagString: Untagged
@@ -93,9 +94,34 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 858630950521785915}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f640d6ccd96df9f439ca83539d9cf328, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PiratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}
+  NavyPiece: {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
+  NavyOre: {fileID: 2100000, guid: b1f0623e1f035104ba60e5ad7d6cc221, type: 2}
+  PirateOre: {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
+  originalType: 1
+  type: 1
+  isNavy: 0
+  hasCaptured: 0
+  hasOre: 0
+  gameWon: 0
+  currentX: -1
+  currentY: -1
+  flashDelay: 1
+--- !u!114 &4111975728429545051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858630950521785915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82434ebddd9016c438232a0f42c11499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PiratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TuQuartermaster : Piece
+public class TuQuartermaster : TTPiece
 {
     public int[,] GetValidMoves(GameObject[,] tiles)
     {

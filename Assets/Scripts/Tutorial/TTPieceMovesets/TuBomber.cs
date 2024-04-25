@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TuBomber : Piece
+public class TuBomber : TTPiece
 {
-    public Piece capturedBomb = null;
+    public TTPiece capturedBomb = null;
 
     public int[,] GetValidMoves(GameObject[,] tiles, bool bombInJail = false)
     {
@@ -37,7 +37,7 @@ public class TuBomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         up = false;
-                        if(possibleSquare.currentPiece.type != PieceType.LandMine){
+                        if(possibleSquare.currentPiece.type != TTPieceType.LandMine){
                             if(!possibleSquare.currentPiece.hasOre && capturedBomb == null)
                             {
                                 moveAssessment[currentX, currentY + change] = -1;
@@ -61,7 +61,7 @@ public class TuBomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         down = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (possibleSquare.currentPiece.type != TTPieceType.LandMine)
                         {
                             if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
                             {
@@ -86,7 +86,7 @@ public class TuBomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         right = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (possibleSquare.currentPiece.type != TTPieceType.LandMine)
                         {
                             if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
                             {
@@ -111,7 +111,7 @@ public class TuBomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         left = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (possibleSquare.currentPiece.type != TTPieceType.LandMine)
                         {
                             if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
                             {
@@ -136,7 +136,7 @@ public class TuBomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         up_right = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (possibleSquare.currentPiece.type != TTPieceType.LandMine)
                         {
                             if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
                             {
@@ -161,7 +161,7 @@ public class TuBomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         up_left = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (possibleSquare.currentPiece.type != TTPieceType.LandMine)
                         {
                             if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
                             {
@@ -186,7 +186,7 @@ public class TuBomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         down_right = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (possibleSquare.currentPiece.type != TTPieceType.LandMine)
                         {
                             if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
                             {
@@ -211,7 +211,7 @@ public class TuBomber : Piece
                     if (possibleSquare.currentPiece != null)
                     {
                         down_left = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (possibleSquare.currentPiece.type != TTPieceType.LandMine)
                         {
                             if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
                             {

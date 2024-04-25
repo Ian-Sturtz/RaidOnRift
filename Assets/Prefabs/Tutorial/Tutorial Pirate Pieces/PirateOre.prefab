@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 4659099234983645522}
   - component: {fileID: 1415354174591029920}
   - component: {fileID: 8387565837910570351}
+  - component: {fileID: -7403895038375924057}
   m_Layer: 0
   m_Name: PirateOre
   m_TagString: Untagged
@@ -177,9 +178,34 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4256565950918163535}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1715335f84937804fa56a821e974dfa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PiratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}
+  NavyPiece: {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
+  NavyOre: {fileID: 2100000, guid: b1f0623e1f035104ba60e5ad7d6cc221, type: 2}
+  PirateOre: {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
+  originalType: 0
+  type: 0
+  isNavy: 0
+  hasCaptured: 0
+  hasOre: 0
+  gameWon: 0
+  currentX: -1
+  currentY: -1
+  flashDelay: 1
+--- !u!114 &-7403895038375924057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4256565950918163535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 984806337836ea44cb1fe9e0fa6cd769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PiratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}

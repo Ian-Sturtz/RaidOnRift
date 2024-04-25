@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TuAdmiral : Piece
+public class TuAdmiral : TTPiece
 {
     public int[,] GetValidMoves(GameObject[,] tiles)
     {

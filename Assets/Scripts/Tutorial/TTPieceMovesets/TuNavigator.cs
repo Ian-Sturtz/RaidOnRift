@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TuNavigator : Piece
+public class TuNavigator : TTPiece
 {
     public int[,] GetValidMoves(GameObject[,] tiles)
     {

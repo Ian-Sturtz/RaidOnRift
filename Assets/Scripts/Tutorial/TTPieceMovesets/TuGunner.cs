@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TuGunner : Piece
+public class TuGunner : TTPiece
 {
     [SerializeField] private GameObject PieceImage;
     [SerializeField] private Sprite unloaded;
@@ -68,10 +68,10 @@ public class TuGunner : Piece
                                 up = false; // Must stop searching in this direction
 
                                 // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                if (isNavy != possibleSquare.currentPiece.GetComponent<TTPiece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    if (possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.LandMine && possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.Ore)
                                     {
                                         moveAssessment[currentX, currentY + y_change] = 3;
                                     }
@@ -93,10 +93,10 @@ public class TuGunner : Piece
                                 up_left = false; // Must stop searching in this direction
 
                                 // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                if (isNavy != possibleSquare.currentPiece.GetComponent<TTPiece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    if (possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.LandMine && possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.Ore)
                                     {
                                         moveAssessment[currentX - x_change, currentY + y_change] = 3;
                                     }
@@ -117,10 +117,10 @@ public class TuGunner : Piece
                                 up_right = false; // Must stop searching in this direction
 
                                 // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                if (isNavy != possibleSquare.currentPiece.GetComponent<TTPiece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    if (possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.LandMine && possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.Ore)
                                     {
                                         moveAssessment[currentX + x_change, currentY + y_change] = 3;
                                     }
@@ -142,10 +142,10 @@ public class TuGunner : Piece
                                 down = false; // Must stop searching in this direction
 
                                 // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                if (isNavy != possibleSquare.currentPiece.GetComponent<TTPiece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    if (possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.LandMine && possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.Ore)
                                     {
                                         moveAssessment[currentX, currentY - y_change] = 3;
                                     }
@@ -167,10 +167,10 @@ public class TuGunner : Piece
                                 down_left = false; // Must stop searching in this direction
 
                                 // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                if (isNavy != possibleSquare.currentPiece.GetComponent<TTPiece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    if (possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.LandMine && possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.Ore)
                                     {
                                         moveAssessment[currentX - x_change, currentY - y_change] = 3;
                                     }
@@ -192,10 +192,10 @@ public class TuGunner : Piece
                                 down_right = false; // Must stop searching in this direction
 
                                 // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                if (isNavy != possibleSquare.currentPiece.GetComponent<TTPiece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    if (possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.LandMine && possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.Ore)
                                     {
                                         moveAssessment[currentX + x_change, currentY - y_change] = 3;
                                     }
@@ -217,10 +217,10 @@ public class TuGunner : Piece
                                 right = false; // Must stop searching in this direction
 
                                 // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                if (isNavy != possibleSquare.currentPiece.GetComponent<TTPiece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    if (possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.LandMine && possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.Ore)
                                     {
                                         moveAssessment[currentX + x_change, currentY] = 3;
                                     }
@@ -242,10 +242,10 @@ public class TuGunner : Piece
                                 left = false; // Must stop searching in this direction
 
                                 // Obstruction is an enemy piece
-                                if (isNavy != possibleSquare.currentPiece.GetComponent<Piece>().isNavy)
+                                if (isNavy != possibleSquare.currentPiece.GetComponent<TTPiece>().isNavy)
                                 {
                                     // Obstruction is not a land mine
-                                    if (possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.LandMine && possibleSquare.currentPiece.GetComponent<Piece>().type != PieceType.Ore)
+                                    if (possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.LandMine && possibleSquare.currentPiece.GetComponent<TTPiece>().type != TTPieceType.Ore)
                                     {
                                         moveAssessment[currentX - x_change, currentY] = 3;
                                     }

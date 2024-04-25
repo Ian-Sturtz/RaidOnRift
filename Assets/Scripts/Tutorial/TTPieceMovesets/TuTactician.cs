@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TuTactician : Piece
+public class TuTactician : TTPiece
 {
     public bool[] mimicPieces = new bool[9];    // Boolean for whether he can mimic those pieces
 
@@ -38,6 +38,7 @@ public class TuTactician : Piece
         for(int i = 1; i <= 2; i++)
         {
             TTSquare possibleSquare;
+            Debug.Log("currentX: " + currentX + " || currentY: " + currentY);
 
             // Right
             if (IsSquareOnBoard(currentX + i, currentY) && right)
@@ -46,7 +47,7 @@ public class TuTactician : Piece
 
                 if(possibleSquare.currentPiece != null)
                 {
-                    if(!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                    if(!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != TTPieceType.LandMine)
                     {
                         moveAssessment[currentX + i, currentY] = 2;
                         right = false;
@@ -73,7 +74,7 @@ public class TuTactician : Piece
 
                 if (possibleSquare.currentPiece != null)
                 {
-                    if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                    if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != TTPieceType.LandMine)
                     {
                         moveAssessment[currentX - i, currentY] = 2;
                         left = false;
@@ -100,7 +101,7 @@ public class TuTactician : Piece
 
                 if (possibleSquare.currentPiece != null)
                 {
-                    if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                    if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != TTPieceType.LandMine)
                     {
                         moveAssessment[currentX, currentY + i] = 2;
                         up = false;
@@ -127,7 +128,7 @@ public class TuTactician : Piece
 
                 if (possibleSquare.currentPiece != null)
                 {
-                    if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                    if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != TTPieceType.LandMine)
                     {
                         moveAssessment[currentX, currentY - i] = 2;
                         down = false;
@@ -193,39 +194,39 @@ public class TuTactician : Piece
                     // Isolates non-orebearer pirates
                     if (!squareInRange.currentPiece.isNavy && !squareInRange.currentPiece.hasOre)
                     {
-                        if(squareInRange.currentPiece.type == PieceType.Mate && !mimicPieces[0])
+                        if(squareInRange.currentPiece.type == TTPieceType.Mate && !mimicPieces[0])
                         {
                             mimicPieces[0] = true;
                         }
-                        else if (squareInRange.currentPiece.type == PieceType.Bomber && !mimicPieces[1])
+                        else if (squareInRange.currentPiece.type == TTPieceType.Bomber && !mimicPieces[1])
                         {
                             mimicPieces[1] = true;
                         }
-                        else if (squareInRange.currentPiece.type == PieceType.Vanguard && !mimicPieces[2])
+                        else if (squareInRange.currentPiece.type == TTPieceType.Vanguard && !mimicPieces[2])
                         {
                             mimicPieces[2] = true;
                         }
-                        else if (squareInRange.currentPiece.type == PieceType.Navigator && !mimicPieces[3])
+                        else if (squareInRange.currentPiece.type == TTPieceType.Navigator && !mimicPieces[3])
                         {
                             mimicPieces[3] = true;
                         }
-                        else if (squareInRange.currentPiece.type == PieceType.Gunner && !mimicPieces[4])
+                        else if (squareInRange.currentPiece.type == TTPieceType.Gunner && !mimicPieces[4])
                         {
                             mimicPieces[4] = true;
                         }
-                        else if (squareInRange.currentPiece.type == PieceType.Cannon && !mimicPieces[5])
+                        else if (squareInRange.currentPiece.type == TTPieceType.Cannon && !mimicPieces[5])
                         {
                             mimicPieces[5] = true;
                         }
-                        else if (squareInRange.currentPiece.type == PieceType.Quartermaster && !mimicPieces[6])
+                        else if (squareInRange.currentPiece.type == TTPieceType.Quartermaster && !mimicPieces[6])
                         {
                             mimicPieces[6] = true;
                         }
-                        else if (squareInRange.currentPiece.type == PieceType.Royal2 && !mimicPieces[7])
+                        else if (squareInRange.currentPiece.type == TTPieceType.Royal2 && !mimicPieces[7])
                         {
                             mimicPieces[7] = true;
                         }
-                        else if (squareInRange.currentPiece.type == PieceType.Royal1 && !mimicPieces[8])
+                        else if (squareInRange.currentPiece.type == TTPieceType.Royal1 && !mimicPieces[8])
                         {
                             mimicPieces[8] = true;
                         }
@@ -245,7 +246,7 @@ public class TuTactician : Piece
             if (mimicPieces[i])
             {
                 
-                Piece inheritPiece = Instantiate(board.PiecePrefabs[i + 13].GetComponent<Piece>());
+                TTPiece inheritPiece = Instantiate(board.PiecePrefabs[i + 13].GetComponent<TTPiece>());
 
                 jail.InsertAPiece(inheritPiece, true);
                 inheritPiece.destroyPiece();
@@ -255,23 +256,24 @@ public class TuTactician : Piece
 
         for (int i = 0; i < 9; i++)
         {
-            if(jail.TacticianMimicCells[i].GetComponent<JailCell>().currentPiece != null)
+            if(jail.TacticianMimicCells[i].GetComponent<TTJailCell>().currentPiece != null)
             {
-                Piece currentPiece = jail.TacticianMimicCells[i].GetComponent<JailCell>().currentPiece;
+                TTPiece currentPiece = jail.TacticianMimicCells[i].GetComponent<TTJailCell>().currentPiece;
 
                 currentPiece.currentX = currentX;
                 currentPiece.currentY = currentY;
 
                 // Spawns an unloaded Gunner if the tactician has already gunner captured
-                if(currentPiece.type == PieceType.Gunner)
+                if(currentPiece.type == TTPieceType.Gunner)
                 {
                     currentPiece.hasCaptured = board.tacticianGunnerCapture;
-                }else if(currentPiece.type == PieceType.Royal2)
+                }else if(currentPiece.type == TTPieceType.Royal2)
                 {
                     currentPiece.GetComponent<TuCorsair>().canJump = (board.tacticianCorsairJump == 0);
                 }
             }
         }
+        Debug.Log("currentX: " + currentX + " || currentY: " + currentY);
 
         moveAssessment[currentX, currentY] = 0;
 

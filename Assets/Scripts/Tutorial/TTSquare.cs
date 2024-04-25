@@ -13,7 +13,7 @@ public class TTSquare : MonoBehaviour
     public Material clickedBoardMaterial;
     public Material moveableBoardMaterial;
     public Material enemyBoardMaterial;
-    public Piece currentPiece;
+    public TTPiece currentPiece;
     public bool SquareHasBeenClicked = false;
     private bool flashing = false;
     private bool continualFlash = false;
