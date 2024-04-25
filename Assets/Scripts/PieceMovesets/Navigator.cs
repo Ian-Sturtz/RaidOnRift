@@ -24,6 +24,7 @@ public class Navigator : Piece
             for (int j = -1; j <= 1; j++)
                 if (IsSquareOnBoard(currentX + i, currentY + j))
                     moveAssessment[currentX + i, currentY + j] = 1;
+        
         if (SceneManager.GetActiveScene().name == "Board")
         {
             for (int change = 1; up || down; change++)
