@@ -96,6 +96,7 @@ public class GameBoard : MonoBehaviour
     [SerializeField] AudioSource gunnerAudio;
     [SerializeField] AudioSource gunnerRecharge;
     [SerializeField] AudioSource Capture;
+    [SerializeField] AudioSource corsairMove;
 
 
     #endregion
@@ -831,9 +832,10 @@ public class GameBoard : MonoBehaviour
         {
             // Corsair jumping requires 2 turns of cooldown before the next jump
             if (currentPiece.type == PieceType.Royal2 && !currentPiece.isNavy)
+            {
                 jumpCooldown = 3;
-                // Corsair jump sound
-            // Tactician inherits a corsair
+                corsairMove.Play();
+            }
             else
             {
                 tacticianCorsairJump = 3;
