@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2926136294502133175}
   - component: {fileID: 8328440698322270868}
-  - component: {fileID: 1732970495815858417}
   - component: {fileID: 1569327898070149305}
   m_Layer: 0
   m_Name: PirateGunner
@@ -87,34 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1732970495815858417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2450506514258733070}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cb0e380814f04448bb2db8582dfdd5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PiratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}
-  NavyPiece: {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
-  NavyOre: {fileID: 2100000, guid: b1f0623e1f035104ba60e5ad7d6cc221, type: 2}
-  PirateOre: {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
-  originalType: 6
-  type: 6
-  isNavy: 1
-  hasCaptured: 0
-  hasOre: 0
-  gameWon: 0
-  currentX: -1
-  currentY: -1
-  flashDelay: 1
-  PieceImage: {fileID: 8931055917002377977}
-  unloaded: {fileID: 21300000, guid: 68e21bbeb6b7d474085a40efe9a31c2c, type: 3}
-  loaded: {fileID: 21300000, guid: a2b680806bf3c8d41b2e7756010718c1, type: 3}
 --- !u!114 &1569327898070149305
 MonoBehaviour:
   m_ObjectHideFlags: 0

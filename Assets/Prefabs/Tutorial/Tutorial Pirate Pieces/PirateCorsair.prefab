@@ -94,7 +94,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6125622987488259811}
   - component: {fileID: 8754890519280588133}
-  - component: {fileID: 8703637574853108430}
   - component: {fileID: 8856433021755527630}
   m_Layer: 0
   m_Name: PirateCorsair
@@ -171,37 +170,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8703637574853108430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7533564943061118156}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12dea9ccef39e89499d849153975653c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PiratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}
-  NavyPiece: {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
-  NavyOre: {fileID: 2100000, guid: b1f0623e1f035104ba60e5ad7d6cc221, type: 2}
-  PirateOre: {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
-  originalType: 9
-  type: 9
-  isNavy: 0
-  hasCaptured: 0
-  hasOre: 0
-  gameWon: 0
-  currentX: -1
-  currentY: -1
-  flashDelay: 1
-  PieceImage: {fileID: 3121823922205218531}
-  jumpReady: {fileID: 21300000, guid: 10635e4bbdcc27c4ba8f33e84b72c242, type: 3}
-  cooldown: {fileID: 21300000, guid: 523d286f321f4bb4ca5a1a671c572c10, type: 3}
-  GameBoard: {fileID: 0}
-  board: {fileID: 0}
-  canJump: 0
 --- !u!114 &8856433021755527630
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8406407774873516751}
   - component: {fileID: 7236766254639850269}
-  - component: {fileID: 3655891716300172863}
   - component: {fileID: 4033336536796635334}
   m_Layer: 0
   m_Name: PirateEngineer
@@ -87,32 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3655891716300172863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8476734553901582401}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e196d9570a990d1468669c44ba66005d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PiratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}
-  NavyPiece: {fileID: 2100000, guid: 72a819d506e47fd44849795c71f678eb, type: 2}
-  NavyOre: {fileID: 2100000, guid: b1f0623e1f035104ba60e5ad7d6cc221, type: 2}
-  PirateOre: {fileID: 2100000, guid: 74f4d5f312f7be249924d7bbb37b8c36, type: 2}
-  originalType: 3
-  type: 3
-  isNavy: 0
-  hasCaptured: 0
-  hasOre: 0
-  gameWon: 0
-  currentX: -1
-  currentY: -1
-  flashDelay: 1
-  capturedBomb: {fileID: 0}
 --- !u!114 &4033336536796635334
 MonoBehaviour:
   m_ObjectHideFlags: 0

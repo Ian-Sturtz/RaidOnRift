@@ -3573,7 +3573,6 @@ MonoBehaviour:
   navyTurn: 1
   NavyPieces: []
   PiratePieces: []
-  gameTimer: {fileID: 519420033}
   tile_size: 1
   tile_size_margins: 1.05
   game_board_size: 10.55
@@ -10269,7 +10268,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 878986048}
   - {fileID: 955689177}
   - {fileID: 502453043}
   - {fileID: 1453859275}
@@ -10312,7 +10310,7 @@ MonoBehaviour:
   Video: {fileID: 0}
   pieceName: {fileID: 1582250332}
   pieceDesc: {fileID: 996868366}
-  character: {fileID: 878986046}
+  character: {fileID: 0}
   admiral: {fileID: 21300000, guid: 59d9abdf25b4fc349a7e294156ff9e8c, type: 3}
   tactician: {fileID: 21300000, guid: d890ea08419e2a149821e5c77ce382e4, type: 3}
   navyCrew: {fileID: 21300000, guid: f0a7043b24d2216448aa07f1e37a27e8, type: 3}
@@ -18278,81 +18276,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8544457697168612191, guid: 16e1ccf36cc184d43bce6862c00b9173, type: 3}
   m_PrefabInstance: {fileID: 892655195}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &878986045
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 878986048}
-  - component: {fileID: 878986047}
-  - component: {fileID: 878986046}
-  m_Layer: 0
-  m_Name: Image
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &878986046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878986045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d890ea08419e2a149821e5c77ce382e4, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &878986047
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878986045}
-  m_CullTransparentMesh: 1
---- !u!224 &878986048
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878986045}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -109.14467}
-  m_LocalScale: {x: 0.96, y: 0.96, z: 2.3999999}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 546281743}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -363.83997, y: -1046.27}
-  m_SizeDelta: {x: 686.3789, y: 888}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &882272279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27309,18 +27232,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 364305080}
     m_Modifications:
-    - target: {fileID: 3705123534587124789, guid: fff0f1c7f8f54c946888da09570e8b40, type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3705123534587124789, guid: fff0f1c7f8f54c946888da09570e8b40, type: 3}
-      propertyPath: m_Size.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3705123534587124789, guid: fff0f1c7f8f54c946888da09570e8b40, type: 3}
-      propertyPath: m_Size.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 502396672919878912, guid: 194decac91f0e534e9a3f369649b956c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.09478673
@@ -27372,6 +27283,18 @@ PrefabInstance:
     - target: {fileID: 2216884578387355243, guid: 194decac91f0e534e9a3f369649b956c, type: 3}
       propertyPath: m_Name
       value: (1,8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3705123534587124789, guid: fff0f1c7f8f54c946888da09570e8b40, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3705123534587124789, guid: fff0f1c7f8f54c946888da09570e8b40, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3705123534587124789, guid: fff0f1c7f8f54c946888da09570e8b40, type: 3}
+      propertyPath: m_Size.z
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -28484,7 +28407,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1534501340
 RectTransform:
   m_ObjectHideFlags: 0
@@ -34037,7 +33960,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1607336535
 RectTransform:
   m_ObjectHideFlags: 0
@@ -41631,14 +41554,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 364305080}
     m_Modifications:
-    - target: {fileID: 131866707789377713, guid: fff0f1c7f8f54c946888da09570e8b40, type: 3}
-      propertyPath: m_Size.x
-      value: 1.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 131866707789377713, guid: fff0f1c7f8f54c946888da09570e8b40, type: 3}
-      propertyPath: m_Size.y
-      value: 1.05
-      objectReference: {fileID: 0}
     - target: {fileID: 502396672919878912, guid: 194decac91f0e534e9a3f369649b956c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.09478673
@@ -41694,6 +41609,14 @@ PrefabInstance:
     - target: {fileID: 2216884578387355243, guid: 194decac91f0e534e9a3f369649b956c, type: 3}
       propertyPath: m_TagString
       value: GameSquare
+      objectReference: {fileID: 0}
+    - target: {fileID: 131866707789377713, guid: fff0f1c7f8f54c946888da09570e8b40, type: 3}
+      propertyPath: m_Size.x
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 131866707789377713, guid: fff0f1c7f8f54c946888da09570e8b40, type: 3}
+      propertyPath: m_Size.y
+      value: 1.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

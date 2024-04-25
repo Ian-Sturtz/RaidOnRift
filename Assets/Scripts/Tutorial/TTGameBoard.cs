@@ -21,7 +21,7 @@ public class TTGameBoard : MonoBehaviour
     public TTPiece[] NavyPieces;      // All Navy game pieces
     public TTPiece[] PiratePieces;    // All Pirate game
 
-    public Bar gameTimer;
+    // public Bar gameTimer;
 
     #endregion
 
@@ -156,10 +156,10 @@ public class TTGameBoard : MonoBehaviour
     private void Update()
     {
         // Check for a game win
-        if (gameTimer.timeOver && !gameWon)
-        {
-            GameOver(!navyTurn);
-        }
+        // if (gameTimer.timeOver && !gameWon)
+        // {
+        //     GameOver(!navyTurn);
+        // }
 
         for (int i = 0; i < TILE_COUNT_X && !gameWon; i++)
         {
@@ -1527,7 +1527,7 @@ public class TTGameBoard : MonoBehaviour
 
         Scene currentScene = SceneManager.GetActiveScene();
 
-        if(currentScene.name == "TTBoard" && StoryUI.tutorialToLoad != 0)
+        if(StoryUI.tutorialToLoad != 0)
         {
             if (StoryUI.tutorialToLoad == 1)
             {
@@ -1594,10 +1594,10 @@ public class TTGameBoard : MonoBehaviour
             {
                 // Admiral tutorial
                 NavyPieces[0] = SpawnPiece(TTPieceType.Royal1, true, 5, 5);
-                NavyPieces[0] = SpawnPiece(TTPieceType.Mate, true, 0, 0);
-                NavyPieces[0] = SpawnPiece(TTPieceType.Mate, true, 9, 9);
-                NavyPieces[0] = SpawnPiece(TTPieceType.Mate, true, 0, 9);
-                NavyPieces[0] = SpawnPiece(TTPieceType.Mate, true, 9, 0);
+                PiratePieces[0] = SpawnPiece(TTPieceType.Mate, false, 0, 0);
+                PiratePieces[1] = SpawnPiece(TTPieceType.Mate, false, 9, 9);
+                PiratePieces[2] = SpawnPiece(TTPieceType.Mate, false, 0, 9);
+                PiratePieces[3] = SpawnPiece(TTPieceType.Mate, false, 9, 0);
             }
             else if(StoryUI.tutorialToLoad == 9)
             {
@@ -1619,7 +1619,31 @@ public class TTGameBoard : MonoBehaviour
             else if(StoryUI.tutorialToLoad == 11)
             {
                 // Corsair tutorial
-                PiratePieces[0] = SpawnPiece(TTPieceType.Royal2, false, 5, 5);
+                PiratePieces[0] = SpawnPiece(TTPieceType.Royal2, false, 4, 5);
+                PiratePieces[1] = SpawnPiece(TTPieceType.LandMine, false, 0, 6);
+                PiratePieces[2] = SpawnPiece(TTPieceType.LandMine, false, 1, 6);
+                PiratePieces[3] = SpawnPiece(TTPieceType.LandMine, false, 2, 6);
+                PiratePieces[4] = SpawnPiece(TTPieceType.LandMine, false, 3, 6);
+                PiratePieces[5] = SpawnPiece(TTPieceType.LandMine, false, 4, 6);
+                PiratePieces[6] = SpawnPiece(TTPieceType.LandMine, false, 5, 6);
+                PiratePieces[7] = SpawnPiece(TTPieceType.LandMine, false, 6, 6);
+                PiratePieces[8] = SpawnPiece(TTPieceType.LandMine, false, 7, 6);
+                PiratePieces[9] = SpawnPiece(TTPieceType.LandMine, false, 8, 6);
+                PiratePieces[10] = SpawnPiece(TTPieceType.LandMine, false, 9, 6);
+                NavyPieces[0] = SpawnPiece(TTPieceType.Mate, true, 2, 0);
+                NavyPieces[1] = SpawnPiece(TTPieceType.Mate, true, 6, 7);
+                NavyPieces[2] = SpawnPiece(TTPieceType.LandMine, true, 0, 3);
+                NavyPieces[3] = SpawnPiece(TTPieceType.LandMine, true, 1, 3);
+                NavyPieces[4] = SpawnPiece(TTPieceType.LandMine, true, 2, 3);
+                NavyPieces[5] = SpawnPiece(TTPieceType.LandMine, true, 3, 3);
+                NavyPieces[6] = SpawnPiece(TTPieceType.LandMine, true, 4, 3);
+                NavyPieces[7] = SpawnPiece(TTPieceType.LandMine, true, 5, 3);
+                NavyPieces[8] = SpawnPiece(TTPieceType.LandMine, true, 6, 3);
+                NavyPieces[9] = SpawnPiece(TTPieceType.LandMine, true, 7, 3);
+                NavyPieces[10] = SpawnPiece(TTPieceType.LandMine, true, 8, 3);
+                NavyPieces[11] = SpawnPiece(TTPieceType.LandMine, true, 9, 3);
+                
+                
             }
             
         }
@@ -1684,7 +1708,7 @@ public class TTGameBoard : MonoBehaviour
     {
         gameOver = true;
         gameWon = true;
-        gameTimer.pauseTimer();
+        // gameTimer.pauseTimer();
         boardUI.GameWon(teamWon, stalemate);
     }
 
@@ -1720,7 +1744,7 @@ public class TTGameBoard : MonoBehaviour
             boardUI.PlayTurnAnim(navyTurn);
         }
 
-        gameTimer.ResetBar();
+        // gameTimer.ResetBar();
 
         Debug.Log(debug);
     }
@@ -1854,46 +1878,6 @@ public class TTGameBoard : MonoBehaviour
 
         GameOver(gw.teamID == 0);
     }
-
-    // private void OnRespawnClient(NetMessage msg)
-    // {
-    //     NetRespawn rs = msg as NetRespawn;
-
-    //     bool navyMove;
-
-    //     Debug.Log($"{rs.teamID}: deploying piece type {rs.specialPiece} from {rs.jailIndex} to {rs.targetX},{rs.targetY}");
-
-    //     if(rs.specialPiece == 0)
-    //         navyMove = rs.teamID == 1;
-    //     else
-    //         navyMove = rs.teamID == 0;
-
-    //     if (navyMove != playerIsNavy)
-    //     {
-    //         Debug.Log("Received a move from opponent!");
-
-    //         Piece deployPiece;
-
-    //         if(rs.specialPiece == 0)
-    //         {
-    //             if (rs.teamID == 0)
-    //                 deployPiece = jail.navyJailedPieces[rs.jailIndex].GetComponent<Piece>();
-    //             else
-    //                 deployPiece = jail.pirateJailedPieces[rs.jailIndex].GetComponent<Piece>();
-    //         }
-    //         else
-    //         {
-    //             if(rs.teamID == 0)
-    //                 deployPiece = jail.navyJailedPieces[rs.jailIndex].GetComponent<Piece>();
-    //             else
-    //                 deployPiece = jail.pirateJailedPieces[rs.jailIndex].GetComponent<Piece>();
-    //         }
-
-    //         Vector2Int deployCoordinates = new Vector2Int(rs.targetX, rs.targetY);
-
-    //         GameplayDeployPiece(deployPiece, deployCoordinates, rs.jailIndex, rs.specialPiece);
-    //     }
-    // }
 
     #endregion
 }
