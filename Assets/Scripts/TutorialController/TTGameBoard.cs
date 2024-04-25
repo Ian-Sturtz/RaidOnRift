@@ -126,6 +126,7 @@ public class TTGameBoard : MonoBehaviour
                 break;
         }
     }
+
     IEnumerator TestNavigator()
     {
         NavyPieces[0] = SpawnPiece(PieceType.Navigator, true, 1, 1);
@@ -496,6 +497,7 @@ public class TTGameBoard : MonoBehaviour
         SceneManager.LoadScene("Story");
 
     }
+    
     IEnumerator TestAdmiral()
     {
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
@@ -773,6 +775,7 @@ public class TTGameBoard : MonoBehaviour
                         jail.InsertAPiece(PiratePieces[2]);
                         PiratePieces[2].destroyPiece();
                         NavyPieces[0].hasCaptured = true;
+                        NavyPieces[0].hasOre = true;
                         MovePiece(NavyPieces[0], 6, 9);
 
                         break;
