@@ -328,12 +328,20 @@ public class BoardUI : MonoBehaviour
         }
     }
 
-    public void UpdateSelectedPiece(PieceType piece, bool isNavy)
+    public void UpdateSelectedPiece(PieceType piece, bool isNavy, bool hasOre = false, bool specialProperty = false)
     {
-        if (piece == PieceType.Ore || piece == PieceType.LandMine)
-            return;
-
         pieceDisplay.SetActive(true);
+
+        if ((piece == PieceType.Ore && navyTurn == isNavy) || (piece == PieceType.LandMine && navyTurn == isNavy))
+            if (!specialProperty) return;
+
+        if (hasOre)
+        {
+            pieceDisplayName.SetText("Orebearer");
+            pieceDescription.SetText("The Orebearer can move one square in any direction, but can move a second time if it captures an enemy.");
+            return;
+        }
+
         switch (piece)
         {
             case PieceType.Royal1:
@@ -387,6 +395,14 @@ public class BoardUI : MonoBehaviour
             case PieceType.Gunner:
                 pieceDisplayName.SetText("Gunner");
                 pieceDescription.SetText("Moves one open space in any direction, or he captures by shooting an enemy up to 3 unblocked spaces away in any direction. He has to move somewhere to reload his weapon before he can capture again. Be warned, he can't shoot the enemy Ore or he might destroy it!");
+                break;
+            case PieceType.Ore:
+                pieceDisplayName.SetText("Ore");
+                pieceDescription.SetText("The most concentrated energy supply in the cosmos. Protect it with your life and get your enemy's supply as quickly as you can!");
+                break;
+            case PieceType.LandMine:
+                pieceDisplayName.SetText("Energy Shield");
+                pieceDescription.SetText("Defenses made from pure energy. No force can get through them, but some are able to get over top of them. Engineers are skilled at building and dismantling them.");
                 break;
         }
     }

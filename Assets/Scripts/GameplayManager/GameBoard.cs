@@ -230,7 +230,7 @@ public class GameBoard : MonoBehaviour
         // The active player has selected a bomber or tactician to use this turn
         if (storedTileSelected != null)
         {
-            boardUI.UpdateSelectedPiece(storedTileSelected.GetComponent<Square>().currentPiece.type, storedTileSelected.GetComponent<Square>().currentPiece.isNavy);
+            boardUI.UpdateSelectedPiece(storedTileSelected.GetComponent<Square>().currentPiece.type, storedTileSelected.GetComponent<Square>().currentPiece.isNavy, storedTileSelected.GetComponent<Square>().currentPiece.hasOre);
 
             // The active player has selected a bomber to use this turn
             if (storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.Bomber) {
@@ -408,6 +408,8 @@ public class GameBoard : MonoBehaviour
                             Debug.Log("It's not your turn!");
                             Square selectedTile = tileSelected.GetComponent<Square>();
                             selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
+
+                            boardUI.UpdateSelectedPiece(current_square.currentPiece.type, current_square.currentPiece.isNavy, current_square.currentPiece.hasOre);
                         }
                         else if (PieceManager.instance.onlineMultiplayer && current_square.currentPiece.isNavy != navyTurn)
                         {
@@ -416,7 +418,7 @@ public class GameBoard : MonoBehaviour
                             Square selectedTile = tileSelected.GetComponent<Square>();
                             selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
 
-                            boardUI.UpdateSelectedPiece(current_square.currentPiece.type, current_square.currentPiece.isNavy);
+                            boardUI.UpdateSelectedPiece(current_square.currentPiece.type, current_square.currentPiece.isNavy, current_square.currentPiece.hasOre);
                         }
                         // The wrong team is trying to move
                         else if (current_square.currentPiece.isNavy != navyTurn)
@@ -426,7 +428,7 @@ public class GameBoard : MonoBehaviour
                             Square selectedTile = tileSelected.GetComponent<Square>();
                             selectedTile.FlashMaterial(selectedTile.clickedBoardMaterial, 3);
 
-                            boardUI.UpdateSelectedPiece(current_square.currentPiece.type, current_square.currentPiece.isNavy);
+                            boardUI.UpdateSelectedPiece(current_square.currentPiece.type, current_square.currentPiece.isNavy, current_square.currentPiece.hasOre);
                         }
                         // The right team is trying to move
                         else
@@ -464,6 +466,10 @@ public class GameBoard : MonoBehaviour
                             squareSelected = true;
                             current_square.SquareHasBeenClicked = true;
                             DetectLegalMoves(tileSelected, current_square.currentPiece);
+
+                            //Fixing edge case for selection lol
+                            if (storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.LandMine || storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.Ore)
+                                boardUI.UpdateSelectedPiece(storedTileSelected.GetComponent<Square>().currentPiece.type, storedTileSelected.GetComponent<Square>().currentPiece.isNavy, false, true);
                         }
 
                     }
