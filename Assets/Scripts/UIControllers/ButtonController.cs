@@ -41,4 +41,9 @@ public class ButtonController : MonoBehaviour
 
         Application.Quit();
     }
+
+    public void LoadScene(string scene)
+    {
+        SceneManager.LoadScene(scene);
+    }
 }

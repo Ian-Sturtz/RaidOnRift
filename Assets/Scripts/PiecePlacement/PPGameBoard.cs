@@ -289,7 +289,7 @@ public class PPGameBoard : MonoBehaviour
                 Debug.Log($"navy first: {PieceManager.instance.navyFirst}");
 
                 navyTurn = PieceManager.instance.navyFirst;
-                PlacementTimer.time = 30;
+                PlacementTimer.time = 60;
                 PlacementTimer.ResetBar();
             }
             else

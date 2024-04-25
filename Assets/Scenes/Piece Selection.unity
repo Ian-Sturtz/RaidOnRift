@@ -5346,7 +5346,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 3:00
+  m_text: 5:00
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
   m_sharedMaterial: {fileID: 2383952268681313545, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
@@ -9093,7 +9093,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Timer: {fileID: 2027925438}
   CountdownClock: {fileID: 1178123243}
-  timeRemaining: 180
+  timeRemaining: 300
   clockTimer: {r: 1, g: 1, b: 1, a: 1}
   panicTimer: {r: 0.78431374, g: 0.07058824, b: 0.07058824, a: 1}
 --- !u!1 &2081456879

@@ -261,6 +261,82 @@ public class StoryUI : MonoBehaviour
 
     public void loadTutorial()
     {
+        switch (chosenPiece)
+        {
+            case "Admiral":
+                StaticTutorialControl.piece = PieceType.Royal1;
+                StaticTutorialControl.isNavy = true;
+                break;
+            case "Tactician":
+                StaticTutorialControl.piece = PieceType.Royal2;
+                StaticTutorialControl.isNavy = true;
+                break;
+            case "Navy Mate":
+                StaticTutorialControl.piece = PieceType.Mate;
+                StaticTutorialControl.isNavy = true;
+                break;
+            case "Navy Quartermaster":
+                StaticTutorialControl.piece = PieceType.Quartermaster;
+                StaticTutorialControl.isNavy = true;
+                break;
+            case "Navy Cannon":
+                StaticTutorialControl.piece = PieceType.Cannon;
+                StaticTutorialControl.isNavy = true;
+                break;
+            case "Navy Engineer":
+                StaticTutorialControl.piece = PieceType.Bomber;
+                StaticTutorialControl.isNavy = true;
+                break;
+            case "Navy Vanguard":
+                StaticTutorialControl.piece = PieceType.Vanguard;
+                StaticTutorialControl.isNavy = true;
+                break;
+            case "Navy Navigator":
+                StaticTutorialControl.piece = PieceType.Navigator;
+                StaticTutorialControl.isNavy = true;
+                break;
+            case "Navy Gunner":
+                StaticTutorialControl.piece = PieceType.Gunner;
+                StaticTutorialControl.isNavy = true;
+                break;
+
+            case "Captain":
+                StaticTutorialControl.piece = PieceType.Royal1;
+                StaticTutorialControl.isNavy = false;
+                break;
+            case "Corsair":
+                StaticTutorialControl.piece = PieceType.Royal2;
+                StaticTutorialControl.isNavy = false;
+                break;
+            case "Pirate Mate":
+                StaticTutorialControl.piece = PieceType.Mate;
+                StaticTutorialControl.isNavy = false;
+                break;
+            case "Pirate Quartermaster":
+                StaticTutorialControl.piece = PieceType.Quartermaster;
+                StaticTutorialControl.isNavy = false;
+                break;
+            case "Pirate Cannon":
+                StaticTutorialControl.piece = PieceType.Cannon;
+                StaticTutorialControl.isNavy = false;
+                break;
+            case "Pirate Engineer":
+                StaticTutorialControl.piece = PieceType.Bomber;
+                StaticTutorialControl.isNavy = false;
+                break;
+            case "Pirate Vanguard":
+                StaticTutorialControl.piece = PieceType.Vanguard;
+                StaticTutorialControl.isNavy = false;
+                break;
+            case "Pirate Navigator":
+                StaticTutorialControl.piece = PieceType.Navigator;
+                StaticTutorialControl.isNavy = false;
+                break;
+            case "Pirate Gunner":
+                StaticTutorialControl.piece = PieceType.Gunner;
+                StaticTutorialControl.isNavy = false;
+                break;
+        }
 
         SceneManager.LoadScene("Tutorial");
     }

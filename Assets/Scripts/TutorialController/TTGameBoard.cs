@@ -73,9 +73,55 @@ public class TTGameBoard : MonoBehaviour
         PiratePieces = new Piece[teamSize];
         IdentifyBoardSquares();
 
-
-        Debug.Log("Testing mate");
-        StartCoroutine(TestMate());
+        switch (StaticTutorialControl.piece)
+        {
+            case PieceType.Mate:
+                Debug.Log("Testing Mate");
+                StartCoroutine(TestMate());
+                break;
+            case PieceType.Bomber:
+                Debug.Log("Testing Engineer");
+                break;
+            case PieceType.Vanguard:
+                Debug.Log("Testing Vanguard");
+                break;
+            case PieceType.Navigator:
+                Debug.Log("Testing Navigator");
+                break;
+            case PieceType.Gunner:
+                Debug.Log("Testing Gunner");
+                break;
+            case PieceType.Cannon:
+                Debug.Log("Testing Cannon");
+                break;
+            case PieceType.Quartermaster:
+                Debug.Log("Testing Quartermaster");
+                break;
+            case PieceType.Royal2:
+                if (StaticTutorialControl.isNavy)
+                {
+                    Debug.Log("Testing Tactician");
+                }
+                else
+                {
+                    Debug.Log("Testing Corsair");
+                }
+                break;
+            case PieceType.Royal1:
+                if (StaticTutorialControl.isNavy)
+                {
+                    Debug.Log("Testing Admiral");
+                }
+                else
+                {
+                    Debug.Log("Testing Captain");
+                }
+                break;
+            default:
+                Debug.Log("Default test case");
+                StartCoroutine(TestMate());
+                break;
+        }
     }
 
     IEnumerator TestMate()
@@ -528,7 +574,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nGood luck!", true);
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Main Menu");
+        SceneManager.LoadScene("Story");
     }
 
     private void IdentifyBoardSquares()
