@@ -354,6 +354,8 @@ public class PPGameBoard : MonoBehaviour
                         storedTileSelected = tileSelected;
 
                         DetectValidSquares(currentSquare);
+
+                        boardUI.UpdateSelectedPiece(currentSquare.currentPiece.type, currentSquare.currentPiece.isNavy);
                     }
 
                 // The same piece was clicked twice (cancel piece selection)
@@ -366,6 +368,8 @@ public class PPGameBoard : MonoBehaviour
                     squareSelected = false;
                     tileSelected = null;
                     selectedCellIndex = -1;
+
+                    boardUI.HideSelectedPiece();
 
                 // A legal placement square has been selected (spawn the selected piece there)
                 } 
@@ -451,6 +455,8 @@ public class PPGameBoard : MonoBehaviour
                     tileSelected = null;
                     squareSelected = false;
                     selectedCellIndex = -1;
+
+                    boardUI.HideSelectedPiece();
 
                     if (oreSpawned)
                     {
