@@ -92,6 +92,7 @@ public class TTGameBoard : MonoBehaviour
                 break;
             case PieceType.Gunner:
                 Debug.Log("Testing Gunner");
+                StartCoroutine(TestGunner());
                 break;
             case PieceType.Cannon:
                 Debug.Log("Testing Cannon");
