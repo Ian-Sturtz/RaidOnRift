@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 public class Mate : Piece
 {
     public bool superPowered = false;
+    [SerializeField] private GameObject PieceImage;
+    [SerializeField] private Sprite regularSprite;
+    [SerializeField] private Sprite superpoweredSprite;
 
     protected override void Update()
     {
@@ -13,6 +16,11 @@ public class Mate : Piece
             superPowered = true;
         else if (!isNavy && currentY == 0)
             superPowered = true;
+
+        if (superPowered)
+            PieceImage.GetComponent<SpriteRenderer>().sprite = superpoweredSprite;
+        else
+            PieceImage.GetComponent<SpriteRenderer>().sprite = regularSprite;
     }
 
     public int[,] GetValidMoves(GameObject[,] tiles)

@@ -832,6 +832,7 @@ public class GameBoard : MonoBehaviour
             // Corsair jumping requires 2 turns of cooldown before the next jump
             if (currentPiece.type == PieceType.Royal2 && !currentPiece.isNavy)
                 jumpCooldown = 3;
+                // Corsair jump sound
             // Tactician inherits a corsair
             else
             {

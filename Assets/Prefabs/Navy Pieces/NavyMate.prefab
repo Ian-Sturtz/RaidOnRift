@@ -112,6 +112,9 @@ MonoBehaviour:
   currentY: -1
   flashDelay: 1
   superPowered: 0
+  PieceImage: {fileID: 7053664756983758090}
+  regularSprite: {fileID: 21300000, guid: 7ef8eb4b5c0f6d6469f751af04d0091b, type: 3}
+  superpoweredSprite: {fileID: 21300000, guid: 945f6aeb4a5fc014bb436118710d6b1a, type: 3}
 --- !u!1 &7053664756983758090
 GameObject:
   m_ObjectHideFlags: 0
