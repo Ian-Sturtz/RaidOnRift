@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum PieceType
 {
@@ -163,17 +163,33 @@ public class Piece : MonoBehaviour
                 }
             }
         }
-
-        // For all squares +/- 1 away from current position
-        for (int x_change = -1; x_change < 2; x_change++)
+        if(SceneManager.GetActiveScene().name == "Board")
         {
-            for (int y_change = -1; y_change < 2; y_change++)
+            // For all squares +/- 1 away from current position
+            for (int x_change = -1; x_change < 2; x_change++)
             {
-                if (IsSquareOnBoard(squareX + x_change, squareY + y_change))
-                    if(tiles[squareX + x_change, squareY + y_change].GetComponent<Square>().currentPiece == null)
-                        moveAssessment[squareX + x_change, squareY + y_change] = 7;
+                for (int y_change = -1; y_change < 2; y_change++)
+                {
+                    if (IsSquareOnBoard(squareX + x_change, squareY + y_change))
+                        if(tiles[squareX + x_change, squareY + y_change].GetComponent<Square>().currentPiece == null)
+                            moveAssessment[squareX + x_change, squareY + y_change] = 7;
+                }
             }
         }
+        else
+        {
+            // For all squares +/- 1 away from current position
+            for (int x_change = -1; x_change < 2; x_change++)
+            {
+                for (int y_change = -1; y_change < 2; y_change++)
+                {
+                    if (IsSquareOnBoard(squareX + x_change, squareY + y_change))
+                        if (tiles[squareX + x_change, squareY + y_change].GetComponent<TTSquare>().currentPiece == null)
+                            moveAssessment[squareX + x_change, squareY + y_change] = 7;
+                }
+            }
+        }
+
 
         moveAssessment[squareX, squareY] = 0;
 

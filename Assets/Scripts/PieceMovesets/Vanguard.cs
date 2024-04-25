@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Vanguard : Piece
 {
@@ -24,39 +23,82 @@ public class Vanguard : Piece
                 if (IsSquareOnBoard(currentX + i, currentY + j))
                     moveAssessment[currentX + i, currentY + j] = 1;
 
-        for (int change = 1; right || left; change++)
+        if (SceneManager.GetActiveScene().name == "Board")
         {
-            if (right)
+            for (int change = 1; right || left; change++)
             {
-                if (IsSquareOnBoard(currentX + change, currentY))
+                if (right)
                 {
-                    moveAssessment[currentX + change, currentY] = 1;
+                    if (IsSquareOnBoard(currentX + change, currentY))
+                    {
+                        moveAssessment[currentX + change, currentY] = 1;
 
-                    if (tiles[currentX + change, currentY].GetComponent<Square>().currentPiece != null)
+                        if (tiles[currentX + change, currentY].GetComponent<Square>().currentPiece != null)
+                        {
+                            right = false;
+                        }
+                    }
+                    else
                     {
                         right = false;
                     }
                 }
-                else
-                {
-                    right = false;
-                }
-            }
 
-            if (left)
-            {
-                if (IsSquareOnBoard(currentX - change, currentY))
+                if (left)
                 {
-                    moveAssessment[currentX - change, currentY] = 1;
+                    if (IsSquareOnBoard(currentX - change, currentY))
+                    {
+                        moveAssessment[currentX - change, currentY] = 1;
 
-                    if (tiles[currentX - change, currentY].GetComponent<Square>().currentPiece != null)
+                        if (tiles[currentX - change, currentY].GetComponent<Square>().currentPiece != null)
+                        {
+                            left = false;
+                        }
+                    }
+                    else
                     {
                         left = false;
                     }
                 }
-                else
+            }
+        }
+        // Tutorial scene
+        else
+        {
+            for (int change = 1; right || left; change++)
+            {
+                if (right)
                 {
-                    left = false;
+                    if (IsSquareOnBoard(currentX + change, currentY))
+                    {
+                        moveAssessment[currentX + change, currentY] = 1;
+
+                        if (tiles[currentX + change, currentY].GetComponent<TTSquare>().currentPiece != null)
+                        {
+                            right = false;
+                        }
+                    }
+                    else
+                    {
+                        right = false;
+                    }
+                }
+
+                if (left)
+                {
+                    if (IsSquareOnBoard(currentX - change, currentY))
+                    {
+                        moveAssessment[currentX - change, currentY] = 1;
+
+                        if (tiles[currentX - change, currentY].GetComponent<TTSquare>().currentPiece != null)
+                        {
+                            left = false;
+                        }
+                    }
+                    else
+                    {
+                        left = false;
+                    }
                 }
             }
         }
