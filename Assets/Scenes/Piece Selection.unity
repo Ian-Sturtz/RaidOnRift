@@ -3109,15 +3109,15 @@ MonoBehaviour:
   pirateInfoText: {fileID: 1818662637}
   navyVideo: {fileID: 1852501863}
   pirateVideo: {fileID: 1364201065}
-  royal1Points: 22
-  royal2Points: 16
-  matePoints: 1
+  royal1Points: 25
+  royal2Points: 20
+  matePoints: 2
   quartermasterPoints: 7
-  cannonPoints: 7
-  bomberPoints: 3
-  vanguardPoints: 6
-  navigatorPoints: 5
-  gunnerPoints: 7
+  cannonPoints: 8
+  bomberPoints: 7
+  vanguardPoints: 5
+  navigatorPoints: 8
+  gunnerPoints: 9
   maxPoints: 100
   maxRoyals: 1
   maxArmy: 2
