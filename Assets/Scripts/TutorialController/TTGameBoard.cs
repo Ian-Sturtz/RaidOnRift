@@ -221,13 +221,13 @@ public class TTGameBoard : MonoBehaviour
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 7, 3);
         PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 5, 0);
         PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 5);
-        PiratePieces[4] = SpawnPiece(PieceType.LandMine, false, 6, 6);
+        PiratePieces[4] = SpawnPiece(PieceType.LandMine, false, 6, 5);
 
         NavyPieces[0] = SpawnPiece(PieceType.Mate, true, 8, 7);
         NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 2, 8);
         NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 6, 9);
         NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 3, 5);
-        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 5, 5);
+        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 5, 4);
 
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
@@ -287,8 +287,11 @@ public class TTGameBoard : MonoBehaviour
                 if (moveAssessment[x, y] == 1)
                 {
                     TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
-                    tiles[x, y].tag = "MoveableSquare";
-                    moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    if(moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
                 }
 
                 if (moveAssessment[x, y] == 8)
@@ -301,7 +304,7 @@ public class TTGameBoard : MonoBehaviour
         tiles[6, 7].tag = "CaptureSquare";
         tiles[6, 7].GetComponent<TTSquare>().SetMaterial(currentSquare.enemyBoardMaterial);
 
-        boardUI.PieceDisplayDescription("The Corsair can move up to 2 open squares diagonally without effort.");
+        boardUI.PieceDisplayDescription("The Corsair can move any open distance diagonally without effort.");
         boardUI.PieceDisplayDescription("\nShe can also jump to any square on the board that doesn't have anyone else there, but this takes a lot of effort so she can't do it all the time.", true);
         boardUI.PieceDisplayDescription("\nClick on the red square in the upper corner to jump the Corsair there.", true);
 

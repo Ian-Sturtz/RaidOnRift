@@ -40,19 +40,15 @@ public class Cannon : Piece
                     {
                         up = false;
 
-                        // It is an enemy piece
-                        if (isNavy != possibleSquare.currentPiece.isNavy || possibleSquare.currentPiece.type == PieceType.LandMine)
+                        if (IsSquareOnBoard(currentX, currentY + change + 1))
                         {
-                            if(IsSquareOnBoard(currentX, currentY + change + 1))
-                            {
-                                Square possibleDestination = tiles[currentX, currentY + change + 1].GetComponent<Square>();
+                            Square possibleDestination = tiles[currentX, currentY + change + 1].GetComponent<Square>();
 
-                                // There is an appropriate square to jump into
-                                if (possibleDestination.currentPiece == null)
-                                {
-                                    moveAssessment[currentX, currentY + change] = 4;
-                                    moveAssessment[currentX, currentY + change + 1] = 5;
-                                }
+                            // There is an appropriate square to jump into
+                            if (possibleDestination.currentPiece == null)
+                            {
+                                moveAssessment[currentX, currentY + change] = 4;
+                                moveAssessment[currentX, currentY + change + 1] = 5;
                             }
                         }
                     }
@@ -75,19 +71,15 @@ public class Cannon : Piece
                     {
                         down = false;
 
-                        // It is an enemy piece
-                        if (isNavy != possibleSquare.currentPiece.isNavy || possibleSquare.currentPiece.type == PieceType.LandMine)
+                        if (IsSquareOnBoard(currentX, currentY - change - 1))
                         {
-                            if (IsSquareOnBoard(currentX, currentY - change - 1))
-                            {
-                                Square possibleDestination = tiles[currentX, currentY - change - 1].GetComponent<Square>();
+                            Square possibleDestination = tiles[currentX, currentY - change - 1].GetComponent<Square>();
 
-                                // There is an appropriate square to jump into
-                                if (possibleDestination.currentPiece == null)
-                                {
-                                    moveAssessment[currentX, currentY - change] = 4;
-                                    moveAssessment[currentX, currentY - change - 1] = 5;
-                                }
+                            // There is an appropriate square to jump into
+                            if (possibleDestination.currentPiece == null)
+                            {
+                                moveAssessment[currentX, currentY - change] = 4;
+                                moveAssessment[currentX, currentY - change - 1] = 5;
                             }
                         }
                     }
@@ -110,19 +102,15 @@ public class Cannon : Piece
                     {
                         left = false;
 
-                        // It is an enemy piece
-                        if (isNavy != possibleSquare.currentPiece.isNavy || possibleSquare.currentPiece.type == PieceType.LandMine)
+                        if (IsSquareOnBoard(currentX - change - 1, currentY))
                         {
-                            if (IsSquareOnBoard(currentX - change - 1, currentY))
-                            {
-                                Square possibleDestination = tiles[currentX - change - 1, currentY].GetComponent<Square>();
+                            Square possibleDestination = tiles[currentX - change - 1, currentY].GetComponent<Square>();
 
-                                // There is an appropriate square to jump into
-                                if (possibleDestination.currentPiece == null)
-                                {
-                                    moveAssessment[currentX - change, currentY] = 4;
-                                    moveAssessment[currentX - change - 1, currentY] = 5;
-                                }
+                            // There is an appropriate square to jump into
+                            if (possibleDestination.currentPiece == null)
+                            {
+                                moveAssessment[currentX - change, currentY] = 4;
+                                moveAssessment[currentX - change - 1, currentY] = 5;
                             }
                         }
                     }
@@ -145,19 +133,15 @@ public class Cannon : Piece
                     {
                         right = false;
 
-                        // It is an enemy piece or a Land Mine
-                        if (isNavy != possibleSquare.currentPiece.isNavy || possibleSquare.currentPiece.type == PieceType.LandMine)
+                        if (IsSquareOnBoard(currentX + change + 1, currentY))
                         {
-                            if (IsSquareOnBoard(currentX + change + 1, currentY))
-                            {
-                                Square possibleDestination = tiles[currentX + change + 1, currentY].GetComponent<Square>();
+                            Square possibleDestination = tiles[currentX + change + 1, currentY].GetComponent<Square>();
 
-                                // There is an appropriate square to jump into
-                                if (possibleDestination.currentPiece == null)
-                                {
-                                    moveAssessment[currentX + change, currentY] = 4;
-                                    moveAssessment[currentX + change + 1, currentY] = 5;
-                                }
+                            // There is an appropriate square to jump into
+                            if (possibleDestination.currentPiece == null)
+                            {
+                                moveAssessment[currentX + change, currentY] = 4;
+                                moveAssessment[currentX + change + 1, currentY] = 5;
                             }
                         }
                     }

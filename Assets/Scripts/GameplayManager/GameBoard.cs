@@ -1574,11 +1574,12 @@ public class GameBoard : MonoBehaviour
                 // Square contains a capturable peice by jumping
                 else if(moveAssessment[x,y] == 4)
                 {
+                    Square activeSquare = tiles[x, y].GetComponent<Square>();
+
                     // Cannon can jump a Land Mine but not capture it
-                    if (tiles[x, y].GetComponent<Square>().currentPiece.type != PieceType.LandMine)
+                    if (activeSquare.currentPiece.type != PieceType.LandMine && activeSquare.currentPiece.isNavy != piece.isNavy)
                     {
                         tiles[x, y].tag = "CannonTarget";
-                        Square activeSquare = tiles[x, y].GetComponent<Square>();
                         activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
                         cannonTarget = true;
                     }

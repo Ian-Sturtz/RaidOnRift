@@ -10048,7 +10048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bar: {fileID: 118975436}
   timerText: {fileID: 696156987}
-  time: 60
+  time: 120
   timeOver: 0
 --- !u!1001 &523828691
 PrefabInstance:

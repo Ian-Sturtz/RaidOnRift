@@ -365,7 +365,7 @@ public class BoardUI : MonoBehaviour
                 else
                 {
                     pieceDisplayName.SetText("Corsair");
-                    pieceDescription.SetText("Moves up to two open squares diagonally, and captures by landing on an enemy. She can also jump to any open square on the board, but if she does, she can't jump on her next turn.");
+                    pieceDescription.SetText("Moves any open distance diagonally, and captures by landing on an enemy while moving this way. She can also jump to any open square on the board, but if she does, she can't jump on her next turn.");
                 }
                 break;
             case PieceType.Mate:
@@ -378,7 +378,7 @@ public class BoardUI : MonoBehaviour
                 break;
             case PieceType.Cannon:
                 pieceDisplayName.SetText("Cannon");
-                pieceDescription.SetText("Moves one open square in any direction, or captures by jumping over enemies. He can cross any open distance while jumping, but he needs space on the other side to land or else he can't make the jump. He can jump over Energy Shields like this, but can't capture them.");
+                pieceDescription.SetText("Moves one open square in any direction, or captures by jumping over enemies. He can cross any open distance while jumping, but he needs space on the other side to land or else he can't make the jump. He can jump over Energy Shields and allies like this, but doesn't capture them.");
                 break;
             case PieceType.Bomber:
                 pieceDisplayName.SetText("Engineer");

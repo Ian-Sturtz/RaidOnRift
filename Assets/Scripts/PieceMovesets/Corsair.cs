@@ -72,7 +72,7 @@ public class Corsair : Piece
                     }
                 }
             }
-            for (int i = 1; i <= 2; i++)
+            for (int i = 1; i <= 9; i++)
             {
 
                 // Upper Right
@@ -150,7 +150,7 @@ public class Corsair : Piece
                     }
                 }
             }
-            for (int i = 1; i <= 2; i++)
+            for (int i = 1; i <= 9; i++)
             {
 
                 // Upper Right
