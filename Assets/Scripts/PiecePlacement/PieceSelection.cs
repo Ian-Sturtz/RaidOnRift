@@ -69,15 +69,15 @@ public class PieceSelection : MonoBehaviour
     #endregion
 
     #region Point Values/Info
-    [SerializeField] private int royal1Points = 22;
-    [SerializeField] private int royal2Points = 16;
-    [SerializeField] private int matePoints = 1;
+    [SerializeField] private int royal1Points = 25;
+    [SerializeField] private int royal2Points = 20;
+    [SerializeField] private int matePoints = 2;
     [SerializeField] private int quartermasterPoints = 7;
-    [SerializeField] private int cannonPoints = 7;
-    [SerializeField] private int bomberPoints = 3;
-    [SerializeField] private int vanguardPoints = 6;
-    [SerializeField] private int navigatorPoints = 5;
-    [SerializeField] private int gunnerPoints = 7;
+    [SerializeField] private int cannonPoints = 8;
+    [SerializeField] private int bomberPoints = 7;
+    [SerializeField] private int vanguardPoints = 5;
+    [SerializeField] private int navigatorPoints = 8;
+    [SerializeField] private int gunnerPoints = 9;
 
     [SerializeField] private int maxPoints = 100;
     [SerializeField] private int maxRoyals = 1;

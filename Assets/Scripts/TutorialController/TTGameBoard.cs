@@ -232,7 +232,7 @@ public class TTGameBoard : MonoBehaviour
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
 
-        string tutorialHeader = "Corsair - 16 Points";
+        string tutorialHeader = "Corsair - 20 Points";
         boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Corsair.\n\nClick anywhere to continue.");
 
         while (true)
@@ -542,7 +542,7 @@ public class TTGameBoard : MonoBehaviour
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
 
-        string tutorialHeader = "Gunner - 7 Points";
+        string tutorialHeader = "Gunner - 9 Points";
         boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Gunner.\n\nClick anywhere to continue.");
 
         while (true)
@@ -1354,7 +1354,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.UpdateTurn(false);
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
-        string tutorialHeader = "Captain - 22 Points";
+        string tutorialHeader = "Captain - 25 Points";
         boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Captain.\n\nClick anywhere to continue.");
 
         PiratePieces[0] = SpawnPiece(PieceType.Royal1, false, 4, 5);
@@ -1726,7 +1726,7 @@ public class TTGameBoard : MonoBehaviour
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
 
-        string tutorialHeader = "Navigator - 5 Points";
+        string tutorialHeader = "Navigator - 7 Points";
         boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Navigator.\n\nClick anywhere to continue.");
 
         while (true)
@@ -2085,7 +2085,7 @@ public class TTGameBoard : MonoBehaviour
     IEnumerator TestAdmiral()
     {
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
-        string tutorialHeader = "Admiral - 22 Points";
+        string tutorialHeader = "Admiral - 25 Points";
         boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Admiral.\n\nClick anywhere to continue.");
 
         NavyPieces[0] = SpawnPiece(PieceType.Royal1, true, 5, 4);
@@ -2394,7 +2394,7 @@ public class TTGameBoard : MonoBehaviour
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
 
-        string tutorialHeader = "Vanguard - 6 Points";
+        string tutorialHeader = "Vanguard - 5 Points";
         boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Vanguard.\n\nClick anywhere to continue.");
 
         while (true)
@@ -2661,7 +2661,7 @@ public class TTGameBoard : MonoBehaviour
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
 
-        string tutorialHeader = "Mate - 1 Point";
+        string tutorialHeader = "Mate - 2 Points";
         boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Mate.\n\nClick anywhere to continue.");
 
         while (true)
