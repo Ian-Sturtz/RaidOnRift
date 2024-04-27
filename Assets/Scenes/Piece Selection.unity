@@ -1188,15 +1188,15 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 864e43e5316a55a4abe52fda7cf3ef96, type: 3}
     - target: {fileID: 770185425126709553, guid: 681faaa2c6873464eb15e4e652d7c520, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.8415094
       objectReference: {fileID: 0}
     - target: {fileID: 770185425126709553, guid: 681faaa2c6873464eb15e4e652d7c520, type: 3}
       propertyPath: m_Color.g
-      value: 0.9254902
+      value: 0.77709806
       objectReference: {fileID: 0}
     - target: {fileID: 770185425126709553, guid: 681faaa2c6873464eb15e4e652d7c520, type: 3}
       propertyPath: m_Color.r
-      value: 0.85490197
+      value: 0.71607685
       objectReference: {fileID: 0}
     - target: {fileID: 1902253340396675650, guid: 681faaa2c6873464eb15e4e652d7c520, type: 3}
       propertyPath: mySounds
@@ -3932,7 +3932,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5/100
+  m_text: 10/100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
   m_sharedMaterial: {fileID: 2383952268681313545, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
@@ -4134,7 +4134,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5/100
+  m_text: 10/100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
   m_sharedMaterial: {fileID: 2383952268681313545, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
@@ -9563,15 +9563,15 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 945f6aeb4a5fc014bb436118710d6b1a, type: 3}
     - target: {fileID: 770185425126709553, guid: 681faaa2c6873464eb15e4e652d7c520, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.8415094
       objectReference: {fileID: 0}
     - target: {fileID: 770185425126709553, guid: 681faaa2c6873464eb15e4e652d7c520, type: 3}
       propertyPath: m_Color.g
-      value: 0.9254902
+      value: 0.77709806
       objectReference: {fileID: 0}
     - target: {fileID: 770185425126709553, guid: 681faaa2c6873464eb15e4e652d7c520, type: 3}
       propertyPath: m_Color.r
-      value: 0.85490197
+      value: 0.71607685
       objectReference: {fileID: 0}
     - target: {fileID: 1902253340396675650, guid: 681faaa2c6873464eb15e4e652d7c520, type: 3}
       propertyPath: mySounds

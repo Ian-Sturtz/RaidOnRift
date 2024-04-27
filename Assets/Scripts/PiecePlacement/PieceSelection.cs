@@ -6,6 +6,7 @@ using Unity.Networking.Transport;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class PieceSelection : MonoBehaviour
@@ -17,7 +18,7 @@ public class PieceSelection : MonoBehaviour
     
     private int royal1 = 0;
     private int royal2 = 0;
-    private int mate = 5;
+    private int mate = 0;
     private int quartermaster = 0;
     private int cannon = 0;
     private int bomber = 0;
@@ -25,7 +26,7 @@ public class PieceSelection : MonoBehaviour
     private int navigator = 0;
     private int gunner = 0;
 
-    private int totalPoints = 5;
+    private int totalPoints = 0;
 
     [SerializeField] private int navyTotal = 0;
     [SerializeField] private int pirateTotal = 0;
@@ -89,6 +90,8 @@ public class PieceSelection : MonoBehaviour
 
     private void Start()
     {
+        mate = minPeasants;
+        totalPoints = mate * matePoints;
         videoManager = this.GetComponent<VideoManager>();
 
         if(MultiplayerController.Instance != null)
@@ -122,9 +125,98 @@ public class PieceSelection : MonoBehaviour
 
     private void Update()
     {
+        // Greys out buttons
+        GameObject[] plus = GameObject.FindGameObjectsWithTag("Plus");
+        GameObject[] minus = GameObject.FindGameObjectsWithTag("Minus");
+
+        foreach (GameObject p in plus)
+        {
+            switch (p.transform.parent.gameObject.name)
+            {
+                case "Select Royal1":
+                    if((totalPoints + royal1Points > maxPoints) || (royal1 >= maxRoyals)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Royal2":
+                    if ((totalPoints + royal2Points > maxPoints) || (royal2 >= maxRoyals)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Mate":
+                    if ((totalPoints + matePoints > maxPoints) || (mate >= maxPeasants)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Quartermaster":
+                    if ((totalPoints + quartermasterPoints > maxPoints) || (quartermaster >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Cannon":
+                    if ((totalPoints + cannonPoints > maxPoints) || (cannon >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Engineer":
+                    if ((totalPoints + bomberPoints > maxPoints) || (bomber >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Vanguard":
+                    if ((totalPoints + vanguardPoints > maxPoints) || (vanguard >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Navigator":
+                    if ((totalPoints + navigatorPoints > maxPoints) || (navigator >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Gunner":
+                    if ((totalPoints + gunnerPoints > maxPoints) || (gunner >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+            }
+        }
+        foreach (GameObject m in minus)
+        {
+            switch (m.transform.parent.gameObject.name)
+            {
+                case "Select Royal1":
+                    if (royal1 <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Royal2":
+                    if (royal2 <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Mate":
+                    if (mate <= minPeasants) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Quartermaster":
+                    if (quartermaster <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Cannon":
+                    if (cannon <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Engineer":
+                    if (bomber <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Vanguard":
+                    if (vanguard <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Navigator":
+                    if (navigator <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Gunner":
+                    if (gunner <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+            }
+        }
+
         // An online game is running and both teams have confirmed their pieces
         // It's time to move onto the next scene
-        if(PieceManager.instance.onlineMultiplayer && navyTotal > 0 && pirateTotal > 0)
+        if (PieceManager.instance.onlineMultiplayer && navyTotal > 0 && pirateTotal > 0)
         {
             timer.stopTimer();
 
@@ -392,7 +484,7 @@ public class PieceSelection : MonoBehaviour
             {
                 royal1 = 0;
                 royal2 = 0;
-                mate = 5;
+                mate = minPeasants;
                 quartermaster = 0;
                 cannon = 0;
                 bomber = 0;
@@ -400,7 +492,7 @@ public class PieceSelection : MonoBehaviour
                 navigator = 0;
                 gunner = 0;
 
-                totalPoints = 5;
+                totalPoints = mate * matePoints;
 
                 navySelecting = !navySelecting;
 
@@ -486,7 +578,7 @@ public class PieceSelection : MonoBehaviour
         }
         if (name == "Select Mate")
         {
-            topText.SetText("Mate [" + matePoints + " point]");
+            topText.SetText("Mate [" + matePoints + " points]");
             infoText.SetText("Moves one square in any direction, but cannot move backwards unless he's captured an enemy piece. He captures by landing on an enemy. Get him across the board and see how strong this unassuming crewmate can become...");
             videoPlayer.clip = videoManager.mate;
         }
