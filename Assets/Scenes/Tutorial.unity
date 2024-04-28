@@ -2932,6 +2932,11 @@ MonoBehaviour:
   tile_size: 1
   tile_size_margins: 1.05
   game_board_size: 10.55
+  boardEdges:
+  - {fileID: 1112814421}
+  - {fileID: 1791826536}
+  NavyEdges: {fileID: 2100000, guid: 5b25276e2e49d9343b15e55b5e948579, type: 2}
+  PirateEdges: {fileID: 2100000, guid: a7341348f9185494fac194a9a8543f4e, type: 2}
   JailCells: {fileID: 653487867}
   jail: {fileID: 653487870}
   teamSize: 30
@@ -2939,6 +2944,10 @@ MonoBehaviour:
   squareSelected: 0
   tileSelected: {fileID: 0}
   storedTileSelected: {fileID: 0}
+  tacticianSelected: 0
+  tacticianInheritSelected: 0
+  tacticianGunnerCapture: 0
+  tacticianCorsairJump: 0
   PiecePrefabs:
   - {fileID: 6887330558775533615, guid: f001947424947804da43bca6d72c7ef0, type: 3}
   - {fileID: 2119935833039630825, guid: 178bfac06b4641441b24f40d8dc05b36, type: 3}
@@ -5063,8 +5072,10 @@ MonoBehaviour:
   board: {fileID: 0}
   NavyJailCells: []
   PirateJailCells: []
+  TacticianMimicCells: []
   navyJailedPieces: []
   pirateJailedPieces: []
+  tacticianMimicPieces: []
 --- !u!1 &654703280
 GameObject:
   m_ObjectHideFlags: 0
@@ -8623,7 +8634,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -13561,7 +13572,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -13997,10 +14008,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1720015089}
-        m_TargetAssemblyTypeName: ButtonController, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 5
+      - m_Target: {fileID: 364305081}
+        m_TargetAssemblyTypeName: TTGameBoard, Assembly-CSharp
+        m_MethodName: ExitTutorial
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

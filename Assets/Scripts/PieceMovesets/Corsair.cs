@@ -19,7 +19,7 @@ public class Corsair : Piece
 
         board = GameBoard.GetComponent<GameBoard>();
 
-        if (board == null)
+        if (board == null || SceneManager.GetActiveScene().name == "Tutorial")
         {
             pieceSelectionScene = true;
         }

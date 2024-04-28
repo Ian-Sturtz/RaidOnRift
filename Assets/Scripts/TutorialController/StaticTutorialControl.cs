@@ -6,4 +6,5 @@ public static class StaticTutorialControl
 {
     public static PieceType piece { set; get; }
     public static bool isNavy { set; get; }
+    public static bool cameFromStoryScene { set; get; }
 }

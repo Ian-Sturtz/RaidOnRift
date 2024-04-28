@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Bomber : Piece
 {
@@ -43,204 +44,413 @@ public class Bomber : Piece
         bool down_right = true;
         bool down_left = true;
 
-        for (int change = 1; (up || down || left || right || up_right || up_left || down_right || down_left) && change <= 2; change++)
+        if (SceneManager.GetActiveScene().name == "Board")
         {
-            if (up)
+            for (int change = 1; (up || down || left || right || up_right || up_left || down_right || down_left) && change <= 2; change++)
             {
-                if (IsSquareOnBoard(currentX, currentY + change))
+                if (up)
                 {
-                    moveAssessment[currentX, currentY + change] = 1;
+                    if (IsSquareOnBoard(currentX, currentY + change))
+                    {
+                        moveAssessment[currentX, currentY + change] = 1;
 
-                    Square possibleSquare = tiles[currentX, currentY + change].GetComponent<Square>();
-                    if (possibleSquare.currentPiece != null)
+                        Square possibleSquare = tiles[currentX, currentY + change].GetComponent<Square>();
+                        if (possibleSquare.currentPiece != null)
+                        {
+                            up = false;
+                            if(possibleSquare.currentPiece.type != PieceType.LandMine){
+                                if(!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX, currentY + change] = -1;
+                                }
+                            }
+                        }
+                    }
+                    else
                     {
                         up = false;
-                        if(possibleSquare.currentPiece.type != PieceType.LandMine){
-                            if(!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                    }
+                }
+
+                if (down)
+                {
+                    if (IsSquareOnBoard(currentX, currentY - change))
+                    {
+                        moveAssessment[currentX, currentY - change] = 1;
+
+                        Square possibleSquare = tiles[currentX, currentY - change].GetComponent<Square>();
+                        if (possibleSquare.currentPiece != null)
+                        {
+                            down = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
                             {
-                                moveAssessment[currentX, currentY + change] = -1;
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX, currentY - change] = -1;
+                                }
                             }
                         }
                     }
-                }
-                else
-                {
-                    up = false;
-                }
-            }
-
-            if (down)
-            {
-                if (IsSquareOnBoard(currentX, currentY - change))
-                {
-                    moveAssessment[currentX, currentY - change] = 1;
-
-                    Square possibleSquare = tiles[currentX, currentY - change].GetComponent<Square>();
-                    if (possibleSquare.currentPiece != null)
+                    else
                     {
                         down = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                    }
+                }
+
+                if (right)
+                {
+                    if (IsSquareOnBoard(currentX + change, currentY))
+                    {
+                        moveAssessment[currentX + change, currentY] = 1;
+
+                        Square possibleSquare = tiles[currentX + change, currentY].GetComponent<Square>();
+                        if (possibleSquare.currentPiece != null)
                         {
-                            if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                            right = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
                             {
-                                moveAssessment[currentX, currentY - change] = -1;
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX + change, currentY] = -1;
+                                }
                             }
                         }
                     }
-                }
-                else
-                {
-                    down = false;
-                }
-            }
-
-            if (right)
-            {
-                if (IsSquareOnBoard(currentX + change, currentY))
-                {
-                    moveAssessment[currentX + change, currentY] = 1;
-
-                    Square possibleSquare = tiles[currentX + change, currentY].GetComponent<Square>();
-                    if (possibleSquare.currentPiece != null)
+                    else
                     {
                         right = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                    }
+                }
+
+                if (left)
+                {
+                    if (IsSquareOnBoard(currentX - change, currentY))
+                    {
+                        moveAssessment[currentX - change, currentY] = 1;
+
+                        Square possibleSquare = tiles[currentX - change, currentY].GetComponent<Square>();
+                        if (possibleSquare.currentPiece != null)
                         {
-                            if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                            left = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
                             {
-                                moveAssessment[currentX + change, currentY] = -1;
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX - change, currentY] = -1;
+                                }
                             }
                         }
                     }
-                }
-                else
-                {
-                    right = false;
-                }
-            }
-
-            if (left)
-            {
-                if (IsSquareOnBoard(currentX - change, currentY))
-                {
-                    moveAssessment[currentX - change, currentY] = 1;
-
-                    Square possibleSquare = tiles[currentX - change, currentY].GetComponent<Square>();
-                    if (possibleSquare.currentPiece != null)
+                    else
                     {
                         left = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                    }
+                }
+
+                if (up_right)
+                {
+                    if (IsSquareOnBoard(currentX + change, currentY + change))
+                    {
+                        moveAssessment[currentX + change, currentY + change] = 1;
+
+                        Square possibleSquare = tiles[currentX + change, currentY + change].GetComponent<Square>();
+                        if (possibleSquare.currentPiece != null)
                         {
-                            if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                            up_right = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
                             {
-                                moveAssessment[currentX - change, currentY] = -1;
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX + change, currentY + change] = -1;
+                                }
                             }
                         }
                     }
-                }
-                else
-                {
-                    left = false;
-                }
-            }
-
-            if (up_right)
-            {
-                if (IsSquareOnBoard(currentX + change, currentY + change))
-                {
-                    moveAssessment[currentX + change, currentY + change] = 1;
-
-                    Square possibleSquare = tiles[currentX + change, currentY + change].GetComponent<Square>();
-                    if (possibleSquare.currentPiece != null)
+                    else
                     {
                         up_right = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                    }
+                }
+
+                if (up_left)
+                {
+                    if (IsSquareOnBoard(currentX - change, currentY + change))
+                    {
+                        moveAssessment[currentX - change, currentY + change] = 1;
+
+                        Square possibleSquare = tiles[currentX - change, currentY + change].GetComponent<Square>();
+                        if (possibleSquare.currentPiece != null)
                         {
-                            if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                            up_left = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
                             {
-                                moveAssessment[currentX + change, currentY + change] = -1;
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX - change, currentY + change] = -1;
+                                }
                             }
                         }
                     }
-                }
-                else
-                {
-                    up_right = false;
-                }
-            }
-
-            if (up_left)
-            {
-                if (IsSquareOnBoard(currentX - change, currentY + change))
-                {
-                    moveAssessment[currentX - change, currentY + change] = 1;
-
-                    Square possibleSquare = tiles[currentX - change, currentY + change].GetComponent<Square>();
-                    if (possibleSquare.currentPiece != null)
+                    else
                     {
                         up_left = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                    }
+                }
+
+                if (down_right)
+                {
+                    if (IsSquareOnBoard(currentX + change, currentY - change))
+                    {
+                        moveAssessment[currentX + change, currentY - change] = 1;
+
+                        Square possibleSquare = tiles[currentX + change, currentY - change].GetComponent<Square>();
+                        if (possibleSquare.currentPiece != null)
                         {
-                            if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                            down_right = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
                             {
-                                moveAssessment[currentX - change, currentY + change] = -1;
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX + change, currentY - change] = -1;
+                                }
                             }
                         }
                     }
-                }
-                else
-                {
-                    up_left = false;
-                }
-            }
-
-            if (down_right)
-            {
-                if (IsSquareOnBoard(currentX + change, currentY - change))
-                {
-                    moveAssessment[currentX + change, currentY - change] = 1;
-
-                    Square possibleSquare = tiles[currentX + change, currentY - change].GetComponent<Square>();
-                    if (possibleSquare.currentPiece != null)
+                    else
                     {
                         down_right = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                    }
+                }
+
+                if (down_left)
+                {
+                    if (IsSquareOnBoard(currentX - change, currentY - change))
+                    {
+                        moveAssessment[currentX - change, currentY - change] = 1;
+
+                        Square possibleSquare = tiles[currentX - change, currentY - change].GetComponent<Square>();
+                        if (possibleSquare.currentPiece != null)
                         {
-                            if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                            down_left = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
                             {
-                                moveAssessment[currentX + change, currentY - change] = -1;
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX - change, currentY - change] = -1;
+                                }
                             }
                         }
                     }
-                }
-                else
-                {
-                    down_right = false;
-                }
-            }
-
-            if (down_left)
-            {
-                if (IsSquareOnBoard(currentX - change, currentY - change))
-                {
-                    moveAssessment[currentX - change, currentY - change] = 1;
-
-                    Square possibleSquare = tiles[currentX - change, currentY - change].GetComponent<Square>();
-                    if (possibleSquare.currentPiece != null)
+                    else
                     {
                         down_left = false;
-                        if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                    }
+                }
+            }
+        }
+        // Tutorial scene
+        else
+        {
+            for (int change = 1; (up || down || left || right || up_right || up_left || down_right || down_left) && change <= 2; change++)
+            {
+                if (up)
+                {
+                    if (IsSquareOnBoard(currentX, currentY + change))
+                    {
+                        moveAssessment[currentX, currentY + change] = 1;
+
+                        TTSquare possibleSquare = tiles[currentX, currentY + change].GetComponent<TTSquare>();
+                        if (possibleSquare.currentPiece != null)
                         {
-                            if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                            up = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
                             {
-                                moveAssessment[currentX - change, currentY - change] = -1;
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX, currentY + change] = -1;
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        up = false;
+                    }
                 }
-                else
+
+                if (down)
                 {
-                    down_left = false;
+                    if (IsSquareOnBoard(currentX, currentY - change))
+                    {
+                        moveAssessment[currentX, currentY - change] = 1;
+
+                        TTSquare possibleSquare = tiles[currentX, currentY - change].GetComponent<TTSquare>();
+                        if (possibleSquare.currentPiece != null)
+                        {
+                            down = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                            {
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX, currentY - change] = -1;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        down = false;
+                    }
+                }
+
+                if (right)
+                {
+                    if (IsSquareOnBoard(currentX + change, currentY))
+                    {
+                        moveAssessment[currentX + change, currentY] = 1;
+
+                        TTSquare possibleSquare = tiles[currentX + change, currentY].GetComponent<TTSquare>();
+                        if (possibleSquare.currentPiece != null)
+                        {
+                            right = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                            {
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX + change, currentY] = -1;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        right = false;
+                    }
+                }
+
+                if (left)
+                {
+                    if (IsSquareOnBoard(currentX - change, currentY))
+                    {
+                        moveAssessment[currentX - change, currentY] = 1;
+
+                        TTSquare possibleSquare = tiles[currentX - change, currentY].GetComponent<TTSquare>();
+                        if (possibleSquare.currentPiece != null)
+                        {
+                            left = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                            {
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX - change, currentY] = -1;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        left = false;
+                    }
+                }
+
+                if (up_right)
+                {
+                    if (IsSquareOnBoard(currentX + change, currentY + change))
+                    {
+                        moveAssessment[currentX + change, currentY + change] = 1;
+
+                        TTSquare possibleSquare = tiles[currentX + change, currentY + change].GetComponent<TTSquare>();
+                        if (possibleSquare.currentPiece != null)
+                        {
+                            up_right = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                            {
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX + change, currentY + change] = -1;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        up_right = false;
+                    }
+                }
+
+                if (up_left)
+                {
+                    if (IsSquareOnBoard(currentX - change, currentY + change))
+                    {
+                        moveAssessment[currentX - change, currentY + change] = 1;
+
+                        TTSquare possibleSquare = tiles[currentX - change, currentY + change].GetComponent<TTSquare>();
+                        if (possibleSquare.currentPiece != null)
+                        {
+                            up_left = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                            {
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX - change, currentY + change] = -1;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        up_left = false;
+                    }
+                }
+
+                if (down_right)
+                {
+                    if (IsSquareOnBoard(currentX + change, currentY - change))
+                    {
+                        moveAssessment[currentX + change, currentY - change] = 1;
+
+                        TTSquare possibleSquare = tiles[currentX + change, currentY - change].GetComponent<TTSquare>();
+                        if (possibleSquare.currentPiece != null)
+                        {
+                            down_right = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                            {
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX + change, currentY - change] = -1;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        down_right = false;
+                    }
+                }
+
+                if (down_left)
+                {
+                    if (IsSquareOnBoard(currentX - change, currentY - change))
+                    {
+                        moveAssessment[currentX - change, currentY - change] = 1;
+
+                        TTSquare possibleSquare = tiles[currentX - change, currentY - change].GetComponent<TTSquare>();
+                        if (possibleSquare.currentPiece != null)
+                        {
+                            down_left = false;
+                            if (possibleSquare.currentPiece.type != PieceType.LandMine)
+                            {
+                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                {
+                                    moveAssessment[currentX - change, currentY - change] = -1;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        down_left = false;
+                    }
                 }
             }
         }

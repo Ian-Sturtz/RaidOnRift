@@ -495,8 +495,6 @@ public class GameBoard : MonoBehaviour
 
                         boardUI.HideSelectedPiece();
 
-
-
                         // Sends move data if online
                         if (PieceManager.instance.onlineMultiplayer)
                         {
