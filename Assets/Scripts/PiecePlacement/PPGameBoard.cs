@@ -46,6 +46,11 @@ public class PPGameBoard : MonoBehaviour
     [SerializeField] private bool pirateDone = true;
     [SerializeField] private bool piecesDone = false;
     [SerializeField] private bool oreSpawned = false;
+    
+    [SerializeField] private Material navyBoardSquares;
+    [SerializeField] private Material navyBoardSquaresOre;
+    [SerializeField] private Material pirateBoardSquares;
+    [SerializeField] private Material pirateBoardSquaresOre;
 
     public bool pieceMoving = false;
     private bool boardRotated = false;
@@ -481,6 +486,27 @@ public class PPGameBoard : MonoBehaviour
 
                 GameObject boardSquare = GameObject.Find(piecename);
 
+                if(y == 1)
+                {
+                    boardSquare.GetComponent<PPSquare>().SetMaterial(navyBoardSquaresOre);
+                    boardSquare.GetComponent<PPSquare>().defaultBoardMaterial = navyBoardSquaresOre;
+                }
+                else if (y == 2 || y == 3)
+                {
+                    boardSquare.GetComponent<PPSquare>().SetMaterial(navyBoardSquares);
+                    boardSquare.GetComponent<PPSquare>().defaultBoardMaterial = navyBoardSquares;
+                }
+                else if (y == 8 || y == 9)
+                {
+                    boardSquare.GetComponent<PPSquare>().SetMaterial(pirateBoardSquares);
+                    boardSquare.GetComponent<PPSquare>().defaultBoardMaterial = pirateBoardSquares;
+                }
+                else if (y == 10)
+                {
+                    boardSquare.GetComponent<PPSquare>().SetMaterial(pirateBoardSquaresOre);
+                    boardSquare.GetComponent<PPSquare>().defaultBoardMaterial = pirateBoardSquaresOre;
+                }
+
                 boardSquare.tag = "GameSquare";
                 
                 tiles[x - 1, y - 1] = boardSquare;
@@ -740,19 +766,28 @@ public class PPGameBoard : MonoBehaviour
             {
                 Debug.Log("Putting the navy at the bottom of the screen");
                 gameBoard.transform.Rotate(0f, 0f, -180f, Space.Self);
+                jail.transform.Rotate(0f, 0f, -180f, Space.Self);
 
                 for (int i = 0; i < teamSize; i++)
                 {
                     if (NavyPieces[i] != null)
                     {
-                        Debug.Log($"Rotated the {i}th piece");
                         NavyPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
                     }
 
                     if (PiratePieces[i] != null)
                     {
-                        Debug.Log($"Rotated the {i}th piece");
                         PiratePieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                    }
+
+                    if(jail.navyJailedPieces[i] != null)
+                    {
+                        jail.navyJailedPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                    }
+
+                    if(jail.pirateJailedPieces[i] != null)
+                    {
+                        jail.pirateJailedPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
                     }
                 }
 
@@ -765,6 +800,7 @@ public class PPGameBoard : MonoBehaviour
             {
                 Debug.Log("Putting the pirates at the bottom of the screen");
                 gameBoard.transform.Rotate(0f, 0f, 180f, Space.Self);
+                jail.transform.Rotate(0f, 0f, 180f, Space.Self);
 
                 for (int i = 0; i < teamSize; i++)
                 {
@@ -778,6 +814,16 @@ public class PPGameBoard : MonoBehaviour
                     {
                         Debug.Log($"Rotated the {i}th piece");
                         PiratePieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                    }
+
+                    if (jail.navyJailedPieces[i] != null)
+                    {
+                        jail.navyJailedPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                    }
+
+                    if (jail.pirateJailedPieces[i] != null)
+                    {
+                        jail.pirateJailedPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
                     }
                 }
 

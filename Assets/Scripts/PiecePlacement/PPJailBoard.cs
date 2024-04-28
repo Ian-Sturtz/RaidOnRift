@@ -132,7 +132,6 @@ public class PPJailBoard : MonoBehaviour
         }
 
         cp.transform.localScale *= jail_square_size;
-
         cp.type = type;
         cp.isNavy = isNavy;
 

@@ -41,7 +41,7 @@ public class PieceManager : MonoBehaviour
     {
         if (instance != null)
         {
-            if(SceneManager.GetActiveScene().name == "Board")
+            if(SceneManager.GetActiveScene().name == "Board" || SceneManager.GetActiveScene().name == "Piece Placement")
             {
                 Destroy(instance.gameObject);
                 return;

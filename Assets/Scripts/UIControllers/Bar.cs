@@ -23,7 +23,7 @@ public class Bar : MonoBehaviour
                 timerText.color = new UnityEngine.Color(0.4588234f, 0f, 0f, 1f);
         }
 
-        initialScale = bar.transform.localScale; 
+        initialScale = bar.transform.localScale;
         AnimateBar();
     }
 

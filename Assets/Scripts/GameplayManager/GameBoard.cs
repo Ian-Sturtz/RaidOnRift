@@ -40,7 +40,7 @@ public class GameBoard : MonoBehaviour
     BoardUI boardUI;
 
     public bool pieceMoving = false;
-    private bool boardRotated = false;
+    public bool boardRotated = false;
 
     #endregion
 
@@ -122,8 +122,9 @@ public class GameBoard : MonoBehaviour
 
     private void Awake()
     {
-        if (PieceManager.instance.onlineMultiplayer)
-            MultiplayerController.Instance.gameWon = -1;
+        if(PieceManager.instance != null)
+            if (PieceManager.instance.onlineMultiplayer)
+                MultiplayerController.Instance.gameWon = -1;
     }
 
     private void Start()
@@ -1854,7 +1855,7 @@ public class GameBoard : MonoBehaviour
                 gunnerLine.transform.Rotate(0f, 0f, -180f, Space.Self);
                 Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1) * -1;
                 gunnerParticles.GetComponent<Transform>().transform.position = targetPos;
-
+                jail.transform.Rotate(0f, 0f, -180f, Space.Self);
                 boardRotated = false;
 
                 for (int i = 0; i < teamSize; i++)
@@ -1868,11 +1869,20 @@ public class GameBoard : MonoBehaviour
                     {
                         PiratePieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
                     }
+
+                    if(jail.pirateJailedPieces[i] != null)
+                    {
+                        jail.pirateJailedPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                    }
+
+                    if(jail.navyJailedPieces[i] != null)
+                    {
+                        jail.navyJailedPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                    }
                 }
 
                 yield return new WaitForSeconds(0.5f);
                 gunnerLine.transform.Rotate(0f, 0f, 180f, Space.Self);
-
             }
         }
         else
@@ -1886,7 +1896,7 @@ public class GameBoard : MonoBehaviour
                 gunnerLine.transform.Rotate(0f, 0f, 180f, Space.Self);
                 Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1) * -1;
                 gunnerParticles.GetComponent<Transform>().transform.position = targetPos;
-
+                jail.transform.Rotate(0f, 0f, 180f, Space.Self);
                 boardRotated = true;
 
                 for (int i = 0; i < teamSize; i++)
@@ -1899,6 +1909,16 @@ public class GameBoard : MonoBehaviour
                     if (PiratePieces[i] != null)
                     {
                         PiratePieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                    }
+
+                    if (jail.pirateJailedPieces[i] != null)
+                    {
+                        jail.pirateJailedPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                    }
+
+                    if (jail.navyJailedPieces[i] != null)
+                    {
+                        jail.navyJailedPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
                     }
                 }
 

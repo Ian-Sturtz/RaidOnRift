@@ -224,6 +224,9 @@ public class JailBoard : MonoBehaviour
 
         cp.transform.localScale *= jail_square_size;
 
+        if (board.boardRotated)
+            cp.transform.Rotate(0f, 0f, 180f, Space.Self);
+
         cp.type = type;
         cp.isNavy = isNavy;
 
