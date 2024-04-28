@@ -452,7 +452,6 @@ public class BoardUI : MonoBehaviour
     {
         if (PieceManager.instance.onlineMultiplayer)
         {
-            MultiplayerController.Instance.gameWon = board.gameWon ? 1 : 0;
             SceneManager.LoadScene("Connection Dropped");
         }
 

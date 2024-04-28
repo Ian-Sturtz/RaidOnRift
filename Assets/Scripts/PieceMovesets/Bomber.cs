@@ -6,6 +6,24 @@ public class Bomber : Piece
 {
     public Piece capturedBomb = null;
 
+    [SerializeField] private SpriteRenderer PieceImage;
+    [SerializeField] private Sprite regularSprite;
+    [SerializeField] private Sprite capturedSprite;
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if (capturedBomb == null)
+        {
+            PieceImage.sprite = regularSprite;
+        }
+        else
+        {
+            PieceImage.sprite = capturedSprite;
+        }
+    }
+
     public int[,] GetValidMoves(GameObject[,] tiles, bool bombInJail = false)
     {
         int[,] moveAssessment;

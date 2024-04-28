@@ -6,6 +6,7 @@ public class Mate : Piece
     public bool superPowered = false;
     [SerializeField] private GameObject PieceImage;
     [SerializeField] private Sprite regularSprite;
+    [SerializeField] private Sprite capturedSprite;
     [SerializeField] private Sprite superpoweredSprite;
 
     protected override void Update()
@@ -20,6 +21,9 @@ public class Mate : Piece
         if (superPowered)
         {
             PieceImage.GetComponent<SpriteRenderer>().sprite = superpoweredSprite;
+        }else if (hasCaptured)
+        {
+            PieceImage.GetComponent<SpriteRenderer>().sprite = capturedSprite;
         }
     }
 

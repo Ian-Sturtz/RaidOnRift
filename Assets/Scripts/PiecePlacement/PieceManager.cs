@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PieceManager : MonoBehaviour
 {
     public static PieceManager instance;
     public bool isActive = false;
     public bool onlineMultiplayer = false;
+    public bool startingFromBoard = false;
 
     public int navyRoyal1;
     public int navyRoyal2;
@@ -39,8 +41,16 @@ public class PieceManager : MonoBehaviour
     {
         if (instance != null)
         {
-            Destroy(gameObject);
-            return;
+            if(SceneManager.GetActiveScene().name == "Board")
+            {
+                Destroy(instance.gameObject);
+                return;
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
 
         instance = this;

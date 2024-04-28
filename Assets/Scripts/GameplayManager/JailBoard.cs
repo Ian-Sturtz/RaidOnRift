@@ -119,7 +119,7 @@ public class JailBoard : MonoBehaviour
             cell.FlashMaterial(cell.clickedJailMaterial, 3);
     }
 
-    protected int FindFirstOpen(GameObject[] teamJailCell, bool tactician = false)
+    public int FindFirstOpen(GameObject[] teamJailCell, bool tactician = false)
     {
         GameObject cellBuffer;
 

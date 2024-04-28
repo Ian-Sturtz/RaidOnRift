@@ -40,6 +40,7 @@ public class GameBoard : MonoBehaviour
     BoardUI boardUI;
 
     public bool pieceMoving = false;
+    private bool boardRotated = false;
 
     #endregion
 
@@ -115,6 +116,7 @@ public class GameBoard : MonoBehaviour
 
     [SerializeField] private bool playerIsNavy;
     private bool[] playerRematch = new bool[2];
+    
 
     #endregion
 
@@ -910,6 +912,17 @@ public class GameBoard : MonoBehaviour
         }
 
         // Capture that Piece
+        int insertIndex;
+
+        if (capturedPiece.isNavy)
+        {
+            insertIndex = jail.FindFirstOpen(jail.PirateJailCells);
+        }
+        else
+        {
+            insertIndex = jail.FindFirstOpen(jail.NavyJailCells);
+        }
+
         jail.InsertAPiece(capturedPiece);
         capturedPiece.destroyPiece();
         currentPiece.hasCaptured = true;
@@ -917,15 +930,14 @@ public class GameBoard : MonoBehaviour
         // Links the engineer with his captured shield
         if (capturedPiece.type == PieceType.LandMine && currentPiece.type == PieceType.Bomber)
         {
-            int bombJailIndex = jail.FindLastSlot(!currentPiece.isNavy);
-            Debug.Log(bombJailIndex);
+            Debug.Log(insertIndex);
             if (currentPiece.isNavy)
             {
-                currentPiece.GetComponent<Bomber>().capturedBomb = jail.pirateJailedPieces[bombJailIndex];
+                currentPiece.GetComponent<Bomber>().capturedBomb = jail.pirateJailedPieces[insertIndex];
             }
             else
             {
-                currentPiece.GetComponent<Bomber>().capturedBomb = jail.navyJailedPieces[bombJailIndex];
+                currentPiece.GetComponent<Bomber>().capturedBomb = jail.navyJailedPieces[insertIndex];
             }
             engineerDrill.Play();
         }
@@ -1124,9 +1136,9 @@ public class GameBoard : MonoBehaviour
             if(PieceManager.instance.onlineMultiplayer && !playerIsNavy)
             {
                 if (deployPieceType == 0)
-                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y, true);
+                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y);
                 else
-                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.Ore, true, deployCoordinates.x, deployCoordinates.y, true);
+                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.Ore, true, deployCoordinates.x, deployCoordinates.y);
             }
             else
             {
@@ -1145,9 +1157,9 @@ public class GameBoard : MonoBehaviour
             if (PieceManager.instance.onlineMultiplayer && !playerIsNavy)
             {
                 if (deployPieceType == 0)
-                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.LandMine, false, deployCoordinates.x, deployCoordinates.y, true);
+                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.LandMine, false, deployCoordinates.x, deployCoordinates.y);
                 else
-                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.Ore, false, deployCoordinates.x, deployCoordinates.y, true);
+                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.Ore, false, deployCoordinates.x, deployCoordinates.y);
             }
             else
             {
@@ -1293,7 +1305,7 @@ public class GameBoard : MonoBehaviour
         tiles[x, y].GetComponent<Square>().currentPiece = null;
     }
 
-    public Piece SpawnPiece(PieceType type, bool isNavy, int startingX = -1, int startingY = -1, bool pirateRotate = false)
+    public Piece SpawnPiece(PieceType type, bool isNavy, int startingX = -1, int startingY = -1)
     {
         Piece cp;
 
@@ -1311,7 +1323,7 @@ public class GameBoard : MonoBehaviour
         cp.type = type;
         cp.isNavy = isNavy;
 
-        if (pirateRotate)
+        if (boardRotated)
         {
             cp.transform.Rotate(0, 0, 180f, Space.Self);
         }
@@ -1713,7 +1725,7 @@ public class GameBoard : MonoBehaviour
         int navyPiecesAdded = 0;
         int piratePiecesAdded = 0;
 
-        if(PieceManager.instance == null)
+        if(PieceManager.instance.startingFromBoard)
         {
             Debug.Log("No pieces available, using default spawn");
 
@@ -1794,6 +1806,18 @@ public class GameBoard : MonoBehaviour
         gameWon = true;
         gameTimer.pauseTimer();
         boardUI.GameWon(teamWon, stalemate);
+
+        if (PieceManager.instance.onlineMultiplayer)
+        {
+            if(playerIsNavy == teamWon)
+            {
+                MultiplayerController.Instance.gameWon = 1;
+            }
+            else
+            {
+                MultiplayerController.Instance.gameWon = 0;
+            }
+        }
     }
 
     public void ForfeitGame()
@@ -1831,6 +1855,8 @@ public class GameBoard : MonoBehaviour
                 Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1) * -1;
                 gunnerParticles.GetComponent<Transform>().transform.position = targetPos;
 
+                boardRotated = false;
+
                 for (int i = 0; i < teamSize; i++)
                 {
                     if (NavyPieces[i] != null)
@@ -1860,6 +1886,8 @@ public class GameBoard : MonoBehaviour
                 gunnerLine.transform.Rotate(0f, 0f, 180f, Space.Self);
                 Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1) * -1;
                 gunnerParticles.GetComponent<Transform>().transform.position = targetPos;
+
+                boardRotated = true;
 
                 for (int i = 0; i < teamSize; i++)
                 {
