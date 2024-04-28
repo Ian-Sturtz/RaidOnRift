@@ -89,7 +89,7 @@ public class TTGameBoard : MonoBehaviour
                 Debug.Log("Testing Mate");
                 StartCoroutine(TestMate());
                 break;
-            case PieceType.Bomber:
+            case PieceType.Engineer:
                 Debug.Log("Testing Engineer");
                 StartCoroutine(TestEngineer());
                 break;
@@ -139,9 +139,199 @@ public class TTGameBoard : MonoBehaviour
                 break;
             default:
                 Debug.Log("Default test case");
-                StartCoroutine(TestMate());
+                StaticTutorialControl.cameFromStoryScene = true;
+                StartCoroutine(TestEngineer());
                 break;
         }
+    }
+
+    IEnumerator TestEngineer()
+    {
+        NavyPieces[0] = SpawnPiece(PieceType.Engineer, true, 3, 2);
+        NavyPieces[1] = SpawnPiece(PieceType.Engineer, true, 6, 2);
+        NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 2, 0);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 2, 6);
+        NavyPieces[4] = SpawnPiece(PieceType.EnergyShield, true, 7, 5);
+
+        PiratePieces[0] = SpawnPiece(PieceType.Engineer, false, 2, 2);
+        PiratePieces[1] = SpawnPiece(PieceType.Engineer, false, 7, 7);
+        PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 4, 9);
+        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 3, 4);
+        PiratePieces[4] = SpawnPiece(PieceType.EnergyShield, false, 5, 5);
+
+        boardUI.GoalText("Raid On Rift: Tutorial Mode");
+
+        string tutorialHeader = "Engineer - 7 Points";
+        boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Engineer.\n\nClick anywhere to continue.");
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+                break;
+            else
+                yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("This is the Engineer! The Engineer is extremely useful for any team.");
+        boardUI.PieceDisplayDescription("\nHe's slightly expensive to add to your team, but his unique abilities make him extremely important.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green Engineer to see how it can move.", true);
+
+        TTSquare currentSquare = tiles[3, 2].GetComponent<TTSquare>();
+        tiles[3, 2].tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                        break;
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        ResetBoardMaterials();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[0].GetComponent<Engineer>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                    else
+                    {
+                        tiles[x, y].tag = "CaptureSquare";
+                        moveSquare.SetMaterial(moveSquare.enemyBoardMaterial);
+                    }
+                }
+            }
+        }
+
+        boardUI.PieceDisplayDescription("The Engineer can move up to 2 open squares in any direction.");
+        boardUI.PieceDisplayDescription("\nIt is the only piece that can remove enemy Energy Shields from the board. Notice how it can't capture that Pirate Engineer, though?", true);
+        boardUI.PieceDisplayDescription("\nClick on the red square to capture the enemy Energy Shield.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "CaptureSquare")
+                    {
+                        ResetBoardMaterials();
+                        jail.InsertAPiece(PiratePieces[3]);
+                        PiratePieces[3].destroyPiece();
+                        MovePiece(NavyPieces[0], 3, 4);
+                        NavyPieces[0].hasCaptured = true;
+                        NavyPieces[0].GetComponent<Engineer>().capturedBomb = jail.navyJailedPieces[0];
+
+                        yield return new WaitForSeconds(.5f);
+
+                        jail.InsertAPiece(NavyPieces[2]);
+                        NavyPieces[2].destroyPiece();
+                        PiratePieces[0].hasCaptured = true;
+                        PiratePieces[0].hasOre = true;
+                        MovePiece(PiratePieces[0], 2, 0);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        MovePiece(PiratePieces[0], 3, 1);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("The Engineer can usually only capture the Ore, Orebearers, or Energy Shields, but once he's got an Energy Shield in tow, all bets are off.");
+        boardUI.PieceDisplayDescription("\nNotice how the enemy Engineer was able to capture your Ore with no problems?", true);
+        boardUI.PieceDisplayDescription("\nYou're going to need to stop that Orebearer. Click on the Engineer again to see what you can do.", true);
+
+        currentSquare = tiles[3, 4].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[0].GetComponent<Engineer>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                }
+            }
+        }
+
+
+
+        //yield return new WaitForSeconds(3f);
+        //ExitTutorial();
     }
 
     IEnumerator TestTactician()
@@ -149,17 +339,17 @@ public class TTGameBoard : MonoBehaviour
         NavyPieces[0] = SpawnPiece(PieceType.Royal2, true, 7, 2);
         NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 1, 1);
         NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 3, 0);
-        NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 0, 5);
-        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 9, 6);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 0, 5);
+        NavyPieces[4] = SpawnPiece(PieceType.EnergyShield, true, 9, 6);
 
         PiratePieces[0] = SpawnPiece(PieceType.Royal1, false, 1, 8);
         PiratePieces[1] = SpawnPiece(PieceType.Royal2, false, 3, 7);
         PiratePieces[2] = SpawnPiece(PieceType.Gunner, false, 1, 5);
-        PiratePieces[3] = SpawnPiece(PieceType.Bomber, false, 8, 7);
+        PiratePieces[3] = SpawnPiece(PieceType.Engineer, false, 8, 7);
         PiratePieces[4] = SpawnPiece(PieceType.Vanguard, false, 4, 8);
         PiratePieces[5] = SpawnPiece(PieceType.Ore, false, 9, 9);
-        PiratePieces[6] = SpawnPiece(PieceType.LandMine, false, 3, 4);
-        PiratePieces[7] = SpawnPiece(PieceType.LandMine, false, 6, 5);
+        PiratePieces[6] = SpawnPiece(PieceType.EnergyShield, false, 3, 4);
+        PiratePieces[7] = SpawnPiece(PieceType.EnergyShield, false, 6, 5);
 
         boardEdges[0].material = NavyEdges;
         boardEdges[1].material = PirateEdges;
@@ -235,7 +425,6 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nIt also has some secret powers that are unlocked when the Tactician is surrounded by enemies.", true);
         boardUI.PieceDisplayDescription("\nClick on the flashing green square to move the Tactician into contested territory.", true);
 
-
         while (true)
         {
             if (Input.GetMouseButtonDown(0))
@@ -258,7 +447,7 @@ public class TTGameBoard : MonoBehaviour
                         jail.InsertAPiece(NavyPieces[4]);
                         NavyPieces[4].destroyPiece();
                         PiratePieces[3].hasCaptured = true;
-                        PiratePieces[3].GetComponent<Bomber>().capturedBomb = jail.navyJailedPieces[0];
+                        PiratePieces[3].GetComponent<Engineer>().capturedBomb = jail.navyJailedPieces[0];
                         MovePiece(PiratePieces[3], 9, 6);
 
                         break;
@@ -358,7 +547,7 @@ public class TTGameBoard : MonoBehaviour
                         currentSquare.SquareHasBeenClicked = true;
                         jail.TacticianMimicCells[0].GetComponent<TTJailCell>().clicked = true;
 
-                        moveAssessment = jail.tacticianMimicPieces[0].GetComponent<Bomber>().GetValidMoves(tiles);
+                        moveAssessment = jail.tacticianMimicPieces[0].GetComponent<Engineer>().GetValidMoves(tiles);
 
                         break;
                     }
@@ -916,7 +1105,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nGood luck!", true);
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Story");
+        ExitTutorial();
     }
 
     IEnumerator TestCorsair()
@@ -927,14 +1116,14 @@ public class TTGameBoard : MonoBehaviour
         PiratePieces[0] = SpawnPiece(PieceType.Royal2, false, 2, 2);
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 7, 3);
         PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 5, 0);
-        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 5);
-        PiratePieces[4] = SpawnPiece(PieceType.LandMine, false, 6, 5);
+        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 1, 5);
+        PiratePieces[4] = SpawnPiece(PieceType.EnergyShield, false, 6, 5);
 
         NavyPieces[0] = SpawnPiece(PieceType.Mate, true, 8, 7);
         NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 2, 8);
         NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 6, 9);
-        NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 3, 5);
-        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 5, 4);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 3, 5);
+        NavyPieces[4] = SpawnPiece(PieceType.EnergyShield, true, 5, 4);
 
 
         PiratePieces[0].GetComponent<Corsair>().canJump = true;
@@ -1230,7 +1419,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nGood luck!", true);
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Story");
+        ExitTutorial();
     }
 
     IEnumerator TestCannon()
@@ -1256,33 +1445,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nGood luck!", true);
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Story");
-    }
-
-    IEnumerator TestEngineer()
-    {
-        NavyPieces[0] = SpawnPiece(PieceType.Bomber, true, 5, 5);
-
-        boardUI.GoalText("Raid On Rift: Tutorial Mode");
-
-        string tutorialHeader = "Engineer - 7 Points";
-        boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Engineer.\n\nClick anywhere to continue.");
-
-        while (true)
-        {
-            if (Input.GetMouseButtonDown(0))
-                break;
-            else
-                yield return null;
-        }
-
-        yield return new WaitForEndOfFrame();
-
-        boardUI.PieceDisplayDescription("Congrats on finishing this tutorial!");
-        boardUI.PieceDisplayDescription("\nGood luck!", true);
-
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Story");
+        ExitTutorial();
     }
 
     IEnumerator TestGunner()
@@ -1290,14 +1453,14 @@ public class TTGameBoard : MonoBehaviour
         NavyPieces[0] = SpawnPiece(PieceType.Gunner, true, 5, 3);
         NavyPieces[1] = SpawnPiece(PieceType.Gunner, true, 6, 7);
         NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 8, 0);
-        NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 2, 4);
-        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 8, 4);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 2, 4);
+        NavyPieces[4] = SpawnPiece(PieceType.EnergyShield, true, 8, 4);
 
         PiratePieces[0] = SpawnPiece(PieceType.Gunner, false, 3, 4);
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 2, 3);
         PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 6, 9);
-        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 5);
-        PiratePieces[4] = SpawnPiece(PieceType.LandMine, false, 8, 5);
+        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 1, 5);
+        PiratePieces[4] = SpawnPiece(PieceType.EnergyShield, false, 8, 5);
         PiratePieces[5] = SpawnPiece(PieceType.Mate, false, 8, 2);
         PiratePieces[6] = SpawnPiece(PieceType.Mate, false, 2, 7);
 
@@ -1732,7 +1895,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nGood luck!", true);
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Story");
+        ExitTutorial();
 
     }
 
@@ -1741,14 +1904,14 @@ public class TTGameBoard : MonoBehaviour
         NavyPieces[0] = SpawnPiece(PieceType.Quartermaster, true, 5, 3);
         NavyPieces[1] = SpawnPiece(PieceType.Quartermaster, true, 1, 4);
         NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 2, 0);
-        NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 1, 5);
-        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 8, 6);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 1, 5);
+        NavyPieces[4] = SpawnPiece(PieceType.EnergyShield, true, 8, 6);
 
         PiratePieces[0] = SpawnPiece(PieceType.Quartermaster, false, 2, 7);
         PiratePieces[1] = SpawnPiece(PieceType.Quartermaster, false, 4, 9);
         PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 6, 9);
-        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 5, 4);
-        PiratePieces[4] = SpawnPiece(PieceType.LandMine, false, 6, 4);
+        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 5, 4);
+        PiratePieces[4] = SpawnPiece(PieceType.EnergyShield, false, 6, 4);
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
 
@@ -2107,7 +2270,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nGood luck!", true);
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Story");
+        ExitTutorial();
     }
 
     IEnumerator TestCaptain()
@@ -2122,14 +2285,14 @@ public class TTGameBoard : MonoBehaviour
         PiratePieces[0] = SpawnPiece(PieceType.Royal1, false, 4, 5);
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 8, 3);
         PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 8, 0);
-        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 0, 5);
-        PiratePieces[4] = SpawnPiece(PieceType.LandMine, false, 7, 6);
+        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 0, 5);
+        PiratePieces[4] = SpawnPiece(PieceType.EnergyShield, false, 7, 6);
 
         NavyPieces[0] = SpawnPiece(PieceType.Mate, true, 6, 8);
         NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 9, 8);
         NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 7, 9);
-        NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 4, 6);
-        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 5, 6);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 4, 6);
+        NavyPieces[4] = SpawnPiece(PieceType.EnergyShield, true, 5, 6);
 
         while (true)
         {
@@ -2469,7 +2632,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nGood luck!", true);
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Story");
+        ExitTutorial();
     }
 
     IEnumerator TestNavigator()
@@ -2477,14 +2640,14 @@ public class TTGameBoard : MonoBehaviour
         NavyPieces[0] = SpawnPiece(PieceType.Navigator, true, 1, 1);
         NavyPieces[1] = SpawnPiece(PieceType.Navigator, true, 6, 2);
         NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 9, 0);
-        NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 2, 4);
-        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 7, 5);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 2, 4);
+        NavyPieces[4] = SpawnPiece(PieceType.EnergyShield, true, 7, 5);
 
         PiratePieces[0] = SpawnPiece(PieceType.Navigator, false, 2, 9);
         PiratePieces[1] = SpawnPiece(PieceType.Navigator, false, 4, 7);
         PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 4, 9);
-        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 0, 6);
-        PiratePieces[4] = SpawnPiece(PieceType.LandMine, false, 5, 7);
+        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 0, 6);
+        PiratePieces[4] = SpawnPiece(PieceType.EnergyShield, false, 5, 7);
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
 
@@ -2840,7 +3003,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nGood luck!", true);
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Story");
+        ExitTutorial();
 
     }
     
@@ -2853,14 +3016,14 @@ public class TTGameBoard : MonoBehaviour
         NavyPieces[0] = SpawnPiece(PieceType.Royal1, true, 5, 4);
         NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 8, 2);
         NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 8, 0);
-        NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 0, 5);
-        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 7, 5);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 0, 5);
+        NavyPieces[4] = SpawnPiece(PieceType.EnergyShield, true, 7, 5);
 
         PiratePieces[0] = SpawnPiece(PieceType.Mate, false, 8, 9);
         PiratePieces[1] = SpawnPiece(PieceType.Mate, false, 3, 7);
         PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 6, 9);
-        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 2, 7);
-        PiratePieces[4] = SpawnPiece(PieceType.LandMine, false, 8, 6);
+        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 2, 7);
+        PiratePieces[4] = SpawnPiece(PieceType.EnergyShield, false, 8, 6);
 
         while (true)
         {
@@ -3136,7 +3299,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nGood luck!", true);
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Story");
+        ExitTutorial();
     }
 
     IEnumerator TestVanguard()
@@ -3144,14 +3307,14 @@ public class TTGameBoard : MonoBehaviour
         NavyPieces[0] = SpawnPiece(PieceType.Vanguard, true, 7, 2);
         NavyPieces[1] = SpawnPiece(PieceType.Vanguard, true, 0, 1);
         NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 5, 0);
-        NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 5, 5);
-        NavyPieces[4] = SpawnPiece(PieceType.LandMine, true, 3, 3);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 5, 5);
+        NavyPieces[4] = SpawnPiece(PieceType.EnergyShield, true, 3, 3);
 
         PiratePieces[0] = SpawnPiece(PieceType.Vanguard, false, 4, 1);
         PiratePieces[1] = SpawnPiece(PieceType.Vanguard, false, 9, 1);
         PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 6, 9);
-        PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 2, 5);
-        PiratePieces[4] = SpawnPiece(PieceType.LandMine, false, 8, 4);
+        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 2, 5);
+        PiratePieces[4] = SpawnPiece(PieceType.EnergyShield, false, 8, 4);
         PiratePieces[5] = SpawnPiece(PieceType.Vanguard, false, 8, 6);
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
@@ -3405,7 +3568,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nGood luck!", true);
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Story");
+        ExitTutorial();
     }
 
     IEnumerator TestMate()
@@ -3413,11 +3576,11 @@ public class TTGameBoard : MonoBehaviour
         NavyPieces[0] = SpawnPiece(PieceType.Mate, true, 5, 5); // Main Character
         NavyPieces[1] = SpawnPiece(PieceType.Mate, true, 2, 2);
         NavyPieces[2] = SpawnPiece(PieceType.Mate, true, 8, 2);
-        NavyPieces[3] = SpawnPiece(PieceType.LandMine, true, 8, 5);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 8, 5);
         NavyPieces[4] = SpawnPiece(PieceType.Ore, true, 6, 0);
 
         PiratePieces[0] = SpawnPiece(PieceType.Ore, false, 0, 9);
-        PiratePieces[1] = SpawnPiece(PieceType.LandMine, false, 7, 7);
+        PiratePieces[1] = SpawnPiece(PieceType.EnergyShield, false, 7, 7);
         PiratePieces[2] = SpawnPiece(PieceType.Mate, false, 2, 7);
         PiratePieces[3] = SpawnPiece(PieceType.Mate, false, 6, 8);
 
@@ -3872,7 +4035,7 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nGood luck!", true);
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Story");
+        ExitTutorial();
     }
 
     private void IdentifyBoardSquares()

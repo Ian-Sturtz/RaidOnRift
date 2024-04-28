@@ -15,7 +15,7 @@ public class PieceManager : MonoBehaviour
     public int navyMate;
     public int navyQuartermaster;
     public int navyCannon;
-    public int navyBomber;
+    public int navyEngineer;
     public int navyVanguard;
     public int navyNavigator;
     public int navyGunner;
@@ -25,7 +25,7 @@ public class PieceManager : MonoBehaviour
     public int pirateMate;
     public int pirateQuartermaster;
     public int pirateCannon;
-    public int pirateBomber;
+    public int pirateEngineer;
     public int pirateVanguard;
     public int pirateNavigator;
     public int pirateGunner;
@@ -41,10 +41,9 @@ public class PieceManager : MonoBehaviour
     {
         if (instance != null)
         {
-            if(SceneManager.GetActiveScene().name == "Board" || SceneManager.GetActiveScene().name == "Piece Placement")
+            if(PieceManager.instance.startingFromBoard)
             {
                 Destroy(instance.gameObject);
-                return;
             }
             else
             {

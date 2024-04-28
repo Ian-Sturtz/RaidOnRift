@@ -7272,7 +7272,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -230
+  m_SortingOrder: 10
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -9181,13 +9181,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive: 0
   onlineMultiplayer: 0
-  startingFromBoard: 0
+  startingFromBoard: 1
   navyRoyal1: 1
   navyRoyal2: 1
   navyMate: 5
   navyQuartermaster: 0
   navyCannon: 0
-  navyBomber: 1
+  navyEngineer: 0
   navyVanguard: 0
   navyNavigator: 0
   navyGunner: 0
@@ -9196,7 +9196,7 @@ MonoBehaviour:
   pirateMate: 5
   pirateQuartermaster: 0
   pirateCannon: 1
-  pirateBomber: 1
+  pirateEngineer: 0
   pirateVanguard: 0
   pirateNavigator: 0
   pirateGunner: 0

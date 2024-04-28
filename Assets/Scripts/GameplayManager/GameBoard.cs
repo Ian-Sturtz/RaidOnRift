@@ -66,8 +66,8 @@ public class GameBoard : MonoBehaviour
 
     #region PieceInteractions
     [Header("Piece Interactions")]
-    // For use with bomber interactions
-    [SerializeField] private bool bomberSelected = false;
+    // For use with Engineer interactions
+    [SerializeField] private bool engineerSelected = false;
     [SerializeField] private bool landMineSelected = false;
     [SerializeField] private bool landMineInJail = false;
     private int cellToHighlight = -2;
@@ -120,15 +120,13 @@ public class GameBoard : MonoBehaviour
 
     #endregion
 
-    private void Awake()
+
+    private void Start()
     {
         if(PieceManager.instance != null)
             if (PieceManager.instance.onlineMultiplayer)
                 MultiplayerController.Instance.gameWon = -1;
-    }
-
-    private void Start()
-    {
+        
         PIECES_ADDED = System.Enum.GetValues(typeof(PieceType)).Length;
 
         //Initialize the game board and all variables
@@ -233,14 +231,14 @@ public class GameBoard : MonoBehaviour
 
         boardUI.UpdateTurn(navyTurn);
 
-        // The active player has selected a bomber or tactician to use this turn
+        // The active player has selected a Engineer or tactician to use this turn
         if (storedTileSelected != null)
         {
             boardUI.UpdateSelectedPiece(storedTileSelected.GetComponent<Square>().currentPiece.type, storedTileSelected.GetComponent<Square>().currentPiece.isNavy, storedTileSelected.GetComponent<Square>().currentPiece.hasOre);
 
-            // The active player has selected a bomber to use this turn
-            if (storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.Bomber) {
-                bomberSelected = true;
+            // The active player has selected a Engineer to use this turn
+            if (storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.Engineer) {
+                engineerSelected = true;
             }
 
             // The active player has selected a tactician to use this turn
@@ -252,10 +250,10 @@ public class GameBoard : MonoBehaviour
                 }
             }
         }
-        // The active player hasn't selected a tactician or bomber to use this turn
+        // The active player hasn't selected a tactician or Engineer to use this turn
         else
         {
-            bomberSelected = false;
+            engineerSelected = false;
 
             // Despawns all pieces out of Tactician inherit cells (if applicable)
             if (tacticianSelected)
@@ -274,17 +272,17 @@ public class GameBoard : MonoBehaviour
             }
         }
 
-        // Highlights a captured enemy land mines so the bomber can deploy them
-        if (bomberSelected && cellToHighlight == -2)
+        // Highlights a captured enemy land mines so the Engineer can deploy them
+        if (engineerSelected && cellToHighlight == -2)
         {
-            // The selected bomber is Navy and can deploy Pirate Bombs
+            // The selected Engineer is Navy and can deploy Pirate Bombs
             if (tileSelected.GetComponent<Square>().currentPiece.isNavy)
             {
-                // The bomber hasn't captured a bomb yet
-                if (tileSelected.GetComponent<Square>().currentPiece.GetComponent<Bomber>().capturedBomb == null)
+                // The Engineer hasn't captured a bomb yet
+                if (tileSelected.GetComponent<Square>().currentPiece.GetComponent<Engineer>().capturedBomb == null)
                 {
                     Debug.Log("No bombs captured, searching for one");
-                    cellToHighlight = jail.FindPiece(PieceType.LandMine, false);
+                    cellToHighlight = jail.FindPiece(PieceType.EnergyShield, false);
                 }
                 else
                 {
@@ -292,7 +290,7 @@ public class GameBoard : MonoBehaviour
                     // Searches jail for the corresponding captured bomb
                     for (int i = 0; i < teamSize; i++)
                     {
-                        if (jail.NavyJailCells[i].GetComponent<JailCell>().currentPiece == tileSelected.GetComponent<Square>().currentPiece.GetComponent<Bomber>().capturedBomb)
+                        if (jail.NavyJailCells[i].GetComponent<JailCell>().currentPiece == tileSelected.GetComponent<Square>().currentPiece.GetComponent<Engineer>().capturedBomb)
                         {
                             cellToHighlight = i;
                         }
@@ -305,14 +303,14 @@ public class GameBoard : MonoBehaviour
                 }
 
             }
-            // The selected bomber is Pirate and can deploy Navy Bombs
+            // The selected Engineer is Pirate and can deploy Navy Bombs
             else
             {
-                // The bomber hasn't captured a bomb yet
-                if (tileSelected.GetComponent<Square>().currentPiece.GetComponent<Bomber>().capturedBomb == null)
+                // The Engineer hasn't captured a bomb yet
+                if (tileSelected.GetComponent<Square>().currentPiece.GetComponent<Engineer>().capturedBomb == null)
                 {
                     Debug.Log("No bombs captured, searching for one");
-                    cellToHighlight = jail.FindPiece(PieceType.LandMine, true);
+                    cellToHighlight = jail.FindPiece(PieceType.EnergyShield, true);
                 }
                 else
                 {
@@ -320,7 +318,7 @@ public class GameBoard : MonoBehaviour
                     // Searches jail for the corresponding captured bomb
                     for (int i = 0; i < teamSize; i++)
                     {
-                        if (jail.PirateJailCells[i].GetComponent<JailCell>().currentPiece == tileSelected.GetComponent<Square>().currentPiece.GetComponent<Bomber>().capturedBomb)
+                        if (jail.PirateJailCells[i].GetComponent<JailCell>().currentPiece == tileSelected.GetComponent<Square>().currentPiece.GetComponent<Engineer>().capturedBomb)
                         {
                             cellToHighlight = i;
                         }
@@ -443,28 +441,28 @@ public class GameBoard : MonoBehaviour
                             {
                                 tacticianSelected = true;
                             }
-                            if (current_square.currentPiece.type == PieceType.Bomber)
+                            if (current_square.currentPiece.type == PieceType.Engineer)
                             {
-                                bomberSelected = true;
+                                engineerSelected = true;
                             }
 
                             // Finds enemy bombs in jail cells
-                            if (bomberSelected)
+                            if (engineerSelected)
                             {
-                                // Tactician is mimicking a bomber
+                                // Tactician is mimicking a Engineer
                                 if (tacticianInheritSelected)
                                 {
-                                    landMineInJail = jail.FindPiece(PieceType.LandMine, false) >= 0;
+                                    landMineInJail = jail.FindPiece(PieceType.EnergyShield, false) >= 0;
                                 }
-                                // The selected bomber is Navy and can deploy Pirate Bombs
+                                // The selected Engineer is Navy and can deploy Pirate Bombs
                                 else if (tileSelected.GetComponent<Square>().currentPiece.isNavy)
                                 {
-                                    landMineInJail = jail.FindPiece(PieceType.LandMine, false) >= 0;
+                                    landMineInJail = jail.FindPiece(PieceType.EnergyShield, false) >= 0;
                                 }
-                                // The selected bomber is Pirate and can deploy Navy Bombs
+                                // The selected Engineer is Pirate and can deploy Navy Bombs
                                 else
                                 {
-                                    landMineInJail = jail.FindPiece(PieceType.LandMine, true) >= 0;
+                                    landMineInJail = jail.FindPiece(PieceType.EnergyShield, true) >= 0;
                                 }
                             }
 
@@ -474,7 +472,7 @@ public class GameBoard : MonoBehaviour
                             DetectLegalMoves(tileSelected, current_square.currentPiece);
 
                             //Fixing edge case for selection lol
-                            if (storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.LandMine || storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.Ore)
+                            if (storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.EnergyShield || storedTileSelected.GetComponent<Square>().currentPiece.type == PieceType.Ore)
                                 boardUI.UpdateSelectedPiece(storedTileSelected.GetComponent<Square>().currentPiece.type, storedTileSelected.GetComponent<Square>().currentPiece.isNavy, false, true);
                         }
 
@@ -655,7 +653,7 @@ public class GameBoard : MonoBehaviour
                     else if (tileSelected.tag == "InteractablePiece")
                     {
                         // A landmine is being interacted with
-                        if (bomberSelected)
+                        if (engineerSelected)
                         {
                             // The user clicked on the landmine again (cancel selection and return to normal moveset)
                             if (landMineSelected)
@@ -826,7 +824,7 @@ public class GameBoard : MonoBehaviour
                         tileSelected.GetComponent<Square>().SquareHasBeenClicked = false;
                         tileSelected = null;
                         storedTileSelected = null;
-                        bomberSelected = false;
+                        engineerSelected = false;
                         landMineSelected = false;
                     }
                 }
@@ -927,16 +925,16 @@ public class GameBoard : MonoBehaviour
         currentPiece.hasCaptured = true;
 
         // Links the engineer with his captured shield
-        if (capturedPiece.type == PieceType.LandMine && currentPiece.type == PieceType.Bomber)
+        if (capturedPiece.type == PieceType.EnergyShield && currentPiece.type == PieceType.Engineer)
         {
             Debug.Log(insertIndex);
             if (currentPiece.isNavy)
             {
-                currentPiece.GetComponent<Bomber>().capturedBomb = jail.pirateJailedPieces[insertIndex];
+                currentPiece.GetComponent<Engineer>().capturedBomb = jail.pirateJailedPieces[insertIndex];
             }
             else
             {
-                currentPiece.GetComponent<Bomber>().capturedBomb = jail.navyJailedPieces[insertIndex];
+                currentPiece.GetComponent<Engineer>().capturedBomb = jail.navyJailedPieces[insertIndex];
             }
             engineerDrill.Play();
         }
@@ -1135,14 +1133,14 @@ public class GameBoard : MonoBehaviour
             if(PieceManager.instance.onlineMultiplayer && !playerIsNavy)
             {
                 if (deployPieceType == 0)
-                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y);
+                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.EnergyShield, true, deployCoordinates.x, deployCoordinates.y);
                 else
                     NavyPieces[spawnIndex] = SpawnPiece(PieceType.Ore, true, deployCoordinates.x, deployCoordinates.y);
             }
             else
             {
                 if (deployPieceType == 0)
-                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y);
+                    NavyPieces[spawnIndex] = SpawnPiece(PieceType.EnergyShield, true, deployCoordinates.x, deployCoordinates.y);
                 else
                     NavyPieces[spawnIndex] = SpawnPiece(PieceType.Ore, true, deployCoordinates.x, deployCoordinates.y);
             }
@@ -1156,14 +1154,14 @@ public class GameBoard : MonoBehaviour
             if (PieceManager.instance.onlineMultiplayer && !playerIsNavy)
             {
                 if (deployPieceType == 0)
-                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.LandMine, false, deployCoordinates.x, deployCoordinates.y);
+                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.EnergyShield, false, deployCoordinates.x, deployCoordinates.y);
                 else
                     PiratePieces[spawnIndex] = SpawnPiece(PieceType.Ore, false, deployCoordinates.x, deployCoordinates.y);
             }
             else
             {
                 if (deployPieceType == 0)
-                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.LandMine, false, deployCoordinates.x, deployCoordinates.y);
+                    PiratePieces[spawnIndex] = SpawnPiece(PieceType.EnergyShield, false, deployCoordinates.x, deployCoordinates.y);
                 else
                     PiratePieces[spawnIndex] = SpawnPiece(PieceType.Ore, false, deployCoordinates.x, deployCoordinates.y);
             }
@@ -1188,7 +1186,7 @@ public class GameBoard : MonoBehaviour
             tileSelected.GetComponent<Square>().SquareHasBeenClicked = false;
 
         tileSelected = null;
-        bomberSelected = false;
+        engineerSelected = false;
         landMineSelected = false;
         resetOre = false;
         ResetBoardMaterials();
@@ -1428,7 +1426,7 @@ public class GameBoard : MonoBehaviour
                     current_square.FlashMaterial(tiles[current_x, current_y].GetComponent<Square>().clickedBoardMaterial, 3);
                     tileSelected = null;
                     break;
-                case PieceType.LandMine:
+                case PieceType.EnergyShield:
                     boardUI.DisplayTempText("Land Mines can't move, click on a different piece!", 1.5f);
                     Debug.Log("The Land Mine doesn't move!");
                     invalidPiece = true;
@@ -1440,14 +1438,14 @@ public class GameBoard : MonoBehaviour
                 case PieceType.Mate:
                     moveAssessment = piece.GetComponent<Mate>().GetValidMoves(tiles);
                     break;
-                case PieceType.Bomber:
+                case PieceType.Engineer:
                     if (landMineSelected)
                     {
-                        moveAssessment = piece.GetComponent<Bomber>().DetectBombDeploy(tiles);
+                        moveAssessment = piece.GetComponent<Engineer>().DetectBombDeploy(tiles);
                     }
                     else
                     {
-                        moveAssessment = piece.GetComponent<Bomber>().GetValidMoves(tiles, landMineInJail);
+                        moveAssessment = piece.GetComponent<Engineer>().GetValidMoves(tiles, landMineInJail);
                     }
                     break;
                 case PieceType.Vanguard:
@@ -1520,9 +1518,9 @@ public class GameBoard : MonoBehaviour
                             moveAssessment[x, y] = -1;
                         }
                         // That piece is a land mine (can't move there)
-                        else if(possiblePiece.type == PieceType.LandMine)
+                        else if(possiblePiece.type == PieceType.EnergyShield)
                         {
-                            if(piece.type == PieceType.Bomber)
+                            if(piece.type == PieceType.Engineer)
                             {
                                 moveAssessment[x, y] = 2;
                             }
@@ -1588,7 +1586,7 @@ public class GameBoard : MonoBehaviour
                     Square activeSquare = tiles[x, y].GetComponent<Square>();
 
                     // Cannon can jump a Land Mine but not capture it
-                    if (activeSquare.currentPiece.type != PieceType.LandMine && activeSquare.currentPiece.isNavy != piece.isNavy)
+                    if (activeSquare.currentPiece.type != PieceType.EnergyShield && activeSquare.currentPiece.isNavy != piece.isNavy)
                     {
                         tiles[x, y].tag = "CannonTarget";
                         activeSquare.SetMaterial(activeSquare.enemyBoardMaterial);
@@ -1668,7 +1666,7 @@ public class GameBoard : MonoBehaviour
                     boardUI.GoalText("- Click on a flashing piece to mimic that piece's moves for a turn", true);
             }
             // A mine can be redeployed
-            if(bomberSelected && !landMineSelected && landMineInJail)
+            if(engineerSelected && !landMineSelected && landMineInJail)
             {
                 boardUI.GoalText("- Click on a flashing Land Mine to redeploy it to the board", true);
             }
@@ -1740,32 +1738,32 @@ public class GameBoard : MonoBehaviour
             NavyPieces[7] = SpawnPiece(PieceType.Mate, true, 6, 1);
             NavyPieces[8] = SpawnPiece(PieceType.Vanguard, true, 7, 1);
             NavyPieces[9] = SpawnPiece(PieceType.Navigator, true, 0, 2);
-            NavyPieces[10] = SpawnPiece(PieceType.Bomber, true, 1, 2);
+            NavyPieces[10] = SpawnPiece(PieceType.Engineer, true, 1, 2);
             NavyPieces[11] = SpawnPiece(PieceType.Quartermaster, true, 2, 2);
             NavyPieces[12] = SpawnPiece(PieceType.Gunner, true, 3, 2);
             NavyPieces[13] = SpawnPiece(PieceType.Mate, true, 5, 2);
             NavyPieces[14] = SpawnPiece(PieceType.Gunner, true, 6, 2);
             NavyPieces[15] = SpawnPiece(PieceType.Navigator, true, 7, 2);
-            NavyPieces[16] = SpawnPiece(PieceType.Bomber, true, 8, 2);
+            NavyPieces[16] = SpawnPiece(PieceType.Engineer, true, 8, 2);
             NavyPieces[17] = SpawnPiece(PieceType.Royal2, true, 9, 2);
 
-            NavyPieces[18] = SpawnPiece(PieceType.LandMine, true, 3, 6);
-            NavyPieces[19] = SpawnPiece(PieceType.LandMine, true, 5, 5);
-            NavyPieces[20] = SpawnPiece(PieceType.LandMine, true, 8, 5);
-            NavyPieces[21] = SpawnPiece(PieceType.LandMine, true, 9, 6);
-            PiratePieces[0] = SpawnPiece(PieceType.LandMine, false, 3, 3);
-            PiratePieces[1] = SpawnPiece(PieceType.LandMine, false, 3, 9);
-            PiratePieces[2] = SpawnPiece(PieceType.LandMine, false, 4, 6);
-            PiratePieces[3] = SpawnPiece(PieceType.LandMine, false, 1, 4);
+            NavyPieces[18] = SpawnPiece(PieceType.EnergyShield, true, 3, 6);
+            NavyPieces[19] = SpawnPiece(PieceType.EnergyShield, true, 5, 5);
+            NavyPieces[20] = SpawnPiece(PieceType.EnergyShield, true, 8, 5);
+            NavyPieces[21] = SpawnPiece(PieceType.EnergyShield, true, 9, 6);
+            PiratePieces[0] = SpawnPiece(PieceType.EnergyShield, false, 3, 3);
+            PiratePieces[1] = SpawnPiece(PieceType.EnergyShield, false, 3, 9);
+            PiratePieces[2] = SpawnPiece(PieceType.EnergyShield, false, 4, 6);
+            PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 1, 4);
 
             PiratePieces[4] = SpawnPiece(PieceType.Ore, false, 6, 9);
-            PiratePieces[5] = SpawnPiece(PieceType.Bomber, false, 0, 7);
+            PiratePieces[5] = SpawnPiece(PieceType.Engineer, false, 0, 7);
             PiratePieces[6] = SpawnPiece(PieceType.Navigator, false, 1, 7);
             PiratePieces[7] = SpawnPiece(PieceType.Mate, false, 2, 7);
             PiratePieces[8] = SpawnPiece(PieceType.Gunner, false, 3, 7);
             PiratePieces[9] = SpawnPiece(PieceType.Mate, false, 4, 7);
             PiratePieces[10] = SpawnPiece(PieceType.Quartermaster, false, 5, 7);
-            PiratePieces[11] = SpawnPiece(PieceType.Bomber, false, 6, 7);
+            PiratePieces[11] = SpawnPiece(PieceType.Engineer, false, 6, 7);
             PiratePieces[12] = SpawnPiece(PieceType.Mate, false, 7, 7);
             PiratePieces[13] = SpawnPiece(PieceType.Navigator, false, 8, 7);
             PiratePieces[14] = SpawnPiece(PieceType.Gunner, false, 9, 7);

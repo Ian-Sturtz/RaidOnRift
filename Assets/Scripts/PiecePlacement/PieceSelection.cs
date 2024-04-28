@@ -21,7 +21,7 @@ public class PieceSelection : MonoBehaviour
     private int mate = 0;
     private int quartermaster = 0;
     private int cannon = 0;
-    private int bomber = 0;
+    private int engineer = 0;
     private int vanguard = 0;
     private int navigator = 0;
     private int gunner = 0;
@@ -75,7 +75,7 @@ public class PieceSelection : MonoBehaviour
     [SerializeField] private int matePoints = 2;
     [SerializeField] private int quartermasterPoints = 7;
     [SerializeField] private int cannonPoints = 8;
-    [SerializeField] private int bomberPoints = 7;
+    [SerializeField] private int engineerPoints = 7;
     [SerializeField] private int vanguardPoints = 5;
     [SerializeField] private int navigatorPoints = 8;
     [SerializeField] private int gunnerPoints = 9;
@@ -154,7 +154,7 @@ public class PieceSelection : MonoBehaviour
                     else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
                     break;
                 case "Select Engineer":
-                    if ((totalPoints + bomberPoints > maxPoints) || (bomber >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    if ((totalPoints + engineerPoints > maxPoints) || (engineer >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
                     else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
                     break;
                 case "Select Vanguard":
@@ -196,7 +196,7 @@ public class PieceSelection : MonoBehaviour
                     else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
                     break;
                 case "Select Engineer":
-                    if (bomber <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    if (engineer <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
                     else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
                     break;
                 case "Select Vanguard":
@@ -317,11 +317,11 @@ public class PieceSelection : MonoBehaviour
             totalPoints += cannonPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
-        if (name == "Select Engineer" && bomber < maxArmy && totalPoints + bomberPoints <= maxPoints)
+        if (name == "Select Engineer" && engineer < maxArmy && totalPoints + engineerPoints <= maxPoints)
         {
-            bomber++;
-            amount.SetText(bomber + "/" + maxArmy);
-            totalPoints += bomberPoints;
+            engineer++;
+            amount.SetText(engineer + "/" + maxArmy);
+            totalPoints += engineerPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Vanguard" && vanguard < maxArmy && totalPoints + vanguardPoints <= maxPoints)
@@ -388,11 +388,11 @@ public class PieceSelection : MonoBehaviour
             totalPoints -= cannonPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
-        if (name == "Select Engineer" && bomber > 0)
+        if (name == "Select Engineer" && engineer > 0)
         {
-            bomber--;
-            amount.SetText(bomber + "/" + maxArmy);
-            totalPoints -= bomberPoints;
+            engineer--;
+            amount.SetText(engineer + "/" + maxArmy);
+            totalPoints -= engineerPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Vanguard" && vanguard > 0)
@@ -430,7 +430,7 @@ public class PieceSelection : MonoBehaviour
 
             idTeam.totalPoints = totalPoints;
             idTeam.Mate_Count = mate;
-            idTeam.Bomber_Count = bomber;
+            idTeam.Engineer_Count = engineer;
             idTeam.Vanguard_Count = vanguard;
             idTeam.Navigator_Count = navigator;
             idTeam.Gunner_Count = gunner;
@@ -459,7 +459,7 @@ public class PieceSelection : MonoBehaviour
                 PieceManager.instance.navyRoyal2 = royal2;
                 PieceManager.instance.navyQuartermaster = quartermaster;
                 PieceManager.instance.navyCannon = cannon;
-                PieceManager.instance.navyBomber = bomber;
+                PieceManager.instance.navyEngineer = engineer;
                 PieceManager.instance.navyVanguard = vanguard;
                 PieceManager.instance.navyNavigator = navigator;
                 PieceManager.instance.navyGunner = gunner;
@@ -472,7 +472,7 @@ public class PieceSelection : MonoBehaviour
                 PieceManager.instance.pirateRoyal2 = royal2;
                 PieceManager.instance.pirateQuartermaster = quartermaster;
                 PieceManager.instance.pirateCannon = cannon;
-                PieceManager.instance.pirateBomber = bomber;
+                PieceManager.instance.pirateEngineer = engineer;
                 PieceManager.instance.pirateVanguard = vanguard;
                 PieceManager.instance.pirateNavigator = navigator;
                 PieceManager.instance.pirateGunner = gunner;
@@ -487,7 +487,7 @@ public class PieceSelection : MonoBehaviour
                 mate = minPeasants;
                 quartermaster = 0;
                 cannon = 0;
-                bomber = 0;
+                engineer = 0;
                 vanguard = 0;
                 navigator = 0;
                 gunner = 0;
@@ -596,7 +596,7 @@ public class PieceSelection : MonoBehaviour
         }
         if (name == "Select Engineer")
         {
-            topText.SetText("Engineer [" + bomberPoints + " points]");
+            topText.SetText("Engineer [" + engineerPoints + " points]");
             infoText.SetText("Moves up to two open squares in any direction. He's the only piece that can capture Energy Shields by landing on them and can redeploy spare Energy Shields back to the board, but he can't capture any enemies unless he's armed with a spare Energy Shield.");
             videoPlayer.clip = videoManager.engineer;
         }
@@ -660,7 +660,7 @@ public class PieceSelection : MonoBehaviour
         NetIdentifyTeam idTeam = msg as NetIdentifyTeam;
 
         Debug.Log($"Mates: {idTeam.Mate_Count}");
-        Debug.Log($"Engineers: {idTeam.Bomber_Count}");
+        Debug.Log($"Engineers: {idTeam.Engineer_Count}");
         Debug.Log($"Vanguards: {idTeam.Vanguard_Count}");
         Debug.Log($"Navigators: {idTeam.Navigator_Count}");
         Debug.Log($"Gunners: {idTeam.Gunner_Count}");
@@ -674,7 +674,7 @@ public class PieceSelection : MonoBehaviour
         if (idTeam.teamID == 0)
         {
             PieceManager.instance.navyMate = idTeam.Mate_Count;
-            PieceManager.instance.navyBomber = idTeam.Bomber_Count;
+            PieceManager.instance.navyEngineer = idTeam.Engineer_Count;
             PieceManager.instance.navyVanguard = idTeam.Vanguard_Count;
             PieceManager.instance.navyNavigator = idTeam.Navigator_Count;
             PieceManager.instance.navyGunner = idTeam.Gunner_Count;
@@ -689,7 +689,7 @@ public class PieceSelection : MonoBehaviour
         else if(idTeam.teamID == 1)
         {
             PieceManager.instance.pirateMate = idTeam.Mate_Count;
-            PieceManager.instance.pirateBomber = idTeam.Bomber_Count;
+            PieceManager.instance.pirateEngineer = idTeam.Engineer_Count;
             PieceManager.instance.pirateVanguard = idTeam.Vanguard_Count;
             PieceManager.instance.pirateNavigator = idTeam.Navigator_Count;
             PieceManager.instance.pirateGunner = idTeam.Gunner_Count;

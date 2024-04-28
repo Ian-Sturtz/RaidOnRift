@@ -360,7 +360,7 @@ public class PPGameBoard : MonoBehaviour
 
                         DetectValidSquares(currentSquare);
 
-                        if(currentSquare.currentPiece.type == PieceType.Ore || currentSquare.currentPiece.type == PieceType.LandMine) 
+                        if(currentSquare.currentPiece.type == PieceType.Ore || currentSquare.currentPiece.type == PieceType.EnergyShield) 
                             boardUI.UpdateSelectedPiece(currentSquare.currentPiece.type, currentSquare.currentPiece.isNavy, false, true);
                         else boardUI.UpdateSelectedPiece(currentSquare.currentPiece.type, currentSquare.currentPiece.isNavy);
                     }
@@ -647,7 +647,7 @@ public class PPGameBoard : MonoBehaviour
 
         boardUI.GoalText("");
 
-        if (currentPiece.type == PieceType.LandMine)
+        if (currentPiece.type == PieceType.EnergyShield)
         {
             boardUI.GoalText("This is a Land Mine. It must go in the Neutral Zone (rows 4-7).", true);
             startingRow = 3;
@@ -909,7 +909,7 @@ public class PPGameBoard : MonoBehaviour
 
             // ResetBoardMaterials();
 
-            if (currentPiece.type == PieceType.Ore || currentPiece.type == PieceType.LandMine)
+            if (currentPiece.type == PieceType.Ore || currentPiece.type == PieceType.EnergyShield)
                 NextTurn();
 
             currentPiece.destroyPiece();

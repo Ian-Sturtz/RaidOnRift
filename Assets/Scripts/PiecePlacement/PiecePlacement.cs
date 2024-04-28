@@ -37,9 +37,9 @@ public class PiecePlacement : MonoBehaviour
                 jail.InsertAPiece(piece);
                 piece.destroyPiece();
             }
-            for (int i = PieceManager.instance.navyBomber; i > 0; i--)
+            for (int i = PieceManager.instance.navyEngineer; i > 0; i--)
             {
-                piece = board.SpawnPiece(PieceType.Bomber, true, -1, -1);
+                piece = board.SpawnPiece(PieceType.Engineer, true, -1, -1);
                 jail.InsertAPiece(piece);
                 piece.destroyPiece();
             }
@@ -92,9 +92,9 @@ public class PiecePlacement : MonoBehaviour
                 jail.InsertAPiece(piece);
                 piece.destroyPiece();
             }
-            for (int i = PieceManager.instance.pirateBomber; i > 0; i--)
+            for (int i = PieceManager.instance.pirateEngineer; i > 0; i--)
             {
-                piece = board.SpawnPiece(PieceType.Bomber, false, -1, -1);
+                piece = board.SpawnPiece(PieceType.Engineer, false, -1, -1);
                 jail.InsertAPiece(piece);
                 piece.destroyPiece();
             }
@@ -143,10 +143,10 @@ public class PiecePlacement : MonoBehaviour
             piece = board.SpawnPiece(PieceType.Cannon, true, -1, -1);
             jail.InsertAPiece(piece);
             piece.destroyPiece();
-            piece = board.SpawnPiece(PieceType.Bomber, true, -1, -1);
+            piece = board.SpawnPiece(PieceType.Engineer, true, -1, -1);
             jail.InsertAPiece(piece);
             piece.destroyPiece();
-            piece = board.SpawnPiece(PieceType.Bomber, true, -1, -1);
+            piece = board.SpawnPiece(PieceType.Engineer, true, -1, -1);
             jail.InsertAPiece(piece);
             piece.destroyPiece();
             piece = board.SpawnPiece(PieceType.Vanguard, true, -1, -1);
@@ -195,10 +195,10 @@ public class PiecePlacement : MonoBehaviour
             piece = board.SpawnPiece(PieceType.Cannon, false, -1, -1);
             jail.InsertAPiece(piece);
             piece.destroyPiece();
-            piece = board.SpawnPiece(PieceType.Bomber, false, -1, -1);
+            piece = board.SpawnPiece(PieceType.Engineer, false, -1, -1);
             jail.InsertAPiece(piece);
             piece.destroyPiece();
-            piece = board.SpawnPiece(PieceType.Bomber, false, -1, -1);
+            piece = board.SpawnPiece(PieceType.Engineer, false, -1, -1);
             jail.InsertAPiece(piece);
             piece.destroyPiece();
             piece = board.SpawnPiece(PieceType.Vanguard, false, -1, -1);
@@ -243,32 +243,32 @@ public class PiecePlacement : MonoBehaviour
         piece = board.SpawnPiece(PieceType.Ore, true, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
-        piece = board.SpawnPiece(PieceType.LandMine, true, -1, -1);
+        piece = board.SpawnPiece(PieceType.EnergyShield, true, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
-        piece = board.SpawnPiece(PieceType.LandMine, true, -1, -1);
+        piece = board.SpawnPiece(PieceType.EnergyShield, true, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
-        piece = board.SpawnPiece(PieceType.LandMine, true, -1, -1);
+        piece = board.SpawnPiece(PieceType.EnergyShield, true, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
-        piece = board.SpawnPiece(PieceType.LandMine, true, -1, -1);
+        piece = board.SpawnPiece(PieceType.EnergyShield, true, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
 
         piece = board.SpawnPiece(PieceType.Ore, false, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
-        piece = board.SpawnPiece(PieceType.LandMine, false, -1, -1);
+        piece = board.SpawnPiece(PieceType.EnergyShield, false, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
-        piece = board.SpawnPiece(PieceType.LandMine, false, -1, -1);
+        piece = board.SpawnPiece(PieceType.EnergyShield, false, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
-        piece = board.SpawnPiece(PieceType.LandMine, false, -1, -1);
+        piece = board.SpawnPiece(PieceType.EnergyShield, false, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
-        piece = board.SpawnPiece(PieceType.LandMine, false, -1, -1);
+        piece = board.SpawnPiece(PieceType.EnergyShield, false, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
     }

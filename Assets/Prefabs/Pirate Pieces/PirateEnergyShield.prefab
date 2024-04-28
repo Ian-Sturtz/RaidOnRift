@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2040952411381913586}
   - component: {fileID: 4833898257165064853}
-  - component: {fileID: 5425058452558433379}
+  - component: {fileID: 5142765858792060632}
   m_Layer: 0
-  m_Name: PirateLandMine
+  m_Name: PirateEnergyShield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5425058452558433379
+--- !u!114 &5142765858792060632
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 858630950521785915}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f640d6ccd96df9f439ca83539d9cf328, type: 3}
+  m_Script: {fileID: 11500000, guid: 1715335f84937804fa56a821e974dfa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PiratePiece: {fileID: 2100000, guid: 6d441c433bdec444f8a14b627df06304, type: 2}

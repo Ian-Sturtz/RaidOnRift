@@ -49,7 +49,7 @@ public class Tactician : Piece
 
                     if(possibleSquare.currentPiece != null)
                     {
-                        if(!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if(!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.EnergyShield)
                         {
                             moveAssessment[currentX + i, currentY] = 2;
                             right = false;
@@ -76,7 +76,7 @@ public class Tactician : Piece
 
                     if (possibleSquare.currentPiece != null)
                     {
-                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.EnergyShield)
                         {
                             moveAssessment[currentX - i, currentY] = 2;
                             left = false;
@@ -103,7 +103,7 @@ public class Tactician : Piece
 
                     if (possibleSquare.currentPiece != null)
                     {
-                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.EnergyShield)
                         {
                             moveAssessment[currentX, currentY + i] = 2;
                             up = false;
@@ -130,7 +130,7 @@ public class Tactician : Piece
 
                     if (possibleSquare.currentPiece != null)
                     {
-                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.EnergyShield)
                         {
                             moveAssessment[currentX, currentY - i] = 2;
                             down = false;
@@ -200,7 +200,7 @@ public class Tactician : Piece
                             {
                                 mimicPieces[0] = true;
                             }
-                            else if (squareInRange.currentPiece.type == PieceType.Bomber && !mimicPieces[1])
+                            else if (squareInRange.currentPiece.type == PieceType.Engineer && !mimicPieces[1])
                             {
                                 mimicPieces[1] = true;
                             }
@@ -292,7 +292,7 @@ public class Tactician : Piece
 
                     if (possibleSquare.currentPiece != null)
                     {
-                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.EnergyShield)
                         {
                             moveAssessment[currentX + i, currentY] = 2;
                             right = false;
@@ -319,7 +319,7 @@ public class Tactician : Piece
 
                     if (possibleSquare.currentPiece != null)
                     {
-                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.EnergyShield)
                         {
                             moveAssessment[currentX - i, currentY] = 2;
                             left = false;
@@ -346,7 +346,7 @@ public class Tactician : Piece
 
                     if (possibleSquare.currentPiece != null)
                     {
-                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.EnergyShield)
                         {
                             moveAssessment[currentX, currentY + i] = 2;
                             up = false;
@@ -373,7 +373,7 @@ public class Tactician : Piece
 
                     if (possibleSquare.currentPiece != null)
                     {
-                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        if (!possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.EnergyShield)
                         {
                             moveAssessment[currentX, currentY - i] = 2;
                             down = false;

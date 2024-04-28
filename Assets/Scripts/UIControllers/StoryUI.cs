@@ -289,7 +289,7 @@ public class StoryUI : MonoBehaviour
                 StaticTutorialControl.cameFromStoryScene = true;
                 break;
             case "Navy Engineer":
-                StaticTutorialControl.piece = PieceType.Bomber;
+                StaticTutorialControl.piece = PieceType.Engineer;
                 StaticTutorialControl.isNavy = true;
                 StaticTutorialControl.cameFromStoryScene = true;
                 break;
@@ -335,7 +335,7 @@ public class StoryUI : MonoBehaviour
                 StaticTutorialControl.cameFromStoryScene = true;
                 break;
             case "Pirate Engineer":
-                StaticTutorialControl.piece = PieceType.Bomber;
+                StaticTutorialControl.piece = PieceType.Engineer;
                 StaticTutorialControl.isNavy = false;
                 StaticTutorialControl.cameFromStoryScene = true;
                 break;
