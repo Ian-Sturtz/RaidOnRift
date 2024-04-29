@@ -12,7 +12,7 @@ public class PPJailBoard : MonoBehaviour
 
     public Piece[] navyJailedPieces;        // Captured Navy Pieces
     public Piece[] pirateJailedPieces;      // Captured Pirate Pieces
-    private float jail_square_size = .5f;
+    private float jail_square_size = .6f;
 
     private void Start()
     {
@@ -132,6 +132,7 @@ public class PPJailBoard : MonoBehaviour
         }
 
         cp.transform.localScale *= jail_square_size;
+
         cp.type = type;
         cp.isNavy = isNavy;
 

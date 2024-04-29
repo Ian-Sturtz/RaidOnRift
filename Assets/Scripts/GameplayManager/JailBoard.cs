@@ -119,7 +119,7 @@ public class JailBoard : MonoBehaviour
             cell.FlashMaterial(cell.clickedJailMaterial, 3);
     }
 
-    public int FindFirstOpen(GameObject[] teamJailCell, bool tactician = false)
+    protected int FindFirstOpen(GameObject[] teamJailCell, bool tactician = false)
     {
         GameObject cellBuffer;
 
@@ -223,9 +223,6 @@ public class JailBoard : MonoBehaviour
         }
 
         cp.transform.localScale *= jail_square_size;
-
-        if (board.boardRotated)
-            cp.transform.Rotate(0f, 0f, 180f, Space.Self);
 
         cp.type = type;
         cp.isNavy = isNavy;

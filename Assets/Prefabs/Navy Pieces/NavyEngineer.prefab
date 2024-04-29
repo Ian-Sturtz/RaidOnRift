@@ -112,9 +112,6 @@ MonoBehaviour:
   currentY: -1
   flashDelay: 1
   capturedBomb: {fileID: 0}
-  PieceImage: {fileID: 2888849903952340983}
-  regularSprite: {fileID: 21300000, guid: 6458b88d33be0c54096aaa14cd4cbcca, type: 3}
-  capturedSprite: {fileID: 21300000, guid: fe5bc073f45e494458ece00f83da80c5, type: 3}
 --- !u!1 &7449086273460967945
 GameObject:
   m_ObjectHideFlags: 0

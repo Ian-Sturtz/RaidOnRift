@@ -19,7 +19,7 @@ public class Corsair : Piece
 
         board = GameBoard.GetComponent<GameBoard>();
 
-        if (board == null || SceneManager.GetActiveScene().name == "Tutorial")
+        if (board == null)
         {
             pieceSelectionScene = true;
         }
@@ -72,7 +72,7 @@ public class Corsair : Piece
                     }
                 }
             }
-            for (int i = 1; i <= 9; i++)
+            for (int i = 1; i <= 2; i++)
             {
 
                 // Upper Right
@@ -150,7 +150,7 @@ public class Corsair : Piece
                     }
                 }
             }
-            for (int i = 1; i <= 9; i++)
+            for (int i = 1; i <= 2; i++)
             {
 
                 // Upper Right

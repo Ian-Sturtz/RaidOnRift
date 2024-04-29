@@ -1,21 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PieceManager : MonoBehaviour
 {
     public static PieceManager instance;
     public bool isActive = false;
     public bool onlineMultiplayer = false;
-    public bool startingFromBoard = false;
 
     public int navyRoyal1;
     public int navyRoyal2;
     public int navyMate;
     public int navyQuartermaster;
     public int navyCannon;
-    public int navyEngineer;
+    public int navyBomber;
     public int navyVanguard;
     public int navyNavigator;
     public int navyGunner;
@@ -25,7 +23,7 @@ public class PieceManager : MonoBehaviour
     public int pirateMate;
     public int pirateQuartermaster;
     public int pirateCannon;
-    public int pirateEngineer;
+    public int pirateBomber;
     public int pirateVanguard;
     public int pirateNavigator;
     public int pirateGunner;
@@ -41,15 +39,8 @@ public class PieceManager : MonoBehaviour
     {
         if (instance != null)
         {
-            if(instance.startingFromBoard)
-            {
-                Destroy(instance.gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-                return;
-            }
+            Destroy(gameObject);
+            return;
         }
 
         instance = this;

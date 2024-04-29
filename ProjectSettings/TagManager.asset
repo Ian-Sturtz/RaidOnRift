@@ -19,8 +19,6 @@ TagManager:
   - CorsairJump
   - VolumeSlider
   - LINK
-  - Plus
-  - Minus
   layers:
   - Default
   - TransparentFX

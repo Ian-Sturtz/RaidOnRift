@@ -95,8 +95,6 @@ public class MainMenuManager : MonoBehaviour
 
     void Start()
     {
-        StaticTutorialControl.cameFromStoryScene = true;
-
         double versionNumber;
         double.TryParse(Application.version, out versionNumber);
         versionText.text = "V." + versionNumber;

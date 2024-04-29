@@ -114,7 +114,6 @@ MonoBehaviour:
   superPowered: 0
   PieceImage: {fileID: 5143921721148730941}
   regularSprite: {fileID: 21300000, guid: 186f78eccbd19934887118c7cd5bf524, type: 3}
-  capturedSprite: {fileID: 21300000, guid: 32d5e8c177e47af4fa1849cb96afb4ce, type: 3}
   superpoweredSprite: {fileID: 21300000, guid: 2fb42e335cf99a7488d2e1cb42c96ece, type: 3}
 --- !u!1 &5143921721148730941
 GameObject:
