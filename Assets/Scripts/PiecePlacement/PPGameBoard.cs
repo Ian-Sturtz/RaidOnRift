@@ -125,7 +125,7 @@ public class PPGameBoard : MonoBehaviour
         IdentifyBoardSquares();
 
         piecePlacer = PiecePlacerObject.GetComponent<PiecePlacement>();
-        PlacementTimer.time = 120;
+        PlacementTimer.time = 240;
 
         if (!PieceManager.instance.onlineMultiplayer && !navyTurn)
             StartCoroutine(RotateBoard(false));
