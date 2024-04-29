@@ -1122,9 +1122,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'S T O R Y +
-
-    T U T O R I A L'
+  m_text: T U T O R I A L
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
   m_sharedMaterial: {fileID: 2383952268681313545, guid: 3ab8f94a8e4dd744c99c73fedd26f8f8, type: 2}
@@ -2110,7 +2108,7 @@ GameObject:
   - component: {fileID: 1873535192}
   - component: {fileID: 1873535191}
   m_Layer: 5
-  m_Name: Story
+  m_Name: Tutorial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

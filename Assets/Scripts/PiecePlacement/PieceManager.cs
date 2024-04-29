@@ -41,7 +41,7 @@ public class PieceManager : MonoBehaviour
     {
         if (instance != null)
         {
-            if(PieceManager.instance.startingFromBoard)
+            if(instance.startingFromBoard)
             {
                 Destroy(instance.gameObject);
             }

@@ -140,9 +140,606 @@ public class TTGameBoard : MonoBehaviour
             default:
                 Debug.Log("Default test case");
                 StaticTutorialControl.cameFromStoryScene = true;
-                StartCoroutine(TestEngineer());
+                StartCoroutine(TestCannon());
                 break;
         }
+    }
+    
+    IEnumerator TestCannon()
+    {
+        NavyPieces[0] = SpawnPiece(PieceType.Cannon, true, 9, 2);
+        NavyPieces[1] = SpawnPiece(PieceType.Cannon, true, 0, 1);
+        NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 7, 0);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 3, 4);
+        NavyPieces[4] = SpawnPiece(PieceType.EnergyShield, true, 9, 6);
+
+        PiratePieces[0] = SpawnPiece(PieceType.Cannon, false, 1, 6);
+        PiratePieces[1] = SpawnPiece(PieceType.Cannon, false, 5, 7);
+        PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 4, 9);
+        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 0, 6);
+        PiratePieces[4] = SpawnPiece(PieceType.EnergyShield, false, 7, 6);
+        PiratePieces[5] = SpawnPiece(PieceType.Mate, false, 4, 4);
+        PiratePieces[6] = SpawnPiece(PieceType.Mate, false, 4, 5);
+
+        boardUI.GoalText("Raid On Rift: Tutorial Mode");
+
+        string tutorialHeader = "Cannon - 8 Points";
+        boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Cannon.\n\nClick anywhere to continue.");
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+                break;
+            else
+                yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("This is the Cannon! The Cannon is very fast and great at protecting or attacking from a distance.");
+        boardUI.PieceDisplayDescription("\nHis average cost, combined with his unmatched range and mobility make him a strong member of most teams.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green Cannon to see how he can move.", true);
+
+        TTSquare currentSquare = tiles[9, 2].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[0].GetComponent<Cannon>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                }
+                else if(moveAssessment[x,y] == 5)
+                {
+                    tiles[x, y].tag = "CannonDestination";
+                }
+            }
+        }
+
+        boardUI.PieceDisplayDescription("The Cannon can move to any open square next to him.");
+        boardUI.PieceDisplayDescription("\nHe can also jump over other pieces in up/down or left/right directions from him, no matter how far away they are.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green square to jump there.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "CannonDestination")
+                    {
+                        ResetBoardMaterials();
+                        MovePiece(NavyPieces[0], 9, 7);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        MovePiece(PiratePieces[0], 0, 5);
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Very nice. The Cannon can jump across any open distance, making him extremely mobile.");
+        boardUI.PieceDisplayDescription("\nRemember, in order for the Cannon to jump over a piece, he has to have room on the other side to land.", true);
+        boardUI.PieceDisplayDescription("\nClick on the Cannon again to see what else he can do.", true);
+
+        currentSquare = tiles[9, 7].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[0].GetComponent<Cannon>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                }
+                else if(moveAssessment[x,y] == 4)
+                {
+                    TTSquare captureTarget = tiles[x, y].GetComponent<TTSquare>();
+                    if (!captureTarget.currentPiece.isNavy)
+                    {
+                        tiles[x, y].tag = "CaptureSquare";
+                        tiles[x,y].GetComponent<TTSquare>().SetMaterial(currentSquare.enemyBoardMaterial);
+                    }
+                }
+                else if (moveAssessment[x, y] == 5)
+                {
+                    if(x == 9 && y == 5)
+                    {
+                        tiles[x, y].GetComponent<TTSquare>().SquareHasBeenClicked = true;
+                    }
+                    else
+                    {
+                        tiles[x, y].tag = "CannonDestination";
+                    }
+                }
+            }
+        }
+
+        boardUI.PieceDisplayDescription("Look at that! That enemy Cannon is exposed! That means he can be jumped!");
+        boardUI.PieceDisplayDescription("\nJumping an enemy piece will capture it. The Cannon can't capture Energy Shields, though.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green square to jump there.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "CannonDestination")
+                    {
+                        ResetBoardMaterials();
+                        jail.InsertAPiece(PiratePieces[1]);
+                        PiratePieces[1].destroyPiece();
+                        NavyPieces[0].hasCaptured = true;
+                        MovePiece(NavyPieces[0], 4, 7);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        jail.InsertAPiece(NavyPieces[1]);
+                        NavyPieces[1].destroyPiece();
+                        PiratePieces[0].hasCaptured = true;
+                        MovePiece(PiratePieces[0], 0, 0);
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("That was a nice capture!");
+        boardUI.PieceDisplayDescription("\nIt looks like that other enemy Cannon is getting pretty close your Ore though, you should definitely go put a stop to that before it's too late.", true);
+        boardUI.PieceDisplayDescription("\nClick on the Cannon again to keep moving him.", true);
+
+        currentSquare = tiles[4, 7].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[0].GetComponent<Cannon>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                }
+                else if (moveAssessment[x, y] == 4)
+                {
+                    TTSquare captureTarget = tiles[x, y].GetComponent<TTSquare>();
+                    if (!captureTarget.currentPiece.isNavy)
+                    {
+                        tiles[x, y].tag = "CaptureSquare";
+                        tiles[x, y].GetComponent<TTSquare>().SetMaterial(currentSquare.enemyBoardMaterial);
+                    }
+                }
+                else if (moveAssessment[x, y] == 5)
+                {
+                    tiles[x, y].tag = "CannonDestination";
+                }
+            }
+        }
+
+        boardUI.PieceDisplayDescription("Remember how the Cannon has to have space on the other side of a piece in order for it to jump?");
+        boardUI.PieceDisplayDescription("\nRight now, the Cannon can't jump the Ore since there's no space on the board, and he can't jump the Mate below him since there's another Mate on the other side of him.", true);
+        boardUI.PieceDisplayDescription("\nInstead, click on the flashing green square to move there.", true);
+
+        tiles[5, 6].tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        
+                        MovePiece(NavyPieces[0], 5, 6);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        jail.InsertAPiece(NavyPieces[2]);
+                        NavyPieces[2].destroyPiece();
+                        PiratePieces[0].hasOre = true;
+                        MovePiece(PiratePieces[0], 8, 0);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        MovePiece(PiratePieces[0], 8, 1);
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Yikes! The enemy Cannon captured the Ore!");
+        boardUI.PieceDisplayDescription("\nYou need to get your Cannon over there and deal with him, immediately!", true);
+        boardUI.PieceDisplayDescription("\nClick on the Cannon again to keep moving.", true);
+
+        currentSquare = tiles[5, 6].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[0].GetComponent<Cannon>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                }
+                else if (moveAssessment[x, y] == 5)
+                {
+                    tiles[x, y].tag = "CannonDestination";
+                }
+            }
+        }
+
+        boardUI.PieceDisplayDescription("Nice! The Cannon can jump over that Energy Shield to get to the other side of the board quickly.");
+        boardUI.PieceDisplayDescription("\nAlso, notice how the Cannon can't touch that enemy Mate right now? Cannons can only capture by jumping over pieces.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green square to jump into position.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "CannonDestination")
+                    {
+                        ResetBoardMaterials();
+
+                        MovePiece(NavyPieces[0], 8, 6);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        MovePiece(PiratePieces[0], 8, 2);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Perfect! Remember, Cannons can jump Energy Shields but they can't capture them.");
+        boardUI.PieceDisplayDescription("\nNow your Cannon is in the perfect position to take that enemy Orebearer out!", true);
+        boardUI.PieceDisplayDescription("\nClick on the Cannon again to line up the jump and take the Orebearer out.", true);
+
+        currentSquare = tiles[8, 6].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[0].GetComponent<Cannon>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                }
+                else if (moveAssessment[x, y] == 4)
+                {
+                    TTSquare captureTarget = tiles[x, y].GetComponent<TTSquare>();
+                    if (captureTarget.currentPiece.type != PieceType.EnergyShield)
+                    {
+                        tiles[x, y].tag = "CaptureSquare";
+                        tiles[x, y].GetComponent<TTSquare>().SetMaterial(currentSquare.enemyBoardMaterial);
+                    }
+                }
+                else if (moveAssessment[x, y] == 5)
+                {
+                    if (x == 6 && y == 6)
+                    {
+                        tiles[x, y].GetComponent<TTSquare>().SquareHasBeenClicked = true;
+                    }
+                    else
+                    {
+                        tiles[x, y].tag = "CannonDestination";
+                    }
+                }
+            }
+        }
+
+        boardUI.PieceDisplayDescription("The enemy Orebearer is in range!");
+        boardUI.PieceDisplayDescription("\nQuickly, click on the flashing green square to capture the enemy Orebearer and take back your Ore!", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "CannonDestination")
+                    {
+                        ResetBoardMaterials();
+                        jail.InsertAPiece(PiratePieces[0]);
+                        PiratePieces[0].destroyPiece();
+                        PiratePieces[0].hasCaptured = true;
+                        MovePiece(NavyPieces[0], 8, 1);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare = tiles[8, 1].GetComponent<TTSquare>();
+        currentSquare.tag = "CaptureSquare";
+        moveAssessment = NavyPieces[0].GetComponent<Piece>().GetValidOreReset(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 7)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.enemyBoardMaterial);
+                    }
+                }
+            }
+        }
+
+        jail.PirateJailCells[1].GetComponent<TTJailCell>().interactable = true;
+
+        boardUI.PieceDisplayDescription("Good Job! You've captured the enemy Orebearer!");
+        boardUI.PieceDisplayDescription("\nYour Ore is safe for another turn, and now needs to get redeployed back to the battlefield.", true);
+        boardUI.PieceDisplayDescription("\nClick on any of the red squares to redeploy your ore and finish this tutorial!", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "MoveableSquare")
+                    {
+                        Vector2Int respawnCoords = IdentifyThisBoardSquare(tileSelected);
+                        ResetBoardMaterials();
+                        jail.navyJailedPieces[1].GetComponent<Piece>().destroyPiece();
+                        jail.PirateJailCells[1].GetComponent<TTJailCell>().resetCell();
+                        NavyPieces[2] = SpawnPiece(PieceType.Ore, true, respawnCoords.x, respawnCoords.y);
+                        tileSelected.GetComponent<TTSquare>().FlashMaterial(currentSquare.moveableBoardMaterial, 3);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        boardUI.PieceDisplayDescription("Congrats on finishing this tutorial!");
+        boardUI.PieceDisplayDescription("\nGood luck!", true);
+
+        yield return new WaitForSeconds(3f);
+        ExitTutorial();
     }
 
     IEnumerator TestEngineer()
@@ -177,7 +774,7 @@ public class TTGameBoard : MonoBehaviour
 
         boardUI.PieceDisplayDescription("This is the Engineer! The Engineer is extremely useful for any team.");
         boardUI.PieceDisplayDescription("\nHe's slightly expensive to add to your team, but his unique abilities make him extremely important.", true);
-        boardUI.PieceDisplayDescription("\nClick on the flashing green Engineer to see how it can move.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green Engineer to see how he can move.", true);
 
         TTSquare currentSquare = tiles[4, 4].GetComponent<TTSquare>();
         currentSquare.tag = "InteractablePiece";
@@ -229,7 +826,7 @@ public class TTGameBoard : MonoBehaviour
         tiles[4, 6].GetComponent<TTSquare>().SetMaterial(currentSquare.enemyBoardMaterial);
 
         boardUI.PieceDisplayDescription("The Engineer can move up to 2 open squares in any direction.");
-        boardUI.PieceDisplayDescription("\nIt is the only piece that can remove enemy Energy Shields from the board. Notice how it can't capture that Pirate Engineer or that Navy Energy Shield, though?", true);
+        boardUI.PieceDisplayDescription("\nHe is the only piece that can remove enemy Energy Shields from the board. Notice how he can't capture that Pirate Engineer or that Navy Energy Shield, though?", true);
         boardUI.PieceDisplayDescription("\nClick on the red square to capture the enemy Energy Shield.", true);
 
         while (true)
@@ -1774,32 +2371,6 @@ public class TTGameBoard : MonoBehaviour
 
             yield return null;
         }
-
-        boardUI.PieceDisplayDescription("Congrats on finishing this tutorial!");
-        boardUI.PieceDisplayDescription("\nGood luck!", true);
-
-        yield return new WaitForSeconds(3f);
-        ExitTutorial();
-    }
-
-    IEnumerator TestCannon()
-    {
-        NavyPieces[0] = SpawnPiece(PieceType.Cannon, true, 5, 5);
-
-        boardUI.GoalText("Raid On Rift: Tutorial Mode");
-
-        string tutorialHeader = "Cannon - 8 Points";
-        boardUI.SetPieceDisplay(tutorialHeader, "Welcome to tutorial mode! In this tutorial, you will learn about the Cannon.\n\nClick anywhere to continue.");
-
-        while (true)
-        {
-            if (Input.GetMouseButtonDown(0))
-                break;
-            else
-                yield return null;
-        }
-
-        yield return new WaitForEndOfFrame();
 
         boardUI.PieceDisplayDescription("Congrats on finishing this tutorial!");
         boardUI.PieceDisplayDescription("\nGood luck!", true);
