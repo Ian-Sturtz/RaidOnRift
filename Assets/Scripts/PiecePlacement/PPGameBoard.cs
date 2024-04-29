@@ -42,6 +42,7 @@ public class PPGameBoard : MonoBehaviour
 
     [SerializeField] private GameObject PiecePlacerObject;
     [SerializeField] private PiecePlacement piecePlacer;
+    public bool piecesSpawned = false;
     [SerializeField] private bool navyDone = true;
     [SerializeField] private bool pirateDone = true;
     [SerializeField] private bool piecesDone = false;
@@ -286,6 +287,7 @@ public class PPGameBoard : MonoBehaviour
             if (!oreSpawned)
             {
                 viewBlocker.SetActive(false);
+                piecesSpawned = false;
                 piecePlacer.SpawnOresAndShields();
                 if (PieceManager.instance.onlineMultiplayer)
                     MultiplayerController.Instance.gameWon = -1;
@@ -296,6 +298,17 @@ public class PPGameBoard : MonoBehaviour
                 navyTurn = PieceManager.instance.navyFirst;
                 PlacementTimer.time = 60;
                 PlacementTimer.ResetBar();
+                StartCoroutine(RotateBoard(navyTurn));
+
+                if (PieceManager.instance.onlineMultiplayer)
+                {
+                    if(playerIsNavy == navyTurn)
+                    {
+                        boardUI.UpdateTurn(navyTurn);
+                        boardUI.GoalText(defaultText);
+                        boardUI.PlayTurnAnim(navyTurn);
+                    }
+                }
             }
             else
             {
@@ -606,6 +619,8 @@ public class PPGameBoard : MonoBehaviour
         cp.type = type;
         cp.isNavy = isNavy;
 
+        Debug.Log($"The board is {boardRotated} rotated");
+
         if (boardRotated)
             cp.transform.Rotate(0, 0, 180f, Space.Self);
 
@@ -751,9 +766,15 @@ public class PPGameBoard : MonoBehaviour
         boardUI.GoalText("Click on a green square to place that piece there,", true);
         boardUI.GoalText("or click the piece again to cancel.", true);
     }
+
     IEnumerator RotateBoard(bool navyAtBottom)
     {
         Debug.Log($"Positioning the {navyAtBottom} pieces to the bottom of the screen");
+        
+        while(!piecesSpawned)
+        {
+            yield return new WaitForFixedUpdate();
+        }
 
         while (pieceMoving)
         {
@@ -765,29 +786,33 @@ public class PPGameBoard : MonoBehaviour
             if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy))
             {
                 Debug.Log("Putting the navy at the bottom of the screen");
-                gameBoard.transform.Rotate(0f, 0f, -180f, Space.Self);
-                jail.transform.Rotate(0f, 0f, -180f, Space.Self);
+                gameBoard.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                jail.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
                 for (int i = 0; i < teamSize; i++)
                 {
                     if (NavyPieces[i] != null)
                     {
-                        NavyPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        NavyPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                     }
 
                     if (PiratePieces[i] != null)
                     {
-                        PiratePieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        PiratePieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                     }
 
                     if(jail.navyJailedPieces[i] != null)
                     {
-                        jail.navyJailedPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.navyJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                     }
 
                     if(jail.pirateJailedPieces[i] != null)
                     {
-                        jail.pirateJailedPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.pirateJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                     }
                 }
 
@@ -799,31 +824,33 @@ public class PPGameBoard : MonoBehaviour
             if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && !playerIsNavy))
             {
                 Debug.Log("Putting the pirates at the bottom of the screen");
-                gameBoard.transform.Rotate(0f, 0f, 180f, Space.Self);
-                jail.transform.Rotate(0f, 0f, 180f, Space.Self);
+                gameBoard.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                jail.transform.localRotation = Quaternion.Euler(0, 0, 180);
 
                 for (int i = 0; i < teamSize; i++)
                 {
                     if (NavyPieces[i] != null)
                     {
                         Debug.Log($"Rotated the {i}th piece");
-                        NavyPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                        NavyPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
                     }
 
                     if (PiratePieces[i] != null)
                     {
                         Debug.Log($"Rotated the {i}th piece");
-                        PiratePieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                        PiratePieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
                     }
 
                     if (jail.navyJailedPieces[i] != null)
                     {
-                        jail.navyJailedPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.navyJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
                     }
 
                     if (jail.pirateJailedPieces[i] != null)
                     {
-                        jail.pirateJailedPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.pirateJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
                     }
                 }
 

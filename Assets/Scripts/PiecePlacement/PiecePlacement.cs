@@ -232,6 +232,8 @@ public class PiecePlacement : MonoBehaviour
             jail.InsertAPiece(piece);
             piece.destroyPiece();
         }
+
+        board.piecesSpawned = true;
     }
 
     public void SpawnOresAndShields()
@@ -271,5 +273,7 @@ public class PiecePlacement : MonoBehaviour
         piece = board.SpawnPiece(PieceType.EnergyShield, false, -1, -1);
         jail.InsertAPiece(piece);
         piece.destroyPiece();
+
+        board.piecesSpawned = true;
     }
 }

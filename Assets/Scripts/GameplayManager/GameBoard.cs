@@ -39,6 +39,7 @@ public class GameBoard : MonoBehaviour
 
     BoardUI boardUI;
 
+    public bool piecesSpawned = false;
     public bool pieceMoving = false;
     public bool boardRotated = false;
 
@@ -1799,6 +1800,7 @@ public class GameBoard : MonoBehaviour
             }
         }
 
+        piecesSpawned = true;
         boardUI.PlayTurnAnim(navyTurn);
     }
 
@@ -1840,6 +1842,11 @@ public class GameBoard : MonoBehaviour
     {
         Debug.Log($"Positioning the {navyAtBottom} pieces to the bottom of the screen");
 
+        while (!piecesSpawned)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
         while (pieceMoving)
         {
             yield return new WaitForFixedUpdate();
@@ -1849,41 +1856,47 @@ public class GameBoard : MonoBehaviour
         {
             if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy))
             {
-                Debug.Log("Putting the navy at the bottom of the screen");
-                gameBoard.transform.Rotate(0f, 0f, -180f, Space.Self);
+                Debug.Log("Putting the pirates at the bottom of the screen");
+                gameBoard.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
                 // Make sure gunner animates correctly
-                gunnerLine.transform.Rotate(0f, 0f, -180f, Space.Self);
+                gunnerLine.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1) * -1;
                 gunnerParticles.GetComponent<Transform>().transform.position = targetPos;
-                jail.transform.Rotate(0f, 0f, -180f, Space.Self);
-                boardRotated = false;
+
+                jail.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
                 for (int i = 0; i < teamSize; i++)
                 {
                     if (NavyPieces[i] != null)
                     {
-                        NavyPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        NavyPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                     }
 
                     if (PiratePieces[i] != null)
                     {
-                        PiratePieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        PiratePieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                     }
 
-                    if(jail.pirateJailedPieces[i] != null)
+                    if (jail.navyJailedPieces[i] != null)
                     {
-                        jail.pirateJailedPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.navyJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                     }
 
-                    if(jail.navyJailedPieces[i] != null)
+                    if (jail.pirateJailedPieces[i] != null)
                     {
-                        jail.navyJailedPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.pirateJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                     }
                 }
 
                 yield return new WaitForSeconds(0.5f);
-                gunnerLine.transform.Rotate(0f, 0f, 180f, Space.Self);
+                gunnerLine.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+                boardRotated = false;
             }
         }
         else
@@ -1891,40 +1904,46 @@ public class GameBoard : MonoBehaviour
             if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && !playerIsNavy))
             {
                 Debug.Log("Putting the pirates at the bottom of the screen");
-                gameBoard.transform.Rotate(0f, 0f, 180f, Space.Self);
+                gameBoard.transform.localRotation = Quaternion.Euler(0, 0, 180);
 
                 // Make sure gunner animates correctly
-                gunnerLine.transform.Rotate(0f, 0f, 180f, Space.Self);
+                gunnerLine.transform.localRotation = Quaternion.Euler(0, 0, 180);
                 Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1) * -1;
                 gunnerParticles.GetComponent<Transform>().transform.position = targetPos;
-                jail.transform.Rotate(0f, 0f, 180f, Space.Self);
-                boardRotated = true;
+
+                jail.transform.localRotation = Quaternion.Euler(0, 0, 180);
 
                 for (int i = 0; i < teamSize; i++)
                 {
                     if (NavyPieces[i] != null)
                     {
-                        NavyPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        NavyPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
                     }
 
                     if (PiratePieces[i] != null)
                     {
-                        PiratePieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
-                    }
-
-                    if (jail.pirateJailedPieces[i] != null)
-                    {
-                        jail.pirateJailedPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        PiratePieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
                     }
 
                     if (jail.navyJailedPieces[i] != null)
                     {
-                        jail.navyJailedPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.navyJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
+                    }
+
+                    if (jail.pirateJailedPieces[i] != null)
+                    {
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.pirateJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
                     }
                 }
 
                 yield return new WaitForSeconds(0.5f);
-                gunnerLine.transform.Rotate(0f, 0f, -180f, Space.Self);
+                gunnerLine.transform.localRotation = Quaternion.Euler(0, 0, 180);
+
+                boardRotated = true;
             }
         }
 
