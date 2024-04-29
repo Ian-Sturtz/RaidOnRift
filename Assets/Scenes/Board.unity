@@ -3760,13 +3760,14 @@ MonoBehaviour:
   tile_size_margins: 1.05
   game_board_size: 10.55
   pieceMoving: 0
+  boardRotated: 0
   JailCells: {fileID: 0}
   jail: {fileID: 0}
   teamSize: 30
   squareSelected: 0
   tileSelected: {fileID: 0}
   storedTileSelected: {fileID: 0}
-  bomberSelected: 0
+  engineerSelected: 0
   landMineSelected: 0
   landMineInJail: 0
   tacticianSelected: 0
@@ -17459,12 +17460,150 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameBoard: {fileID: 0}
   board: {fileID: 0}
-  NavyJailCells: []
-  PirateJailCells: []
-  TacticianMimicCells: []
-  navyJailedPieces: []
-  pirateJailedPieces: []
-  tacticianMimicPieces: []
+  NavyJailCells:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  PirateJailCells:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  TacticianMimicCells:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  navyJailedPieces:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  pirateJailedPieces:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  tacticianMimicPieces:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &715274901
 Transform:
   m_ObjectHideFlags: 0
@@ -41478,7 +41617,7 @@ MonoBehaviour:
   navyMate: 5
   navyQuartermaster: 1
   navyCannon: 1
-  navyBomber: 1
+  navyEngineer: 0
   navyVanguard: 1
   navyNavigator: 1
   navyGunner: 1
@@ -41487,11 +41626,11 @@ MonoBehaviour:
   pirateMate: 5
   pirateQuartermaster: 1
   pirateCannon: 1
-  pirateBomber: 1
+  pirateEngineer: 0
   pirateVanguard: 1
   pirateNavigator: 1
   pirateGunner: 1
-  navyFirst: 1
+  navyFirst: 0
   pieceTypes: 020000000a000000000000000300000002000000080000000200000007000000040000000900000006000000050000000200000002000000010000000100000001000000010000000100000001000000010000000100000008000000030000000600000009000000020000000200000005000000070000000200000000000000020000000a0000000400000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   factions: 010101010101010101010101010101000000000101010000000000000000000000000000000000000000000000000000000000000000000000000000
   totalPieces: 36
