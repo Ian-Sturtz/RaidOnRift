@@ -7,6 +7,15 @@ public class NextScene : MonoBehaviour
 {
     void OnEnable()
     {
-        SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
+        if (!StaticTutorialControl.cameFromStoryScene)
+        {
+            StaticTutorialControl.piece = PieceType.Mate;
+            StaticTutorialControl.cameFromStoryScene = false;
+            SceneManager.LoadScene("Tutorial", LoadSceneMode.Single);
+        }
+        else
+        {
+            SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
+        }
     }
 }

@@ -42,10 +42,16 @@ public class PPGameBoard : MonoBehaviour
 
     [SerializeField] private GameObject PiecePlacerObject;
     [SerializeField] private PiecePlacement piecePlacer;
+    public bool piecesSpawned = false;
     [SerializeField] private bool navyDone = true;
     [SerializeField] private bool pirateDone = true;
     [SerializeField] private bool piecesDone = false;
     [SerializeField] private bool oreSpawned = false;
+    
+    [SerializeField] private Material navyBoardSquares;
+    [SerializeField] private Material navyBoardSquaresOre;
+    [SerializeField] private Material pirateBoardSquares;
+    [SerializeField] private Material pirateBoardSquaresOre;
 
     public bool pieceMoving = false;
     private bool boardRotated = false;
@@ -119,7 +125,7 @@ public class PPGameBoard : MonoBehaviour
         IdentifyBoardSquares();
 
         piecePlacer = PiecePlacerObject.GetComponent<PiecePlacement>();
-        PlacementTimer.time = 120;
+        PlacementTimer.time = 240;
 
         if (!PieceManager.instance.onlineMultiplayer && !navyTurn)
             StartCoroutine(RotateBoard(false));
@@ -281,6 +287,7 @@ public class PPGameBoard : MonoBehaviour
             if (!oreSpawned)
             {
                 viewBlocker.SetActive(false);
+                piecesSpawned = false;
                 piecePlacer.SpawnOresAndShields();
                 if (PieceManager.instance.onlineMultiplayer)
                     MultiplayerController.Instance.gameWon = -1;
@@ -291,6 +298,17 @@ public class PPGameBoard : MonoBehaviour
                 navyTurn = PieceManager.instance.navyFirst;
                 PlacementTimer.time = 60;
                 PlacementTimer.ResetBar();
+                StartCoroutine(RotateBoard(navyTurn));
+
+                if (PieceManager.instance.onlineMultiplayer)
+                {
+                    if(playerIsNavy == navyTurn)
+                    {
+                        boardUI.UpdateTurn(navyTurn);
+                        boardUI.GoalText(defaultText);
+                        boardUI.PlayTurnAnim(navyTurn);
+                    }
+                }
             }
             else
             {
@@ -355,7 +373,7 @@ public class PPGameBoard : MonoBehaviour
 
                         DetectValidSquares(currentSquare);
 
-                        if(currentSquare.currentPiece.type == PieceType.Ore || currentSquare.currentPiece.type == PieceType.LandMine) 
+                        if(currentSquare.currentPiece.type == PieceType.Ore || currentSquare.currentPiece.type == PieceType.EnergyShield) 
                             boardUI.UpdateSelectedPiece(currentSquare.currentPiece.type, currentSquare.currentPiece.isNavy, false, true);
                         else boardUI.UpdateSelectedPiece(currentSquare.currentPiece.type, currentSquare.currentPiece.isNavy);
                     }
@@ -481,6 +499,27 @@ public class PPGameBoard : MonoBehaviour
 
                 GameObject boardSquare = GameObject.Find(piecename);
 
+                if(y == 1)
+                {
+                    boardSquare.GetComponent<PPSquare>().SetMaterial(navyBoardSquaresOre);
+                    boardSquare.GetComponent<PPSquare>().defaultBoardMaterial = navyBoardSquaresOre;
+                }
+                else if (y == 2 || y == 3)
+                {
+                    boardSquare.GetComponent<PPSquare>().SetMaterial(navyBoardSquares);
+                    boardSquare.GetComponent<PPSquare>().defaultBoardMaterial = navyBoardSquares;
+                }
+                else if (y == 8 || y == 9)
+                {
+                    boardSquare.GetComponent<PPSquare>().SetMaterial(pirateBoardSquares);
+                    boardSquare.GetComponent<PPSquare>().defaultBoardMaterial = pirateBoardSquares;
+                }
+                else if (y == 10)
+                {
+                    boardSquare.GetComponent<PPSquare>().SetMaterial(pirateBoardSquaresOre);
+                    boardSquare.GetComponent<PPSquare>().defaultBoardMaterial = pirateBoardSquaresOre;
+                }
+
                 boardSquare.tag = "GameSquare";
                 
                 tiles[x - 1, y - 1] = boardSquare;
@@ -580,6 +619,8 @@ public class PPGameBoard : MonoBehaviour
         cp.type = type;
         cp.isNavy = isNavy;
 
+        Debug.Log($"The board is {boardRotated} rotated");
+
         if (boardRotated)
             cp.transform.Rotate(0, 0, 180f, Space.Self);
 
@@ -621,7 +662,7 @@ public class PPGameBoard : MonoBehaviour
 
         boardUI.GoalText("");
 
-        if (currentPiece.type == PieceType.LandMine)
+        if (currentPiece.type == PieceType.EnergyShield)
         {
             boardUI.GoalText("This is a Land Mine. It must go in the Neutral Zone (rows 4-7).", true);
             startingRow = 3;
@@ -725,9 +766,15 @@ public class PPGameBoard : MonoBehaviour
         boardUI.GoalText("Click on a green square to place that piece there,", true);
         boardUI.GoalText("or click the piece again to cancel.", true);
     }
+
     IEnumerator RotateBoard(bool navyAtBottom)
     {
         Debug.Log($"Positioning the {navyAtBottom} pieces to the bottom of the screen");
+        
+        while(!piecesSpawned)
+        {
+            yield return new WaitForFixedUpdate();
+        }
 
         while (pieceMoving)
         {
@@ -739,20 +786,33 @@ public class PPGameBoard : MonoBehaviour
             if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && playerIsNavy))
             {
                 Debug.Log("Putting the navy at the bottom of the screen");
-                gameBoard.transform.Rotate(0f, 0f, -180f, Space.Self);
+                gameBoard.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                jail.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
                 for (int i = 0; i < teamSize; i++)
                 {
                     if (NavyPieces[i] != null)
                     {
                         Debug.Log($"Rotated the {i}th piece");
-                        NavyPieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                        NavyPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                     }
 
                     if (PiratePieces[i] != null)
                     {
                         Debug.Log($"Rotated the {i}th piece");
-                        PiratePieces[i].transform.Rotate(0f, 0f, -180f, Space.Self);
+                        PiratePieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    }
+
+                    if(jail.navyJailedPieces[i] != null)
+                    {
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.navyJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    }
+
+                    if(jail.pirateJailedPieces[i] != null)
+                    {
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.pirateJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                     }
                 }
 
@@ -764,20 +824,33 @@ public class PPGameBoard : MonoBehaviour
             if (!PieceManager.instance.onlineMultiplayer || (PieceManager.instance.onlineMultiplayer && !playerIsNavy))
             {
                 Debug.Log("Putting the pirates at the bottom of the screen");
-                gameBoard.transform.Rotate(0f, 0f, 180f, Space.Self);
+                gameBoard.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                jail.transform.localRotation = Quaternion.Euler(0, 0, 180);
 
                 for (int i = 0; i < teamSize; i++)
                 {
                     if (NavyPieces[i] != null)
                     {
                         Debug.Log($"Rotated the {i}th piece");
-                        NavyPieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                        NavyPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
                     }
 
                     if (PiratePieces[i] != null)
                     {
                         Debug.Log($"Rotated the {i}th piece");
-                        PiratePieces[i].transform.Rotate(0f, 0f, 180f, Space.Self);
+                        PiratePieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
+                    }
+
+                    if (jail.navyJailedPieces[i] != null)
+                    {
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.navyJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
+                    }
+
+                    if (jail.pirateJailedPieces[i] != null)
+                    {
+                        Debug.Log($"Rotated the {i}th piece");
+                        jail.pirateJailedPieces[i].transform.localRotation = Quaternion.Euler(0, 0, 180);
                     }
                 }
 
@@ -863,7 +936,7 @@ public class PPGameBoard : MonoBehaviour
 
             // ResetBoardMaterials();
 
-            if (currentPiece.type == PieceType.Ore || currentPiece.type == PieceType.LandMine)
+            if (currentPiece.type == PieceType.Ore || currentPiece.type == PieceType.EnergyShield)
                 NextTurn();
 
             currentPiece.destroyPiece();

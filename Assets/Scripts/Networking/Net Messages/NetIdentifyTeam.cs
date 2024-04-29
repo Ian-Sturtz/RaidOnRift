@@ -7,7 +7,7 @@ public class NetIdentifyTeam : NetMessage
     public int teamID { set; get; }         // 0: Navy, 1: Pirates
     public int totalPoints { set; get; }    // Total points of a team
     public int Mate_Count { set; get; }     // How many Mates?
-    public int Bomber_Count { set; get; }   // How many Engineers?
+    public int Engineer_Count { set; get; }   // How many Engineers?
     public int Vanguard_Count { set; get; } // How many Vanguard?
     public int Navigator_Count { set; get; }// How many Navigators?
     public int Gunner_Count { set; get; }   // How many Gunners?
@@ -34,7 +34,7 @@ public class NetIdentifyTeam : NetMessage
         writer.WriteInt(teamID);
         writer.WriteInt(totalPoints);
         writer.WriteInt(Mate_Count);
-        writer.WriteInt(Bomber_Count);
+        writer.WriteInt(Engineer_Count);
         writer.WriteInt(Vanguard_Count);
         writer.WriteInt(Navigator_Count);
         writer.WriteInt(Gunner_Count);
@@ -48,7 +48,7 @@ public class NetIdentifyTeam : NetMessage
         teamID = reader.ReadInt();
         totalPoints = reader.ReadInt();
         Mate_Count = reader.ReadInt();
-        Bomber_Count = reader.ReadInt();
+        Engineer_Count = reader.ReadInt();
         Vanguard_Count = reader.ReadInt();
         Navigator_Count = reader.ReadInt();
         Gunner_Count = reader.ReadInt();

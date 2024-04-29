@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 public enum PieceType
 {
     Ore = 0,
-    LandMine = 1,
+    EnergyShield = 1,
     Mate = 2,
-    Bomber = 3,
+    Engineer = 3,
     Vanguard = 4,
     Navigator = 5,
     Gunner = 6,
@@ -134,7 +134,7 @@ public class Piece : MonoBehaviour
                         Square possibleSquare = tiles[currentX + x_change, currentY + y_change].GetComponent<Square>();
                         if (possibleSquare.currentPiece == null)
                             moveAssessment[currentX + x_change, currentY + y_change] = 1;
-                        else if (isNavy != possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        else if (isNavy != possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             moveAssessment[currentX + x_change, currentY + y_change] = 2;
                     }
                 }
@@ -152,7 +152,7 @@ public class Piece : MonoBehaviour
                         Square possibleSquare = tiles[currentX + x_change, currentY + y_change].GetComponent<Square>();
                         if (possibleSquare.currentPiece == null)
                             moveAssessment[currentX + x_change, currentY + y_change] = 1;
-                        else if (isNavy != possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.LandMine)
+                        else if (isNavy != possibleSquare.currentPiece.isNavy && possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             moveAssessment[currentX + x_change, currentY + y_change] = 2;
                     }
                 }

@@ -6,6 +6,7 @@ using Unity.Networking.Transport;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class PieceSelection : MonoBehaviour
@@ -17,15 +18,15 @@ public class PieceSelection : MonoBehaviour
     
     private int royal1 = 0;
     private int royal2 = 0;
-    private int mate = 5;
+    private int mate = 0;
     private int quartermaster = 0;
     private int cannon = 0;
-    private int bomber = 0;
+    private int engineer = 0;
     private int vanguard = 0;
     private int navigator = 0;
     private int gunner = 0;
 
-    private int totalPoints = 5;
+    private int totalPoints = 0;
 
     [SerializeField] private int navyTotal = 0;
     [SerializeField] private int pirateTotal = 0;
@@ -69,15 +70,15 @@ public class PieceSelection : MonoBehaviour
     #endregion
 
     #region Point Values/Info
-    [SerializeField] private int royal1Points = 22;
-    [SerializeField] private int royal2Points = 16;
-    [SerializeField] private int matePoints = 1;
+    [SerializeField] private int royal1Points = 25;
+    [SerializeField] private int royal2Points = 20;
+    [SerializeField] private int matePoints = 2;
     [SerializeField] private int quartermasterPoints = 7;
-    [SerializeField] private int cannonPoints = 7;
-    [SerializeField] private int bomberPoints = 3;
-    [SerializeField] private int vanguardPoints = 6;
-    [SerializeField] private int navigatorPoints = 5;
-    [SerializeField] private int gunnerPoints = 7;
+    [SerializeField] private int cannonPoints = 8;
+    [SerializeField] private int engineerPoints = 7;
+    [SerializeField] private int vanguardPoints = 5;
+    [SerializeField] private int navigatorPoints = 8;
+    [SerializeField] private int gunnerPoints = 9;
 
     [SerializeField] private int maxPoints = 100;
     [SerializeField] private int maxRoyals = 1;
@@ -89,6 +90,8 @@ public class PieceSelection : MonoBehaviour
 
     private void Start()
     {
+        mate = minPeasants;
+        totalPoints = mate * matePoints;
         videoManager = this.GetComponent<VideoManager>();
 
         if(MultiplayerController.Instance != null)
@@ -122,9 +125,98 @@ public class PieceSelection : MonoBehaviour
 
     private void Update()
     {
+        // Greys out buttons
+        GameObject[] plus = GameObject.FindGameObjectsWithTag("Plus");
+        GameObject[] minus = GameObject.FindGameObjectsWithTag("Minus");
+
+        foreach (GameObject p in plus)
+        {
+            switch (p.transform.parent.gameObject.name)
+            {
+                case "Select Royal1":
+                    if((totalPoints + royal1Points > maxPoints) || (royal1 >= maxRoyals)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Royal2":
+                    if ((totalPoints + royal2Points > maxPoints) || (royal2 >= maxRoyals)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Mate":
+                    if ((totalPoints + matePoints > maxPoints) || (mate >= maxPeasants)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Quartermaster":
+                    if ((totalPoints + quartermasterPoints > maxPoints) || (quartermaster >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Cannon":
+                    if ((totalPoints + cannonPoints > maxPoints) || (cannon >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Engineer":
+                    if ((totalPoints + engineerPoints > maxPoints) || (engineer >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Vanguard":
+                    if ((totalPoints + vanguardPoints > maxPoints) || (vanguard >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Navigator":
+                    if ((totalPoints + navigatorPoints > maxPoints) || (navigator >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Gunner":
+                    if ((totalPoints + gunnerPoints > maxPoints) || (gunner >= maxArmy)) p.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else p.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+            }
+        }
+        foreach (GameObject m in minus)
+        {
+            switch (m.transform.parent.gameObject.name)
+            {
+                case "Select Royal1":
+                    if (royal1 <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Royal2":
+                    if (royal2 <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Mate":
+                    if (mate <= minPeasants) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Quartermaster":
+                    if (quartermaster <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Cannon":
+                    if (cannon <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Engineer":
+                    if (engineer <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Vanguard":
+                    if (vanguard <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Navigator":
+                    if (navigator <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+                case "Select Gunner":
+                    if (gunner <= 0) m.GetComponent<Image>().color = new Color(0.67f, 0.67f, 0.67f, 1);
+                    else m.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    break;
+            }
+        }
+
         // An online game is running and both teams have confirmed their pieces
         // It's time to move onto the next scene
-        if(PieceManager.instance.onlineMultiplayer && navyTotal > 0 && pirateTotal > 0)
+        if (PieceManager.instance.onlineMultiplayer && navyTotal > 0 && pirateTotal > 0)
         {
             timer.stopTimer();
 
@@ -225,11 +317,11 @@ public class PieceSelection : MonoBehaviour
             totalPoints += cannonPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
-        if (name == "Select Engineer" && bomber < maxArmy && totalPoints + bomberPoints <= maxPoints)
+        if (name == "Select Engineer" && engineer < maxArmy && totalPoints + engineerPoints <= maxPoints)
         {
-            bomber++;
-            amount.SetText(bomber + "/" + maxArmy);
-            totalPoints += bomberPoints;
+            engineer++;
+            amount.SetText(engineer + "/" + maxArmy);
+            totalPoints += engineerPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Vanguard" && vanguard < maxArmy && totalPoints + vanguardPoints <= maxPoints)
@@ -296,11 +388,11 @@ public class PieceSelection : MonoBehaviour
             totalPoints -= cannonPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
-        if (name == "Select Engineer" && bomber > 0)
+        if (name == "Select Engineer" && engineer > 0)
         {
-            bomber--;
-            amount.SetText(bomber + "/" + maxArmy);
-            totalPoints -= bomberPoints;
+            engineer--;
+            amount.SetText(engineer + "/" + maxArmy);
+            totalPoints -= engineerPoints;
             pointsText.SetText(totalPoints + "/" + maxPoints);
         }
         if (name == "Select Vanguard" && vanguard > 0)
@@ -338,7 +430,7 @@ public class PieceSelection : MonoBehaviour
 
             idTeam.totalPoints = totalPoints;
             idTeam.Mate_Count = mate;
-            idTeam.Bomber_Count = bomber;
+            idTeam.Engineer_Count = engineer;
             idTeam.Vanguard_Count = vanguard;
             idTeam.Navigator_Count = navigator;
             idTeam.Gunner_Count = gunner;
@@ -367,7 +459,7 @@ public class PieceSelection : MonoBehaviour
                 PieceManager.instance.navyRoyal2 = royal2;
                 PieceManager.instance.navyQuartermaster = quartermaster;
                 PieceManager.instance.navyCannon = cannon;
-                PieceManager.instance.navyBomber = bomber;
+                PieceManager.instance.navyEngineer = engineer;
                 PieceManager.instance.navyVanguard = vanguard;
                 PieceManager.instance.navyNavigator = navigator;
                 PieceManager.instance.navyGunner = gunner;
@@ -380,7 +472,7 @@ public class PieceSelection : MonoBehaviour
                 PieceManager.instance.pirateRoyal2 = royal2;
                 PieceManager.instance.pirateQuartermaster = quartermaster;
                 PieceManager.instance.pirateCannon = cannon;
-                PieceManager.instance.pirateBomber = bomber;
+                PieceManager.instance.pirateEngineer = engineer;
                 PieceManager.instance.pirateVanguard = vanguard;
                 PieceManager.instance.pirateNavigator = navigator;
                 PieceManager.instance.pirateGunner = gunner;
@@ -392,15 +484,15 @@ public class PieceSelection : MonoBehaviour
             {
                 royal1 = 0;
                 royal2 = 0;
-                mate = 5;
+                mate = minPeasants;
                 quartermaster = 0;
                 cannon = 0;
-                bomber = 0;
+                engineer = 0;
                 vanguard = 0;
                 navigator = 0;
                 gunner = 0;
 
-                totalPoints = 5;
+                totalPoints = mate * matePoints;
 
                 navySelecting = !navySelecting;
 
@@ -480,13 +572,13 @@ public class PieceSelection : MonoBehaviour
             else
             {
                 topText.SetText("Corsair [" + royal2Points + " points]");
-                infoText.SetText("A Pirate-exclusive crewmate. Moves up to two open squares diagonally, and captures by landing on an enemy. She can also jump to any open square on the board, but if she does, she can't jump on her next turn.");
+                infoText.SetText("A Pirate-exclusive crewmate. Moves any open distance diagonally, and captures by landing on an enemy while moving this way. She can also jump to any open square on the board, but if she does, she can't jump on her next turn.");
             }
             videoPlayer.clip = videoManager.royal2;
         }
         if (name == "Select Mate")
         {
-            topText.SetText("Mate [" + matePoints + " point]");
+            topText.SetText("Mate [" + matePoints + " points]");
             infoText.SetText("Moves one square in any direction, but cannot move backwards unless he's captured an enemy piece. He captures by landing on an enemy. Get him across the board and see how strong this unassuming crewmate can become...");
             videoPlayer.clip = videoManager.mate;
         }
@@ -499,12 +591,12 @@ public class PieceSelection : MonoBehaviour
         if (name == "Select Cannon")
         {
             topText.SetText("Cannon [" + cannonPoints + " points]");
-            infoText.SetText("Moves one open space in any direction, or captures by jumping over enemies. He can cross any open distance while jumping, but he needs space on the other side to land or else he can't make the jump. He can jump over Energy Shields like this, but can't capture them.");
+            infoText.SetText("Moves one open square in any direction, or captures by jumping over enemies. He can cross any open distance while jumping, but he needs space on the other side to land or else he can't make the jump. He can jump over Energy Shields and allies like this, but doesn't capture them.");
             videoPlayer.clip = videoManager.cannon;
         }
         if (name == "Select Engineer")
         {
-            topText.SetText("Engineer [" + bomberPoints + " points]");
+            topText.SetText("Engineer [" + engineerPoints + " points]");
             infoText.SetText("Moves up to two open squares in any direction. He's the only piece that can capture Energy Shields by landing on them and can redeploy spare Energy Shields back to the board, but he can't capture any enemies unless he's armed with a spare Energy Shield.");
             videoPlayer.clip = videoManager.engineer;
         }
@@ -568,7 +660,7 @@ public class PieceSelection : MonoBehaviour
         NetIdentifyTeam idTeam = msg as NetIdentifyTeam;
 
         Debug.Log($"Mates: {idTeam.Mate_Count}");
-        Debug.Log($"Engineers: {idTeam.Bomber_Count}");
+        Debug.Log($"Engineers: {idTeam.Engineer_Count}");
         Debug.Log($"Vanguards: {idTeam.Vanguard_Count}");
         Debug.Log($"Navigators: {idTeam.Navigator_Count}");
         Debug.Log($"Gunners: {idTeam.Gunner_Count}");
@@ -582,7 +674,7 @@ public class PieceSelection : MonoBehaviour
         if (idTeam.teamID == 0)
         {
             PieceManager.instance.navyMate = idTeam.Mate_Count;
-            PieceManager.instance.navyBomber = idTeam.Bomber_Count;
+            PieceManager.instance.navyEngineer = idTeam.Engineer_Count;
             PieceManager.instance.navyVanguard = idTeam.Vanguard_Count;
             PieceManager.instance.navyNavigator = idTeam.Navigator_Count;
             PieceManager.instance.navyGunner = idTeam.Gunner_Count;
@@ -597,7 +689,7 @@ public class PieceSelection : MonoBehaviour
         else if(idTeam.teamID == 1)
         {
             PieceManager.instance.pirateMate = idTeam.Mate_Count;
-            PieceManager.instance.pirateBomber = idTeam.Bomber_Count;
+            PieceManager.instance.pirateEngineer = idTeam.Engineer_Count;
             PieceManager.instance.pirateVanguard = idTeam.Vanguard_Count;
             PieceManager.instance.pirateNavigator = idTeam.Navigator_Count;
             PieceManager.instance.pirateGunner = idTeam.Gunner_Count;

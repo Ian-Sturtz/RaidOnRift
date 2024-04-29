@@ -332,7 +332,7 @@ public class BoardUI : MonoBehaviour
     {
         pieceDisplay.SetActive(true);
 
-        if ((piece == PieceType.Ore && navyTurn == isNavy) || (piece == PieceType.LandMine && navyTurn == isNavy))
+        if ((piece == PieceType.Ore && navyTurn == isNavy) || (piece == PieceType.EnergyShield && navyTurn == isNavy))
             if (!specialProperty) return;
 
         if (hasOre)
@@ -365,7 +365,7 @@ public class BoardUI : MonoBehaviour
                 else
                 {
                     pieceDisplayName.SetText("Corsair");
-                    pieceDescription.SetText("Moves up to two open squares diagonally, and captures by landing on an enemy. She can also jump to any open square on the board, but if she does, she can't jump on her next turn.");
+                    pieceDescription.SetText("Moves any open distance diagonally, and captures by landing on an enemy while moving this way. She can also jump to any open square on the board, but if she does, she can't jump on her next turn.");
                 }
                 break;
             case PieceType.Mate:
@@ -378,9 +378,9 @@ public class BoardUI : MonoBehaviour
                 break;
             case PieceType.Cannon:
                 pieceDisplayName.SetText("Cannon");
-                pieceDescription.SetText("Moves one open square in any direction, or captures by jumping over enemies. He can cross any open distance while jumping, but he needs space on the other side to land or else he can't make the jump. He can jump over Energy Shields like this, but can't capture them.");
+                pieceDescription.SetText("Moves one open square in any direction, or captures by jumping over enemies. He can cross any open distance while jumping, but he needs space on the other side to land or else he can't make the jump. He can jump over Energy Shields and allies like this, but doesn't capture them.");
                 break;
-            case PieceType.Bomber:
+            case PieceType.Engineer:
                 pieceDisplayName.SetText("Engineer");
                 pieceDescription.SetText("Moves up to two open squares in any direction. He's the only piece that can capture Energy Shields by landing on them and can redeploy spare Energy Shields back to the board, but he can't capture any enemies unless he's armed with a spare Energy Shield.");
                 break;
@@ -400,7 +400,7 @@ public class BoardUI : MonoBehaviour
                 pieceDisplayName.SetText("Ore");
                 pieceDescription.SetText("The most concentrated energy supply in the cosmos. Protect it with your life and get your enemy's supply as quickly as you can!");
                 break;
-            case PieceType.LandMine:
+            case PieceType.EnergyShield:
                 pieceDisplayName.SetText("Energy Shield");
                 pieceDescription.SetText("Defenses made from pure energy. No force can get through them, but some are able to get over top of them. Engineers are skilled at building and dismantling them.");
                 break;
@@ -514,7 +514,6 @@ public class BoardUI : MonoBehaviour
     {
         if (PieceManager.instance.onlineMultiplayer)
         {
-            MultiplayerController.Instance.gameWon = board.gameWon ? 1 : 0;
             SceneManager.LoadScene("Connection Dropped");
         }
 

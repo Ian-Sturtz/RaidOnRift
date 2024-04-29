@@ -10,7 +10,16 @@ public class Skip : MonoBehaviour
     {
         if (Input.anyKey)
         {
-            SceneManager.LoadScene("Main Menu");
+            if (!StaticTutorialControl.cameFromStoryScene)
+            {
+                StaticTutorialControl.piece = PieceType.Mate;
+                StaticTutorialControl.cameFromStoryScene = false;
+                SceneManager.LoadScene("Tutorial", LoadSceneMode.Single);
+            }
+            else
+            {
+                SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
+            }
         }
     }
 }

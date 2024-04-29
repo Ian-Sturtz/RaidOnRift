@@ -43,7 +43,15 @@ public class TTSquare : MonoBehaviour
                 StartCoroutine(ContinualFlash(defaultBoardMaterial, moveableBoardMaterial));
             }
         }
-        else if(tag == "CorsairJump")
+        else if(tag == "CannonTarget")
+        {
+            if (!continualFlash)
+            {
+                continualFlash = true;
+                StartCoroutine(ContinualFlash(defaultBoardMaterial, enemyBoardMaterial));
+            }
+        }
+        else if (tag == "CorsairJump")
         {
             if (!continualFlash)
             {
