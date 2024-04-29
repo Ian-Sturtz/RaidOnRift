@@ -59,9 +59,12 @@ public class Engineer : Piece
                         {
                             up = false;
                             if(possibleSquare.currentPiece.type != PieceType.EnergyShield){
-                                if(!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX, currentY + change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX, currentY + change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -91,9 +94,12 @@ public class Engineer : Piece
                             down = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX, currentY - change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX, currentY - change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -123,9 +129,12 @@ public class Engineer : Piece
                             right = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX + change, currentY] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX + change, currentY] = -1;
+                                    }
                                 }
                             }
                             else
@@ -155,9 +164,12 @@ public class Engineer : Piece
                             left = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX - change, currentY] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX - change, currentY] = -1;
+                                    }
                                 }
                             }
                             else
@@ -187,9 +199,12 @@ public class Engineer : Piece
                             up_right = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX + change, currentY + change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX + change, currentY + change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -219,9 +234,12 @@ public class Engineer : Piece
                             up_left = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX - change, currentY + change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX - change, currentY + change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -251,9 +269,12 @@ public class Engineer : Piece
                             down_right = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX + change, currentY - change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX + change, currentY - change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -283,9 +304,12 @@ public class Engineer : Piece
                             down_left = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX - change, currentY - change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX - change, currentY - change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -321,9 +345,12 @@ public class Engineer : Piece
                             up = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX, currentY + change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX, currentY + change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -353,9 +380,12 @@ public class Engineer : Piece
                             down = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX, currentY - change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX, currentY - change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -385,9 +415,12 @@ public class Engineer : Piece
                             right = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX + change, currentY] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX + change, currentY] = -1;
+                                    }
                                 }
                             }
                             else
@@ -417,9 +450,12 @@ public class Engineer : Piece
                             left = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX - change, currentY] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX - change, currentY] = -1;
+                                    }
                                 }
                             }
                             else
@@ -449,9 +485,12 @@ public class Engineer : Piece
                             up_right = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX + change, currentY + change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX + change, currentY + change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -481,9 +520,12 @@ public class Engineer : Piece
                             up_left = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX - change, currentY + change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX - change, currentY + change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -513,9 +555,12 @@ public class Engineer : Piece
                             down_right = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX + change, currentY - change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX + change, currentY - change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -545,9 +590,12 @@ public class Engineer : Piece
                             down_left = false;
                             if (possibleSquare.currentPiece.type != PieceType.EnergyShield)
                             {
-                                if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                if (possibleSquare.currentPiece.type != PieceType.Ore)
                                 {
-                                    moveAssessment[currentX - change, currentY - change] = -1;
+                                    if (!possibleSquare.currentPiece.hasOre && capturedBomb == null)
+                                    {
+                                        moveAssessment[currentX - change, currentY - change] = -1;
+                                    }
                                 }
                             }
                             else
@@ -584,39 +632,192 @@ public class Engineer : Piece
             for (int y = 0; y < 10; y++)
                 moveAssessment[x, y] = -1;
 
-        // Checks square to the left
-        if (IsSquareOnBoard(currentX - 1, currentY))
+        bool left = true;
+        bool right = true;
+        bool up = true;
+        bool down = true;
+
+        if (SceneManager.GetActiveScene().name == "Board")
         {
-            if (tiles[currentX - 1, currentY].GetComponent<Square>().currentPiece == null)
+            for (int change = 1; change <= 2; change++)
             {
-                moveAssessment[currentX - 1, currentY] = 6;
+                Square possibleSquare;
+
+                if (left)
+                {
+                    if (IsSquareOnBoard(currentX - change, currentY))
+                    {
+                        possibleSquare = tiles[currentX - change, currentY].GetComponent<Square>();
+
+                        if (possibleSquare.currentPiece == null)
+                        {
+                            moveAssessment[currentX - change, currentY] = 6;
+                        }
+                        else
+                        {
+                            left = false;
+                        }
+                    }
+                    else
+                    {
+                        left = false;
+                    }
+                }
+
+                if (right)
+                {
+                    if (IsSquareOnBoard(currentX + change, currentY))
+                    {
+                        possibleSquare = tiles[currentX + change, currentY].GetComponent<Square>();
+
+                        if (possibleSquare.currentPiece == null)
+                        {
+                            moveAssessment[currentX + change, currentY] = 6;
+                        }
+                        else
+                        {
+                            right = false;
+                        }
+                    }
+                    else
+                    {
+                        right = false;
+                    }
+                }
+
+                if (up)
+                {
+                    if (IsSquareOnBoard(currentX, currentY + change))
+                    {
+                        possibleSquare = tiles[currentX, currentY + change].GetComponent<Square>();
+
+                        if (possibleSquare.currentPiece == null)
+                        {
+                            moveAssessment[currentX, currentY + change] = 6;
+                        }
+                        else
+                        {
+                            up = false;
+                        }
+                    }
+                    else
+                    {
+                        up = false;
+                    }
+                }
+
+                if (down)
+                {
+                    if (IsSquareOnBoard(currentX, currentY - change))
+                    {
+                        possibleSquare = tiles[currentX, currentY - change].GetComponent<Square>();
+
+                        if (possibleSquare.currentPiece == null)
+                        {
+                            moveAssessment[currentX, currentY - change] = 6;
+                        }
+                        else
+                        {
+                            down = false;
+                        }
+                    }
+                    else
+                    {
+                        down = false;
+                    }
+                }
             }
         }
-
-        // Checks square to the right
-        if (IsSquareOnBoard(currentX + 1, currentY))
+        // Tutorial scene
+        else
         {
-            if (tiles[currentX + 1, currentY].GetComponent<Square>().currentPiece == null)
+            for (int change = 1; change <= 2; change++)
             {
-                moveAssessment[currentX + 1, currentY] = 6;
-            }
-        }
+                TTSquare possibleSquare;
 
-        // Checks square above
-        if (IsSquareOnBoard(currentX, currentY + 1))
-        {
-            if (tiles[currentX, currentY + 1].GetComponent<Square>().currentPiece == null)
-            {
-                moveAssessment[currentX, currentY + 1] = 6;
-            }
-        }
+                if (left)
+                {
+                    if (IsSquareOnBoard(currentX - change, currentY))
+                    {
+                        possibleSquare = tiles[currentX - change, currentY].GetComponent<TTSquare>();
 
-        // Checks square below
-        if (IsSquareOnBoard(currentX, currentY - 1))
-        {
-            if (tiles[currentX, currentY - 1].GetComponent<Square>().currentPiece == null)
-            {
-                moveAssessment[currentX, currentY - 1] = 6;
+                        if (possibleSquare.currentPiece == null)
+                        {
+                            moveAssessment[currentX - change, currentY] = 6;
+                        }
+                        else
+                        {
+                            left = false;
+                        }
+                    }
+                    else
+                    {
+                        left = false;
+                    }
+                }
+
+                if (right)
+                {
+                    if (IsSquareOnBoard(currentX + change, currentY))
+                    {
+                        possibleSquare = tiles[currentX + change, currentY].GetComponent<TTSquare>();
+
+                        if (possibleSquare.currentPiece == null)
+                        {
+                            moveAssessment[currentX + change, currentY] = 6;
+                        }
+                        else
+                        {
+                            right = false;
+                        }
+                    }
+                    else
+                    {
+                        right = false;
+                    }
+                }
+
+                if (up)
+                {
+                    if (IsSquareOnBoard(currentX, currentY + change))
+                    {
+                        possibleSquare = tiles[currentX, currentY + change].GetComponent<TTSquare>();
+
+                        if (possibleSquare.currentPiece == null)
+                        {
+                            moveAssessment[currentX, currentY + change] = 6;
+                        }
+                        else
+                        {
+                            up = false;
+                        }
+                    }
+                    else
+                    {
+                        up = false;
+                    }
+                }
+
+                if (down)
+                {
+                    if (IsSquareOnBoard(currentX, currentY - change))
+                    {
+                        possibleSquare = tiles[currentX, currentY - change].GetComponent<TTSquare>();
+
+                        if (possibleSquare.currentPiece == null)
+                        {
+                            moveAssessment[currentX, currentY - change] = 6;
+                        }
+                        else
+                        {
+                            down = false;
+                        }
+                    }
+                    else
+                    {
+                        down = false;
+                    }
+                }
             }
         }
 

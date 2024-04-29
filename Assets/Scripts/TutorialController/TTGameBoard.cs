@@ -147,17 +147,18 @@ public class TTGameBoard : MonoBehaviour
 
     IEnumerator TestEngineer()
     {
-        NavyPieces[0] = SpawnPiece(PieceType.Engineer, true, 3, 2);
-        NavyPieces[1] = SpawnPiece(PieceType.Engineer, true, 6, 2);
-        NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 2, 0);
-        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 2, 6);
+        NavyPieces[0] = SpawnPiece(PieceType.Engineer, true, 4, 4);
+        NavyPieces[1] = SpawnPiece(PieceType.Engineer, true, 7, 3);
+        NavyPieces[2] = SpawnPiece(PieceType.Ore, true, 6, 0);
+        NavyPieces[3] = SpawnPiece(PieceType.EnergyShield, true, 3, 3);
         NavyPieces[4] = SpawnPiece(PieceType.EnergyShield, true, 7, 5);
 
-        PiratePieces[0] = SpawnPiece(PieceType.Engineer, false, 2, 2);
-        PiratePieces[1] = SpawnPiece(PieceType.Engineer, false, 7, 7);
-        PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 4, 9);
-        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 3, 4);
-        PiratePieces[4] = SpawnPiece(PieceType.EnergyShield, false, 5, 5);
+        PiratePieces[0] = SpawnPiece(PieceType.Engineer, false, 2, 3);
+        PiratePieces[1] = SpawnPiece(PieceType.Engineer, false, 4, 8);
+        PiratePieces[2] = SpawnPiece(PieceType.Ore, false, 5, 9);
+        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 4, 6);
+        PiratePieces[4] = SpawnPiece(PieceType.EnergyShield, false, 5, 6);
+        PiratePieces[5] = SpawnPiece(PieceType.Engineer, false, 6, 4);
 
         boardUI.GoalText("Raid On Rift: Tutorial Mode");
 
@@ -178,8 +179,8 @@ public class TTGameBoard : MonoBehaviour
         boardUI.PieceDisplayDescription("\nHe's slightly expensive to add to your team, but his unique abilities make him extremely important.", true);
         boardUI.PieceDisplayDescription("\nClick on the flashing green Engineer to see how it can move.", true);
 
-        TTSquare currentSquare = tiles[3, 2].GetComponent<TTSquare>();
-        tiles[3, 2].tag = "InteractablePiece";
+        TTSquare currentSquare = tiles[4, 4].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
 
         while (true)
         {
@@ -220,17 +221,15 @@ public class TTGameBoard : MonoBehaviour
                         tiles[x, y].tag = "MoveableSquare";
                         moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
                     }
-                    else
-                    {
-                        tiles[x, y].tag = "CaptureSquare";
-                        moveSquare.SetMaterial(moveSquare.enemyBoardMaterial);
-                    }
                 }
             }
         }
 
+        tiles[4, 6].tag = "CaptureSquare";
+        tiles[4, 6].GetComponent<TTSquare>().SetMaterial(currentSquare.enemyBoardMaterial);
+
         boardUI.PieceDisplayDescription("The Engineer can move up to 2 open squares in any direction.");
-        boardUI.PieceDisplayDescription("\nIt is the only piece that can remove enemy Energy Shields from the board. Notice how it can't capture that Pirate Engineer, though?", true);
+        boardUI.PieceDisplayDescription("\nIt is the only piece that can remove enemy Energy Shields from the board. Notice how it can't capture that Pirate Engineer or that Navy Energy Shield, though?", true);
         boardUI.PieceDisplayDescription("\nClick on the red square to capture the enemy Energy Shield.", true);
 
         while (true)
@@ -250,21 +249,17 @@ public class TTGameBoard : MonoBehaviour
                         ResetBoardMaterials();
                         jail.InsertAPiece(PiratePieces[3]);
                         PiratePieces[3].destroyPiece();
-                        MovePiece(NavyPieces[0], 3, 4);
+                        MovePiece(NavyPieces[0], 4, 6);
                         NavyPieces[0].hasCaptured = true;
-                        NavyPieces[0].GetComponent<Engineer>().capturedBomb = jail.navyJailedPieces[0];
+                        NavyPieces[0].GetComponent<Engineer>().capturedBomb = jail.pirateJailedPieces[0];
 
                         yield return new WaitForSeconds(.5f);
 
-                        jail.InsertAPiece(NavyPieces[2]);
-                        NavyPieces[2].destroyPiece();
-                        PiratePieces[0].hasCaptured = true;
-                        PiratePieces[0].hasOre = true;
-                        MovePiece(PiratePieces[0], 2, 0);
-
-                        yield return new WaitForSeconds(.5f);
-
-                        MovePiece(PiratePieces[0], 3, 1);
+                        jail.InsertAPiece(NavyPieces[4]);
+                        NavyPieces[4].destroyPiece();
+                        PiratePieces[5].hasCaptured = true;
+                        PiratePieces[5].GetComponent<Engineer>().capturedBomb = jail.navyJailedPieces[0];
+                        MovePiece(PiratePieces[5], 7, 5);
 
                         break;
                     }
@@ -276,11 +271,11 @@ public class TTGameBoard : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        boardUI.PieceDisplayDescription("The Engineer can usually only capture the Ore, Orebearers, or Energy Shields, but once he's got an Energy Shield in tow, all bets are off.");
-        boardUI.PieceDisplayDescription("\nNotice how the enemy Engineer was able to capture your Ore with no problems?", true);
-        boardUI.PieceDisplayDescription("\nYou're going to need to stop that Orebearer. Click on the Engineer again to see what you can do.", true);
+        boardUI.PieceDisplayDescription("Usually, the Engineer can only capture enemy Ore, Orebearers, and Energy Shields.");
+        boardUI.PieceDisplayDescription("\nBut as long as he's got an Energy Shield in tow, he gets a lot stronger.", true);
+        boardUI.PieceDisplayDescription("\nClick on the Engineer again to see what he can do now.", true);
 
-        currentSquare = tiles[3, 4].GetComponent<TTSquare>();
+        currentSquare = tiles[4, 6].GetComponent<TTSquare>();
         currentSquare.tag = "InteractablePiece";
 
         while (true)
@@ -324,14 +319,379 @@ public class TTGameBoard : MonoBehaviour
                         tiles[x, y].tag = "MoveableSquare";
                         moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
                     }
+                    else
+                    {
+                        moveSquare.tag = "CaptureSquare";
+                        moveSquare.SetMaterial(moveSquare.enemyBoardMaterial);
+                    }
                 }
             }
         }
 
+        jail.NavyJailCells[0].GetComponent<TTJailCell>().clicked = true;
 
+        boardUI.PieceDisplayDescription("Now that the Engineer has captured a Shield, he can capture any enemy pieces in his range.");
+        boardUI.PieceDisplayDescription("\nBe aware though, each Engineer can only have up to one Energy Shield captured at a time. Notice how he can't capture that other Energy Shield?", true);
+        boardUI.PieceDisplayDescription("\nClick on the red square to capture the enemy Engineer.", true);
 
-        //yield return new WaitForSeconds(3f);
-        //ExitTutorial();
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "CaptureSquare")
+                    {
+                        ResetBoardMaterials();
+                        jail.InsertAPiece(PiratePieces[1]);
+                        PiratePieces[1].destroyPiece();
+                        MovePiece(NavyPieces[0], 4, 8);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        MovePiece(PiratePieces[0], 2, 2);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Nice job, you're right on top of that enemy Ore now.");
+        boardUI.PieceDisplayDescription("\nBut look, that other enemy Engineer is setting up to capture your Ore too!", true);
+        boardUI.PieceDisplayDescription("\nClick on your other Engineer to start setting up defenses for your Ore.", true);
+
+        currentSquare = tiles[7, 3].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[1].GetComponent<Engineer>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                }
+            }
+        }
+
+        jail.NavyJailCells[0].GetComponent<TTJailCell>().clicked = true;
+
+        tiles[5, 1].tag = "InteractablePiece";
+
+        boardUI.PieceDisplayDescription("This Engineer hasn't yet captured an Energy Shield, so he still can't capture regular enemies.");
+        boardUI.PieceDisplayDescription("\nRegardless, Engineers are still great at fortifying defenses, so you'll want to move him closer to your Ore to better protect it.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green square to move the Engineer there.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        MovePiece(NavyPieces[1], 5, 1);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        MovePiece(PiratePieces[0], 4, 0);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Yikes! It looks like your Engineer got here just in time.");
+        boardUI.PieceDisplayDescription("\nQuickly, take this chance to set up your defenses!", true);
+        boardUI.PieceDisplayDescription("\nClick on the Engineer again to set up your defense.", true);
+
+        currentSquare = tiles[5, 1].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[1].GetComponent<Engineer>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                }
+            }
+        }
+
+        jail.NavyJailCells[0].GetComponent<TTJailCell>().interactable = true;
+
+        boardUI.PieceDisplayDescription("Engineers can set any captured enemy Energy Shield back on the board.");
+        boardUI.PieceDisplayDescription("\nThey can even deploy Energy Shields that were captured by other Engineers!", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green Energy Shield in the corner to place it back on the board.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        moveAssessment = NavyPieces[1].GetComponent<Engineer>().DetectBombDeploy(tiles);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 6)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "CaptureSquare";
+                        moveSquare.SetMaterial(moveSquare.enemyBoardMaterial);
+                    }
+                }
+            }
+        }
+
+        tiles[5, 0].tag = "CannonTarget";
+
+        boardUI.PieceDisplayDescription("Engineers can deploy Energy Shields up to 2 open spaces away in either up/down or left/right directions.");
+        boardUI.PieceDisplayDescription("\nPlacing them down will remove the strength boost from whichever Engineer captured that Shield, though.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing red square to redeploy the Energy Shield there.", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "CannonTarget")
+                    {
+                        ResetBoardMaterials();
+                        jail.pirateJailedPieces[0].GetComponent<Piece>().destroyPiece();
+                        jail.NavyJailCells[0].GetComponent<TTJailCell>().resetCell();
+                        PiratePieces[3] = SpawnPiece(PieceType.EnergyShield, false, 5, 0);
+
+                        yield return new WaitForSeconds(.5f);
+
+                        MovePiece(PiratePieces[5], 7, 3);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        boardUI.PieceDisplayDescription("Nicely done, your Ore is safe for now.");
+        boardUI.PieceDisplayDescription("\nSince Engineers can't take their own Energy Shields and that enemy Engineer can't capture your Engineer right now, he can't get through to your Ore without going all the way around.", true);
+        boardUI.PieceDisplayDescription("\nClick on the flashing green Engineer to keep moving.", true);
+
+        currentSquare = tiles[4, 8].GetComponent<TTSquare>();
+        currentSquare.tag = "InteractablePiece";
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "InteractablePiece")
+                    {
+                        ResetBoardMaterials();
+                        break;
+                    }
+
+                }
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        currentSquare.SquareHasBeenClicked = true;
+        moveAssessment = NavyPieces[0].GetComponent<Engineer>().GetValidMoves(tiles);
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                if (moveAssessment[x, y] == 1)
+                {
+                    TTSquare moveSquare = tiles[x, y].GetComponent<TTSquare>();
+                    if (moveSquare.currentPiece == null)
+                    {
+                        tiles[x, y].tag = "MoveableSquare";
+                        moveSquare.SetMaterial(moveSquare.moveableBoardMaterial);
+                    }
+                    else
+                    {
+                        tiles[x, y].tag = "CaptureSquare";
+                        tiles[x,y].GetComponent<TTSquare>().SetMaterial(currentSquare.enemyBoardMaterial);
+                    }
+                }
+            }
+        }
+
+        boardUI.PieceDisplayDescription("Now that the other Engineer redeployed the Energy Shield you captured, this Engineer doesn't have that strength boost from before.");
+        boardUI.PieceDisplayDescription("\nThat doesn't matter though, because even a non-boosted Engineer can still capture Ore!", true);
+        boardUI.PieceDisplayDescription("\nClick on the red Ore to capture it and finish this tutorial!", true);
+
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                // A square has been clicked
+                if (hit.collider != null)
+                {
+                    tileSelected = GameObject.Find(hit.collider.name);
+
+                    if (tileSelected.tag == "CaptureSquare")
+                    {
+                        ResetBoardMaterials();
+                        jail.InsertAPiece(PiratePieces[2]);
+                        PiratePieces[2].destroyPiece();
+                        NavyPieces[0].hasOre = true;
+                        MovePiece(NavyPieces[0], 5, 9);
+
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        boardUI.PieceDisplayDescription("Congrats on finishing this tutorial!");
+        boardUI.PieceDisplayDescription("\nGood luck!", true);
+
+        yield return new WaitForSeconds(3f);
+        ExitTutorial();
     }
 
     IEnumerator TestTactician()
