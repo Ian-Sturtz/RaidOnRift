@@ -938,6 +938,11 @@ public class GameBoard : MonoBehaviour
             }
             engineerDrill.Play();
         }
+        // Links Tactician with his captured shield
+        else if (capturedPiece.type == PieceType.EnergyShield && tacticianInheritSelected)
+        {
+            currentPiece.GetComponent<Tactician>().capturedBomb = jail.pirateJailedPieces[insertIndex];
+        }
 
         // Prevents the Tactician from mimicking a Gunner and capturing twice
         if (gunnerCapture)

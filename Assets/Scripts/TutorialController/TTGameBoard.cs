@@ -562,7 +562,7 @@ public class TTGameBoard : MonoBehaviour
         tiles[5, 0].tag = "CannonTarget";
 
         boardUI.PieceDisplayDescription("Engineers can deploy Energy Shields up to 2 open spaces away in either up/down or left/right directions.");
-        boardUI.PieceDisplayDescription("\nPlacing them down will remove the strength boost from whichever Engineer captured that Shield, though.", true);
+        boardUI.PieceDisplayDescription("\nPlacing them down will remove the strength boost from the Engineer that captured that Shield, though.", true);
         boardUI.PieceDisplayDescription("\nClick on the flashing red square to redeploy the Energy Shield there.", true);
 
         while (true)

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Tactician : Piece
 {
+    public Piece capturedBomb = null;
     public bool[] mimicPieces = new bool[9];    // Boolean for whether he can mimic those pieces
 
     public int[,] GetValidMoves(GameObject[,] tiles)
@@ -269,9 +270,16 @@ public class Tactician : Piece
                     if(currentPiece.type == PieceType.Gunner)
                     {
                         currentPiece.hasCaptured = board.tacticianGunnerCapture;
-                    }else if(currentPiece.type == PieceType.Royal2)
+                    // Spawns an exhausted Corsair if the tactician has already corsair jumped
+                    }
+                    else if(currentPiece.type == PieceType.Royal2)
                     {
                         currentPiece.GetComponent<Corsair>().canJump = (board.tacticianCorsairJump == 0);
+                    }
+                    // Spawns a power buffed engineer if the tactician has already captured a shield
+                    else if(currentPiece.type == PieceType.Engineer)
+                    {
+                        currentPiece.GetComponent<Engineer>().capturedBomb = capturedBomb;
                     }
                 }
             }
