@@ -16,26 +16,13 @@ public class StoryUI : MonoBehaviour
     bool menuTop;
     Vector2 bottomPos;
 
-    [SerializeField] private VideoClip navyRoyal1;
-    [SerializeField] private VideoClip navyRoyal2;
-
-    [SerializeField] private VideoClip pirateRoyal1;
-    [SerializeField] private VideoClip pirateRoyal2;
-
-    [SerializeField] public VideoClip quartermaster;
-    [SerializeField] public VideoClip cannon;
-    [SerializeField] public VideoClip engineer;
-    [SerializeField] public VideoClip vanguard;
-    [SerializeField] public VideoClip navigator;
-    [SerializeField] public VideoClip gunner;
-    [SerializeField] public VideoClip mate;
-
-    [HideInInspector] public VideoClip royal1;
-    [HideInInspector] public VideoClip royal2;
+    private VideoPlayer videoPlayer;
+    private VideoTutorial videoTutorial;
 
     public GameObject menu;
     public GameObject background;
-    public GameObject Video;
+    // public GameObject Video;
+    [SerializeField] private VideoPlayer playVideo;
     public TMP_Text pieceName;
     public TMP_Text pieceDesc;
     public Image character;
@@ -61,30 +48,89 @@ public class StoryUI : MonoBehaviour
     public Sprite pirateQuatermaster;
     public Sprite pirateVanguard;
 
-    public void Setup(bool isNavy)
-    {
-        if (isNavy)
-        {
-            royal1 = navyRoyal1;
-            royal2 = navyRoyal2;
-        }
-        else
-        {
-            royal1 = pirateRoyal1;
-            royal2 = pirateRoyal2;
-        }
-    }
 
     // Start is called before the first frame update
     void Start()
     {
         bottomPos = menu.transform.position;
         Scene currentScene = SceneManager.GetActiveScene();
+
+        videoPlayer = playVideo;
+        videoTutorial = this.GetComponent<VideoTutorial>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        switch (tutorialToLoad)
+            {                        
+                case 1:
+                    pieceName.SetText("THE CREWMATE");
+                    pieceDesc.SetText("Moves one square in any direction, but cannot move backwards unless he's captured an enemy piece. He captures by landing on an enemy. Get him across the board and see how strong this unassuming crewmate can become...\r\n\nUse the navy Mate to capture the enemy Mate up top first for it to gain the ability to move backwards, and then capture the other enemy beneath.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Mate.");
+                    if(SceneManager.GetActiveScene().name == "TTBoard")
+                        videoPlayer.clip = videoTutorial.mate;
+                    break;
+                case 2:
+                    pieceName.SetText("THE QUARTERMASTER");
+                    pieceDesc.SetText("Moves two spaces up/down or left/right and one space perpendicular. He jumps over enemies in his way and captures by landing on an enemy.\r\n\nUse the Quatermaster's movement to jump over the energy shield and capture the enemy Mate.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Quartermaster.");
+                    if(SceneManager.GetActiveScene().name == "TTBoard")
+                        videoPlayer.clip = videoTutorial.quartermaster;
+                    break;
+                case 3:
+                    pieceName.SetText("THE CANNONEER");
+                    pieceDesc.SetText("Moves one open space in any direction, or captures by jumping over enemies. He can cross any open distance while jumping, but he needs space on the other side to land or else he can't make the jump. He can jump over Energy Shields like this, but can't capture them.\r\n\nSince the cannoneer can't jump over energy shields, move to the side to be able to capture the unlbocked enemy Mate.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Cannoneer.");
+                    if(SceneManager.GetActiveScene().name == "TTBoard")
+                        videoPlayer.clip = videoTutorial.cannon;
+                    break;
+                case 4:
+                    pieceName.SetText("THE ENGINEER");
+                    pieceDesc.SetText("Moves up to two open squares in any direction. He's the only piece that can capture Energy Shields by landing on them and can redeploy spare Energy Shields back to the board, but he can't capture any enemies unless he's armed with a spare Energy Shield.\r\n\nTest how the Engineer can capture enemy energy shields (you'll notice you can't do the same with friendly ones) and relocate the Energy Shields around you.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Engineer.");
+                    if(SceneManager.GetActiveScene().name == "TTBoard")
+                        videoPlayer.clip = videoTutorial.engineer;
+                    break;
+                case 5:
+                    pieceName.SetText("THE VANGUARD");
+                    pieceDesc.SetText("Moves one square forwards or backwards, both up/down or left/right and diagonally, but can move any open distance sideways. He captures by landing on an enemy.\r\n\nTaking into account the Vanguard's movement, try figuring out which enemy Mate will take less moves to capture and then test if you were right.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Vanguard.");
+                    if(SceneManager.GetActiveScene().name == "TTBoard")
+                        videoPlayer.clip = videoTutorial.vanguard;
+                    break;
+                case 6:
+                    pieceName.SetText("THE NAVIGATOR");
+                    pieceDesc.SetText("Moves one square sideways, both up/down or left/right and diagonally, but can move any open distance forwards and backwards. He captures by landing on an enemy.\r\n\nTaking into account the Navigator's movement, try figuring out which enemy Mate will take less moves to capture and then test if you were right.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Navigator.");
+                    if(SceneManager.GetActiveScene().name == "TTBoard")
+                        videoPlayer.clip = videoTutorial.navigator;
+                    break;
+                case 7:
+                    pieceName.SetText("THE GUNNER");
+                    pieceDesc.SetText("Moves one open space in any direction, or he captures by shooting an enemy up to 3 unblocked spaces away in any direction. He has to move somewhere to reload his weapon before he can capture again. Be warned, he can't shoot the enemy Ore or he might destroy it!\r\n\nUse the Gunner's special capture to capture the enemy Mates, you'll notice that you cannot capture the mate to the right because it's too far away, neither the one above you because an Energy Shield blocks your way, start by capturing the one under and move to recharge your shot, then try to capture the rest of the mates in the least possible moves.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Gunner.");
+                    if(SceneManager.GetActiveScene().name == "TTBoard")
+                        videoPlayer.clip = videoTutorial.gunner;
+                    break;
+                case 8:
+                    pieceName.SetText("THE ADMIRAL");
+                    pieceDesc.SetText("Moves any unblocked distance in any direction. She captures by landing on an enemy.\r\n\nUse the Admiral's movement to capture all the enemy Mates with the least amount of moves possible.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the Admiral.");
+                    if(SceneManager.GetActiveScene().name == "TTBoard")
+                        videoPlayer.clip = videoTutorial.admiral;             
+                    break;
+                case 9:
+                    pieceName.SetText("THE TACTICIAN");
+                    pieceDesc.SetText("Moves up to two open squares up/down or left/right, and captures by landing on an enemy. It can also use the moveset of any enemy within whatever zone the it's in (the 3 rows on each player's side of the board, or the 4 rows in the middle).\r\n\nUse the Tacticians special ability to imitate the Gunner within the same zone, and then use the gunner's shot to capture the enemy Mate.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the Tactician.");
+                    if(SceneManager.GetActiveScene().name == "TTBoard")
+                        videoPlayer.clip = videoTutorial.tactician;
+                    break;
+                case 10:
+                    pieceName.SetText("THE CAPTAIN");
+                    pieceDesc.SetText("Moves exactly five squares in any up/down or left/right direction, and can change direction while moving. He jumps over blockers, and captures enemies in the fifth square by landing on them.\r\n\nUse the Captain's special movement to sort the Energy Shields around you and capture the enemy Mate behind the Shields.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the Captain.");
+                    if(SceneManager.GetActiveScene().name == "TTBoard")
+                        videoPlayer.clip = videoTutorial.captain;
+                    break;
+                case 11:
+                    pieceName.SetText("THE CORSAIR");
+                    pieceDesc.SetText("Moves up to two open squares diagonally, and captures by landing on an enemy. She can also jump to any open square on the board, but if she does, she can't jump on her next turn.\r\n\nUse the Corsair's jump to capture the enemy Mates on the opposite sides of the board, remember that the Corsair cannot use its jump two turns straight.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the Corsair");
+                    if(SceneManager.GetActiveScene().name == "TTBoard")
+                        videoPlayer.clip = videoTutorial.corsair;
+                    break;
+            }
 
     }
 
@@ -206,67 +252,6 @@ public class StoryUI : MonoBehaviour
                     pieceDesc.SetText("With every burst from my cannon, I write our legacy among the stars, a gunner's promise to defend our freedom in the cosmic sea.\n\n Amid the silence of space, I stand as the gunner, master of my personal arsenal. My aim is guided by the stars, firing with precision that rivals the pull of gravity. Each shot declares our freedom, echoing through the void. In the dance of combat and cosmos, my skills safeguard our quest for adventure and treasure, a relentless defender of our celestial domain.");
                     character.sprite = pirateGunner;
                     tutorialToLoad = 7;
-                    break;
-                case "Tutorial":
-                    
-                    switch (tutorialToLoad)
-                    {                        
-                        case 1:
-                            pieceName.SetText("THE CREWMATE");
-                            pieceDesc.SetText("Moves one square in any direction, but cannot move backwards unless he's captured an enemy piece. He captures by landing on an enemy. Get him across the board and see how strong this unassuming crewmate can become...\r\n\nUse the navy Mate to capture the enemy Mate up top first for it to gain the ability to move backwards, and then capture the other enemy beneath.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Mate.");
-                            // character.sprite = navyCrew;
-                            break;
-                        case 2:
-                            pieceName.SetText("THE QUARTERMASTER");
-                            pieceDesc.SetText("Moves two spaces up/down or left/right and one space perpendicular. He jumps over enemies in his way and captures by landing on an enemy.\r\n\nUse the Quatermaster's movement to jump over the energy shield and capture the enemy Mate.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Quartermaster.");
-                            // character.sprite = navyQuatermaster;
-                            break;
-                        case 3:
-                            pieceName.SetText("THE CANNONEER");
-                            pieceDesc.SetText("Moves one open space in any direction, or captures by jumping over enemies. He can cross any open distance while jumping, but he needs space on the other side to land or else he can't make the jump. He can jump over Energy Shields like this, but can't capture them.\r\n\nSince the cannoneer can't jump over energy shields, move to the side to be able to capture the unlbocked enemy Mate.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Cannoneer.");
-                            // character.sprite = navyCannon;
-                            break;
-                        case 4:
-                            pieceName.SetText("THE ENGINEER");
-                            pieceDesc.SetText("Moves up to two open squares in any direction. He's the only piece that can capture Energy Shields by landing on them and can redeploy spare Energy Shields back to the board, but he can't capture any enemies unless he's armed with a spare Energy Shield.\r\n\nTest how the Engineer can capture enemy energy shields (you'll notice you can't do the same with friendly ones) and relocate the Energy Shields around you.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Engineer.");
-                            // character.sprite = navyEngineer;
-                            break;
-                        case 5:
-                            pieceName.SetText("THE VANGUARD");
-                            pieceDesc.SetText("Moves one square forwards or backwards, both up/down or left/right and diagonally, but can move any open distance sideways. He captures by landing on an enemy.\r\n\nTaking into account the Vanguard's movement, try figuring out which enemy Mate will take less moves to capture and then test if you were right.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Vanguard.");
-                            // character.sprite = navyVanguard;
-                            break;
-                        case 6:
-                            pieceName.SetText("THE NAVIGATOR");
-                            pieceDesc.SetText("Moves one square sideways, both up/down or left/right and diagonally, but can move any open distance forwards and backwards. He captures by landing on an enemy.\r\n\nTaking into account the Navigator's movement, try figuring out which enemy Mate will take less moves to capture and then test if you were right.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Navigator.");
-                            // character.sprite = navyNavigator;
-                            break;
-                        case 7:
-                            pieceName.SetText("THE GUNNER");
-                            pieceDesc.SetText("Moves one open space in any direction, or he captures by shooting an enemy up to 3 unblocked spaces away in any direction. He has to move somewhere to reload his weapon before he can capture again. Be warned, he can't shoot the enemy Ore or he might destroy it!\r\n\nUse the Gunner's special capture to capture the enemy Mates, you'll notice that you cannot capture the mate to the right because it's too far away, neither the one above you because an Energy Shield blocks your way, start by capturing the one under and move to recharge your shot, then try to capture the rest of the mates in the least possible moves.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the navy Gunner.");
-                            // character.sprite = navyGunner;
-                            break;
-                        case 8:
-                            pieceName.SetText("THE ADMIRAL");
-                            pieceDesc.SetText("Moves any unblocked distance in any direction. She captures by landing on an enemy.\r\n\nUse the Admiral's movement to capture all the enemy Mates with the least amount of moves possible.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the Admiral.");
-                            // character.sprite = admiral;             
-                            break;
-                        case 9:
-                            pieceName.SetText("THE TACTICIAN");
-                            pieceDesc.SetText("Moves up to two open squares up/down or left/right, and captures by landing on an enemy. It can also use the moveset of any enemy within whatever zone the it's in (the 3 rows on each player's side of the board, or the 4 rows in the middle).\r\n\nUse the Tacticians special ability to imitate the Gunner within the same zone, and then use the gunner's shot to capture the enemy Mate.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the Tactician.");
-                            // character.sprite = tactician;
-                            break;
-                        case 10:
-                            pieceName.SetText("THE CAPTAIN");
-                            pieceDesc.SetText("Moves exactly five squares in any up/down or left/right direction, and can change direction while moving. He jumps over blockers, and captures enemies in the fifth square by landing on them.\r\n\nUse the Captain's special movement to sort the Energy Shields around you and capture the enemy Mate behind the Shields.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the Captain.");
-                            // character.sprite = Captain;
-                            break;
-                        case 11:
-                            pieceName.SetText("THE CORSAIR");
-                            pieceDesc.SetText("Moves up to two open squares diagonally, and captures by landing on an enemy. She can also jump to any open square on the board, but if she does, she can't jump on her next turn.\r\n\nUse the Corsair's jump to capture the enemy Mates on the opposite sides of the board, remember that the Corsair cannot use its jump two turns straight.\r\nTake into account that you will be taking turns for both the navy and the pirates, but the focus of this tutorial is the Corsair");
-                            // character.sprite = Corsair;
-                            break;
-                    }
                     break;
 
             }

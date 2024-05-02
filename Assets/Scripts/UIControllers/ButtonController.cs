@@ -5,6 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class ButtonController : MonoBehaviour
 {
+    private bool toStory = false;
+    public void ExitTutorial()
+    {
+        if (toStory)
+        {
+            LoadStoryScene();
+        }
+        else
+            LoadMainMenu();
+    }
+
+    public void setTutorial(bool isStory)
+    {
+        toStory = isStory;
+    }
+    
     public void LoadMainMenu()
     {
         if(PieceManager.instance != null)
@@ -22,6 +38,11 @@ public class ButtonController : MonoBehaviour
         }
         else
             SceneManager.LoadScene("Main Menu");
+    }
+
+    public void LoadStoryScene()
+    {
+        SceneManager.LoadScene("Story");
     }
 
     public void QuitGame()

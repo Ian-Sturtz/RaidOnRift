@@ -26,6 +26,8 @@ public class VideoManager : MonoBehaviour
 
     [HideInInspector] public VideoClip royal1;
     [HideInInspector] public VideoClip royal2;
+    [HideInInspector] public VideoClip royal3;
+    [HideInInspector] public VideoClip royal4;
     [HideInInspector] public VideoClip quartermaster;
     [HideInInspector] public VideoClip cannon;
     [HideInInspector] public VideoClip engineer;
@@ -36,6 +38,21 @@ public class VideoManager : MonoBehaviour
 
     public void Setup(bool isNavy)
     {
+        // if(SceneManager.GetActiveScene().name == "TTBoard")
+        // {
+        //     royal1 = navyRoyal1;
+        //     royal2 = navyRoyal2;
+        //     royal3 = pirateRoyal1;
+        //     royal4 = pirateRoyal2;
+        //     quartermaster = navyQuartermaster;
+        //     cannon = navyCannon;
+        //     engineer = navyEngineer;
+        //     vanguard = navyVanguard;
+        //     navigator = navyNavigator;
+        //     gunner = navyGunner;
+        //     mate = navyMate;
+        // }
+        // else 
         if(isNavy)
         {
             royal1 = navyRoyal1;

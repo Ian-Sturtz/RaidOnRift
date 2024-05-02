@@ -940,20 +940,20 @@ public class TTGameBoard : MonoBehaviour
             jail.navyJailedPieces[jailIndex].GetComponent<TTPiece>().destroyPiece();
             jail.PirateJailCells[jailIndex].GetComponent<TTJailCell>().resetCell();
 
-            if(PieceManager.instance.onlineMultiplayer && !playerIsNavy)
-            {
-                if (deployPieceType == 0)
-                    NavyPieces[spawnIndex] = SpawnPiece(TTPieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y, true);
-                else
-                    NavyPieces[spawnIndex] = SpawnPiece(TTPieceType.Ore, true, deployCoordinates.x, deployCoordinates.y, true);
-            }
+            // if(PieceManager.instance.onlineMultiplayer && !playerIsNavy)
+            // {
+            if (deployPieceType == 0)
+                NavyPieces[spawnIndex] = SpawnPiece(TTPieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y, true);
             else
-            {
-                if (deployPieceType == 0)
-                    NavyPieces[spawnIndex] = SpawnPiece(TTPieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y);
-                else
-                    NavyPieces[spawnIndex] = SpawnPiece(TTPieceType.Ore, true, deployCoordinates.x, deployCoordinates.y);
-            }
+                NavyPieces[spawnIndex] = SpawnPiece(TTPieceType.Ore, true, deployCoordinates.x, deployCoordinates.y, true);
+            // }
+            // else
+            // {
+            //     if (deployPieceType == 0)
+            //         NavyPieces[spawnIndex] = SpawnPiece(TTPieceType.LandMine, true, deployCoordinates.x, deployCoordinates.y);
+            //     else
+            //         NavyPieces[spawnIndex] = SpawnPiece(TTPieceType.Ore, true, deployCoordinates.x, deployCoordinates.y);
+            // }
 
         }
         else
@@ -1265,7 +1265,7 @@ public class TTGameBoard : MonoBehaviour
                     moveAssessment = piece.GetComponent<TuCannon>().GetValidMoves(tiles);
                     break;
                 case TTPieceType.Quartermaster:
-                    moveAssessment = piece.GetComponent<Quartermaster>().GetValidMoves(tiles);
+                    moveAssessment = piece.GetComponent<TuQuartermaster>().GetValidMoves(tiles);
                     break;
                 case TTPieceType.Royal2:
                     if (piece.isNavy && !tacticianInheritSelected)
@@ -1552,6 +1552,7 @@ public class TTGameBoard : MonoBehaviour
             {
                 // Cannon tutorial
                 NavyPieces[0] = SpawnPiece(TTPieceType.Cannon, true, 5, 5);
+                NavyPieces[1] = SpawnPiece(TTPieceType.LandMine, true, 5, 7);
                 PiratePieces[0] = SpawnPiece(TTPieceType.Mate, false, 5, 8);
                 PiratePieces[1] = SpawnPiece(TTPieceType.Mate, false, 6, 8);
             }
@@ -1605,6 +1606,8 @@ public class TTGameBoard : MonoBehaviour
                 NavyPieces[0] = SpawnPiece(TTPieceType.Royal2, true, 5, 4);
                 PiratePieces[0] = SpawnPiece(TTPieceType.Gunner, false, 8, 6);
                 PiratePieces[1] = SpawnPiece(TTPieceType.Mate, false, 5, 7);
+                PiratePieces[2] = SpawnPiece(TTPieceType.Royal2, false, 2, 5);
+                PiratePieces[3] = SpawnPiece(TTPieceType.Vanguard, false, 3, 4);
 
             }
             else if(StoryUI.tutorialToLoad == 10)
