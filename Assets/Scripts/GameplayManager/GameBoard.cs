@@ -43,6 +43,11 @@ public class GameBoard : MonoBehaviour
     public bool pieceMoving = false;
     public bool boardRotated = false;
 
+    [SerializeField] private Material navyBoardSquares;
+    [SerializeField] private Material navyBoardSquaresOre;
+    [SerializeField] private Material pirateBoardSquares;
+    [SerializeField] private Material pirateBoardSquaresOre;
+
     #endregion
 
     #region JailInfo
@@ -1217,6 +1222,27 @@ public class GameBoard : MonoBehaviour
             for (int y = 1; y <= TILE_COUNT_Y; y++)
             {
                 GameObject boardSquare = FindThisBoardSquare(x, y);
+
+                if (y == 1)
+                {
+                    boardSquare.GetComponent<Square>().SetMaterial(navyBoardSquaresOre);
+                    boardSquare.GetComponent<Square>().defaultBoardMaterial = navyBoardSquaresOre;
+                }
+                else if (y == 2 || y == 3)
+                {
+                    boardSquare.GetComponent<Square>().SetMaterial(navyBoardSquares);
+                    boardSquare.GetComponent<Square>().defaultBoardMaterial = navyBoardSquares;
+                }
+                else if (y == 8 || y == 9)
+                {
+                    boardSquare.GetComponent<Square>().SetMaterial(pirateBoardSquares);
+                    boardSquare.GetComponent<Square>().defaultBoardMaterial = pirateBoardSquares;
+                }
+                else if (y == 10)
+                {
+                    boardSquare.GetComponent<Square>().SetMaterial(pirateBoardSquaresOre);
+                    boardSquare.GetComponent<Square>().defaultBoardMaterial = pirateBoardSquaresOre;
+                }
 
                 boardSquare.tag = "GameSquare";
                 

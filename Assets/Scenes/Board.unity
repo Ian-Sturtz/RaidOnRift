@@ -3718,6 +3718,10 @@ MonoBehaviour:
   piecesSpawned: 0
   pieceMoving: 0
   boardRotated: 0
+  navyBoardSquares: {fileID: 2100000, guid: ab3470cbfdb1d82459fed494a67c9e10, type: 2}
+  navyBoardSquaresOre: {fileID: 2100000, guid: 261b6d1ba4ced8b4596cfd69e825ab3e, type: 2}
+  pirateBoardSquares: {fileID: 2100000, guid: a291abc702ae11a4eb5127b91ac12a13, type: 2}
+  pirateBoardSquaresOre: {fileID: 2100000, guid: f06aaefa6ec6cd94db0049ad9fcb6fb5, type: 2}
   JailCells: {fileID: 0}
   jail: {fileID: 0}
   teamSize: 30
