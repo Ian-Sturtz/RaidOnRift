@@ -1898,7 +1898,7 @@ public class GameBoard : MonoBehaviour
                 gameBoard.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
                 // Make sure gunner animates correctly
-                gunnerLine.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                gunnerLine.transform.localRotation = Quaternion.Euler(0, 0, 180);
                 Vector3 targetPos = gunnerLine.GetComponent<LineRenderer>().GetPosition(1) * -1;
                 gunnerParticles.GetComponent<Transform>().transform.position = targetPos;
 
@@ -1979,7 +1979,7 @@ public class GameBoard : MonoBehaviour
                 }
 
                 yield return new WaitForSeconds(0.5f);
-                gunnerLine.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                gunnerLine.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
                 boardRotated = true;
             }

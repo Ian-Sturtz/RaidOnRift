@@ -40,6 +40,7 @@ public class BoardUI : MonoBehaviour
     private bool[] playerRematch = new bool[2];
 
     private Coroutine a, b;
+    private float height = Screen.height;
 
     private void Awake()
     {
@@ -305,7 +306,8 @@ public class BoardUI : MonoBehaviour
     {
         particles.SetActive(true);
         var particleCom = particles.GetComponent<ParticleSystem>().main;
-        
+
+        lineRenderer.GetComponent<Transform>().transform.localScale = new Vector3(1080 / height, 1080 / height, 1080 / height);
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, targetPos);
         particles.GetComponent<Transform>().transform.position = targetPos;
