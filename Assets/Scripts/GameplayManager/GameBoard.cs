@@ -1471,8 +1471,8 @@ public class GameBoard : MonoBehaviour
                     tileSelected = null;
                     break;
                 case PieceType.EnergyShield:
-                    boardUI.DisplayTempText("Land Mines can't move, click on a different piece!", 1.5f);
-                    Debug.Log("The Land Mine doesn't move!");
+                    boardUI.DisplayTempText("Energy Shields can't move, click on a different piece!", 1.5f);
+                    Debug.Log("The Energy Shield doesn't move!");
                     invalidPiece = true;
                     squareSelected = false;
                     current_square.SquareHasBeenClicked = false;
@@ -1675,7 +1675,7 @@ public class GameBoard : MonoBehaviour
             // A land mine has been selected but it can't go anywhere
             if (landMineSelected)
             {
-                boardUI.GoalText("There are no valid spots for the Land Mine to go.");
+                boardUI.GoalText("There are no valid spots for the Energy Shield to go.");
                 boardUI.GoalText("Click on it again to cancel.", true);
             }
             else
@@ -1712,7 +1712,7 @@ public class GameBoard : MonoBehaviour
             // A mine can be redeployed
             if(engineerSelected && !landMineSelected && landMineInJail)
             {
-                boardUI.GoalText("- Click on a flashing Land Mine to redeploy it to the board", true);
+                boardUI.GoalText("- Click on a flashing Energy Shield to redeploy it to the board", true);
             }
             // A gunner can capture by shooting
             if (gunnerAble)
@@ -1733,7 +1733,7 @@ public class GameBoard : MonoBehaviour
             if (mineDeploy)
             {
                 boardUI.GoalText("- Click on a red square to redeploy the bomb there", true);
-                boardUI.GoalText("- Click on that Land Mine again to cancel the redeploy", true);
+                boardUI.GoalText("- Click on that Energy Shield again to cancel the redeploy", true);
             }
             // The ore is being redeployed
             if (oreDeploy)
