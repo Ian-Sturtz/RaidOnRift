@@ -7,5 +7,4 @@ public class MultiplayerLobby : MonoBehaviour
 {
     public TMP_InputField addressInput;
     // Buttons
-
 }
