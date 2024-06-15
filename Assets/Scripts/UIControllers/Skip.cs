@@ -10,7 +10,7 @@ public class Skip : MonoBehaviour
     {
         if (Input.anyKey)
         {
-            if (!StaticTutorialControl.cameFromStoryScene)
+            if (!StaticTutorialControl.cameFromStoryScene && !(StatManager.instance != null && StatManager.instance.completedTutorial))
             {
                 StaticTutorialControl.piece = PieceType.Mate;
                 StaticTutorialControl.cameFromStoryScene = false;

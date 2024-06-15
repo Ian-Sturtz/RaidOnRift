@@ -5118,6 +5118,10 @@ public class TTGameBoard : MonoBehaviour
 
     public void ExitTutorial()
     {
+        if (StatManager.instance != null)
+        {
+            StatManager.instance.FinishedTutorial();
+        }
         if (StaticTutorialControl.cameFromStoryScene)
         {
             SceneManager.LoadScene("Story");

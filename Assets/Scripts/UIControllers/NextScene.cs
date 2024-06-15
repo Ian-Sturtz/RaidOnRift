@@ -7,7 +7,7 @@ public class NextScene : MonoBehaviour
 {
     void OnEnable()
     {
-        if (!StaticTutorialControl.cameFromStoryScene)
+        if (!StaticTutorialControl.cameFromStoryScene && !(StatManager.instance != null && StatManager.instance.completedTutorial))
         {
             StaticTutorialControl.piece = PieceType.Mate;
             StaticTutorialControl.cameFromStoryScene = false;
