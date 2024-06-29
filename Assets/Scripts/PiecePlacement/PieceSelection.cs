@@ -67,6 +67,13 @@ public class PieceSelection : MonoBehaviour
     
     [SerializeField] private VideoPlayer navyVideo;
     [SerializeField] private VideoPlayer pirateVideo;
+
+    [SerializeField] private TMP_Dropdown navyLoadDropdown;
+    [SerializeField] private TMP_Dropdown pirateLoadDropdown;
+    [SerializeField] private TMP_Dropdown navySaveDropdown;
+    [SerializeField] private TMP_Dropdown pirateSaveDropdown;
+    [SerializeField] private TMP_InputField navyInputField;
+    [SerializeField] private TMP_InputField pirateInputField;
     #endregion
 
     #region Point Values/Info
@@ -275,6 +282,7 @@ public class PieceSelection : MonoBehaviour
             videoPlayer = pirateVideo;
         }
         videoManager.Setup(navySelecting);
+        ReloadDropdowns();
     }
 
     public void IncreaseCount(GameObject parent)
@@ -700,6 +708,180 @@ public class PieceSelection : MonoBehaviour
 
             pirateTotal = idTeam.totalPoints;
         }
+    }
+    #endregion
+
+    #region Presets
+    public void ReloadDropdowns()
+    {
+        for(int i = 1; i < 11; i++)
+        {
+            TMP_Dropdown.OptionData newItem = new TMP_Dropdown.OptionData(StatManager.instance.presetNames[i - 1]);
+            navyLoadDropdown.options.RemoveAt(i);
+            navyLoadDropdown.options.Insert(i, newItem);
+            pirateLoadDropdown.options.RemoveAt(i);
+            pirateLoadDropdown.options.Insert(i, newItem);
+
+            navySaveDropdown.options.RemoveAt(i);
+            navySaveDropdown.options.Insert(i, newItem);
+            pirateSaveDropdown.options.RemoveAt(i);
+            pirateSaveDropdown.options.Insert(i, newItem);
+        }
+    }
+
+    public void ResetDropdownSelection()
+    {
+        navySaveDropdown.value = 0;
+        pirateSaveDropdown.value = 0;
+    }
+
+    public void SavePreset()
+    {
+        int value;
+        string inputName;
+        if (navySelecting)
+        {
+            value = navySaveDropdown.value - 1;
+            inputName = navyInputField.text;
+        }
+        else
+        {
+            value = pirateSaveDropdown.value - 1;
+            inputName = pirateInputField.text;
+        }
+
+        if (value == -1) return;
+
+        StatManager.instance.presetNames[value] = inputName;
+        StatManager.instance.presetRoyal1[value] = royal1;
+        StatManager.instance.presetRoyal2[value] = royal2;
+        StatManager.instance.presetMate[value] = mate;
+        StatManager.instance.presetQuartermaster[value] = quartermaster;
+        StatManager.instance.presetCannon[value] = cannon;
+        StatManager.instance.presetEngineer[value] = engineer;
+        StatManager.instance.presetVanguard[value] = vanguard;
+        StatManager.instance.presetNavigator[value] = navigator;
+        StatManager.instance.presetGunner[value] = gunner;
+
+        ReloadDropdowns();
+    }
+
+    public void LoadPreset()
+    {
+        int value;
+        if (navySelecting)
+        {
+            value = navyLoadDropdown.value - 1;
+        }
+        else
+        {
+            value = pirateLoadDropdown.value - 1;
+        }
+
+        if (value == -1) return;
+
+        royal1 = 0;
+        royal2 = 0;
+        mate = minPeasants;
+        quartermaster = 0;
+        cannon = 0;
+        engineer = 0;
+        vanguard = 0;
+        navigator = 0;
+        gunner = 0;
+        totalPoints = minPeasants * matePoints;
+
+        for (int i = 0; i < StatManager.instance.presetRoyal1[value] && i < maxRoyals; i++)
+        {
+            if (totalPoints + royal1Points > maxPoints) break;
+
+            royal1++;
+            totalPoints += royal1Points;
+        }
+        TMP_Text amount = GameObject.Find("Select Royal1/Amount").GetComponent<TMP_Text>();
+        amount.SetText(royal1 + "/" + maxRoyals);
+
+        for (int i = 0; i < StatManager.instance.presetRoyal2[value] && i < maxRoyals; i++)
+        {
+            if (totalPoints + royal2Points > maxPoints) break;
+
+            royal2++;
+            totalPoints += royal2Points;
+        }
+        amount = GameObject.Find("Select Royal2/Amount").GetComponent<TMP_Text>();
+        amount.SetText(royal2 + "/" + maxRoyals);
+
+        for (int i = minPeasants; i < StatManager.instance.presetMate[value] && i < maxPeasants; i++)
+        {
+            if (totalPoints + matePoints > maxPoints) break;
+
+            mate++;
+            totalPoints += matePoints;
+        }
+        amount = GameObject.Find("Select Mate/Amount").GetComponent<TMP_Text>();
+        amount.SetText(mate + "/" + maxPeasants);
+
+        for (int i = 0; i < StatManager.instance.presetQuartermaster[value] && i < maxArmy; i++)
+        {
+            if (totalPoints + quartermasterPoints > maxPoints) break;
+
+            quartermaster++;
+            totalPoints += quartermasterPoints;
+        }
+        amount = GameObject.Find("Select Quartermaster/Amount").GetComponent<TMP_Text>();
+        amount.SetText(quartermaster + "/" + maxArmy);
+
+        for (int i = 0; i < StatManager.instance.presetCannon[value] && i < maxArmy; i++)
+        {
+            if (totalPoints + cannonPoints > maxPoints) break;
+
+            cannon++;
+            totalPoints += cannonPoints;
+        }
+        amount = GameObject.Find("Select Cannon/Amount").GetComponent<TMP_Text>();
+        amount.SetText(cannon + "/" + maxArmy);
+
+        for (int i = 0; i < StatManager.instance.presetEngineer[value] && i < maxArmy; i++)
+        {
+            if (totalPoints + engineerPoints > maxPoints) break;
+
+            engineer++;
+            totalPoints += engineerPoints;
+        }
+        amount = GameObject.Find("Select Engineer/Amount").GetComponent<TMP_Text>();
+        amount.SetText(engineer + "/" + maxArmy);
+
+        for (int i = 0; i < StatManager.instance.presetVanguard[value] && i < maxArmy; i++)
+        {
+            if (totalPoints + vanguardPoints > maxPoints) break;
+
+            vanguard++;
+            totalPoints += vanguardPoints;
+        }
+        amount = GameObject.Find("Select Vanguard/Amount").GetComponent<TMP_Text>();
+        amount.SetText(vanguard + "/" + maxArmy);
+
+        for (int i = 0; i < StatManager.instance.presetNavigator[value] && i < maxArmy; i++)
+        {
+            if (totalPoints + navigatorPoints > maxPoints) break;
+
+            navigator++;
+            totalPoints += navigatorPoints;
+        }
+        amount = GameObject.Find("Select Navigator/Amount").GetComponent<TMP_Text>();
+        amount.SetText(navigator + "/" + maxArmy);
+
+        for (int i = 0; i < StatManager.instance.presetGunner[value] && i < maxArmy; i++)
+        {
+            if (totalPoints + gunnerPoints > maxPoints) break;
+
+            gunner++;
+            totalPoints += gunnerPoints;
+        }
+        amount = GameObject.Find("Select Gunner/Amount").GetComponent<TMP_Text>();
+        amount.SetText(gunner + "/" + maxArmy);
+
+        pointsText.SetText(totalPoints + "/" + maxPoints);
     }
     #endregion
 }

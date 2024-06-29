@@ -40,7 +40,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void LoadGame()
     {
-        // TODO - Load save data from file using data handler
+        // Load save data from file using data handler
         this.gameData = dataHandler.Load();
 
         // if no data loaded, init new game
@@ -59,13 +59,13 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void SaveGame()
     {
-        // TODO - pass data to other scripts so they can update it
+        // pass data to other scripts so they can update it
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
             dataPersistenceObj.SaveData(ref gameData);
         }
 
-        // TODO - save data to file using data handler
+        // save data to file using data handler
         dataHandler.Save(gameData);
     }
 

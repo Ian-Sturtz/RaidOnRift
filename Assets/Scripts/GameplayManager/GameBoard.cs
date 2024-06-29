@@ -184,6 +184,8 @@ public class GameBoard : MonoBehaviour
             boardUI.GoalText("Waiting for opponent to move.");
 
         RegisterEvents();
+
+        CalculateStats();
     }
 
     private void OnDestroy()
@@ -2034,6 +2036,13 @@ public class GameBoard : MonoBehaviour
             else
                 boardUI.GoalText("Waiting for opponent to move.");
         }
+    }
+
+    public void CalculateStats()
+    {
+        StatManager.instance.IncreaseNumBattles();
+        if (PieceManager.instance.onlineMultiplayer) StatManager.instance.IncreaseNumOnlineBattles();
+        else StatManager.instance.IncreaseNumOfflineBattles();
     }
 
     #region Events

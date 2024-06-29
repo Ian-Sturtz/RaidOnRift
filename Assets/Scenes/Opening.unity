@@ -21333,8 +21333,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11b7578c5c3d29489be7b06b6be3a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fileName: data.game
-  useEncryption: 1
+  fileName: data.sav
+  useEncryption: 0
 --- !u!4 &673090822
 Transform:
   m_ObjectHideFlags: 0
@@ -37972,7 +37972,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 496.9, y: 18.7}
+  m_AnchoredPosition: {x: 496.8999, y: 18.699951}
   m_SizeDelta: {x: 656.46, y: 30.919}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1280560921

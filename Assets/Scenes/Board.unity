@@ -907,6 +907,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67036646}
   m_CullTransparentMesh: 1
+--- !u!1 &78447063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 78447065}
+  - component: {fileID: 78447064}
+  m_Layer: 0
+  m_Name: StatManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &78447064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78447063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73af0b551a9402640b392a4891eb0dbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numBattles: 0
+  numOfflineBattles: 0
+  numOnlineBattles: 0
+  numWins: 0
+  numLosses: 0
+  numStalemates: 0
+  completedTutorial: 0
+  presetNames:
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  presetRoyal1: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  presetRoyal2: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  presetMate: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  presetQuartermaster: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  presetCannon: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  presetEngineer: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  presetVanguard: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  presetNavigator: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  presetGunner: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+--- !u!4 &78447065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78447063}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 959.44806, y: 611.27374, z: 19.718195}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &82238573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41333,6 +41404,52 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 694bcfad484589846a281d544624fe68, type: 3}
+--- !u!1 &1827615082
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1827615084}
+  - component: {fileID: 1827615083}
+  m_Layer: 0
+  m_Name: DataPersistenceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1827615083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827615082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11b7578c5c3d29489be7b06b6be3a96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileName: data.sav
+  useEncryption: 0
+--- !u!4 &1827615084
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827615082}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 959.44806, y: 611.27374, z: 19.718195}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1828547095
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44369,3 +44486,5 @@ SceneRoots:
   - {fileID: 715274901}
   - {fileID: 1546379266}
   - {fileID: 1833807784}
+  - {fileID: 78447065}
+  - {fileID: 1827615084}
